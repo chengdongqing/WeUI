@@ -129,9 +129,7 @@ fun WeDialogHolder(
     cancelText: String = "取消",
     okColor: Color = Color(0xFF576B95),
     onOk: (MutableState<Boolean>) -> Unit,
-    onCancel: ((MutableState<Boolean>) -> Unit)? = {
-        it.value = false
-    },
+    onCancel: ((MutableState<Boolean>) -> Unit)? = null,
     holder: @Composable (MutableState<Boolean>) -> Unit
 ) {
     val visible = remember { mutableStateOf(false) }
@@ -148,8 +146,10 @@ fun WeDialogHolder(
         onOk = {
             onOk(visible)
         },
-        onCancel = {
-            onCancel?.invoke(visible)
-        }
+        onCancel = if (onCancel != null) {
+            {
+                onCancel(visible)
+            }
+        } else null
     )
 }

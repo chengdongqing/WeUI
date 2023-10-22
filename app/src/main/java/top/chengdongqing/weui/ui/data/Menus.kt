@@ -1,0 +1,77 @@
+package top.chengdongqing.weui.ui.data
+
+import androidx.annotation.DrawableRes
+import top.chengdongqing.weui.R
+
+data class MenuItem(
+    val label: String,
+    val path: String
+)
+
+data class MenuGroup(
+    val title: String,
+    @DrawableRes
+    val iconId: Int,
+    val children: List<MenuItem>? = null,
+    val path: String? = null
+)
+
+val menus = listOf(
+    MenuGroup(
+        "表单", R.drawable.icon_nav_form,
+        listOf(
+            MenuItem("Button", "button"),
+            MenuItem("Form", "form"),
+            MenuItem("List", "list"),
+            MenuItem("Slider", "slider"),
+            MenuItem("Uploader", "uploader")
+        )
+    ),
+    MenuGroup(
+        "基础组件", R.drawable.icon_nav_layout,
+        listOf(
+            MenuItem("Article", "article"),
+            MenuItem("Badge", "badge"),
+            MenuItem("Flex", "flex"),
+            MenuItem("Footer", "footer"),
+            MenuItem("Gallery", "gallery"),
+            MenuItem("Grid", "grid"),
+            MenuItem("Icons", "icons"),
+            MenuItem("Loading", "loading"),
+            MenuItem("Loadmore", "loadmore"),
+            MenuItem("Panel", "panel"),
+            MenuItem("Preview", "preview"),
+            MenuItem("Progress", "progress"),
+            MenuItem("Steps", "steps")
+        )
+    ),
+    MenuGroup(
+        "操作反馈", R.drawable.icon_nav_feedback,
+        listOf(
+            MenuItem("Actionsheet", "actionsheet"),
+            MenuItem("Dialog", "dialog"),
+            MenuItem("Half-screen Dialog", "half-screen-dialog"),
+            MenuItem("Msg", "msg"),
+            MenuItem("Picker", "picker"),
+            MenuItem("Toast", "toast"),
+            MenuItem("Information Bar", "information-bar")
+        )
+    ),
+    MenuGroup(
+        "导航相关", R.drawable.icon_nav_nav,
+        listOf(
+            MenuItem("Navbar", "navbar"),
+            MenuItem("Tabbar", "tabbar")
+        )
+    ),
+    MenuGroup(
+        "搜索相关", R.drawable.icon_nav_search,
+        listOf(
+            MenuItem("Search Bar", "search-bar")
+        )
+    ),
+    MenuGroup(
+        "层级规范", R.drawable.icon_nav_zindex,
+        path = "/z-index"
+    )
+)
