@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import top.chengdongqing.weui.ui.theme.FontColor
 
 @Composable
 fun WeDialog(
@@ -61,6 +62,7 @@ fun WeDialog(
                                 start = 24.dp,
                                 end = 24.dp
                             ),
+                        color = FontColor,
                         fontSize = 17.sp,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center
@@ -91,7 +93,12 @@ fun WeDialog(
                                     .clickable(onClick = onCancel),
                                 contentAlignment = Alignment.Center
                             ) {
-                                Text(text = cancelText, fontSize = 17.sp, fontWeight = FontWeight.Bold)
+                                Text(
+                                    text = cancelText,
+                                    color = FontColor,
+                                    fontSize = 17.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
                             }
                             Divider(
                                 modifier = Modifier

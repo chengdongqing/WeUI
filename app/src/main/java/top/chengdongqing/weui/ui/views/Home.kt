@@ -27,13 +27,14 @@ import androidx.navigation.NavHostController
 import top.chengdongqing.weui.R
 import top.chengdongqing.weui.ui.data.MenuGroup
 import top.chengdongqing.weui.ui.data.menus
+import top.chengdongqing.weui.ui.theme.BackgroundColor
 
 @Composable
 fun HomePage(navController: NavHostController) {
     LazyColumn(
         Modifier
             .fillMaxSize()
-            .background(Color(0XFFEDEDED))
+            .background(BackgroundColor)
             .statusBarsPadding()
     ) {
         item {

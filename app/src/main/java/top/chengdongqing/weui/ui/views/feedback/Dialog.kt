@@ -1,18 +1,19 @@
 package top.chengdongqing.weui.ui.views.feedback
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import top.chengdongqing.weui.ui.components.ButtonType
+import top.chengdongqing.weui.ui.components.Page
+import top.chengdongqing.weui.ui.components.WeButton
 import top.chengdongqing.weui.ui.components.WeDialogHolder
 
 @Composable
 fun DialogPage() {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    Page(title = "Dialog", description = "对话框") {
         Column {
             WeDialogHolder(
                 title = "弹窗标题",
@@ -24,20 +25,24 @@ fun DialogPage() {
                 },
                 onCancel = {
                     it.value = false
-                }) {
-                Button(onClick = { it.value = true }) {
-                    Text(text = "Dialog 样式一")
+                }
+            ) {
+                WeButton(text = "Dialog 样式一", type = ButtonType.PLAIN) {
+                    it.value = true
                 }
             }
+
+            Spacer(Modifier.height(16.dp))
 
             WeDialogHolder(
                 title = "弹窗内容，告知当前状态、信息和解决方法，描述文字尽量控制在三行内",
                 okText = "知道了",
                 onOk = {
                     it.value = false
-                }) {
-                Button(onClick = { it.value = true }) {
-                    Text(text = "Dialog 样式二")
+                }
+            ) {
+                WeButton(text = "Dialog 样式二", type = ButtonType.PLAIN) {
+                    it.value = true
                 }
             }
         }
