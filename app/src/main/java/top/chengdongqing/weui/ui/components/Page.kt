@@ -13,10 +13,10 @@ import top.chengdongqing.weui.ui.theme.BackgroundColor
 import top.chengdongqing.weui.ui.theme.FontColor
 
 @Composable
-fun Page(title: String, description: String, content: @Composable () -> Unit) {
+fun Page(title: String, description: String, bgColor: Color = BackgroundColor, content: @Composable () -> Unit) {
     Column(
         Modifier
-            .background(BackgroundColor)
+            .background(bgColor)
             .statusBarsPadding()
     ) {
         Column(Modifier.padding(40.dp)) {

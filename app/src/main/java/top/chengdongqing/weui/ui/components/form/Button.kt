@@ -1,12 +1,9 @@
-package top.chengdongqing.weui.ui.components
+package top.chengdongqing.weui.ui.components.form
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Text
@@ -20,6 +17,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import top.chengdongqing.weui.ui.components.basic.WeLoading
 import top.chengdongqing.weui.ui.theme.DangerColor
 import top.chengdongqing.weui.ui.theme.FontColor
 import top.chengdongqing.weui.ui.theme.PrimaryColor
@@ -62,10 +60,17 @@ fun WeButton(
             .padding(size.padding),
         contentAlignment = Alignment.Center
     ) {
-        Text(
-            text,
-            color = if (!disabled) type.color else Color(0f, 0f, 0f, 0.15f),
-            fontSize = size.fontSize
-        )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            if (loading) {
+                WeLoading(color = type.color)
+                Spacer(Modifier.width(8.dp))
+            }
+
+            Text(
+                text,
+                color = if (!disabled) type.color else Color(0f, 0f, 0f, 0.15f),
+                fontSize = size.fontSize
+            )
+        }
     }
 }

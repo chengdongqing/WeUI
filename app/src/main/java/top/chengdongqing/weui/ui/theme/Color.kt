@@ -14,4 +14,5 @@ val PrimaryColor = Color(0xFF07C160)
 val BackgroundColor = Color(0XFFEDEDED)
 val DangerColor = Color(0xFFFA5151)
 
+val BorderColor = Color(0f, 0f, 0f, 0.1f)
 val FontColor = Color(0f, 0f, 0f, 0.9f)

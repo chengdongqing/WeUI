@@ -4,10 +4,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import top.chengdongqing.weui.ui.components.ButtonSize
-import top.chengdongqing.weui.ui.components.ButtonType
 import top.chengdongqing.weui.ui.components.Page
-import top.chengdongqing.weui.ui.components.WeButton
+import top.chengdongqing.weui.ui.components.form.ButtonSize
+import top.chengdongqing.weui.ui.components.form.ButtonType
+import top.chengdongqing.weui.ui.components.form.WeButton
 
 @Composable
 fun ButtonPage() {
@@ -15,9 +15,15 @@ fun ButtonPage() {
         Column {
             WeButton(text = "主要操作")
             Spacer(Modifier.height(16.dp))
+            WeButton(text = "主要操作", loading = true)
+            Spacer(Modifier.height(16.dp))
             WeButton(text = "次要操作", type = ButtonType.PLAIN)
             Spacer(Modifier.height(16.dp))
+            WeButton(text = "次要操作", type = ButtonType.PLAIN, loading = true)
+            Spacer(Modifier.height(16.dp))
             WeButton(text = "警示操作", type = ButtonType.DANGER)
+            Spacer(Modifier.height(16.dp))
+            WeButton(text = "警示操作", type = ButtonType.DANGER, loading = true)
             Spacer(Modifier.height(32.dp))
 
             WeButton(text = "按钮禁用", disabled = true)

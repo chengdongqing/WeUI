@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.ui.components
+package top.chengdongqing.weui.ui.components.feedback
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

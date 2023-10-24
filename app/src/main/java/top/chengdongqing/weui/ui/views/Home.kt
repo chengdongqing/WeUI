@@ -24,13 +24,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import top.chengdongqing.weui.LocalNavController
 import top.chengdongqing.weui.R
 import top.chengdongqing.weui.ui.data.MenuGroup
 import top.chengdongqing.weui.ui.data.menus
 import top.chengdongqing.weui.ui.theme.BackgroundColor
+import top.chengdongqing.weui.ui.theme.BorderColor
 
 @Composable
-fun HomePage(navController: NavHostController) {
+fun HomePage() {
+    val navController = LocalNavController.current
+
     LazyColumn(
         Modifier
             .fillMaxSize()
@@ -142,7 +146,7 @@ fun MenuGroup(group: MenuGroup, open: Boolean, navController: NavHostController,
                         Divider(
                             Modifier.padding(horizontal = 20.dp),
                             thickness = 0.5.dp,
-                            color = Color(0f, 0f, 0f, 0.1f)
+                            color = BorderColor
                         )
                     }
                 }

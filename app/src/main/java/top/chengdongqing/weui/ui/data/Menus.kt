@@ -22,8 +22,11 @@ val menus = listOf(
         listOf(
             MenuItem("Button", "button"),
             MenuItem("Form", "form"),
-            MenuItem("List", "list"),
+            MenuItem("Checkbox", "checkbox"),
+            MenuItem("Radio", "radio"),
+            MenuItem("Switch", "switch"),
             MenuItem("Slider", "slider"),
+            MenuItem("List", "list"),
             MenuItem("Uploader", "uploader")
         )
     ),
