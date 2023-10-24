@@ -13,10 +13,7 @@ import top.chengdongqing.weui.ui.theme.WeUITheme
 import top.chengdongqing.weui.ui.views.HomePage
 import top.chengdongqing.weui.ui.views.basic.LoadingPage
 import top.chengdongqing.weui.ui.views.feedback.DialogPage
-import top.chengdongqing.weui.ui.views.form.ButtonPage
-import top.chengdongqing.weui.ui.views.form.CheckboxPage
-import top.chengdongqing.weui.ui.views.form.RadioPage
-import top.chengdongqing.weui.ui.views.form.SwitchPage
+import top.chengdongqing.weui.ui.views.form.*
 
 val LocalNavController = compositionLocalOf<NavHostController> { error("No NavController provided") }
 
@@ -43,6 +40,9 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("switch") {
                             SwitchPage()
+                        }
+                        composable("slider") {
+                            SliderPage()
                         }
                         composable("loading") {
                             LoadingPage()
