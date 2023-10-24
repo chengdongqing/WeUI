@@ -3,6 +3,8 @@ package top.chengdongqing.weui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
 import androidx.navigation.NavHostController
@@ -25,8 +27,36 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
 
                 CompositionLocalProvider(LocalNavController provides navController) {
-                    NavHost(navController = navController, startDestination = "home") {
-                        composable("home") {
+                    NavHost(
+                        navController,
+                        startDestination = "home",
+                        enterTransition = {
+                            slideIntoContainer(
+                                AnimatedContentTransitionScope.SlideDirection.Left,
+                                animationSpec = tween(300)
+                            )
+                        },
+                        exitTransition = {
+                            slideOutOfContainer(
+                                AnimatedContentTransitionScope.SlideDirection.Right,
+                                animationSpec = tween(300)
+                            )
+                        }
+                    ) {
+                        composable("home",
+                            enterTransition = {
+                                slideIntoContainer(
+                                    AnimatedContentTransitionScope.SlideDirection.Right,
+                                    animationSpec = tween(300)
+                                )
+                            },
+                            exitTransition = {
+                                slideOutOfContainer(
+                                    AnimatedContentTransitionScope.SlideDirection.Left,
+                                    animationSpec = tween(300)
+                                )
+                            }
+                        ) {
                             HomePage()
                         }
                         composable("button") {
@@ -56,4 +86,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-

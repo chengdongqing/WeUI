@@ -6,7 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -69,7 +68,7 @@ fun WeCheckbox(
             .clip(RoundedCornerShape(10.dp))
             .clickable(remember {
                 MutableInteractionSource()
-            }, if (!disabled) rememberRipple() else null) {
+            }, null) {
                 if (!disabled) {
                     onChange?.invoke(!checked)
                 }

@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -60,7 +59,7 @@ fun WeRadio(label: String, checked: Boolean, disabled: Boolean, onClick: () -> U
                 .clip(RoundedCornerShape(10.dp))
                 .clickable(remember {
                     MutableInteractionSource()
-                }, if (!disabled) rememberRipple() else null) {
+                }, null) {
                     if (!disabled) {
                         onClick()
                     }

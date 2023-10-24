@@ -1,6 +1,8 @@
 package top.chengdongqing.weui.ui.views.form
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -12,7 +14,7 @@ import top.chengdongqing.weui.ui.components.form.WeButton
 @Composable
 fun ButtonPage() {
     Page(title = "Button", description = "按钮") {
-        Column {
+        Column(Modifier.verticalScroll(rememberScrollState())) {
             WeButton(text = "主要操作")
             Spacer(Modifier.height(16.dp))
             WeButton(text = "主要操作", loading = true)
@@ -42,6 +44,8 @@ fun ButtonPage() {
                 Spacer(Modifier.width(12.dp))
                 WeButton(text = "按钮", size = ButtonSize.SMALL, type = ButtonType.DANGER)
             }
+
+            Spacer(Modifier.height(100.dp))
         }
     }
 }

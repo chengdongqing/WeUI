@@ -2,12 +2,9 @@ package top.chengdongqing.weui.ui.views
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowRight
@@ -35,42 +32,41 @@ import top.chengdongqing.weui.ui.theme.BorderColor
 fun HomePage() {
     val navController = LocalNavController.current
 
-    LazyColumn(
+    Column(
         Modifier
             .fillMaxSize()
             .background(BackgroundColor)
             .statusBarsPadding()
+            .verticalScroll(rememberScrollState())
     ) {
-        item {
-            Column(Modifier.padding(40.dp)) {
-                Image(
-                    painter = painterResource(id = R.drawable.logo),
-                    contentDescription = "WeUI",
-                    modifier = Modifier.height(21.dp)
-                )
-                Spacer(modifier = Modifier.height(19.dp))
-                Text(
-                    text = "WeUI 是一套同微信原生视觉体验一致的基础样式库，由微信官方设计团队为微信内网页和微信小程序量身设计，令用户的使用感知更加统一。",
-                    color = Color(0f, 0f, 0f, 0.55f),
-                    fontSize = 14.sp
-                )
-            }
+        Column(Modifier.padding(40.dp)) {
+            Image(
+                painter = painterResource(id = R.drawable.logo),
+                contentDescription = "WeUI",
+                modifier = Modifier.height(21.dp)
+            )
+            Spacer(modifier = Modifier.height(19.dp))
+            Text(
+                text = "WeUI 是一套同微信原生视觉体验一致的基础样式库，由微信官方设计团队为微信内网页和微信小程序量身设计，令用户的使用感知更加统一。",
+                color = Color(0f, 0f, 0f, 0.55f),
+                fontSize = 14.sp
+            )
         }
 
-        item {
-            var current by remember {
-                mutableStateOf(-1)
-            }
+        var current by remember {
+            mutableIntStateOf(-1)
+        }
 
-            Column(Modifier.padding(horizontal = 16.dp)) {
-                menus.forEachIndexed { index, item ->
-                    MenuGroup(item, index == current, navController) {
-                        current = if (current == index) -1 else index
-                    }
-                    Spacer(Modifier.height(8.dp))
+        Column(Modifier.padding(horizontal = 16.dp)) {
+            menus.forEachIndexed { index, item ->
+                MenuGroup(item, index == current, navController) {
+                    current = if (current == index) -1 else index
                 }
+                Spacer(Modifier.height(8.dp))
             }
         }
+
+        Spacer(Modifier.height(100.dp))
     }
 }
 
