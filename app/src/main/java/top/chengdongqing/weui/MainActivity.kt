@@ -15,6 +15,8 @@ import top.chengdongqing.weui.ui.views.basic.LoadingPage
 import top.chengdongqing.weui.ui.views.feedback.DialogPage
 import top.chengdongqing.weui.ui.views.form.ButtonPage
 import top.chengdongqing.weui.ui.views.form.CheckboxPage
+import top.chengdongqing.weui.ui.views.form.RadioPage
+import top.chengdongqing.weui.ui.views.form.SwitchPage
 
 val LocalNavController = compositionLocalOf<NavHostController> { error("No NavController provided") }
 
@@ -26,7 +28,7 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
 
                 CompositionLocalProvider(LocalNavController provides navController) {
-                    NavHost(navController = navController, startDestination = "checkbox") {
+                    NavHost(navController = navController, startDestination = "home") {
                         composable("home") {
                             HomePage()
                         }
@@ -35,6 +37,12 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("checkbox") {
                             CheckboxPage()
+                        }
+                        composable("radio") {
+                            RadioPage()
+                        }
+                        composable("switch") {
+                            SwitchPage()
                         }
                         composable("loading") {
                             LoadingPage()

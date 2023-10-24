@@ -89,13 +89,11 @@ fun MenuGroup(group: MenuGroup, open: Boolean, navController: NavHostController,
             .clip(RoundedCornerShape(4.dp))
             .background(Color.White)
     ) {
-        val interactionSource = remember {
-            MutableInteractionSource()
-        }
-
         Row(
             Modifier
-                .clickable(interactionSource = interactionSource, indication = null) {
+                .clickable(remember {
+                    MutableInteractionSource()
+                }, null) {
                     if (group.path != null) {
                         navController.navigate(group.path)
                     } else {

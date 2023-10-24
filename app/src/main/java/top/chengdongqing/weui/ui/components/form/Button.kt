@@ -43,15 +43,13 @@ fun WeButton(
     loading: Boolean = false,
     onClick: (() -> Unit)? = null
 ) {
-    val interactionSource = remember {
-        MutableInteractionSource()
-    }
-
     Box(
         Modifier
             .width(if (size != ButtonSize.SMALL) 184.dp else Dp.Unspecified)
             .clip(RoundedCornerShape(size.borderRadius))
-            .clickable(interactionSource, indication = if (!disabled) rememberRipple() else null) {
+            .clickable(remember {
+                MutableInteractionSource()
+            }, if (!disabled) rememberRipple() else null) {
                 if (!disabled) {
                     onClick?.invoke()
                 }

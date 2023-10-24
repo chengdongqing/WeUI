@@ -26,26 +26,52 @@ import top.chengdongqing.weui.ui.theme.BorderColor
 import top.chengdongqing.weui.ui.theme.FontColor
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 
+data class CheckboxOption(
+    val label: String,
+    val value: Any,
+    val disabled: Boolean = false
+)
+
+@Composable
+fun WeCheckboxGroup(
+    options: List<CheckboxOption>,
+    values: List<Any> = listOf(),
+    disabled: Boolean = false,
+    onChange: ((values: List<Any>) -> Unit)? = null
+) {
+    Column {
+        for (option in options) {
+            WeCheckbox(
+                label = option.label,
+                checked = values.contains(option.value),
+                disabled = disabled || option.disabled
+            ) {
+                val values1 = if (values.contains(option.value)) {
+                    values.filter { it != option.value }
+                } else {
+                    values.plusElement(option.value)
+                }
+                onChange?.invoke(values1)
+            }
+        }
+    }
+}
+
 @Composable
 fun WeCheckbox(
     label: String,
-    value: String? = null,
     checked: Boolean = false,
-    defaultChecked: Boolean = false,
     disabled: Boolean = false,
-    indeterminate: Boolean = false,
-    onChange: (checked: Boolean) -> Unit
+    onChange: ((checked: Boolean) -> Unit)? = null
 ) {
-    val interactionSource = remember {
-        MutableInteractionSource()
-    }
-
     Row(
         Modifier
             .clip(RoundedCornerShape(10.dp))
-            .clickable(interactionSource, indication = if (!disabled) rememberRipple() else null) {
+            .clickable(remember {
+                MutableInteractionSource()
+            }, if (!disabled) rememberRipple() else null) {
                 if (!disabled) {
-                    onChange(!checked)
+                    onChange?.invoke(!checked)
                 }
             }
             .padding(16.dp)
@@ -79,14 +105,4 @@ fun WeCheckbox(
             Divider(modifier = Modifier.offset(y = 16.dp), thickness = 0.5.dp, color = BorderColor)
         }
     }
-}
-
-@Composable
-fun WeCheckboxGroup(
-    value: List<String>? = null,
-    defaultValue: List<String>? = null,
-    disabled: Boolean = false,
-    onChange: (checkedValues: List<String>) -> Unit
-) {
-
 }

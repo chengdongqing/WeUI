@@ -1,24 +1,29 @@
 package top.chengdongqing.weui.ui.views.form
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.ui.components.Page
-import top.chengdongqing.weui.ui.components.form.WeCheckbox
+import top.chengdongqing.weui.ui.components.form.CheckboxOption
+import top.chengdongqing.weui.ui.components.form.WeCheckboxGroup
 
 @Composable
 fun CheckboxPage() {
     Page(title = "Checkbox", description = "复选框", bgColor = Color.White) {
-        Column(Modifier.padding(horizontal = 16.dp)) {
-            WeCheckbox(label = "standard is dealt for u.", checked = true) {
-            }
-            WeCheckbox(label = "standard is dealicient for u.") {
-            }
-            WeCheckbox(label = "standard is dealicient for u.", checked = true, disabled = true) {
-            }
+        val values = remember {
+            mutableStateListOf<Any>(1)
+        }
+
+        WeCheckboxGroup(
+            listOf(
+                CheckboxOption(label = "standard is dealt for u.", value = 1),
+                CheckboxOption(label = "standard is dealicient for u.", value = 2),
+                CheckboxOption(label = "standard is dealicient for u.", value = 3, disabled = true)
+            ), values = values
+        ) {
+            values.clear()
+            values.addAll(it)
         }
     }
 }

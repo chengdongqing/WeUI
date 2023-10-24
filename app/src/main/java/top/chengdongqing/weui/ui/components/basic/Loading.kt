@@ -6,8 +6,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -23,7 +23,7 @@ fun WeLoading(size: Dp = 16.dp, color: Color = Color.Unspecified) {
             tween(durationMillis = 1000, easing = LinearEasing),
             RepeatMode.Restart
         ),
-        label = "LoadingFloatAnimation"
+        label = "LoadingAnimation"
     )
 
     Icon(
@@ -31,7 +31,7 @@ fun WeLoading(size: Dp = 16.dp, color: Color = Color.Unspecified) {
         contentDescription = "loading",
         modifier = Modifier
             .size(size)
-            .graphicsLayer(rotationZ = angle),
+            .rotate(angle),
         tint = color
     )
 }

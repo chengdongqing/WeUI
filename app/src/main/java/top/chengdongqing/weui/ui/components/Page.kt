@@ -32,7 +32,12 @@ fun Page(title: String, description: String, bgColor: Color = BackgroundColor, c
 
         Spacer(Modifier.height(30.dp))
 
-        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
+        Box(
+            Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            contentAlignment = Alignment.TopCenter
+        ) {
             content()
         }
     }
