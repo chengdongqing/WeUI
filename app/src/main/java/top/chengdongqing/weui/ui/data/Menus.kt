@@ -53,7 +53,7 @@ val menus = listOf(
         listOf(
             MenuItem("Actionsheet", "actionsheet"),
             MenuItem("Dialog", "dialog"),
-            MenuItem("Half-screen Dialog", "half-screen-dialog"),
+            MenuItem("Popup", "popup"),
             MenuItem("Msg", "msg"),
             MenuItem("Picker", "picker"),
             MenuItem("Toast", "toast"),

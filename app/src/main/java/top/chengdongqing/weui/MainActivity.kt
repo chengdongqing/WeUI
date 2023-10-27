@@ -15,6 +15,7 @@ import top.chengdongqing.weui.ui.theme.WeUITheme
 import top.chengdongqing.weui.ui.views.HomePage
 import top.chengdongqing.weui.ui.views.basic.LoadingPage
 import top.chengdongqing.weui.ui.views.feedback.DialogPage
+import top.chengdongqing.weui.ui.views.feedback.PopupPage
 import top.chengdongqing.weui.ui.views.form.*
 
 val LocalNavController = compositionLocalOf<NavHostController> { error("No NavController provided") }
@@ -79,6 +80,9 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("dialog") {
                             DialogPage()
+                        }
+                        composable("popup") {
+                            PopupPage()
                         }
                     }
                 }

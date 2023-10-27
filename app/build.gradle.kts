@@ -52,6 +52,7 @@ dependencies {
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.activity.compose)
+    implementation(libs.constraintlayout.compose)
     implementation(libs.navigation.compose)
     implementation(libs.accompanist.navigation.animation)
     implementation(platform(libs.compose.bom))
