@@ -1,12 +1,9 @@
 package top.chengdongqing.weui.ui.views.feedback
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.height
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.ui.components.Page
 import top.chengdongqing.weui.ui.components.feedback.WePopup
 import top.chengdongqing.weui.ui.components.form.WeButton
@@ -25,7 +22,7 @@ fun PopupPage() {
         WePopup(visible.value, onClose = {
             visible.value = false
         }) {
-            Box(Modifier.height(450.dp))
+            Text(text = "你好")
         }
     }
 }

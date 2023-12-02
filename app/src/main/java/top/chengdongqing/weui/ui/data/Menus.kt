@@ -33,6 +33,7 @@ val menus = listOf(
     MenuGroup(
         "基础组件", R.drawable.icon_nav_layout,
         listOf(
+            MenuItem("MediaPicker", "mediaPicker"),
             MenuItem("Article", "article"),
             MenuItem("Badge", "badge"),
             MenuItem("Flex", "flex"),

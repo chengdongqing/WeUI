@@ -21,8 +21,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import top.chengdongqing.weui.LocalNavController
 import top.chengdongqing.weui.R
+import top.chengdongqing.weui.navigation.LocalNavController
 import top.chengdongqing.weui.ui.data.MenuGroup
 import top.chengdongqing.weui.ui.data.menus
 import top.chengdongqing.weui.ui.theme.BackgroundColor

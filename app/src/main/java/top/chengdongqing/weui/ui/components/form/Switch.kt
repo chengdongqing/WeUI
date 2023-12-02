@@ -1,6 +1,5 @@
 package top.chengdongqing.weui.ui.components.form
 
-import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -27,17 +26,14 @@ fun WeSwitch(
     onChange: ((checked: Boolean) -> Unit)? = null
 ) {
     val offsetX by animateDpAsState(
-        targetValue = if (checked) 22.dp else 2.dp,
-        animationSpec = tween(
-            durationMillis = 350,
-            easing = CubicBezierEasing(0.4f, 0.4f, 0.25f, 1.35f)
-        ),
+        targetValue = if (checked) 26.dp else 2.dp,
+        animationSpec = tween(durationMillis = 100),
         label = "SwitchAnimation"
     )
 
     Box(
         Modifier
-            .size(52.dp, 32.dp)
+            .size(50.dp, 26.dp)
             .clip(RoundedCornerShape(16.dp))
             .background(
                 if (checked) {
@@ -50,18 +46,20 @@ fun WeSwitch(
                     BorderColor
                 }
             )
-            .clickable(interactionSource = remember {
-                MutableInteractionSource()
-            }, indication = null) {
-                if (!disabled) {
-                    onChange?.invoke(!checked)
-                }
+            .clickable(
+                interactionSource = remember {
+                    MutableInteractionSource()
+                },
+                indication = null,
+                enabled = !disabled
+            ) {
+                onChange?.invoke(!checked)
             }
     ) {
         Box(
             Modifier
                 .offset(offsetX, 2.dp)
-                .size(28.dp)
+                .size(22.dp)
                 .clip(RoundedCornerShape(50))
                 .background(Color.White)
         )

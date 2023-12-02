@@ -66,12 +66,14 @@ fun WeCheckbox(
     Row(
         Modifier
             .clip(RoundedCornerShape(10.dp))
-            .clickable(remember {
-                MutableInteractionSource()
-            }, null) {
-                if (!disabled) {
-                    onChange?.invoke(!checked)
-                }
+            .clickable(
+                remember {
+                    MutableInteractionSource()
+                },
+                indication = null,
+                enabled = !disabled
+            ) {
+                onChange?.invoke(!checked)
             }
             .padding(16.dp)
             .alpha(if (disabled) 0.1f else 1f),

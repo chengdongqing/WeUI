@@ -57,12 +57,14 @@ fun WeRadio(label: String, checked: Boolean, disabled: Boolean, onClick: () -> U
         Row(
             Modifier
                 .clip(RoundedCornerShape(10.dp))
-                .clickable(remember {
-                    MutableInteractionSource()
-                }, null) {
-                    if (!disabled) {
-                        onClick()
-                    }
+                .clickable(
+                    remember {
+                        MutableInteractionSource()
+                    },
+                    indication = null,
+                    enabled = !disabled
+                ) {
+                    onClick()
                 }
                 .padding(16.dp)
                 .alpha(if (disabled) 0.1f else 1f),
