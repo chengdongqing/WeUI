@@ -8,8 +8,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import top.chengdongqing.weui.ui.views.HomePage
+import top.chengdongqing.weui.ui.views.basic.GalleryPage
 import top.chengdongqing.weui.ui.views.basic.LoadingPage
-import top.chengdongqing.weui.ui.views.basic.MediaPickPage
 import top.chengdongqing.weui.ui.views.feedback.DialogPage
 import top.chengdongqing.weui.ui.views.feedback.PopupPage
 import top.chengdongqing.weui.ui.views.form.*
@@ -61,8 +61,8 @@ fun NavGraphBuilder.basicGraph() {
     composable("loading") {
         LoadingPage()
     }
-    composable("mediaPicker") {
-        MediaPickPage()
+    composable("gallery") {
+        GalleryPage()
     }
 }
 

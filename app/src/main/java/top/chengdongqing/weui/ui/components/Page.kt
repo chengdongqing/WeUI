@@ -13,7 +13,13 @@ import top.chengdongqing.weui.ui.theme.BackgroundColor
 import top.chengdongqing.weui.ui.theme.FontColor
 
 @Composable
-fun Page(title: String, description: String, bgColor: Color = BackgroundColor, content: @Composable () -> Unit) {
+fun Page(
+    title: String,
+    description: String,
+    paddingValues: PaddingValues? = null,
+    bgColor: Color = BackgroundColor,
+    content: @Composable () -> Unit
+) {
     Column(
         Modifier
             .background(bgColor)
@@ -35,7 +41,7 @@ fun Page(title: String, description: String, bgColor: Color = BackgroundColor, c
         Box(
             Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(paddingValues ?: PaddingValues(16.dp)),
             contentAlignment = Alignment.TopCenter
         ) {
             content()

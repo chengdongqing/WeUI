@@ -42,7 +42,7 @@ val menus = listOf(
             MenuItem("Grid", "grid"),
             MenuItem("Icons", "icons"),
             MenuItem("Loading", "loading"),
-            MenuItem("Loadmore", "loadmore"),
+            MenuItem("LoadMore", "loadMore"),
             MenuItem("Panel", "panel"),
             MenuItem("Preview", "preview"),
             MenuItem("Progress", "progress"),
@@ -52,26 +52,26 @@ val menus = listOf(
     MenuGroup(
         "操作反馈", R.drawable.icon_nav_feedback,
         listOf(
-            MenuItem("Actionsheet", "actionsheet"),
+            MenuItem("ActionSheet", "actionSheet"),
             MenuItem("Dialog", "dialog"),
             MenuItem("Popup", "popup"),
             MenuItem("Msg", "msg"),
             MenuItem("Picker", "picker"),
             MenuItem("Toast", "toast"),
-            MenuItem("Information Bar", "information-bar")
+            MenuItem("Information Bar", "informationBar")
         )
     ),
     MenuGroup(
         "导航相关", R.drawable.icon_nav_nav,
         listOf(
             MenuItem("Navbar", "navbar"),
-            MenuItem("Tabbar", "tabbar")
+            MenuItem("TabBar", "tabBar")
         )
     ),
     MenuGroup(
         "搜索相关", R.drawable.icon_nav_search,
         listOf(
-            MenuItem("Search Bar", "search-bar")
+            MenuItem("Search Bar", "searchBar")
         )
     ),
     MenuGroup(
