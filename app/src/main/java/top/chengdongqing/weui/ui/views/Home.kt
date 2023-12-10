@@ -12,6 +12,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -22,15 +23,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import top.chengdongqing.weui.R
-import top.chengdongqing.weui.navigation.LocalNavController
 import top.chengdongqing.weui.ui.data.MenuGroup
 import top.chengdongqing.weui.ui.data.menus
 import top.chengdongqing.weui.ui.theme.BackgroundColor
 import top.chengdongqing.weui.ui.theme.BorderColor
 
 @Composable
-fun HomePage() {
-    val navController = LocalNavController.current
+fun HomePage(navController: NavHostController) {
+    var current by rememberSaveable {
+        mutableIntStateOf(-1)
+    }
 
     Column(
         Modifier
@@ -51,10 +53,6 @@ fun HomePage() {
                 color = Color(0f, 0f, 0f, 0.55f),
                 fontSize = 14.sp
             )
-        }
-
-        var current by remember {
-            mutableIntStateOf(-1)
         }
 
         Column(Modifier.padding(horizontal = 16.dp)) {

@@ -3,10 +3,7 @@ package top.chengdongqing.weui.navigation
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.compositionLocalOf
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -17,53 +14,50 @@ import top.chengdongqing.weui.ui.views.feedback.DialogPage
 import top.chengdongqing.weui.ui.views.feedback.PopupPage
 import top.chengdongqing.weui.ui.views.form.*
 
-val LocalNavController = compositionLocalOf<NavHostController> { error("No NavController provided") }
-
 @Composable
 fun AppNavigator() {
     val navController = rememberNavController()
 
-    CompositionLocalProvider(LocalNavController provides navController) {
-        NavHost(
-            navController,
-            startDestination = "home",
+    NavHost(
+        navController,
+        startDestination = "home",
+        enterTransition = {
+            slideIntoContainer(
+                AnimatedContentTransitionScope.SlideDirection.Left,
+                animationSpec = tween(300)
+            )
+        },
+        exitTransition = {
+            slideOutOfContainer(
+                AnimatedContentTransitionScope.SlideDirection.Right,
+                animationSpec = tween(300)
+            )
+        }
+    ) {
+        composable("home",
             enterTransition = {
                 slideIntoContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    AnimatedContentTransitionScope.SlideDirection.Right,
                     animationSpec = tween(300)
                 )
             },
             exitTransition = {
                 slideOutOfContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    AnimatedContentTransitionScope.SlideDirection.Left,
                     animationSpec = tween(300)
                 )
             }
         ) {
-            composable("home",
-                enterTransition = {
-                    slideIntoContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Right,
-                        animationSpec = tween(300)
-                    )
-                },
-                exitTransition = {
-                    slideOutOfContainer(
-                        AnimatedContentTransitionScope.SlideDirection.Left,
-                        animationSpec = tween(300)
-                    )
-                }
-            ) {
-                HomePage()
-            }
-            addFormRoutes()
-            addBasicRoutes()
-            addFeedbackRoutes()
+            HomePage(navController)
         }
+
+        basicGraph()
+        formGraph()
+        feedbackGraph()
     }
 }
 
-fun NavGraphBuilder.addBasicRoutes() {
+fun NavGraphBuilder.basicGraph() {
     composable("loading") {
         LoadingPage()
     }
@@ -72,7 +66,7 @@ fun NavGraphBuilder.addBasicRoutes() {
     }
 }
 
-fun NavGraphBuilder.addFormRoutes() {
+fun NavGraphBuilder.formGraph() {
     composable("button") {
         ButtonPage()
     }
@@ -90,7 +84,7 @@ fun NavGraphBuilder.addFormRoutes() {
     }
 }
 
-fun NavGraphBuilder.addFeedbackRoutes() {
+fun NavGraphBuilder.feedbackGraph() {
     composable("dialog") {
         DialogPage()
     }
