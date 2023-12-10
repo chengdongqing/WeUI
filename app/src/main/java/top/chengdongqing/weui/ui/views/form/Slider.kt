@@ -13,8 +13,8 @@ fun SliderPage() {
             mutableFloatStateOf(0f)
         }
 
-        WeSlider(value.floatValue, onValueChange = {
+        WeSlider(value.floatValue) {
             value.floatValue = it
-        })
+        }
     }
 }

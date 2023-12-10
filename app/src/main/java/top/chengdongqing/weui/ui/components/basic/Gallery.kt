@@ -26,7 +26,7 @@ import top.chengdongqing.weui.ui.components.form.ButtonSize
 import top.chengdongqing.weui.ui.components.form.WeButton
 
 @Composable
-fun Gallery() {
+fun WeGallery() {
     val context = LocalContext.current
     val selectedMedia = remember {
         mutableStateListOf<MediaItem>()
@@ -65,9 +65,9 @@ fun Gallery() {
 @Composable
 fun MediaGrid(mediaItems: List<MediaItem>) {
     LazyVerticalGrid(
-        columns = GridCells.Fixed(4),
-        horizontalArrangement = Arrangement.spacedBy(2.dp),
-        verticalArrangement = Arrangement.spacedBy(2.dp),
+        columns = GridCells.Fixed(3),
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
         modifier = Modifier.fillMaxWidth()
     ) {
         items(mediaItems.size) { index ->
