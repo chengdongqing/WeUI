@@ -2,6 +2,7 @@ package top.chengdongqing.weui.ui.components.form
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -40,9 +41,19 @@ fun WeSlider(
     var fraction by remember { mutableFloatStateOf(0f) }
     var offsetX by remember { mutableStateOf(0.dp) }
 
+    // 值改变后计算相应元素的位置或宽度
     LaunchedEffect(value, sliderWidth) {
         fraction = (value.coerceIn(min, max) - min) / (max - min).toFloat()
         offsetX = density.run { (sliderWidth * fraction).toDp() }
+    }
+
+    // 处理滑动或点击事件
+    fun handleChange(offsetX: Float) {
+        val newFraction = (offsetX / sliderWidth).coerceIn(0f, 1f)
+        val newValue = (newFraction * (max - min) + min).toInt()
+        if (newValue % step == 0) {
+            onValueChange(newValue)
+        }
     }
 
     Box(
@@ -52,17 +63,21 @@ fun WeSlider(
             .onSizeChanged {
                 sliderWidth = it.width
             }
+            // 处理拖动事件
             .pointerInput(sliderWidth, step, min, max) {
                 detectHorizontalDragGestures { change, _ ->
-                    val newFraction = (change.position.x / sliderWidth).coerceIn(0f, 1f)
-                    val newValue = (newFraction * (max - min) + min).toInt()
-                    if (newValue % step == 0) {
-                        onValueChange(newValue)
-                    }
+                    handleChange(change.position.x)
+                }
+            }
+            // 处理点击事件
+            .pointerInput(Unit) {
+                detectTapGestures {
+                    handleChange(it.x)
                 }
             },
         contentAlignment = Alignment.CenterStart
     ) {
+        // 滑轨
         Box(
             Modifier
                 .fillMaxWidth()
@@ -70,6 +85,7 @@ fun WeSlider(
                 .background(BorderColor),
             contentAlignment = Alignment.CenterStart
         ) {
+            // 高亮线段
             Box(
                 Modifier
                     .fillMaxWidth(fraction)
@@ -77,6 +93,7 @@ fun WeSlider(
                     .background(PrimaryColor)
             )
         }
+        // 手柄
         Box(
             Modifier
                 .size(28.dp)
