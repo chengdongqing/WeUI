@@ -98,8 +98,8 @@ fun WeSlider(
             Modifier
                 .size(28.dp)
                 .offset(offsetX - 14.dp)
-                .background(Color.White, CircleShape)
                 .shadow(14.dp, CircleShape, spotColor = BorderColor)
+                .background(Color.White, CircleShape)
         )
 
     }

@@ -1,9 +1,13 @@
 package top.chengdongqing.weui.ui.views.feedback
 
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.ui.components.Page
 import top.chengdongqing.weui.ui.components.feedback.WePopup
 import top.chengdongqing.weui.ui.components.form.WeButton
@@ -15,14 +19,15 @@ fun PopupPage() {
             mutableStateOf(false)
         }
 
-        WeButton(text = "open") {
+        WeButton(text = "Open") {
             visible.value = true
         }
 
         WePopup(visible.value, onClose = {
             visible.value = false
-        }) {
-            Text(text = "你好")
+        }, title = "标题") {
+            Text(text = "内容")
+            Spacer(modifier = Modifier.height(100.dp))
         }
     }
 }
