@@ -118,7 +118,7 @@ fun MenuGroup(group: MenuGroup, open: Boolean, navController: NavHostController,
                     Row(
                         Modifier
                             .clickable {
-                                navController.navigate(item.path)
+                                navController.navigate(item.route)
                             }
                             .padding(horizontal = 20.dp, vertical = 16.dp),
                         verticalAlignment = Alignment.CenterVertically

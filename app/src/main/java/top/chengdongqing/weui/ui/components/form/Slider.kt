@@ -1,40 +1,67 @@
 package top.chengdongqing.weui.ui.components.form
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectTransformGestures
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.ui.theme.BorderColor
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 
 @Composable
 fun WeSlider(
-    value: Float,
-    min: Float = 0f,
-    max: Float = 1f,
-    onValueChange: (Float) -> Unit
+    value: Int,
+    step: Int = 1,
+    min: Int = 0,
+    max: Int = 100,
+    onValueChange: (value: Int) -> Unit
 ) {
-    var offsetX by remember { mutableFloatStateOf(0f) }
+    val density = LocalDensity.current
+    var sliderWidth by remember { mutableIntStateOf(0) }
+    var fraction by remember { mutableFloatStateOf(0f) }
+    var offsetX by remember { mutableStateOf(0.dp) }
+
+    LaunchedEffect(value, sliderWidth) {
+        fraction = (value.coerceIn(min, max) - min) / (max - min).toFloat()
+        offsetX = density.run { (sliderWidth * fraction).toDp() }
+    }
 
     Box(
         Modifier
             .fillMaxWidth()
             .height(48.dp)
-            .pointerInput(Unit) {
-                detectTransformGestures { _, pan, _, _ ->
-                    offsetX += pan.x
-                    val newValue = (value + offsetX / 300).coerceIn(0f, 1f)
-                    onValueChange(newValue)
-                    offsetX = 0f
-                }
+            .onSizeChanged {
+                sliderWidth = it.width
             }
+            .pointerInput(sliderWidth, step, min, max) {
+                detectHorizontalDragGestures { change, _ ->
+                    val newFraction = (change.position.x / sliderWidth).coerceIn(0f, 1f)
+                    val newValue = (newFraction * (max - min) + min).toInt()
+                    if (newValue % step == 0) {
+                        onValueChange(newValue)
+                    }
+                }
+            },
+        contentAlignment = Alignment.CenterStart
     ) {
         Box(
             Modifier
@@ -43,21 +70,20 @@ fun WeSlider(
                 .background(BorderColor),
             contentAlignment = Alignment.CenterStart
         ) {
-            val thumbX = (value - min) / (max - min)
             Box(
                 Modifier
-                    .fillMaxWidth(fraction = thumbX)
+                    .fillMaxWidth(fraction)
                     .height(2.dp)
                     .background(PrimaryColor)
             )
         }
-        val thumbX = (value - min) / (max - min)
         Box(
             Modifier
-                .offset(x = (thumbX * 100).dp, y = (-14).dp)
                 .size(28.dp)
-                .shadow(14.dp, CircleShape, spotColor = BorderColor)
+                .offset(offsetX - 14.dp)
                 .background(Color.White, CircleShape)
+                .shadow(14.dp, CircleShape, spotColor = BorderColor)
         )
+
     }
 }

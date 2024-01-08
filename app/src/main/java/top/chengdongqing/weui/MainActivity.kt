@@ -3,7 +3,7 @@ package top.chengdongqing.weui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import top.chengdongqing.weui.navigation.AppNavigator
+import top.chengdongqing.weui.navigation.NavigationGraph
 import top.chengdongqing.weui.ui.theme.WeUITheme
 
 class MainActivity : ComponentActivity() {
@@ -11,7 +11,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             WeUITheme {
-                AppNavigator()
+                NavigationGraph()
             }
         }
     }

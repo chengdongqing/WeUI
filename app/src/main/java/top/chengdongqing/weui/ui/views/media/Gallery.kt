@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.ui.views.basic
+package top.chengdongqing.weui.ui.views.media
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable

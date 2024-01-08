@@ -5,7 +5,7 @@ import top.chengdongqing.weui.R
 
 data class MenuItem(
     val label: String,
-    val path: String
+    val route: String
 )
 
 data class MenuGroup(
@@ -18,64 +18,73 @@ data class MenuGroup(
 
 val menus = listOf(
     MenuGroup(
-        "表单", R.drawable.icon_nav_form,
+        "表单组件", R.drawable.icon_nav_form,
         listOf(
             MenuItem("Button", "button"),
-            MenuItem("Form", "form"),
             MenuItem("Checkbox", "checkbox"),
             MenuItem("Radio", "radio"),
             MenuItem("Switch", "switch"),
-            MenuItem("Slider", "slider"),
-            MenuItem("List", "list"),
-            MenuItem("Uploader", "uploader")
+            MenuItem("Slider", "slider")
         )
     ),
     MenuGroup(
         "基础组件", R.drawable.icon_nav_layout,
         listOf(
-            MenuItem("MediaPicker", "mediaPicker"),
-            MenuItem("Article", "article"),
             MenuItem("Badge", "badge"),
-            MenuItem("Flex", "flex"),
             MenuItem("Footer", "footer"),
-            MenuItem("Gallery", "gallery"),
-            MenuItem("Grid", "grid"),
-            MenuItem("Icons", "icons"),
             MenuItem("Loading", "loading"),
-            MenuItem("LoadMore", "loadMore"),
-            MenuItem("Panel", "panel"),
-            MenuItem("Preview", "preview"),
+            MenuItem("LoadMore", "load-more"),
             MenuItem("Progress", "progress"),
             MenuItem("Steps", "steps")
         )
     ),
     MenuGroup(
+        "媒体组件", R.drawable.icon_nav_media,
+        listOf(
+            MenuItem("Gallery", "gallery"),
+            MenuItem("File Browser", "file-browser"),
+            MenuItem("Media Picker", "media-picker"),
+            MenuItem("Voice Recorder", "voice-recorder"),
+            MenuItem("Image Cropper", "image-cropper"),
+            MenuItem("Camera", "camera"),
+            MenuItem("Audio", "audio"),
+            MenuItem("Video", "video"),
+            MenuItem("Live Player", "live-player"),
+            MenuItem("Live Pusher", "live-pusher")
+        )
+    ),
+    MenuGroup(
         "操作反馈", R.drawable.icon_nav_feedback,
         listOf(
-            MenuItem("ActionSheet", "actionSheet"),
+            MenuItem("ActionSheet", "action-sheet"),
             MenuItem("Dialog", "dialog"),
             MenuItem("Popup", "popup"),
-            MenuItem("Msg", "msg"),
             MenuItem("Picker", "picker"),
             MenuItem("Toast", "toast"),
-            MenuItem("Information Bar", "informationBar")
+            MenuItem("Information Bar", "information-bar")
+        )
+    ),
+    MenuGroup(
+        "地图组件", R.drawable.icon_nav_feedback,
+        listOf(
+            MenuItem("Map", "map"),
         )
     ),
     MenuGroup(
         "导航相关", R.drawable.icon_nav_nav,
         listOf(
-            MenuItem("Navbar", "navbar"),
-            MenuItem("TabBar", "tabBar")
+            MenuItem("NavBar", "nav-bar"),
+            MenuItem("TabBar", "tab-bar")
         )
     ),
     MenuGroup(
         "搜索相关", R.drawable.icon_nav_search,
         listOf(
-            MenuItem("Search Bar", "searchBar")
+            MenuItem("Search Bar", "search-bar")
         )
     ),
     MenuGroup(
         "层级规范", R.drawable.icon_nav_zindex,
-        path = "/z-index"
+        path = "z-index"
     )
 )
