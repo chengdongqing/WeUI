@@ -2,7 +2,15 @@ package top.chengdongqing.weui.ui.components.feedback
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
@@ -135,9 +143,9 @@ fun WeDialogHolder(
     okText: String = "确定",
     cancelText: String = "取消",
     okColor: Color = Color(0xFF576B95),
-    onOk: (MutableState<Boolean>) -> Unit,
-    onCancel: ((MutableState<Boolean>) -> Unit)? = null,
-    holder: @Composable (MutableState<Boolean>) -> Unit
+    onOk: (visible: MutableState<Boolean>) -> Unit,
+    onCancel: ((visible: MutableState<Boolean>) -> Unit)? = null,
+    holder: @Composable (visible: MutableState<Boolean>) -> Unit
 ) {
     val visible = remember { mutableStateOf(false) }
 

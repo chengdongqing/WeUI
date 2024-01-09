@@ -7,9 +7,10 @@ import androidx.compose.animation.slideOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -35,7 +36,8 @@ import top.chengdongqing.weui.utils.clickableWithoutRipple
 @Composable
 fun WePopup(
     visible: Boolean,
-    onClose: () -> Unit,
+    onCancel: () -> Unit,
+    padding: PaddingValues = PaddingValues(12.dp),
     title: String? = null,
     content: @Composable () -> Unit
 ) {
@@ -52,14 +54,14 @@ fun WePopup(
 
     if (visible || localVisible) {
         Dialog(
-            onDismissRequest = onClose,
+            onDismissRequest = onCancel,
             properties = DialogProperties(usePlatformDefaultWidth = false)
         ) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .clickableWithoutRipple {
-                        onClose()
+                        onCancel()
                     },
                 contentAlignment = Alignment.BottomStart
             ) {
@@ -78,21 +80,20 @@ fun WePopup(
                             .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
                             .background(Color.White)
                             .clickableWithoutRipple { }
+                            .padding(padding)
                     ) {
                         Column {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(60.dp),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                title?.also {
+                            title?.also {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .heightIn(60.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
                                     Text(text = it, fontSize = 18.sp, fontWeight = FontWeight.Bold)
                                 }
                             }
-                            Box(modifier = Modifier.padding(16.dp)) {
-                                content()
-                            }
+                            content()
                         }
                     }
                 }

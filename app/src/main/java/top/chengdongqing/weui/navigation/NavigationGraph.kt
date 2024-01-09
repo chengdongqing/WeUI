@@ -8,11 +8,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import top.chengdongqing.weui.ui.views.HomePage
-import top.chengdongqing.weui.ui.views.media.GalleryPage
 import top.chengdongqing.weui.ui.views.basic.LoadingPage
+import top.chengdongqing.weui.ui.views.feedback.ActionSheetPage
 import top.chengdongqing.weui.ui.views.feedback.DialogPage
 import top.chengdongqing.weui.ui.views.feedback.PopupPage
-import top.chengdongqing.weui.ui.views.form.*
+import top.chengdongqing.weui.ui.views.form.ButtonPage
+import top.chengdongqing.weui.ui.views.form.CheckboxPage
+import top.chengdongqing.weui.ui.views.form.RadioPage
+import top.chengdongqing.weui.ui.views.form.SliderPage
+import top.chengdongqing.weui.ui.views.form.SwitchPage
+import top.chengdongqing.weui.ui.views.media.GalleryPage
 
 @Composable
 fun NavigationGraph() {
@@ -90,5 +95,8 @@ fun NavGraphBuilder.feedbackGraph() {
     }
     composable("popup") {
         PopupPage()
+    }
+    composable("action-sheet") {
+        ActionSheetPage()
     }
 }

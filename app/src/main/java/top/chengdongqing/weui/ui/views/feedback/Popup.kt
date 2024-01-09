@@ -23,7 +23,7 @@ fun PopupPage() {
             visible.value = true
         }
 
-        WePopup(visible.value, onClose = {
+        WePopup(visible.value, onCancel = {
             visible.value = false
         }, title = "标题") {
             Text(text = "内容")
