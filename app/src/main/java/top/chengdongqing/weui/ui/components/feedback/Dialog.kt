@@ -28,7 +28,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import top.chengdongqing.weui.ui.theme.FontColo1
 import top.chengdongqing.weui.ui.theme.FontColor
+import top.chengdongqing.weui.ui.theme.LinkColor
 
 /**
  * 对话框
@@ -49,7 +51,7 @@ fun WeDialog(
     content: String? = null,
     okText: String = "确定",
     cancelText: String = "取消",
-    okColor: Color = Color(0xFF576B95),
+    okColor: Color = LinkColor,
     onOk: () -> Unit,
     onCancel: (() -> Unit)? = null
 ) {
@@ -93,7 +95,7 @@ fun WeDialog(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 24.dp),
-                            color = Color(0f, 0f, 0f, 0.55f),
+                            color = FontColo1,
                             fontSize = 17.sp,
                             textAlign = TextAlign.Center
                         )
@@ -154,7 +156,7 @@ fun WeDialogHolder(
     content: String? = null,
     okText: String = "确定",
     cancelText: String = "取消",
-    okColor: Color = Color(0xFF576B95),
+    okColor: Color = LinkColor,
     onOk: (visible: MutableState<Boolean>) -> Unit,
     onCancel: ((visible: MutableState<Boolean>) -> Unit)? = null,
     holder: @Composable (visible: MutableState<Boolean>) -> Unit

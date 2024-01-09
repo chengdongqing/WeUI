@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.ui.theme.BackgroundColor
+import top.chengdongqing.weui.ui.theme.FontColo1
 import top.chengdongqing.weui.ui.theme.FontColor
 
 /**
@@ -49,7 +50,7 @@ fun Page(
                 lineHeight = 32.sp
             )
             Spacer(Modifier.height(4.dp))
-            Text(text = description, color = Color(0f, 0f, 0f, 0.55f), fontSize = 14.sp)
+            Text(text = description, color = FontColo1, fontSize = 14.sp)
         }
 
         Spacer(Modifier.height(30.dp))

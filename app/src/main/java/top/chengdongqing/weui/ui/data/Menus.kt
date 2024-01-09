@@ -42,15 +42,15 @@ val menus = listOf(
         "媒体组件", R.drawable.icon_nav_media,
         listOf(
             MenuItem("Gallery", "gallery"),
-            MenuItem("File Browser", "file-browser"),
-            MenuItem("Media Picker", "media-picker"),
-            MenuItem("Voice Recorder", "voice-recorder"),
-            MenuItem("Image Cropper", "image-cropper"),
+            MenuItem("FileBrowser", "file-browser"),
+            MenuItem("MediaPicker", "media-picker"),
+            MenuItem("VoiceRecorder", "voice-recorder"),
+            MenuItem("ImageCropper", "image-cropper"),
             MenuItem("Camera", "camera"),
             MenuItem("Audio", "audio"),
             MenuItem("Video", "video"),
-            MenuItem("Live Player", "live-player"),
-            MenuItem("Live Pusher", "live-pusher")
+            MenuItem("LivePlayer", "live-player"),
+            MenuItem("LivePusher", "live-pusher")
         )
     ),
     MenuGroup(
@@ -61,7 +61,7 @@ val menus = listOf(
             MenuItem("Popup", "popup"),
             MenuItem("Picker", "picker"),
             MenuItem("Toast", "toast"),
-            MenuItem("Information Bar", "information-bar")
+            MenuItem("InformationBar", "information-bar")
         )
     ),
     MenuGroup(
@@ -80,7 +80,7 @@ val menus = listOf(
     MenuGroup(
         "搜索相关", R.drawable.icon_nav_search,
         listOf(
-            MenuItem("Search Bar", "search-bar")
+            MenuItem("SearchBar", "search-bar")
         )
     ),
     MenuGroup(

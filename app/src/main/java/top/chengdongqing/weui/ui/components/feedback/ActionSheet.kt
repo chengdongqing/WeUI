@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import top.chengdongqing.weui.ui.theme.FontColo1
 
 data class ActionItem(
     val label: String,
@@ -55,7 +56,7 @@ fun WeActionSheet(
                 ) {
                     Text(
                         text = it,
-                        color = Color(0f, 0f, 0f, 0.55f),
+                        color = FontColo1,
                         fontSize = 12.sp
                     )
                 }
@@ -81,7 +82,7 @@ fun WeActionSheet(
                         fontSize = 17.sp
                     )
                     item.description?.also {
-                        Text(text = it, color = Color(0f, 0f, 0f, 0.55f), fontSize = 12.sp)
+                        Text(text = it, color = FontColo1, fontSize = 12.sp)
                     }
                 }
             }

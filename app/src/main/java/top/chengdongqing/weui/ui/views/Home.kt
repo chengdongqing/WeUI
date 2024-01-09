@@ -2,17 +2,34 @@ package top.chengdongqing.weui.ui.views
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -27,6 +44,7 @@ import top.chengdongqing.weui.ui.data.MenuGroup
 import top.chengdongqing.weui.ui.data.menus
 import top.chengdongqing.weui.ui.theme.BackgroundColor
 import top.chengdongqing.weui.ui.theme.BorderColor
+import top.chengdongqing.weui.ui.theme.FontColo1
 
 @Composable
 fun HomePage(navController: NavHostController) {
@@ -50,7 +68,7 @@ fun HomePage(navController: NavHostController) {
             Spacer(modifier = Modifier.height(19.dp))
             Text(
                 text = "WeUI 是一套同微信原生视觉体验一致的基础样式库，由微信官方设计团队为微信内网页和微信小程序量身设计，令用户的使用感知更加统一。",
-                color = Color(0f, 0f, 0f, 0.55f),
+                color = FontColo1,
                 fontSize = 14.sp
             )
         }
@@ -64,12 +82,30 @@ fun HomePage(navController: NavHostController) {
             }
         }
 
-        Spacer(Modifier.height(100.dp))
+        Spacer(Modifier.height(60.dp))
+
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 40.dp)
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.icon_footer_link),
+                contentDescription = null,
+                modifier = Modifier.size(84.dp, 19.dp)
+            )
+        }
     }
 }
 
 @Composable
-fun MenuGroup(group: MenuGroup, open: Boolean, navController: NavHostController, onChange: () -> Unit) {
+fun MenuGroup(
+    group: MenuGroup,
+    open: Boolean,
+    navController: NavHostController,
+    onChange: () -> Unit
+) {
     val animatedHeight by animateDpAsState(
         targetValue = if (open && group.children != null) 56.5.dp * group.children.size else 0.dp,
         animationSpec = remember {

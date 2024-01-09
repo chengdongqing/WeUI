@@ -11,6 +11,7 @@ import top.chengdongqing.weui.ui.views.HomePage
 import top.chengdongqing.weui.ui.views.basic.LoadingPage
 import top.chengdongqing.weui.ui.views.feedback.ActionSheetPage
 import top.chengdongqing.weui.ui.views.feedback.DialogPage
+import top.chengdongqing.weui.ui.views.feedback.InformationBarPage
 import top.chengdongqing.weui.ui.views.feedback.PopupPage
 import top.chengdongqing.weui.ui.views.feedback.ToastPage
 import top.chengdongqing.weui.ui.views.form.ButtonPage
@@ -19,6 +20,7 @@ import top.chengdongqing.weui.ui.views.form.RadioPage
 import top.chengdongqing.weui.ui.views.form.SliderPage
 import top.chengdongqing.weui.ui.views.form.SwitchPage
 import top.chengdongqing.weui.ui.views.media.GalleryPage
+import top.chengdongqing.weui.ui.views.search.SearchBarPage
 
 @Composable
 fun NavigationGraph() {
@@ -60,6 +62,7 @@ fun NavigationGraph() {
         basicGraph()
         formGraph()
         feedbackGraph()
+        searchGraph()
     }
 }
 
@@ -102,5 +105,14 @@ fun NavGraphBuilder.feedbackGraph() {
     }
     composable("toast") {
         ToastPage()
+    }
+    composable("information-bar") {
+        InformationBarPage()
+    }
+}
+
+fun NavGraphBuilder.searchGraph() {
+    composable("search-bar") {
+        SearchBarPage()
     }
 }
