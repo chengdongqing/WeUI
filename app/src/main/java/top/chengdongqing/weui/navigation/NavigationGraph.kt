@@ -12,6 +12,7 @@ import top.chengdongqing.weui.ui.views.basic.LoadingPage
 import top.chengdongqing.weui.ui.views.feedback.ActionSheetPage
 import top.chengdongqing.weui.ui.views.feedback.DialogPage
 import top.chengdongqing.weui.ui.views.feedback.PopupPage
+import top.chengdongqing.weui.ui.views.feedback.ToastPage
 import top.chengdongqing.weui.ui.views.form.ButtonPage
 import top.chengdongqing.weui.ui.views.form.CheckboxPage
 import top.chengdongqing.weui.ui.views.form.RadioPage
@@ -98,5 +99,8 @@ fun NavGraphBuilder.feedbackGraph() {
     }
     composable("action-sheet") {
         ActionSheetPage()
+    }
+    composable("toast") {
+        ToastPage()
     }
 }

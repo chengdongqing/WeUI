@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.ui.components.Page
 import top.chengdongqing.weui.ui.components.feedback.WePopup
+import top.chengdongqing.weui.ui.components.form.ButtonType
 import top.chengdongqing.weui.ui.components.form.WeButton
 
 @Composable
@@ -19,11 +20,11 @@ fun PopupPage() {
             mutableStateOf(false)
         }
 
-        WeButton(text = "Open") {
+        WeButton(text = "打开", type = ButtonType.PLAIN) {
             visible.value = true
         }
 
-        WePopup(visible.value, onCancel = {
+        WePopup(visible.value, onClose = {
             visible.value = false
         }, title = "标题") {
             Text(text = "内容")

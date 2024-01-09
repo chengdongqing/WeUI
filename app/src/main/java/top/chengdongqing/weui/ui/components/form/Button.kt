@@ -3,7 +3,12 @@ package top.chengdongqing.weui.ui.components.form
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Text
@@ -34,6 +39,16 @@ enum class ButtonSize(val padding: PaddingValues, val fontSize: TextUnit, val bo
     SMALL(PaddingValues(vertical = 6.dp, horizontal = 12.dp), 14.sp, 6.dp)
 }
 
+/**
+ * 按钮
+ *
+ * @param text 按钮文字
+ * @param type 类型
+ * @param size 大小
+ * @param disabled 是否禁用
+ * @param loading 是否加载中
+ * @param onClick 点击事件
+ */
 @Composable
 fun WeButton(
     text: String,

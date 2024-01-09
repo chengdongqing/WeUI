@@ -31,6 +31,14 @@ data class RadioOption(
     val disabled: Boolean = false
 )
 
+/**
+ * 单选框
+ *
+ * @param options 可选项列表
+ * @param value 已选中的value
+ * @param disabled 是否禁用
+ * @param onChange 选中项改变事件
+ */
 @Composable
 fun WeRadioGroup(
     options: List<RadioOption>,

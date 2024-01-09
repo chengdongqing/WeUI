@@ -26,6 +26,15 @@ data class ActionItem(
     val color: Color? = null
 )
 
+/**
+ * 弹出式菜单
+ *
+ * @param visible 是否显示
+ * @param title 标题
+ * @param actions 菜单列表
+ * @param onCancel 取消事件
+ * @param onChange 菜单选中事件
+ */
 @Composable
 fun WeActionSheet(
     visible: Boolean,

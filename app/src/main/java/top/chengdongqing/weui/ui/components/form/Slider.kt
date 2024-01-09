@@ -28,13 +28,22 @@ import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.ui.theme.BorderColor
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 
+/**
+ * 滑块
+ *
+ * @param value 当前值
+ * @param step 步长
+ * @param min 最小值
+ * @param max 最大值
+ * @param onChange 值改变事件
+ */
 @Composable
 fun WeSlider(
     value: Int,
     step: Int = 1,
     min: Int = 0,
     max: Int = 100,
-    onValueChange: (value: Int) -> Unit
+    onChange: (value: Int) -> Unit
 ) {
     val density = LocalDensity.current
     var sliderWidth by remember { mutableIntStateOf(0) }
@@ -52,7 +61,7 @@ fun WeSlider(
         val newFraction = (offsetX / sliderWidth).coerceIn(0f, 1f)
         val newValue = (newFraction * (max - min) + min).toInt()
         if (newValue % step == 0) {
-            onValueChange(newValue)
+            onChange(newValue)
         }
     }
 

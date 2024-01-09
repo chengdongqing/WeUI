@@ -1,7 +1,14 @@
 package top.chengdongqing.weui.ui.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -12,11 +19,20 @@ import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.ui.theme.BackgroundColor
 import top.chengdongqing.weui.ui.theme.FontColor
 
+/**
+ * 页面组件
+ *
+ * @param title 标题
+ * @param description 描述
+ * @param padding 内边距
+ * @param bgColor 背景颜色
+ * @param content 内容
+ */
 @Composable
 fun Page(
     title: String,
     description: String,
-    paddingValues: PaddingValues? = null,
+    padding: PaddingValues = PaddingValues(16.dp),
     bgColor: Color = BackgroundColor,
     content: @Composable () -> Unit
 ) {
@@ -41,7 +57,7 @@ fun Page(
         Box(
             Modifier
                 .fillMaxSize()
-                .padding(paddingValues ?: PaddingValues(16.dp)),
+                .padding(padding),
             contentAlignment = Alignment.TopCenter
         ) {
             content()

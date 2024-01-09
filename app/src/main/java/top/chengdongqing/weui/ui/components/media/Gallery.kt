@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.ui.components.form.ButtonSize
+import top.chengdongqing.weui.ui.components.form.ButtonType
 import top.chengdongqing.weui.ui.components.form.WeButton
 
 @Composable
@@ -61,12 +62,12 @@ fun WeGallery() {
                 .padding(horizontal = 32.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            WeButton("选择本地媒体文件", size = ButtonSize.SMALL) {
+            WeButton("选择本地媒体文件", type = ButtonType.PLAIN, size = ButtonSize.SMALL) {
                 pickMultipleMediaLauncher.launch(
                     PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo)
                 )
             }
-            WeButton("读取本地媒体文件", size = ButtonSize.SMALL) {
+            WeButton("读取本地媒体文件", type = ButtonType.PLAIN, size = ButtonSize.SMALL) {
                 Toast.makeText(context, "敬请期待", Toast.LENGTH_SHORT).show()
             }
         }

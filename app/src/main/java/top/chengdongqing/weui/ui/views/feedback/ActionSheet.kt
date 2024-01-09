@@ -9,6 +9,7 @@ import androidx.compose.ui.platform.LocalContext
 import top.chengdongqing.weui.ui.components.Page
 import top.chengdongqing.weui.ui.components.feedback.ActionItem
 import top.chengdongqing.weui.ui.components.feedback.WeActionSheet
+import top.chengdongqing.weui.ui.components.form.ButtonType
 import top.chengdongqing.weui.ui.components.form.WeButton
 
 @Composable
@@ -18,7 +19,7 @@ fun ActionSheetPage() {
             mutableStateOf(false)
         }
 
-        WeButton(text = "弹出") {
+        WeButton(text = "弹出", type = ButtonType.PLAIN) {
             visible.value = true
         }
 

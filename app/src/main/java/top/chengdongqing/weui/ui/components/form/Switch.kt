@@ -19,6 +19,13 @@ import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.ui.theme.BorderColor
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 
+/**
+ * 开关
+ *
+ * @param checked 是否开启
+ * @param disabled 是否禁用
+ * @param onChange 状态改变事件
+ */
 @Composable
 fun WeSwitch(
     checked: Boolean = false,

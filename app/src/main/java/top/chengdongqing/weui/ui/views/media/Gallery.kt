@@ -8,7 +8,7 @@ import top.chengdongqing.weui.ui.components.media.WeGallery
 
 @Composable
 fun GalleryPage() {
-    Page(title = "Gallery", description = "相册", paddingValues = PaddingValues(0.dp)) {
+    Page(title = "Gallery", description = "相册", padding = PaddingValues(0.dp)) {
         WeGallery()
     }
 }

@@ -33,10 +33,19 @@ import androidx.compose.ui.window.DialogProperties
 import kotlinx.coroutines.delay
 import top.chengdongqing.weui.utils.clickableWithoutRipple
 
+/**
+ * 从底部弹出的半屏弹窗
+ *
+ * @param visible 是否显示
+ * @param onClose 关闭事件
+ * @param padding 内边距
+ * @param title 标题
+ * @param content 内容
+ */
 @Composable
 fun WePopup(
     visible: Boolean,
-    onCancel: () -> Unit,
+    onClose: () -> Unit,
     padding: PaddingValues = PaddingValues(12.dp),
     title: String? = null,
     content: @Composable () -> Unit
@@ -54,14 +63,14 @@ fun WePopup(
 
     if (visible || localVisible) {
         Dialog(
-            onDismissRequest = onCancel,
+            onDismissRequest = onClose,
             properties = DialogProperties(usePlatformDefaultWidth = false)
         ) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .clickableWithoutRipple {
-                        onCancel()
+                        onClose()
                     },
                 contentAlignment = Alignment.BottomStart
             ) {

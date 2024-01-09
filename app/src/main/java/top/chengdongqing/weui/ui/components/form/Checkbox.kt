@@ -4,7 +4,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
@@ -31,6 +38,14 @@ data class CheckboxOption(
     val disabled: Boolean = false
 )
 
+/**
+ * 多选框
+ *
+ * @param options 可选项列表
+ * @param values 已选中的value列表
+ * @param disabled 是否禁用
+ * @param onChange 选中项改变事件
+ */
 @Composable
 fun WeCheckboxGroup(
     options: List<CheckboxOption>,

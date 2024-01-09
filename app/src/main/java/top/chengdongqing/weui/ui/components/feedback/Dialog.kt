@@ -30,6 +30,18 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import top.chengdongqing.weui.ui.theme.FontColor
 
+/**
+ * 对话框
+ *
+ * @param visible 是否显示
+ * @param title 标题
+ * @param content 内容
+ * @param okText 确定按钮文字
+ * @param cancelText 取消按钮文字
+ * @param okColor 确定按钮颜色
+ * @param onOk 确定事件
+ * @param onCancel 取消事件
+ */
 @Composable
 fun WeDialog(
     visible: Boolean,
@@ -147,7 +159,9 @@ fun WeDialogHolder(
     onCancel: ((visible: MutableState<Boolean>) -> Unit)? = null,
     holder: @Composable (visible: MutableState<Boolean>) -> Unit
 ) {
-    val visible = remember { mutableStateOf(false) }
+    val visible = remember {
+        mutableStateOf(false)
+    }
 
     holder(visible)
 

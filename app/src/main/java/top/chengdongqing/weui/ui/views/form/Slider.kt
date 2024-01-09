@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.ui.components.Page
 import top.chengdongqing.weui.ui.components.form.ButtonSize
+import top.chengdongqing.weui.ui.components.form.ButtonType
 import top.chengdongqing.weui.ui.components.form.WeButton
 import top.chengdongqing.weui.ui.components.form.WeSlider
 
@@ -40,16 +41,16 @@ fun SliderPage() {
             Spacer(modifier = Modifier.height(60.dp))
             Text(text = "value: $value")
             Spacer(modifier = Modifier.height(20.dp))
-            WeButton(text = "设置值为50") {
+            WeButton(text = "设置值为50", type = ButtonType.PLAIN) {
                 value = 50
             }
             Spacer(modifier = Modifier.height(20.dp))
             Row {
-                WeButton(text = "设置步长为10", size = ButtonSize.SMALL) {
+                WeButton(text = "设置步长为10", type = ButtonType.PLAIN, size = ButtonSize.SMALL) {
                     step = 10
                 }
                 Spacer(modifier = Modifier.width(10.dp))
-                WeButton(text = "设置步长为1", size = ButtonSize.SMALL) {
+                WeButton(text = "设置步长为1", type = ButtonType.PLAIN, size = ButtonSize.SMALL) {
                     step = 1
                 }
             }
