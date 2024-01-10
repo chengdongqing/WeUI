@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.ui.data
+package top.chengdongqing.weui.data
 
 import androidx.annotation.DrawableRes
 import top.chengdongqing.weui.R
@@ -18,6 +18,17 @@ data class MenuGroup(
 
 val menus = listOf(
     MenuGroup(
+        "基础组件", R.drawable.icon_nav_layout,
+        listOf(
+            MenuItem("Badge", "badge"),
+            MenuItem("Footer", "footer"),
+            MenuItem("Loading", "loading"),
+            MenuItem("LoadMore", "load-more"),
+            MenuItem("Progress", "progress"),
+            MenuItem("Steps", "steps")
+        )
+    ),
+    MenuGroup(
         "表单组件", R.drawable.icon_nav_form,
         listOf(
             MenuItem("Button", "button"),
@@ -28,14 +39,14 @@ val menus = listOf(
         )
     ),
     MenuGroup(
-        "基础组件", R.drawable.icon_nav_layout,
+        "操作反馈", R.drawable.icon_nav_feedback,
         listOf(
-            MenuItem("Badge", "badge"),
-            MenuItem("Footer", "footer"),
-            MenuItem("Loading", "loading"),
-            MenuItem("LoadMore", "load-more"),
-            MenuItem("Progress", "progress"),
-            MenuItem("Steps", "steps")
+            MenuItem("ActionSheet", "action-sheet"),
+            MenuItem("Dialog", "dialog"),
+            MenuItem("Popup", "popup"),
+            MenuItem("Picker", "picker"),
+            MenuItem("Toast", "toast"),
+            MenuItem("InformationBar", "information-bar")
         )
     ),
     MenuGroup(
@@ -54,14 +65,28 @@ val menus = listOf(
         )
     ),
     MenuGroup(
-        "操作反馈", R.drawable.icon_nav_feedback,
+        "设备接口", R.drawable.icon_nav_nav,
         listOf(
-            MenuItem("ActionSheet", "action-sheet"),
-            MenuItem("Dialog", "dialog"),
-            MenuItem("Popup", "popup"),
-            MenuItem("Picker", "picker"),
-            MenuItem("Toast", "toast"),
-            MenuItem("InformationBar", "information-bar")
+            MenuItem("DeviceInfo", "device-info"),
+            MenuItem("SystemStatus", "system-status"),
+            MenuItem("Database", "database"),
+            MenuItem("WiFi", "wifi"),
+            MenuItem("Bluetooth", "bluetooth"),
+            MenuItem("NFC", "nfc"),
+            MenuItem("Battery", "battery"),
+            MenuItem("Flashlight", "flashlight"),
+            MenuItem("Vibrate", "vibrate"),
+            MenuItem("Infrared", "infrared"),
+            MenuItem("GPS", "gps"),
+            MenuItem("Gyroscope", "gyroscope"),
+            MenuItem("Compass", "compass"),
+            MenuItem("Accelerometer", "accelerometer"),
+            MenuItem("Clipboard", "clipboard"),
+            MenuItem("ScreenBrightness", "screen-brightness"),
+            MenuItem("PhoneContact", "phone-contact"),
+            MenuItem("Sms", "sms"),
+            MenuItem("Keyboard", "keyboard"),
+            MenuItem("PhoneCalendar", "phone-calendar")
         )
     ),
     MenuGroup(

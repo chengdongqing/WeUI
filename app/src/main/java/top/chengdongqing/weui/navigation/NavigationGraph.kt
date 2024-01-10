@@ -11,6 +11,11 @@ import top.chengdongqing.weui.ui.views.HomePage
 import top.chengdongqing.weui.ui.views.basic.LoadMorePage
 import top.chengdongqing.weui.ui.views.basic.LoadingPage
 import top.chengdongqing.weui.ui.views.basic.ProgressPage
+import top.chengdongqing.weui.ui.views.device.DatabasePage
+import top.chengdongqing.weui.ui.views.device.DeviceInfoPage
+import top.chengdongqing.weui.ui.views.device.InfraredPage
+import top.chengdongqing.weui.ui.views.device.SystemStatusPage
+import top.chengdongqing.weui.ui.views.device.WiFiPage
 import top.chengdongqing.weui.ui.views.feedback.ActionSheetPage
 import top.chengdongqing.weui.ui.views.feedback.DialogPage
 import top.chengdongqing.weui.ui.views.feedback.InformationBarPage
@@ -30,7 +35,7 @@ fun NavigationGraph() {
 
     NavHost(
         navController,
-        startDestination = "home",
+        startDestination = "infrared",
         enterTransition = {
             slideIntoContainer(
                 AnimatedContentTransitionScope.SlideDirection.Left,
@@ -64,6 +69,7 @@ fun NavigationGraph() {
         basicGraph()
         formGraph()
         feedbackGraph()
+        deviceGraph()
         searchGraph()
     }
 }
@@ -116,6 +122,33 @@ fun NavGraphBuilder.feedbackGraph() {
     }
     composable("information-bar") {
         InformationBarPage()
+    }
+}
+
+fun NavGraphBuilder.deviceGraph() {
+    composable("device-info") {
+        DeviceInfoPage()
+    }
+    composable("system-status") {
+        SystemStatusPage()
+    }
+    composable("database") {
+        DatabasePage()
+    }
+    composable("wifi") {
+        WiFiPage()
+    }
+    composable("bluetooth") {
+
+    }
+    composable("nfc") {
+
+    }
+    composable("flashlight") {
+
+    }
+    composable("infrared") {
+        InfraredPage()
     }
 }
 
