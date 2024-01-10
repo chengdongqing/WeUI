@@ -10,7 +10,6 @@ fun SystemStatusPage() {
     Page(title = "SystemStatus", description = "系统状态") {
         Column {
             Text(text = "网络状态")
-            Text(text = "系统主题")
             Text(text = "截屏事件")
         }
     }

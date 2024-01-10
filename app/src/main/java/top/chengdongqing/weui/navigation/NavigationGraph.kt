@@ -11,6 +11,7 @@ import top.chengdongqing.weui.ui.views.HomePage
 import top.chengdongqing.weui.ui.views.basic.LoadMorePage
 import top.chengdongqing.weui.ui.views.basic.LoadingPage
 import top.chengdongqing.weui.ui.views.basic.ProgressPage
+import top.chengdongqing.weui.ui.views.device.ClipboardPage
 import top.chengdongqing.weui.ui.views.device.DatabasePage
 import top.chengdongqing.weui.ui.views.device.DeviceInfoPage
 import top.chengdongqing.weui.ui.views.device.InfraredPage
@@ -35,7 +36,7 @@ fun NavigationGraph() {
 
     NavHost(
         navController,
-        startDestination = "infrared",
+        startDestination = "home",
         enterTransition = {
             slideIntoContainer(
                 AnimatedContentTransitionScope.SlideDirection.Left,
@@ -149,6 +150,9 @@ fun NavGraphBuilder.deviceGraph() {
     }
     composable("infrared") {
         InfraredPage()
+    }
+    composable("clipboard") {
+        ClipboardPage()
     }
 }
 

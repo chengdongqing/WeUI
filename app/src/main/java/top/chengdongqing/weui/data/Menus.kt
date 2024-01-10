@@ -86,7 +86,8 @@ val menus = listOf(
             MenuItem("PhoneContact", "phone-contact"),
             MenuItem("Sms", "sms"),
             MenuItem("Keyboard", "keyboard"),
-            MenuItem("PhoneCalendar", "phone-calendar")
+            MenuItem("PhoneCalendar", "phone-calendar"),
+            MenuItem("Fingerprint", "fingerprint")
         )
     ),
     MenuGroup(

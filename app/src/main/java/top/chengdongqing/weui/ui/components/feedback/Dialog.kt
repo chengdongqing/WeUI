@@ -157,7 +157,7 @@ fun WeDialogHolder(
     okText: String = "确定",
     cancelText: String = "取消",
     okColor: Color = LinkColor,
-    onOk: (visible: MutableState<Boolean>) -> Unit,
+    onOk: (visible: MutableState<Boolean>) -> Unit = { it.value = false },
     onCancel: ((visible: MutableState<Boolean>) -> Unit)? = null,
     holder: @Composable (visible: MutableState<Boolean>) -> Unit
 ) {
