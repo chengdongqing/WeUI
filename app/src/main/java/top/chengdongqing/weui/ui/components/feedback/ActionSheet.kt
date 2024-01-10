@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.ui.theme.FontColo1
 
-data class ActionItem(
+data class ActionSheetItem(
     val label: String,
     val description: String? = null,
     val color: Color? = null
@@ -32,7 +32,7 @@ data class ActionItem(
  *
  * @param visible 是否显示
  * @param title 标题
- * @param actions 菜单列表
+ * @param options 菜单列表
  * @param onCancel 取消事件
  * @param onChange 菜单选中事件
  */
@@ -40,7 +40,7 @@ data class ActionItem(
 fun WeActionSheet(
     visible: Boolean,
     title: String? = null,
-    actions: List<ActionItem>,
+    options: List<ActionSheetItem>,
     onCancel: () -> Unit,
     onChange: (index: Int) -> Unit
 ) {
@@ -62,7 +62,7 @@ fun WeActionSheet(
                 }
             }
 
-            actions.forEachIndexed { index, item ->
+            options.forEachIndexed { index, item ->
                 Divider(thickness = 0.5.dp, color = Color(0f, 0f, 0f, 0.1f))
                 Column(
                     modifier = Modifier

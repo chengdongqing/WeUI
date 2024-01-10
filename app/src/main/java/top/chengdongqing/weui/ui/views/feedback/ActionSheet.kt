@@ -7,7 +7,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import top.chengdongqing.weui.ui.components.Page
-import top.chengdongqing.weui.ui.components.feedback.ActionItem
+import top.chengdongqing.weui.ui.components.feedback.ActionSheetItem
 import top.chengdongqing.weui.ui.components.feedback.WeActionSheet
 import top.chengdongqing.weui.ui.components.form.ButtonType
 import top.chengdongqing.weui.ui.components.form.WeButton
@@ -27,10 +27,10 @@ fun ActionSheetPage() {
         WeActionSheet(
             visible.value,
             title = "这是一个标题，可以为一行或者两行。",
-            actions = listOf(
-                ActionItem("微信"),
-                ActionItem("支付宝", "副标题"),
-                ActionItem("QQ", color = Color.Red)
+            options = listOf(
+                ActionSheetItem("微信"),
+                ActionSheetItem("支付宝", "副标题"),
+                ActionSheetItem("QQ", color = Color.Red)
             ),
             onCancel = { visible.value = false }
         ) {

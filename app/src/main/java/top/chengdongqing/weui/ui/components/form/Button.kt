@@ -33,7 +33,11 @@ enum class ButtonType(val bgColor: Color, val color: Color) {
     PLAIN(Color(0f, 0f, 0f, 0.05f), FontColor)
 }
 
-enum class ButtonSize(val padding: PaddingValues, val fontSize: TextUnit, val borderRadius: Dp = 8.dp) {
+enum class ButtonSize(
+    val padding: PaddingValues,
+    val fontSize: TextUnit,
+    val borderRadius: Dp = 8.dp
+) {
     LARGE(PaddingValues(vertical = 12.dp, horizontal = 24.dp), 17.sp),
     MEDIUM(PaddingValues(vertical = 10.dp, horizontal = 24.dp), 14.sp),
     SMALL(PaddingValues(vertical = 6.dp, horizontal = 12.dp), 14.sp, 6.dp)
@@ -58,14 +62,16 @@ fun WeButton(
     loading: Boolean = false,
     onClick: (() -> Unit)? = null
 ) {
+    val localDisabled = disabled || loading
+
     Box(
         Modifier
             .width(if (size != ButtonSize.SMALL) 184.dp else Dp.Unspecified)
             .clip(RoundedCornerShape(size.borderRadius))
             .clickable(remember {
                 MutableInteractionSource()
-            }, if (!disabled) rememberRipple() else null) {
-                if (!disabled) {
+            }, if (!localDisabled) rememberRipple() else null) {
+                if (!localDisabled) {
                     onClick?.invoke()
                 }
             }
