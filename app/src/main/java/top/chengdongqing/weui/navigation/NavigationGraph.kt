@@ -14,8 +14,10 @@ import top.chengdongqing.weui.ui.views.basic.ProgressPage
 import top.chengdongqing.weui.ui.views.device.ClipboardPage
 import top.chengdongqing.weui.ui.views.device.DatabasePage
 import top.chengdongqing.weui.ui.views.device.DeviceInfoPage
+import top.chengdongqing.weui.ui.views.device.FlashlightPage
 import top.chengdongqing.weui.ui.views.device.InfraredPage
 import top.chengdongqing.weui.ui.views.device.SystemStatusPage
+import top.chengdongqing.weui.ui.views.device.VibrationPage
 import top.chengdongqing.weui.ui.views.device.WiFiPage
 import top.chengdongqing.weui.ui.views.feedback.ActionSheetPage
 import top.chengdongqing.weui.ui.views.feedback.DialogPage
@@ -146,13 +148,16 @@ fun NavGraphBuilder.deviceGraph() {
 
     }
     composable("flashlight") {
-
+        FlashlightPage()
     }
     composable("infrared") {
         InfraredPage()
     }
     composable("clipboard") {
         ClipboardPage()
+    }
+    composable("vibration") {
+        VibrationPage()
     }
 }
 
