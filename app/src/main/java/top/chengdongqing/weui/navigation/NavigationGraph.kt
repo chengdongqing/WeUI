@@ -11,6 +11,7 @@ import top.chengdongqing.weui.ui.views.HomePage
 import top.chengdongqing.weui.ui.views.basic.LoadMorePage
 import top.chengdongqing.weui.ui.views.basic.LoadingPage
 import top.chengdongqing.weui.ui.views.basic.ProgressPage
+import top.chengdongqing.weui.ui.views.device.CalendarPage
 import top.chengdongqing.weui.ui.views.device.CallAndContactsPage
 import top.chengdongqing.weui.ui.views.device.ClipboardPage
 import top.chengdongqing.weui.ui.views.device.DatabasePage
@@ -166,6 +167,9 @@ fun NavGraphBuilder.deviceGraph() {
     }
     composable("sms") {
         SmsPage()
+    }
+    composable("calendar") {
+        CalendarPage()
     }
 }
 
