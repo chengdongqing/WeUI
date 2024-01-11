@@ -11,11 +11,13 @@ import top.chengdongqing.weui.ui.views.HomePage
 import top.chengdongqing.weui.ui.views.basic.LoadMorePage
 import top.chengdongqing.weui.ui.views.basic.LoadingPage
 import top.chengdongqing.weui.ui.views.basic.ProgressPage
+import top.chengdongqing.weui.ui.views.device.CallAndContactsPage
 import top.chengdongqing.weui.ui.views.device.ClipboardPage
 import top.chengdongqing.weui.ui.views.device.DatabasePage
 import top.chengdongqing.weui.ui.views.device.DeviceInfoPage
 import top.chengdongqing.weui.ui.views.device.FlashlightPage
 import top.chengdongqing.weui.ui.views.device.InfraredPage
+import top.chengdongqing.weui.ui.views.device.SmsPage
 import top.chengdongqing.weui.ui.views.device.SystemStatusPage
 import top.chengdongqing.weui.ui.views.device.VibrationPage
 import top.chengdongqing.weui.ui.views.device.WiFiPage
@@ -158,6 +160,12 @@ fun NavGraphBuilder.deviceGraph() {
     }
     composable("vibration") {
         VibrationPage()
+    }
+    composable("call-contacts") {
+        CallAndContactsPage()
+    }
+    composable("sms") {
+        SmsPage()
     }
 }
 

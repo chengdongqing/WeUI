@@ -82,10 +82,10 @@ val menus = listOf(
             MenuItem("Accelerometer", "accelerometer"),
             MenuItem("Clipboard", "clipboard"),
             MenuItem("ScreenBrightness", "screen-brightness"),
-            MenuItem("PhoneContact", "phone-contact"),
-            MenuItem("Sms", "sms"),
+            MenuItem("CallAndContacts", "call-contacts"),
+            MenuItem("SMS", "sms"),
             MenuItem("Keyboard", "keyboard"),
-            MenuItem("PhoneCalendar", "phone-calendar"),
+            MenuItem("Calendar", "calendar"),
             MenuItem("Fingerprint", "fingerprint")
         )
     ),
