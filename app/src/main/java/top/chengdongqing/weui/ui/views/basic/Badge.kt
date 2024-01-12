@@ -45,7 +45,12 @@ fun BadgePage() {
                 WeButton(text = "按钮")
             }
             Spacer(modifier = Modifier.height(20.dp))
-            WeBadge("8", size = 20.dp, color = Color.Blue, alignment = Alignment.BottomStart) {
+            WeBadge(
+                "8",
+                size = 20.dp,
+                color = Color(0xFFFF6700),
+                alignment = Alignment.BottomStart
+            ) {
                 WeButton(text = "按钮")
             }
             Spacer(modifier = Modifier.height(20.dp))

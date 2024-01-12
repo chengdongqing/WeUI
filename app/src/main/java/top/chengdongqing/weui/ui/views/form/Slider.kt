@@ -36,7 +36,7 @@ fun SliderPage() {
             modifier = Modifier.padding(horizontal = 12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            WeSlider(value, step) {
+            WeSlider(value, step = step) {
                 value = it
             }
             Spacer(modifier = Modifier.height(40.dp))

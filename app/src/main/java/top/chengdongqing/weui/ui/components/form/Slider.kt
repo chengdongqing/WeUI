@@ -51,6 +51,7 @@ import top.chengdongqing.weui.ui.theme.PrimaryColor
 @Composable
 fun WeSlider(
     value: Int,
+    modifier: Modifier = Modifier,
     step: Int = 1,
     min: Int = 0,
     max: Int = 100,
@@ -83,7 +84,9 @@ fun WeSlider(
     }
 
     Row(
-        modifier = Modifier.height(48.dp),
+        modifier = Modifier
+            .height(48.dp)
+            .then(modifier),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(

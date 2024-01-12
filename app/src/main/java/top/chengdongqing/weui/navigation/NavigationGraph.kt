@@ -12,6 +12,7 @@ import top.chengdongqing.weui.ui.views.basic.BadgePage
 import top.chengdongqing.weui.ui.views.basic.LoadMorePage
 import top.chengdongqing.weui.ui.views.basic.LoadingPage
 import top.chengdongqing.weui.ui.views.basic.ProgressPage
+import top.chengdongqing.weui.ui.views.basic.StepsPage
 import top.chengdongqing.weui.ui.views.device.CalendarPage
 import top.chengdongqing.weui.ui.views.device.CallAndContactsPage
 import top.chengdongqing.weui.ui.views.device.ClipboardPage
@@ -77,6 +78,7 @@ fun NavigationGraph() {
         basicGraph()
         formGraph()
         feedbackGraph()
+        mediaGraph()
         deviceGraph()
         searchGraph()
     }
@@ -95,8 +97,8 @@ fun NavGraphBuilder.basicGraph() {
     composable("progress") {
         ProgressPage()
     }
-    composable("gallery") {
-        GalleryPage()
+    composable("steps") {
+        StepsPage()
     }
 }
 
@@ -133,6 +135,12 @@ fun NavGraphBuilder.feedbackGraph() {
     }
     composable("information-bar") {
         InformationBarPage()
+    }
+}
+
+fun NavGraphBuilder.mediaGraph() {
+    composable("gallery") {
+        GalleryPage()
     }
 }
 
