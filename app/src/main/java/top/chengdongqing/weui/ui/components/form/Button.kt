@@ -56,6 +56,7 @@ enum class ButtonSize(
 @Composable
 fun WeButton(
     text: String,
+    modifier: Modifier = Modifier,
     type: ButtonType = ButtonType.PRIMARY,
     size: ButtonSize = ButtonSize.LARGE,
     disabled: Boolean = false,
@@ -68,15 +69,19 @@ fun WeButton(
         Modifier
             .width(if (size != ButtonSize.SMALL) 184.dp else Dp.Unspecified)
             .clip(RoundedCornerShape(size.borderRadius))
-            .clickable(remember {
-                MutableInteractionSource()
-            }, if (!localDisabled) rememberRipple() else null) {
+            .clickable(
+                interactionSource = remember {
+                    MutableInteractionSource()
+                },
+                indication = if (!localDisabled) rememberRipple() else null
+            ) {
                 if (!localDisabled) {
                     onClick?.invoke()
                 }
             }
             .background(if (!disabled) type.bgColor else Color(0xFFF7F7F7))
-            .padding(size.padding),
+            .padding(size.padding)
+            .then(modifier),
         contentAlignment = Alignment.Center
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {

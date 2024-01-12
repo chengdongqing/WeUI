@@ -21,7 +21,6 @@ val menus = listOf(
         "基础组件", R.drawable.icon_nav_layout,
         listOf(
             MenuItem("Badge", "badge"),
-            MenuItem("Footer", "footer"),
             MenuItem("Loading", "loading"),
             MenuItem("LoadMore", "load-more"),
             MenuItem("Progress", "progress"),

@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import top.chengdongqing.weui.ui.views.HomePage
+import top.chengdongqing.weui.ui.views.basic.BadgePage
 import top.chengdongqing.weui.ui.views.basic.LoadMorePage
 import top.chengdongqing.weui.ui.views.basic.LoadingPage
 import top.chengdongqing.weui.ui.views.basic.ProgressPage
@@ -82,6 +83,9 @@ fun NavigationGraph() {
 }
 
 fun NavGraphBuilder.basicGraph() {
+    composable("badge") {
+        BadgePage()
+    }
     composable("loading") {
         LoadingPage()
     }
