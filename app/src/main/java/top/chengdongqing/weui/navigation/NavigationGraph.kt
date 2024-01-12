@@ -18,6 +18,7 @@ import top.chengdongqing.weui.ui.views.device.DatabasePage
 import top.chengdongqing.weui.ui.views.device.DeviceInfoPage
 import top.chengdongqing.weui.ui.views.device.FlashlightPage
 import top.chengdongqing.weui.ui.views.device.InfraredPage
+import top.chengdongqing.weui.ui.views.device.ScreenBrightnessPage
 import top.chengdongqing.weui.ui.views.device.SmsPage
 import top.chengdongqing.weui.ui.views.device.SystemStatusPage
 import top.chengdongqing.weui.ui.views.device.VibrationPage
@@ -161,6 +162,9 @@ fun NavGraphBuilder.deviceGraph() {
     }
     composable("vibration") {
         VibrationPage()
+    }
+    composable("screen-brightness") {
+        ScreenBrightnessPage()
     }
     composable("call-contacts") {
         CallAndContactsPage()

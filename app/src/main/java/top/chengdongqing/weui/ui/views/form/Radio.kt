@@ -10,7 +10,7 @@ import top.chengdongqing.weui.ui.components.form.WeRadioGroup
 
 @Composable
 fun RadioPage() {
-    Page(title = "Radio", description = "单选框", bgColor = Color.White) {
+    Page(title = "Radio", description = "单选框", backgroundColor = Color.White) {
         val value = remember {
             mutableStateOf<Any>("2")
         }

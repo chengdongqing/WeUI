@@ -26,7 +26,7 @@ import top.chengdongqing.weui.ui.theme.FontColor
  * @param title 标题
  * @param description 描述
  * @param padding 内边距
- * @param bgColor 背景颜色
+ * @param backgroundColor 背景颜色
  * @param content 内容
  */
 @Composable
@@ -34,12 +34,12 @@ fun Page(
     title: String,
     description: String,
     padding: PaddingValues = PaddingValues(16.dp),
-    bgColor: Color = BackgroundColor,
+    backgroundColor: Color = BackgroundColor,
     content: @Composable () -> Unit
 ) {
     Column(
         Modifier
-            .background(bgColor)
+            .background(backgroundColor)
             .statusBarsPadding()
     ) {
         Column(Modifier.padding(40.dp)) {

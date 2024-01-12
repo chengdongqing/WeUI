@@ -10,7 +10,7 @@ import top.chengdongqing.weui.ui.components.form.WeCheckboxGroup
 
 @Composable
 fun CheckboxPage() {
-    Page(title = "Checkbox", description = "复选框", bgColor = Color.White) {
+    Page(title = "Checkbox", description = "复选框", backgroundColor = Color.White) {
         val values = remember {
             mutableStateListOf<Any>(1)
         }

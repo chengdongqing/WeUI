@@ -28,7 +28,7 @@ import kotlin.concurrent.timerTask
 
 @Composable
 fun ProgressPage() {
-    Page(title = "Progress", description = "进度条", bgColor = Color.White) {
+    Page(title = "Progress", description = "进度条", backgroundColor = Color.White) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             WeProgress(20f, null)
             WeProgress(44.57898f)

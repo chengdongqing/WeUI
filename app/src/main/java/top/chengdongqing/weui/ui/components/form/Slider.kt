@@ -4,11 +4,17 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -24,8 +30,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.ui.theme.BorderColor
+import top.chengdongqing.weui.ui.theme.FontColo1
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 
 /**
@@ -35,6 +44,8 @@ import top.chengdongqing.weui.ui.theme.PrimaryColor
  * @param step 步长
  * @param min 最小值
  * @param max 最大值
+ * @param disabled 是否禁用
+ * @param formatter 值格式化函数
  * @param onChange 值改变事件
  */
 @Composable
@@ -43,6 +54,10 @@ fun WeSlider(
     step: Int = 1,
     min: Int = 0,
     max: Int = 100,
+    disabled: Boolean = false,
+    formatter: ((percent: Int) -> String)? = {
+        "$it%"
+    },
     onChange: (value: Int) -> Unit
 ) {
     val density = LocalDensity.current
@@ -58,58 +73,75 @@ fun WeSlider(
 
     // 处理滑动或点击事件
     fun handleChange(offsetX: Float) {
-        val newFraction = (offsetX / sliderWidth).coerceIn(0f, 1f)
-        val newValue = (newFraction * (max - min) + min).toInt()
-        if (newValue % step == 0) {
-            onChange(newValue)
+        if (!disabled) {
+            val newFraction = (offsetX / sliderWidth).coerceIn(0f, 1f)
+            val newValue = (newFraction * (max - min) + min).toInt()
+            if (newValue % step == 0) {
+                onChange(newValue)
+            }
         }
     }
 
-    Box(
-        Modifier
-            .fillMaxWidth()
-            .height(48.dp)
-            .onSizeChanged {
-                sliderWidth = it.width
-            }
-            // 处理拖动事件
-            .pointerInput(sliderWidth, step, min, max) {
-                detectHorizontalDragGestures { change, _ ->
-                    handleChange(change.position.x)
-                }
-            }
-            // 处理点击事件
-            .pointerInput(Unit) {
-                detectTapGestures {
-                    handleChange(it.x)
-                }
-            },
-        contentAlignment = Alignment.CenterStart
+    Row(
+        modifier = Modifier.height(48.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        // 滑轨
         Box(
             Modifier
-                .fillMaxWidth()
-                .height(2.dp)
-                .background(BorderColor),
+                .weight(1f)
+                .fillMaxHeight()
+                .onSizeChanged {
+                    sliderWidth = it.width
+                }
+                // 处理拖动事件
+                .pointerInput(sliderWidth, step, min, max) {
+                    detectHorizontalDragGestures { change, _ ->
+                        handleChange(change.position.x)
+                    }
+                }
+                // 处理点击事件
+                .pointerInput(Unit) {
+                    detectTapGestures {
+                        handleChange(it.x)
+                    }
+                },
             contentAlignment = Alignment.CenterStart
         ) {
-            // 高亮线段
+            // 滑轨
             Box(
                 Modifier
-                    .fillMaxWidth(fraction)
+                    .fillMaxWidth()
                     .height(2.dp)
-                    .background(PrimaryColor)
+                    .background(BorderColor),
+                contentAlignment = Alignment.CenterStart
+            ) {
+                // 高亮线段
+                Box(
+                    Modifier
+                        .fillMaxWidth(fraction)
+                        .height(2.dp)
+                        .background(PrimaryColor)
+                )
+            }
+            // 手柄
+            Box(
+                Modifier
+                    .size(28.dp)
+                    .offset(offsetX - 14.dp)
+                    .shadow(14.dp, CircleShape, spotColor = BorderColor)
+                    .background(Color.White, CircleShape)
             )
         }
-        // 手柄
-        Box(
-            Modifier
-                .size(28.dp)
-                .offset(offsetX - 14.dp)
-                .shadow(14.dp, CircleShape, spotColor = BorderColor)
-                .background(Color.White, CircleShape)
-        )
 
+        formatter?.also {
+            Spacer(modifier = Modifier.width(20.dp))
+            Text(
+                text = it(value),
+                modifier = Modifier.widthIn(40.dp),
+                color = FontColo1,
+                fontSize = 14.sp,
+                textAlign = TextAlign.End
+            )
+        }
     }
 }
