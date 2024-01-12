@@ -30,10 +30,10 @@ fun WeBadge(
     size: Dp = 10.dp,
     color: Color = Color.Red,
     alignment: Alignment = Alignment.TopEnd,
-    holder: @Composable () -> Unit
+    holder: (@Composable () -> Unit)? = null
 ) {
     Box {
-        holder()
+        holder?.invoke()
 
         val density = LocalDensity.current
         var localWidth by remember {
@@ -78,7 +78,7 @@ fun WeBadge(
                 .offset(x = offsetX, y = offsetY)
                 .clip(if (localWidth > size) RoundedCornerShape(20.dp) else CircleShape)
                 .background(color)
-                .padding(horizontal = if (localWidth > size) 6.dp else 0.dp),
+                .padding(horizontal = if (localWidth > size && content != null) 6.dp else 0.dp),
             contentAlignment = Alignment.Center
         ) {
             content?.also {
