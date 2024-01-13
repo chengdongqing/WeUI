@@ -32,6 +32,7 @@ import top.chengdongqing.weui.ui.views.feedback.PopupPage
 import top.chengdongqing.weui.ui.views.feedback.ToastPage
 import top.chengdongqing.weui.ui.views.form.ButtonPage
 import top.chengdongqing.weui.ui.views.form.CheckboxPage
+import top.chengdongqing.weui.ui.views.form.InputPage
 import top.chengdongqing.weui.ui.views.form.RadioPage
 import top.chengdongqing.weui.ui.views.form.SliderPage
 import top.chengdongqing.weui.ui.views.form.SwitchPage
@@ -117,6 +118,9 @@ fun NavGraphBuilder.formGraph() {
     }
     composable("slider") {
         SliderPage()
+    }
+    composable("input") {
+        InputPage()
     }
 }
 

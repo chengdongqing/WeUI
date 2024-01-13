@@ -6,13 +6,10 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -36,6 +33,8 @@ import top.chengdongqing.weui.ui.components.KeyValueRow
 import top.chengdongqing.weui.ui.components.Page
 import top.chengdongqing.weui.ui.components.form.ButtonType
 import top.chengdongqing.weui.ui.components.form.WeButton
+import top.chengdongqing.weui.ui.components.form.WeInput
+import top.chengdongqing.weui.ui.components.form.WeTextarea
 
 @Composable
 fun SmsPage() {
@@ -61,28 +60,16 @@ private fun SmsSend() {
         mutableStateOf("")
     }
 
-    TextField(
+    WeInput(
         value = number,
-        onValueChange = {
-            number = it
-        },
-        placeholder = {
-            Text(text = "请输入号码")
-        },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-        modifier = Modifier.fillMaxWidth()
-    )
-    Spacer(modifier = Modifier.height(10.dp))
-    TextField(
-        value = content,
-        onValueChange = {
-            content = it
-        },
-        placeholder = {
-            Text(text = "请输入内容")
-        },
-        modifier = Modifier.fillMaxWidth()
-    )
+        placeholder = "请输入号码",
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
+    ) {
+        number = it
+    }
+    WeTextarea(content, placeholder = "请输入内容", max = 200) {
+        content = it
+    }
     Spacer(modifier = Modifier.height(20.dp))
     WeButton(
         text = "发送短信",

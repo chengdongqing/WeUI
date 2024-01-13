@@ -16,8 +16,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -41,6 +39,7 @@ import top.chengdongqing.weui.ui.components.KeyValueRow
 import top.chengdongqing.weui.ui.components.Page
 import top.chengdongqing.weui.ui.components.form.ButtonType
 import top.chengdongqing.weui.ui.components.form.WeButton
+import top.chengdongqing.weui.ui.components.form.WeInput
 import java.util.Date
 import java.util.TimeZone
 
@@ -67,11 +66,13 @@ fun AddCalendarEvent() {
     var title by remember {
         mutableStateOf("")
     }
-    TextField(value = title, onValueChange = {
+    WeInput(
+        value = title,
+        placeholder = "事件名称",
+        modifier = Modifier.fillMaxWidth()
+    ) {
         title = it
-    }, placeholder = {
-        Text(text = "事件名称")
-    }, modifier = Modifier.fillMaxWidth())
+    }
     val datePickerState = rememberDatePickerState(initialDisplayMode = DisplayMode.Input)
     DatePicker(state = datePickerState)
 

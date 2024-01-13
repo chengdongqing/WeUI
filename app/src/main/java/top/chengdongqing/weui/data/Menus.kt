@@ -34,7 +34,8 @@ val menus = listOf(
             MenuItem("Checkbox", "checkbox"),
             MenuItem("Radio", "radio"),
             MenuItem("Switch", "switch"),
-            MenuItem("Slider", "slider")
+            MenuItem("Slider", "slider"),
+            MenuItem("Input", "input")
         )
     ),
     MenuGroup(

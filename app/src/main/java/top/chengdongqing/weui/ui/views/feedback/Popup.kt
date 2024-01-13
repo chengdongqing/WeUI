@@ -20,7 +20,7 @@ fun PopupPage() {
             mutableStateOf(false)
         }
 
-        WeButton(text = "打开", type = ButtonType.PLAIN) {
+        WeButton(text = "弹出", type = ButtonType.PLAIN) {
             visible.value = true
         }
 

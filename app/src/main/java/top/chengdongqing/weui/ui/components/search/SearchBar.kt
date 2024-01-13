@@ -34,6 +34,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.ui.theme.FontColo1
+import top.chengdongqing.weui.ui.theme.LightColor
 import top.chengdongqing.weui.ui.theme.LinkColor
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.utils.clickableWithoutRipple
@@ -97,7 +98,7 @@ fun WeSearchBar(value: String, onChange: (value: String) -> Unit) {
                                 if (value.isEmpty()) {
                                     Text(
                                         text = "搜索",
-                                        color = Color(0f, 0f, 0f, 0.4f),
+                                        color = LightColor,
                                         fontSize = 16.sp
                                     )
                                 }

@@ -18,8 +18,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -45,6 +43,7 @@ import top.chengdongqing.weui.ui.components.Page
 import top.chengdongqing.weui.ui.components.form.ButtonSize
 import top.chengdongqing.weui.ui.components.form.ButtonType
 import top.chengdongqing.weui.ui.components.form.WeButton
+import top.chengdongqing.weui.ui.components.form.WeInput
 import java.util.Date
 
 @Composable
@@ -73,17 +72,13 @@ private fun PhoneCall() {
         mutableStateOf("")
     }
 
-    TextField(
+    WeInput(
         value = number,
-        onValueChange = {
-            number = it
-        },
-        placeholder = {
-            Text(text = "请输入号码")
-        },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-        modifier = Modifier.fillMaxWidth()
-    )
+        placeholder = "请输入号码",
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
+    ) {
+        number = it
+    }
     Spacer(modifier = Modifier.height(20.dp))
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -226,7 +221,7 @@ fun PhoneCallLogs() {
         mutableStateListOf<Pair<String, String>>()
     }
 
-    WeButton(text = "读取通话记录", loading = loading) {
+    WeButton(text = "读取通话记录", type = ButtonType.PLAIN, loading = loading) {
         if (callLogPermissionState.status.isGranted) {
             loading = true
             coroutineScope.launch {
