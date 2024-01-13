@@ -115,13 +115,12 @@ fun CalendarEvents() {
         if (calendarPermissionState.status.isGranted) {
             loading = true
             coroutineScope.launch {
-                readCalendarEvents(context) { res ->
-                    if (events.isNotEmpty()) {
-                        events.clear()
-                    }
-                    events.addAll(res)
-                    loading = false
+                val events1 = readCalendarEvents(context)
+                if (events.isNotEmpty()) {
+                    events.clear()
                 }
+                events.addAll(events1)
+                loading = false
             }
         } else {
             calendarPermissionState.launchPermissionRequest()
@@ -140,24 +139,21 @@ fun CalendarEvents() {
     }
 }
 
-suspend fun readCalendarEvents(
-    context: Context,
-    onResult: (List<Pair<String, String>>) -> Unit
-) {
-    val events = mutableListOf<Pair<String, String>>()
-    val cursor = context.contentResolver.query(
-        CalendarContract.Events.CONTENT_URI,
-        arrayOf(
-            CalendarContract.Events._ID,
-            CalendarContract.Events.TITLE,
-            CalendarContract.Events.DTSTART
-        ),
-        null,
-        null,
-        CalendarContract.Events.DTSTART + " DESC"
-    )
-
+suspend fun readCalendarEvents(context: Context): List<Pair<String, String>> =
     withContext(Dispatchers.IO) {
+        val events = mutableListOf<Pair<String, String>>()
+        val cursor = context.contentResolver.query(
+            CalendarContract.Events.CONTENT_URI,
+            arrayOf(
+                CalendarContract.Events._ID,
+                CalendarContract.Events.TITLE,
+                CalendarContract.Events.DTSTART
+            ),
+            null,
+            null,
+            CalendarContract.Events.DTSTART + " DESC"
+        )
+
         cursor?.use {
             val titleCol = cursor.getColumnIndex(CalendarContract.Events.TITLE)
             val startCol = cursor.getColumnIndex(CalendarContract.Events.DTSTART)
@@ -169,7 +165,6 @@ suspend fun readCalendarEvents(
                 events.add(Pair(title, start))
             }
         }
-    }
 
-    onResult(events)
-}
+        events
+    }

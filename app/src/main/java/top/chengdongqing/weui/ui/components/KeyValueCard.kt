@@ -25,7 +25,7 @@ import top.chengdongqing.weui.ui.theme.FontColor
 fun KeyValueCard(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
     Column(
         modifier = modifier
-            .background(Color.White, RoundedCornerShape(8.dp))
+            .background(Color.White, RoundedCornerShape(4.dp))
             .padding(horizontal = 16.dp)
     ) {
         content()

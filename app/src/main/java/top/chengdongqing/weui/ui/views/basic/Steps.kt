@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -22,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.ui.components.Page
 import top.chengdongqing.weui.ui.components.basic.WeSteps
-import top.chengdongqing.weui.ui.components.form.WeSlider
+import top.chengdongqing.weui.ui.components.form.WeButton
 import top.chengdongqing.weui.ui.theme.FontColo1
 
 @Composable
@@ -101,18 +100,16 @@ fun StepsPage() {
                     items = listOf(null, null, null, null),
                     isVertical = false
                 )
-                Spacer(modifier = Modifier.height(20.dp))
-                Text(text = "更新步骤条")
-                WeSlider(
-                    value = step,
-                    modifier = Modifier.padding(horizontal = 20.dp),
-                    min = 0,
-                    max = 3,
-                    formatter = {
-                        "步骤${it + 1}"
-                    }
+                Spacer(modifier = Modifier.height(40.dp))
+                WeButton(
+                    text = "更新状态",
+                    modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
                 ) {
-                    step = it
+                    if (step < 3) {
+                        step++
+                    } else {
+                        step = 0
+                    }
                 }
             }
         }

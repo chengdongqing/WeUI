@@ -55,17 +55,17 @@ fun DeviceInfoPage() {
             KeyValueRow("字体缩放比例", LocalConfiguration.current.fontScale.toString())
             KeyValueRow("系统版本", "Android ${Build.VERSION.RELEASE}")
 
-            (context.getSystemService(Context.WIFI_SERVICE) as? WifiManager)?.also {
+            (context.getSystemService(Context.WIFI_SERVICE) as? WifiManager)?.let {
                 KeyValueRow("WiFi开关", getEnableStatus(it.isWifiEnabled))
             }
-            (context.getSystemService(Context.BLUETOOTH_SERVICE) as? BluetoothManager)?.also {
+            (context.getSystemService(Context.BLUETOOTH_SERVICE) as? BluetoothManager)?.let {
                 KeyValueRow("蓝牙开关", getEnableStatus(it.adapter.isEnabled))
             }
-            (context.getSystemService(Context.LOCATION_SERVICE) as? LocationManager)?.also {
+            (context.getSystemService(Context.LOCATION_SERVICE) as? LocationManager)?.let {
                 val isGpsEnabled = it.isProviderEnabled(LocationManager.GPS_PROVIDER)
                 KeyValueRow("GPS开关", getEnableStatus(isGpsEnabled))
             }
-            (context.getSystemService(Context.NFC_SERVICE) as? NfcManager)?.also {
+            (context.getSystemService(Context.NFC_SERVICE) as? NfcManager)?.let {
                 val isNfcEnabled = it.defaultAdapter?.isEnabled == true
                 KeyValueRow("NFC开关", getEnableStatus(isNfcEnabled))
             }

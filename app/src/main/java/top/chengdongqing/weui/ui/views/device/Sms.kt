@@ -110,13 +110,12 @@ private fun SmsMessages() {
         if (readSmsPermissionState.status.isGranted) {
             loading = true
             coroutineScope.launch {
-                readSmsMessages(context) { res ->
-                    if (messages.isNotEmpty()) {
-                        messages.clear()
-                    }
-                    messages.addAll(res)
-                    loading = false
+                val messages1 = readSmsMessages(context)
+                if (messages.isNotEmpty()) {
+                    messages.clear()
                 }
+                messages.addAll(messages1)
+                loading = false
             }
         } else {
             readSmsPermissionState.launchPermissionRequest()
@@ -130,15 +129,12 @@ private fun SmsMessages() {
     }
 }
 
-private suspend fun readSmsMessages(
-    context: Context,
-    onResult: (List<Pair<String, String>>) -> Unit
-) {
-    val messages = mutableListOf<Pair<String, String>>()
-    val cursor = context.contentResolver
-        .query(Uri.parse("content://sms/inbox"), null, null, null, null)
-
+private suspend fun readSmsMessages(context: Context): List<Pair<String, String>> =
     withContext(Dispatchers.IO) {
+        val messages = mutableListOf<Pair<String, String>>()
+        val cursor = context.contentResolver
+            .query(Uri.parse("content://sms/inbox"), null, null, null, null)
+
         cursor?.use {
             val addressIndex = it.getColumnIndex("address")
             val bodyIndex = it.getColumnIndex("body")
@@ -148,7 +144,6 @@ private suspend fun readSmsMessages(
                 messages.add(item)
             }
         }
-    }
 
-    onResult(messages)
-}
+        messages
+    }

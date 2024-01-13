@@ -70,7 +70,7 @@ fun WeTextarea(
                         )
                     }
 
-                    max?.also {
+                    max?.let {
                         Text(
                             text = "${value.length}/$it",
                             color = LightColor,

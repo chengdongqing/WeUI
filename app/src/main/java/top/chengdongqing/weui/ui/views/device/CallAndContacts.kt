@@ -139,18 +139,14 @@ private fun PhoneContacts() {
         if (contactsPermissionState.status.isGranted) {
             loading = true
             coroutineScope.launch {
-                readContacts(context) { res ->
-                    if (contacts.isNotEmpty()) {
-                        contacts.clear()
-                    }
-                    contacts.addAll(res.map {
-                        Pair(
-                            it.first,
-                            it.second.joinToString("\n")
-                        )
-                    })
-                    loading = false
+                val contacts1 = readContacts(context)
+                if (contacts.isNotEmpty()) {
+                    contacts.clear()
                 }
+                contacts.addAll(contacts1.map {
+                    it.first to it.second.joinToString("\n")
+                })
+                loading = false
             }
         } else {
             contactsPermissionState.launchPermissionRequest()
@@ -168,20 +164,17 @@ private fun PhoneContacts() {
     }
 }
 
-private suspend fun readContacts(
-    context: Context,
-    onResult: (List<Pair<String, List<String>>>) -> Unit
-) {
-    val contacts = mutableListOf<Pair<String, String>>()
-    val cursor = context.contentResolver.query(
-        ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-        null,
-        null,
-        null,
-        null
-    )
-
+private suspend fun readContacts(context: Context): (List<Pair<String, List<String>>>) =
     withContext(Dispatchers.IO) {
+        val contacts = mutableListOf<Pair<String, String>>()
+        val cursor = context.contentResolver.query(
+            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+            null,
+            null,
+            null,
+            null
+        )
+
         cursor?.use {
             val nameIndex =
                 it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)
@@ -193,18 +186,15 @@ private suspend fun readContacts(
                 contacts.add(Pair(name, number))
             }
         }
+
+        contacts.groupBy({
+            it.first
+        }, {
+            it.second
+        }).map {
+            Pair(it.key, it.value)
+        }
     }
-
-
-    // 聚合相同联系人的多个号码
-    onResult(contacts.groupBy({
-        it.first
-    }, {
-        it.second
-    }).map {
-        Pair(it.key, it.value)
-    })
-}
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
@@ -225,18 +215,14 @@ fun PhoneCallLogs() {
         if (callLogPermissionState.status.isGranted) {
             loading = true
             coroutineScope.launch {
-                readCallLogs(context) { res ->
-                    if (logs.isNotEmpty()) {
-                        logs.clear()
-                    }
-                    logs.addAll(res.map {
-                        Pair(
-                            it.first,
-                            it.second.joinToString("\n")
-                        )
-                    })
-                    loading = false
+                val logs1 = readCallLogs(context)
+                if (logs.isNotEmpty()) {
+                    logs.clear()
                 }
+                logs.addAll(logs1.map {
+                    it.first to it.second.joinToString("\n")
+                })
+                loading = false
             }
         } else {
             callLogPermissionState.launchPermissionRequest()
@@ -254,20 +240,17 @@ fun PhoneCallLogs() {
     }
 }
 
-private suspend fun readCallLogs(
-    context: Context,
-    onResult: (List<Pair<String, List<String>>>) -> Unit
-) {
-    val logs = mutableListOf<Pair<String, List<String>>>()
-    val cursor = context.contentResolver.query(
-        CallLog.Calls.CONTENT_URI,
-        null,
-        null,
-        null,
-        CallLog.Calls.DATE + " DESC"
-    )
-
+private suspend fun readCallLogs(context: Context): (List<Pair<String, List<String>>>) =
     withContext(Dispatchers.IO) {
+        val logs = mutableListOf<Pair<String, List<String>>>()
+        val cursor = context.contentResolver.query(
+            CallLog.Calls.CONTENT_URI,
+            null,
+            null,
+            null,
+            CallLog.Calls.DATE + " DESC"
+        )
+
         cursor?.use {
             val numberIndex = cursor.getColumnIndex(CallLog.Calls.NUMBER)
             val dateIndex = cursor.getColumnIndex(CallLog.Calls.DATE)
@@ -293,7 +276,6 @@ private suspend fun readCallLogs(
                 )
             }
         }
-    }
 
-    onResult(logs)
-}
+        logs
+    }

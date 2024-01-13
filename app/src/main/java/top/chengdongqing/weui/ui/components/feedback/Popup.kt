@@ -92,7 +92,7 @@ fun WePopup(
                             .padding(padding)
                     ) {
                         Column {
-                            title?.also {
+                            title?.let {
                                 Box(
                                     modifier = Modifier
                                         .fillMaxWidth()

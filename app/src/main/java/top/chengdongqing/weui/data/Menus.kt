@@ -35,6 +35,7 @@ val menus = listOf(
             MenuItem("Radio", "radio"),
             MenuItem("Switch", "switch"),
             MenuItem("Slider", "slider"),
+            MenuItem("Picker", "picker"),
             MenuItem("Input", "input")
         )
     ),
@@ -44,9 +45,9 @@ val menus = listOf(
             MenuItem("ActionSheet", "action-sheet"),
             MenuItem("Dialog", "dialog"),
             MenuItem("Popup", "popup"),
-            MenuItem("Picker", "picker"),
             MenuItem("Toast", "toast"),
-            MenuItem("InformationBar", "information-bar")
+            MenuItem("InformationBar", "information-bar"),
+            MenuItem("ContextualMenu", "contextual-menu")
         )
     ),
     MenuGroup(

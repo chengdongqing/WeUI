@@ -52,7 +52,7 @@ fun ClipboardPage() {
             }
             WeDialogHolder(title = "剪贴板内容", content = content1) { dialog ->
                 WeButton(text = "读取剪贴板内容", type = ButtonType.PLAIN) {
-                    getClipboardData(context)?.also {
+                    getClipboardData(context)?.let {
                         content1 = it
                         dialog.value = true
                     } ?: Toast.makeText(context, "获取失败", Toast.LENGTH_SHORT).show()

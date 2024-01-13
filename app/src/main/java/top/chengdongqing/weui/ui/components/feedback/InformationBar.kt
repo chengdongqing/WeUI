@@ -77,7 +77,7 @@ fun WeInformationBar(
         Spacer(modifier = Modifier.width(8.dp))
         Text(text = content, fontSize = 14.sp, color = type.textColor)
         Spacer(modifier = Modifier.weight(1f))
-        linkText?.also {
+        linkText?.let {
             Text(
                 text = it,
                 fontSize = 14.sp,
@@ -88,7 +88,7 @@ fun WeInformationBar(
             )
         }
         Spacer(modifier = Modifier.width(8.dp))
-        onClose?.also {
+        onClose?.let {
             Icon(
                 Icons.Outlined.Close,
                 contentDescription = null,

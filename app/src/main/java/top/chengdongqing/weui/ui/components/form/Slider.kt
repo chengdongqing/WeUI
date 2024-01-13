@@ -136,7 +136,7 @@ fun WeSlider(
             )
         }
 
-        formatter?.also {
+        formatter?.let {
             Spacer(modifier = Modifier.width(20.dp))
             Text(
                 text = it(value),

@@ -34,7 +34,7 @@ fun VibrationPage() {
     }
 }
 
-private fun vibrate(context: Context, milliseconds: Long = 400) {
+fun vibrate(context: Context, milliseconds: Long = 400) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         val vibrator =
             context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager

@@ -26,6 +26,7 @@ import top.chengdongqing.weui.ui.views.device.SystemStatusPage
 import top.chengdongqing.weui.ui.views.device.VibrationPage
 import top.chengdongqing.weui.ui.views.device.WiFiPage
 import top.chengdongqing.weui.ui.views.feedback.ActionSheetPage
+import top.chengdongqing.weui.ui.views.feedback.ContextualMenuPage
 import top.chengdongqing.weui.ui.views.feedback.DialogPage
 import top.chengdongqing.weui.ui.views.feedback.InformationBarPage
 import top.chengdongqing.weui.ui.views.feedback.PopupPage
@@ -33,6 +34,7 @@ import top.chengdongqing.weui.ui.views.feedback.ToastPage
 import top.chengdongqing.weui.ui.views.form.ButtonPage
 import top.chengdongqing.weui.ui.views.form.CheckboxPage
 import top.chengdongqing.weui.ui.views.form.InputPage
+import top.chengdongqing.weui.ui.views.form.PickerPage
 import top.chengdongqing.weui.ui.views.form.RadioPage
 import top.chengdongqing.weui.ui.views.form.SliderPage
 import top.chengdongqing.weui.ui.views.form.SwitchPage
@@ -119,6 +121,9 @@ fun NavGraphBuilder.formGraph() {
     composable("slider") {
         SliderPage()
     }
+    composable("picker") {
+        PickerPage()
+    }
     composable("input") {
         InputPage()
     }
@@ -139,6 +144,9 @@ fun NavGraphBuilder.feedbackGraph() {
     }
     composable("information-bar") {
         InformationBarPage()
+    }
+    composable("contextual-menu") {
+        ContextualMenuPage()
     }
 }
 

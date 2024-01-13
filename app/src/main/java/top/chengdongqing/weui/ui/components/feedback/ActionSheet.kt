@@ -46,7 +46,7 @@ fun WeActionSheet(
 ) {
     WePopup(visible, onCancel, PaddingValues(0.dp)) {
         Column {
-            title?.also {
+            title?.let {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -81,7 +81,7 @@ fun WeActionSheet(
                         color = item.color ?: Color.Unspecified,
                         fontSize = 17.sp
                     )
-                    item.description?.also {
+                    item.description?.let {
                         Text(text = it, color = FontColo1, fontSize = 12.sp)
                     }
                 }

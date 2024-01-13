@@ -81,7 +81,7 @@ fun WeBadge(
                 .padding(horizontal = if (localWidth > size && content != null) 6.dp else 0.dp),
             contentAlignment = Alignment.Center
         ) {
-            content?.also {
+            content?.let {
                 Text(text = it, color = Color.White, fontSize = 12.sp)
             }
         }
