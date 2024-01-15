@@ -132,18 +132,19 @@ private fun SmsMessages() {
 private suspend fun readSmsMessages(context: Context): List<Pair<String, String>> =
     withContext(Dispatchers.IO) {
         val messages = mutableListOf<Pair<String, String>>()
-        val cursor = context.contentResolver
-            .query(Uri.parse("content://sms/inbox"), null, null, null, null)
 
-        cursor?.use {
-            val addressIndex = it.getColumnIndex("address")
-            val bodyIndex = it.getColumnIndex("body")
+        context.contentResolver
+            .query(
+                Uri.parse("content://sms/inbox"), null, null, null, null
+            )?.use { cursor ->
+                val addressIndex = cursor.getColumnIndex("address")
+                val bodyIndex = cursor.getColumnIndex("body")
 
-            while (it.moveToNext()) {
-                val item = Pair(it.getString(addressIndex), it.getString(bodyIndex))
-                messages.add(item)
+                while (cursor.moveToNext()) {
+                    val item = Pair(cursor.getString(addressIndex), cursor.getString(bodyIndex))
+                    messages.add(item)
+                }
             }
-        }
 
         messages
     }

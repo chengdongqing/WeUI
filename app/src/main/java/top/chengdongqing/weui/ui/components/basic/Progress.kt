@@ -63,7 +63,7 @@ fun WeProgress(
                     .background(PrimaryColor)
             )
         }
-        formatter?.let {
+        formatter?.also {
             Spacer(modifier = Modifier.width(10.dp))
             Text(
                 text = it(localPercent),
@@ -111,7 +111,7 @@ fun WeCircleProgress(
             )
         }
 
-        formatter?.let {
+        formatter?.also {
             Text(
                 text = it(localPercent),
                 color = FontColor,
@@ -162,7 +162,7 @@ fun WeDashboardProgress(
             )
         }
 
-        formatter?.let {
+        formatter?.also {
             Text(
                 text = it(localPercent),
                 color = FontColor,

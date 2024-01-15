@@ -167,22 +167,20 @@ private fun PhoneContacts() {
 private suspend fun readContacts(context: Context): (List<Pair<String, List<String>>>) =
     withContext(Dispatchers.IO) {
         val contacts = mutableListOf<Pair<String, String>>()
-        val cursor = context.contentResolver.query(
+        context.contentResolver.query(
             ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
             null,
             null,
             null,
             null
-        )
-
-        cursor?.use {
+        )?.use { cursor ->
             val nameIndex =
-                it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)
-            val numberIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
+                cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)
+            val numberIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
 
-            while (it.moveToNext()) {
-                val name = it.getString(nameIndex)
-                val number = it.getString(numberIndex)
+            while (cursor.moveToNext()) {
+                val name = cursor.getString(nameIndex)
+                val number = cursor.getString(numberIndex)
                 contacts.add(Pair(name, number))
             }
         }
@@ -243,21 +241,19 @@ fun PhoneCallLogs() {
 private suspend fun readCallLogs(context: Context): (List<Pair<String, List<String>>>) =
     withContext(Dispatchers.IO) {
         val logs = mutableListOf<Pair<String, List<String>>>()
-        val cursor = context.contentResolver.query(
+        context.contentResolver.query(
             CallLog.Calls.CONTENT_URI,
             null,
             null,
             null,
             CallLog.Calls.DATE + " DESC"
-        )
-
-        cursor?.use {
+        )?.use { cursor ->
             val numberIndex = cursor.getColumnIndex(CallLog.Calls.NUMBER)
             val dateIndex = cursor.getColumnIndex(CallLog.Calls.DATE)
             val durationIndex = cursor.getColumnIndex(CallLog.Calls.DURATION)
             val typeIndex = cursor.getColumnIndex(CallLog.Calls.TYPE)
 
-            while (it.moveToNext()) {
+            while (cursor.moveToNext()) {
                 val number = cursor.getString(numberIndex)
                 val date = DateFormat.format("yyyy-MM-dd HH:mm:ss", Date(cursor.getLong(dateIndex)))
                     .toString()

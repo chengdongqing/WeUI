@@ -47,7 +47,7 @@ val menus = listOf(
             MenuItem("Popup", "popup"),
             MenuItem("Toast", "toast"),
             MenuItem("InformationBar", "information-bar"),
-            MenuItem("ContextualMenu", "contextual-menu")
+            MenuItem("ContextMenu", "context-menu")
         )
     ),
     MenuGroup(
@@ -87,7 +87,8 @@ val menus = listOf(
             MenuItem("SMS", "sms"),
             MenuItem("Keyboard", "keyboard"),
             MenuItem("Calendar", "calendar"),
-            MenuItem("Fingerprint", "fingerprint")
+            MenuItem("Fingerprint", "fingerprint"),
+            MenuItem("Notification", "notification")
         )
     ),
     MenuGroup(

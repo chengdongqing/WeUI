@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.toSize
 import androidx.compose.ui.window.Popup
 
 @Composable
-fun WeContextualMenu(options: List<@Composable () -> Unit>, content: @Composable () -> Unit) {
+fun WeContextMenu(options: List<@Composable () -> Unit>, content: @Composable () -> Unit) {
     var showPopup by remember { mutableStateOf(false) }
     var popupPosition by remember { mutableStateOf(Offset.Zero) }
     var elementSize by remember { mutableStateOf(Size.Zero) }

@@ -142,7 +142,8 @@ fun CalendarEvents() {
 suspend fun readCalendarEvents(context: Context): List<Pair<String, String>> =
     withContext(Dispatchers.IO) {
         val events = mutableListOf<Pair<String, String>>()
-        val cursor = context.contentResolver.query(
+
+        context.contentResolver.query(
             CalendarContract.Events.CONTENT_URI,
             arrayOf(
                 CalendarContract.Events._ID,
@@ -152,9 +153,7 @@ suspend fun readCalendarEvents(context: Context): List<Pair<String, String>> =
             null,
             null,
             CalendarContract.Events.DTSTART + " DESC"
-        )
-
-        cursor?.use {
+        )?.use { cursor ->
             val titleCol = cursor.getColumnIndex(CalendarContract.Events.TITLE)
             val startCol = cursor.getColumnIndex(CalendarContract.Events.DTSTART)
 

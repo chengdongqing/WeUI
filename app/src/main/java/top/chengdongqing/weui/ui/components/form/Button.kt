@@ -67,7 +67,7 @@ fun WeButton(
 
     Box(
         Modifier
-            .width(if (size != ButtonSize.SMALL) 184.dp else Dp.Unspecified)
+            .width(if (size != ButtonSize.SMALL) 184.dp else 0.dp)
             .clip(RoundedCornerShape(size.borderRadius))
             .clickable(
                 interactionSource = remember {

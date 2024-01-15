@@ -11,7 +11,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.ui.theme.BorderColor
 import top.chengdongqing.weui.ui.theme.PrimaryColor
@@ -100,8 +99,8 @@ private fun StepItem(
             }
             .padding(if (isVertical) PaddingValues(start = 36.dp) else PaddingValues(top = 36.dp))
             .sizeIn(
-                if (isVertical) Dp.Unspecified else 80.dp,
-                if (!isVertical) Dp.Unspecified else 80.dp
+                if (isVertical) 0.dp else 80.dp,
+                if (!isVertical) 0.dp else 80.dp
             )
     ) {
         content?.invoke()

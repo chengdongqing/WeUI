@@ -20,13 +20,15 @@ import top.chengdongqing.weui.ui.views.device.DatabasePage
 import top.chengdongqing.weui.ui.views.device.DeviceInfoPage
 import top.chengdongqing.weui.ui.views.device.FlashlightPage
 import top.chengdongqing.weui.ui.views.device.InfraredPage
+import top.chengdongqing.weui.ui.views.device.KeyboardPage
+import top.chengdongqing.weui.ui.views.device.NotificationPage
 import top.chengdongqing.weui.ui.views.device.ScreenBrightnessPage
 import top.chengdongqing.weui.ui.views.device.SmsPage
 import top.chengdongqing.weui.ui.views.device.SystemStatusPage
 import top.chengdongqing.weui.ui.views.device.VibrationPage
 import top.chengdongqing.weui.ui.views.device.WiFiPage
 import top.chengdongqing.weui.ui.views.feedback.ActionSheetPage
-import top.chengdongqing.weui.ui.views.feedback.ContextualMenuPage
+import top.chengdongqing.weui.ui.views.feedback.ContextMenuPage
 import top.chengdongqing.weui.ui.views.feedback.DialogPage
 import top.chengdongqing.weui.ui.views.feedback.InformationBarPage
 import top.chengdongqing.weui.ui.views.feedback.PopupPage
@@ -145,8 +147,8 @@ fun NavGraphBuilder.feedbackGraph() {
     composable("information-bar") {
         InformationBarPage()
     }
-    composable("contextual-menu") {
-        ContextualMenuPage()
+    composable("context-menu") {
+        ContextMenuPage()
     }
 }
 
@@ -198,6 +200,12 @@ fun NavGraphBuilder.deviceGraph() {
     }
     composable("calendar") {
         CalendarPage()
+    }
+    composable("notification") {
+        NotificationPage()
+    }
+    composable("keyboard") {
+        KeyboardPage()
     }
 }
 

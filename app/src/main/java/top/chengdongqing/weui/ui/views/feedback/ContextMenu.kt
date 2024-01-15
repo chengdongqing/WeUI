@@ -21,14 +21,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.ui.components.Page
-import top.chengdongqing.weui.ui.components.feedback.WeContextualMenu
+import top.chengdongqing.weui.ui.components.feedback.WeContextMenu
 import top.chengdongqing.weui.ui.theme.BorderColor
 import top.chengdongqing.weui.ui.theme.FontColor
 
 @Composable
-fun ContextualMenuPage() {
-    Page(title = "ContextualMenu", description = "上下文菜单") {
-        WeContextualMenu(listOf({
+fun ContextMenuPage() {
+    Page(title = "ContextMenu", description = "上下文菜单") {
+        WeContextMenu(listOf({
             Text(text = "菜单1")
         }, {
             Text(text = "菜单2")
