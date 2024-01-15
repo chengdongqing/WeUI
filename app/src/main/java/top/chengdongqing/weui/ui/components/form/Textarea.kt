@@ -31,9 +31,13 @@ fun WeTextarea(
     disabled: Boolean = false,
     labelWidth: Dp = 68.dp,
     max: Int? = null,
+    topBorder: Boolean = false,
     onChange: ((String) -> Unit)? = null
 ) {
     Column {
+        if (topBorder) {
+            Divider(thickness = 0.5.dp, color = BorderColor)
+        }
         Row(
             modifier = modifier.padding(vertical = 16.dp)
         ) {

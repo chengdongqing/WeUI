@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.ui.components.Page
-import top.chengdongqing.weui.ui.components.feedback.WeDialogHolder
+import top.chengdongqing.weui.ui.components.feedback.rememberWeDialog
 import top.chengdongqing.weui.ui.components.form.ButtonType
 import top.chengdongqing.weui.ui.components.form.WeButton
 import top.chengdongqing.weui.ui.components.form.WeTextarea
@@ -30,33 +30,27 @@ fun ClipboardPage() {
             var content by remember {
                 mutableStateOf("")
             }
+            val weDialog = rememberWeDialog()
 
-            WeTextarea(content, placeholder = "请输入内容", max = 200) {
+            WeTextarea(content, placeholder = "请输入内容", max = 200, topBorder = true) {
                 content = it
             }
             Spacer(modifier = Modifier.height(20.dp))
-            WeDialogHolder(title = "设置剪贴板失败", content = "内容不能为空") {
-                WeButton(text = "设置剪贴板内容") {
-                    if (content.isEmpty()) {
-                        it.value = true
-                    } else {
-                        setClipboardData(context, content)
-                        Toast.makeText(context, "已复制", Toast.LENGTH_SHORT).show()
-                    }
+            WeButton(text = "设置剪贴板内容") {
+                if (content.isEmpty()) {
+                    weDialog.open("设置剪贴板失败", "内容不能为空", {
+                        Toast.makeText(context, "知道了", Toast.LENGTH_SHORT).show()
+                    }, null)
+                } else {
+                    setClipboardData(context, content)
+                    Toast.makeText(context, "已复制", Toast.LENGTH_SHORT).show()
                 }
             }
             Spacer(modifier = Modifier.height(20.dp))
-
-            var content1 by remember {
-                mutableStateOf("")
-            }
-            WeDialogHolder(title = "剪贴板内容", content = content1) { dialog ->
-                WeButton(text = "读取剪贴板内容", type = ButtonType.PLAIN) {
-                    getClipboardData(context)?.let {
-                        content1 = it
-                        dialog.value = true
-                    } ?: Toast.makeText(context, "获取失败", Toast.LENGTH_SHORT).show()
-                }
+            WeButton(text = "读取剪贴板内容", type = ButtonType.PLAIN) {
+                getClipboardData(context)?.let {
+                    weDialog.open("剪贴板内容", it, onCancel = null)
+                } ?: Toast.makeText(context, "获取失败", Toast.LENGTH_SHORT).show()
             }
         }
     }
