@@ -49,6 +49,7 @@ enum class ButtonSize(
  * @param text 按钮文字
  * @param type 类型
  * @param size 大小
+ * @param width 宽度
  * @param disabled 是否禁用
  * @param loading 是否加载中
  * @param onClick 点击事件
@@ -59,6 +60,7 @@ fun WeButton(
     modifier: Modifier = Modifier,
     type: ButtonType = ButtonType.PRIMARY,
     size: ButtonSize = ButtonSize.LARGE,
+    width: Dp = 184.dp,
     disabled: Boolean = false,
     loading: Boolean = false,
     onClick: (() -> Unit)? = null
@@ -67,7 +69,7 @@ fun WeButton(
 
     Box(
         Modifier
-            .width(if (size != ButtonSize.SMALL) 184.dp else 0.dp)
+            .width(if (size != ButtonSize.SMALL) width else 0.dp)
             .clip(RoundedCornerShape(size.borderRadius))
             .clickable(
                 interactionSource = remember {
