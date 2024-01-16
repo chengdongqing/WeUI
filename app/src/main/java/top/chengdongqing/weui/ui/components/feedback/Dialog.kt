@@ -15,6 +15,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -150,71 +152,73 @@ fun WeDialog(
 }
 
 @Composable
-fun rememberWeDialog(
-    okText: String = "确定",
-    cancelText: String = "取消",
-    okColor: Color = LinkColor,
-    closeOnAction: Boolean = true
-): WeDialogState {
-    val visibleState = remember { mutableStateOf(false) }
-    val titleState = remember { mutableStateOf("") }
-    val contentState = remember { mutableStateOf<String?>(null) }
-    val onOkState = remember { mutableStateOf<(() -> Unit)?>(null) }
-    val onCancelState = remember { mutableStateOf<(() -> Unit)?>(null) }
-
-    fun close() {
-        visibleState.value = false
+fun rememberWeDialog(): WeDialogState {
+    val visibleState = remember {
+        mutableStateOf(false)
+    }
+    val localState = remember {
+        mutableStateMapOf<String, Any?>()
     }
 
     WeDialog(
         visible = visibleState.value,
-        title = titleState.value,
-        content = contentState.value,
-        okText = okText,
-        cancelText = cancelText,
-        okColor = okColor,
+        title = (localState["title"] as String?) ?: "",
+        content = localState["content"] as String?,
+        okText = (localState["okText"] as String?) ?: "",
+        cancelText = (localState["cancelText"] as String?) ?: "",
+        okColor = (localState["okColor"] as Color?) ?: Color.Unspecified,
         onOk = {
-            onOkState.value?.invoke()
-            if (closeOnAction) {
-                close()
+            if (localState.contains("onOk")) {
+                (localState["onOk"] as? () -> Unit)?.invoke()
+            }
+            if (localState["closeOnAction"] == true) {
+                visibleState.value = false
             }
         },
-        onCancel = if (onCancelState.value != null) {
+        onCancel = if (localState["onCancel"] != null) {
             {
-                onCancelState.value?.invoke()
-                if (closeOnAction) {
-                    close()
+                (localState["onCancel"] as? () -> Unit)?.invoke()
+                if (localState["closeOnAction"] == true) {
+                    visibleState.value = false
                 }
             }
         } else null
     )
 
-    return WeDialogState(visibleState.value, { title, content, onOk, onCancel ->
-        titleState.value = title
-        contentState.value = content
-        onOkState.value = onOk
-        onCancelState.value = onCancel
-        visibleState.value = true
-    }, {
-        close()
-    })
+    return WeDialogState(visibleState, localState)
 }
 
 class WeDialogState(
-    val visible: Boolean,
-    private val showDialog: (title: String, content: String?, onOk: (() -> Unit)?, onCancel: (() -> Unit)?) -> Unit,
-    private val hideDialog: () -> Unit
+    private val visible: MutableState<Boolean>,
+    private val localState: MutableMap<String, Any?>
 ) {
+    fun visible(): Boolean {
+        return this.visible.value
+    }
+
     fun open(
         title: String,
         content: String? = null,
+        okText: String = "确定",
+        cancelText: String = "取消",
+        okColor: Color = LinkColor,
+        closeOnAction: Boolean = true,
         onOk: (() -> Unit)? = null,
         onCancel: (() -> Unit)? = {}
     ) {
-        showDialog(title, content, onOk, onCancel)
+        localState["title"] = title
+        localState["content"] = content
+        localState["okText"] = okText
+        localState["cancelText"] = cancelText
+        localState["okColor"] = okColor
+        localState["closeOnAction"] = closeOnAction
+        localState["onOk"] = onOk
+        localState["onCancel"] = onCancel
+
+        visible.value = true
     }
 
-    fun hide() {
-        hideDialog()
+    fun close() {
+        visible.value = false
     }
 }

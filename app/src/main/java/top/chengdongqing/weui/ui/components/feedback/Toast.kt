@@ -17,11 +17,13 @@ import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import top.chengdongqing.weui.ui.components.basic.WeLoading
 import top.chengdongqing.weui.ui.theme.BackgroundColor
 import top.chengdongqing.weui.utils.screenCenterPositionProvider
@@ -72,10 +75,17 @@ fun WeToast(
             .heightIn(44.dp)
     }
 
-    LaunchedEffect(visible) {
-        if (visible) {
-            if (duration != Duration.INFINITE) {
+    val coroutineScope = rememberCoroutineScope()
+    DisposableEffect(visible, duration) {
+        if (visible && duration != Duration.INFINITE) {
+            coroutineScope.launch {
                 delay(duration)
+                onClose()
+            }
+        }
+
+        onDispose {
+            if (visible) {
                 onClose()
             }
         }
@@ -120,11 +130,11 @@ fun WeToast(
                         Text(
                             text = title,
                             color = Color.White,
-                            fontSize = if (hasIcon && lineCount.value == 1) 17.sp else 14.sp,
+                            fontSize = if (hasIcon && lineCount.intValue == 1) 17.sp else 14.sp,
                             modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
                             textAlign = TextAlign.Center,
                             onTextLayout = {
-                                lineCount.value = it.lineCount
+                                lineCount.intValue = it.lineCount
                             }
                         )
                     }
@@ -135,26 +145,50 @@ fun WeToast(
 }
 
 @Composable
-fun WeToastHolder(
-    title: String,
-    icon: ToastIcon = ToastIcon.NONE,
-    mask: Boolean = false,
-    duration: Duration = 1500.milliseconds,
-    holder: @Composable (visible: MutableState<Boolean>) -> Unit
-) {
+fun rememberWeToast(): WeToastState {
     val visible = remember {
         mutableStateOf(false)
     }
-
-    holder(visible)
+    val localState = remember {
+        mutableStateMapOf<String, Any?>()
+    }
 
     WeToast(
-        visible.value,
-        title,
-        icon,
-        mask,
-        duration
+        visible = visible.value,
+        title = (localState["title"] as String?) ?: "",
+        icon = (localState["icon"] as ToastIcon?) ?: ToastIcon.NONE,
+        mask = (localState["mask"] as Boolean?) ?: false,
+        duration = (localState["duration"] as Duration?) ?: 1500.milliseconds
     ) {
+        visible.value = false
+    }
+
+    return WeToastState(visible, localState)
+}
+
+class WeToastState(
+    private val visible: MutableState<Boolean>,
+    private val localState: MutableMap<String, Any?>
+) {
+    fun visible(): Boolean {
+        return visible.value
+    }
+
+    fun open(
+        title: String,
+        icon: ToastIcon = ToastIcon.NONE,
+        mask: Boolean = false,
+        duration: Duration = 1500.milliseconds
+    ) {
+        localState["title"] = title
+        localState["icon"] = icon
+        localState["mask"] = mask
+        localState["duration"] = duration
+
+        visible.value = true
+    }
+
+    fun close() {
         visible.value = false
     }
 }

@@ -6,16 +6,23 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -24,7 +31,9 @@ import top.chengdongqing.weui.ui.theme.FontColo1
 data class ActionSheetItem(
     val label: String,
     val description: String? = null,
-    val color: Color? = null
+    val color: Color? = null,
+    val disabled: Boolean = false,
+    val icon: (@Composable () -> Unit)? = null
 )
 
 /**
@@ -68,19 +77,28 @@ fun WeActionSheet(
                     modifier = Modifier
                         .fillMaxWidth()
                         .heightIn(56.dp)
-                        .clickable {
-                            onCancel()
-                            onChange(index)
-                        }
+                        .alpha(if (item.disabled) 0.4f else 1f)
+                        .then(if (!item.disabled) {
+                            Modifier.clickable {
+                                onCancel()
+                                onChange(index)
+                            }
+                        } else Modifier)
                         .padding(12.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    Text(
-                        text = item.label,
-                        color = item.color ?: Color.Unspecified,
-                        fontSize = 17.sp
-                    )
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        item.icon?.let {
+                            it()
+                            Spacer(modifier = Modifier.width(6.dp))
+                        }
+                        Text(
+                            text = item.label,
+                            color = item.color ?: Color.Unspecified,
+                            fontSize = 17.sp
+                        )
+                    }
                     item.description?.let {
                         Text(text = it, color = FontColo1, fontSize = 12.sp)
                     }
@@ -110,5 +128,50 @@ fun WeActionSheet(
                 )
             }
         }
+    }
+}
+
+@Composable
+fun rememberWeActionSheet(): WeActionSheetState {
+    val visible = remember {
+        mutableStateOf(false)
+    }
+    val localState = remember {
+        mutableStateMapOf<String, Any?>()
+    }
+
+    WeActionSheet(
+        visible = visible.value,
+        title = localState["title"] as String?,
+        options = (localState["options"] as? List<ActionSheetItem>) ?: listOf(),
+        onCancel = { visible.value = false },
+        onChange = (localState["onChange"] as? (index: Int) -> Unit) ?: {}
+    )
+
+    return WeActionSheetState(visible, localState)
+}
+
+class WeActionSheetState(
+    private val visible: MutableState<Boolean>,
+    private val localState: MutableMap<String, Any?>
+) {
+    fun visible(): Boolean {
+        return visible.value
+    }
+
+    fun open(
+        title: String? = null,
+        options: List<ActionSheetItem>,
+        onChange: (index: Int) -> Unit
+    ) {
+        localState["title"] = title
+        localState["options"] = options
+        localState["onChange"] = onChange
+
+        visible.value = true
+    }
+
+    fun close() {
+        visible.value = false
     }
 }

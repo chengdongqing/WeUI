@@ -2,10 +2,11 @@ package top.chengdongqing.weui.ui.views.device
 
 import android.content.Context
 import android.hardware.ConsumerIrManager
-import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import top.chengdongqing.weui.ui.components.Page
+import top.chengdongqing.weui.ui.components.feedback.ToastIcon
+import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
 import top.chengdongqing.weui.ui.components.form.WeButton
 
 @Composable
@@ -13,6 +14,7 @@ fun InfraredPage() {
     Page(title = "Infrared", description = "红外信号发射") {
         val context = LocalContext.current
         val irManager = context.getSystemService(Context.CONSUMER_IR_SERVICE) as? ConsumerIrManager
+        val toast = rememberWeToast()
 
         WeButton("发射红外信号") {
             if (irManager?.hasIrEmitter() == true) {
@@ -24,9 +26,9 @@ fun InfraredPage() {
                 val frequency = 38000
 
                 irManager.transmit(frequency, pattern)
-                Toast.makeText(context, "已发射", Toast.LENGTH_SHORT).show()
+                toast.open("已发射", ToastIcon.SUCCESS)
             } else {
-                Toast.makeText(context, "此设备没有红外模块", Toast.LENGTH_SHORT).show()
+                toast.open("此设备没有红外模块", ToastIcon.FAIL)
             }
         }
     }

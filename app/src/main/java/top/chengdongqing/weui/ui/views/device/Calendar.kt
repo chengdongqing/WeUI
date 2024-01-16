@@ -5,7 +5,6 @@ import android.content.ContentValues
 import android.content.Context
 import android.provider.CalendarContract
 import android.text.format.DateFormat
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -37,6 +36,8 @@ import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.ui.components.KeyValueCard
 import top.chengdongqing.weui.ui.components.KeyValueRow
 import top.chengdongqing.weui.ui.components.Page
+import top.chengdongqing.weui.ui.components.feedback.ToastIcon
+import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
 import top.chengdongqing.weui.ui.components.form.ButtonType
 import top.chengdongqing.weui.ui.components.form.WeButton
 import top.chengdongqing.weui.ui.components.form.WeInput
@@ -62,6 +63,7 @@ fun CalendarPage() {
 fun AddCalendarEvent() {
     val context = LocalContext.current
     val calendarPermissionState = rememberPermissionState(Manifest.permission.WRITE_CALENDAR)
+    val toast = rememberWeToast()
 
     var title by remember {
         mutableStateOf("")
@@ -87,9 +89,9 @@ fun AddCalendarEvent() {
                     put(CalendarContract.Events.CALENDAR_ID, 1)
                 }
                 context.contentResolver.insert(CalendarContract.Events.CONTENT_URI, values)
-                Toast.makeText(context, "已添加", Toast.LENGTH_SHORT).show()
+                toast.open("已添加", icon = ToastIcon.SUCCESS)
             } else {
-                Toast.makeText(context, "请输入正确的事件信息", Toast.LENGTH_SHORT).show()
+                toast.open("请正确输入")
             }
         } else {
             calendarPermissionState.launchPermissionRequest()

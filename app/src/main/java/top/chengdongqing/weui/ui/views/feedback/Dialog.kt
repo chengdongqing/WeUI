@@ -15,20 +15,23 @@ import top.chengdongqing.weui.ui.components.form.WeButton
 fun DialogPage() {
     Page(title = "Dialog", description = "对话框") {
         Column {
-            val weDialog = rememberWeDialog(okText = "主操作", "辅助操作")
+            val weDialog = rememberWeDialog()
             WeButton(text = "Dialog 样式一", type = ButtonType.PLAIN) {
                 weDialog.open(
                     "弹窗标题",
-                    "弹窗内容，告知当前状态、信息和解决方法，描述文字尽量控制在三行内"
+                    "弹窗内容，告知当前状态、信息和解决方法，描述文字尽量控制在三行内",
+                    "主操作",
+                    "辅助操作"
                 )
             }
 
             Spacer(Modifier.height(16.dp))
 
-            val weDialog1 = rememberWeDialog(okText = "知道了")
+            val weDialog1 = rememberWeDialog()
             WeButton(text = "Dialog 样式二", type = ButtonType.PLAIN) {
                 weDialog1.open(
                     "弹窗内容，告知当前状态、信息和解决方法，描述文字尽量控制在三行内",
+                    okText = "知道了",
                     onCancel = null
                 )
             }

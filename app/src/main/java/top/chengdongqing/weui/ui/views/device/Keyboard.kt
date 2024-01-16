@@ -22,6 +22,8 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import top.chengdongqing.weui.ui.components.Page
 import top.chengdongqing.weui.ui.components.form.ButtonType
 import top.chengdongqing.weui.ui.components.form.WeButton
@@ -75,9 +77,12 @@ fun rememberKeyboardHeight(): Dp {
         val listener = ViewTreeObserver.OnGlobalLayoutListener {
             val rect = Rect()
             rootView.getWindowVisibleDisplayFrame(rect)
-            val keypadHeight = rootView.height - rect.bottom
+            val windowInsets = ViewCompat.getRootWindowInsets(rootView)
+            val bottomInset =
+                windowInsets?.getInsets(WindowInsetsCompat.Type.systemBars())?.bottom ?: 0
+            val keyboardHeight = rootView.height - rect.bottom - bottomInset
             height = density.run {
-                keypadHeight.toDp()
+                keyboardHeight.toDp()
             }
         }
         rootView.viewTreeObserver.addOnGlobalLayoutListener(listener)

@@ -6,7 +6,6 @@ import android.net.Uri
 import android.provider.CallLog
 import android.provider.ContactsContract
 import android.text.format.DateFormat
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -40,6 +39,7 @@ import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.ui.components.KeyValueCard
 import top.chengdongqing.weui.ui.components.KeyValueRow
 import top.chengdongqing.weui.ui.components.Page
+import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
 import top.chengdongqing.weui.ui.components.form.ButtonSize
 import top.chengdongqing.weui.ui.components.form.ButtonType
 import top.chengdongqing.weui.ui.components.form.WeButton
@@ -68,10 +68,11 @@ private fun PhoneCall() {
     val context = LocalContext.current
     val callPermissionState =
         rememberPermissionState(android.Manifest.permission.CALL_PHONE)
+    val toast = rememberWeToast()
+
     var number by remember {
         mutableStateOf("")
     }
-
     WeInput(
         value = number,
         placeholder = "请输入号码",
@@ -91,7 +92,7 @@ private fun PhoneCall() {
         ) {
             if (callPermissionState.status.isGranted) {
                 if (number.isEmpty()) {
-                    Toast.makeText(context, "请输入号码", Toast.LENGTH_SHORT).show()
+                    toast.open("请输入号码")
                 } else {
                     val intent = Intent(Intent.ACTION_CALL).apply {
                         data = Uri.parse("tel:${number}")
@@ -109,7 +110,7 @@ private fun PhoneCall() {
             size = ButtonSize.MEDIUM
         ) {
             if (number.isEmpty()) {
-                Toast.makeText(context, "请输入号码", Toast.LENGTH_SHORT).show()
+                toast.open("请输入号码")
             } else {
                 val intent = Intent(Intent.ACTION_DIAL).apply {
                     data = Uri.parse("tel:${number}")

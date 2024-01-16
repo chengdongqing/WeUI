@@ -3,7 +3,6 @@ package top.chengdongqing.weui.ui.views.device
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -31,6 +30,7 @@ import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.ui.components.KeyValueCard
 import top.chengdongqing.weui.ui.components.KeyValueRow
 import top.chengdongqing.weui.ui.components.Page
+import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
 import top.chengdongqing.weui.ui.components.form.ButtonType
 import top.chengdongqing.weui.ui.components.form.WeButton
 import top.chengdongqing.weui.ui.components.form.WeInput
@@ -53,6 +53,8 @@ private fun SmsSend() {
     val context = LocalContext.current
     val smsPermissionState =
         rememberPermissionState(android.Manifest.permission.SEND_SMS)
+    val toast = rememberWeToast()
+
     var number by remember {
         mutableStateOf("")
     }
@@ -77,7 +79,7 @@ private fun SmsSend() {
     ) {
         if (smsPermissionState.status.isGranted) {
             if (number.isEmpty() || content.isEmpty()) {
-                Toast.makeText(context, "请检查是否输入正确", Toast.LENGTH_SHORT).show()
+                toast.open("请正确输入")
             } else {
                 val intent = Intent(Intent.ACTION_SENDTO).apply {
                     data = Uri.parse("smsto:$number")
