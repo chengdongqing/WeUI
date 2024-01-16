@@ -61,7 +61,7 @@ fun HomePage(navController: NavHostController) {
     ) {
         Column(Modifier.padding(40.dp)) {
             Image(
-                painter = painterResource(id = R.drawable.logo),
+                painter = painterResource(id = R.drawable.ic_logo),
                 contentDescription = "WeUI",
                 modifier = Modifier.height(21.dp)
             )
@@ -91,7 +91,7 @@ fun HomePage(navController: NavHostController) {
                 .padding(vertical = 40.dp)
         ) {
             Image(
-                painter = painterResource(id = R.drawable.icon_footer_link),
+                painter = painterResource(id = R.drawable.ic_footer_link),
                 contentDescription = null,
                 modifier = Modifier.size(84.dp, 19.dp)
             )

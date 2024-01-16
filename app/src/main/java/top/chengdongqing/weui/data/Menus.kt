@@ -18,7 +18,7 @@ data class MenuGroup(
 
 val menus = listOf(
     MenuGroup(
-        "基础组件", R.drawable.icon_nav_layout,
+        "基础组件", R.drawable.ic_nav_layout,
         listOf(
             MenuItem("Badge", "badge"),
             MenuItem("Loading", "loading"),
@@ -28,7 +28,7 @@ val menus = listOf(
         )
     ),
     MenuGroup(
-        "表单组件", R.drawable.icon_nav_form,
+        "表单组件", R.drawable.ic_nav_form,
         listOf(
             MenuItem("Button", "button"),
             MenuItem("Checkbox", "checkbox"),
@@ -40,7 +40,7 @@ val menus = listOf(
         )
     ),
     MenuGroup(
-        "操作反馈", R.drawable.icon_nav_feedback,
+        "操作反馈", R.drawable.ic_nav_feedback,
         listOf(
             MenuItem("ActionSheet", "action-sheet"),
             MenuItem("Dialog", "dialog"),
@@ -51,7 +51,7 @@ val menus = listOf(
         )
     ),
     MenuGroup(
-        "媒体组件", R.drawable.icon_nav_media,
+        "媒体组件", R.drawable.ic_nav_media,
         listOf(
             MenuItem("Gallery", "gallery"),
             MenuItem("FileBrowser", "file-browser"),
@@ -66,7 +66,7 @@ val menus = listOf(
         )
     ),
     MenuGroup(
-        "设备接口", R.drawable.icon_nav_nav,
+        "设备接口", R.drawable.ic_nav_nav,
         listOf(
             MenuItem("DeviceInfo", "device-info"),
             MenuItem("SystemStatus", "system-status"),
@@ -92,26 +92,26 @@ val menus = listOf(
         )
     ),
     MenuGroup(
-        "地图组件", R.drawable.icon_nav_feedback,
+        "地图组件", R.drawable.ic_nav_feedback,
         listOf(
             MenuItem("Map", "map"),
         )
     ),
     MenuGroup(
-        "导航相关", R.drawable.icon_nav_nav,
+        "导航相关", R.drawable.ic_nav_nav,
         listOf(
             MenuItem("NavBar", "nav-bar"),
             MenuItem("TabBar", "tab-bar")
         )
     ),
     MenuGroup(
-        "搜索相关", R.drawable.icon_nav_search,
+        "搜索相关", R.drawable.ic_nav_search,
         listOf(
             MenuItem("SearchBar", "search-bar")
         )
     ),
     MenuGroup(
-        "层级规范", R.drawable.icon_nav_zindex,
+        "层级规范", R.drawable.ic_nav_zindex,
         path = "z-index"
     )
 )

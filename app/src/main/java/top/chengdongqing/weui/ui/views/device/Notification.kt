@@ -41,7 +41,7 @@ fun NotificationPage() {
 @SuppressLint("MissingPermission")
 private fun sendNotification(context: Context, channelId: String, title: String, content: String) {
     val builder = NotificationCompat.Builder(context, channelId)
-        .setSmallIcon(R.drawable.logo) // 设置通知小图标
+        .setSmallIcon(R.drawable.ic_logo) // 设置通知小图标
         .setContentTitle(title) // 设置通知标题
         .setContentText(content) // 设置通知内容
         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
