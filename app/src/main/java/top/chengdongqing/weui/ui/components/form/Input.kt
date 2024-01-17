@@ -36,6 +36,7 @@ fun WeInput(
     placeholder: String? = null,
     disabled: Boolean = false,
     labelWidth: Dp = 68.dp,
+    alignment: Alignment = Alignment.CenterStart,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     onChange: ((String) -> Unit)? = null
@@ -65,7 +66,7 @@ fun WeInput(
             ) { innerTextField ->
                 Box(
                     Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.CenterStart
+                    contentAlignment = alignment
                 ) {
                     innerTextField()
                     if (value.isEmpty() && placeholder?.isNotEmpty() == true) {

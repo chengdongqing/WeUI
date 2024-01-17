@@ -13,6 +13,7 @@ import top.chengdongqing.weui.ui.views.basic.LoadMorePage
 import top.chengdongqing.weui.ui.views.basic.LoadingPage
 import top.chengdongqing.weui.ui.views.basic.ProgressPage
 import top.chengdongqing.weui.ui.views.basic.StepsPage
+import top.chengdongqing.weui.ui.views.basic.SwiperPage
 import top.chengdongqing.weui.ui.views.device.CalendarPage
 import top.chengdongqing.weui.ui.views.device.CallAndContactsPage
 import top.chengdongqing.weui.ui.views.device.ClipboardPage
@@ -49,7 +50,7 @@ fun NavigationGraph() {
 
     NavHost(
         navController,
-        startDestination = "home",
+        startDestination = "picker",
         enterTransition = {
             slideIntoContainer(
                 AnimatedContentTransitionScope.SlideDirection.Left,
@@ -104,6 +105,9 @@ fun NavGraphBuilder.basicGraph() {
     }
     composable("steps") {
         StepsPage()
+    }
+    composable("swiper") {
+        SwiperPage()
     }
 }
 

@@ -24,7 +24,8 @@ val menus = listOf(
             MenuItem("Loading", "loading"),
             MenuItem("LoadMore", "load-more"),
             MenuItem("Progress", "progress"),
-            MenuItem("Steps", "steps")
+            MenuItem("Steps", "steps"),
+            MenuItem("Swiper", "swiper")
         )
     ),
     MenuGroup(
