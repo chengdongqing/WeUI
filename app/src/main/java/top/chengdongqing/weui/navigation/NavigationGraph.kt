@@ -50,7 +50,7 @@ fun NavigationGraph() {
 
     NavHost(
         navController,
-        startDestination = "picker",
+        startDestination = "home",
         enterTransition = {
             slideIntoContainer(
                 AnimatedContentTransitionScope.SlideDirection.Left,

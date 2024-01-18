@@ -20,6 +20,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -36,7 +37,7 @@ fun WeInput(
     placeholder: String? = null,
     disabled: Boolean = false,
     labelWidth: Dp = 68.dp,
-    alignment: Alignment = Alignment.CenterStart,
+    textAlign: TextAlign? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     onChange: ((String) -> Unit)? = null
@@ -57,7 +58,7 @@ fun WeInput(
                     .height(56.dp),
                 readOnly = disabled,
                 singleLine = true,
-                textStyle = TextStyle(color = FontColor, fontSize = 16.sp),
+                textStyle = TextStyle(color = FontColor, fontSize = 16.sp, textAlign = textAlign),
                 keyboardOptions = keyboardOptions,
                 keyboardActions = keyboardActions,
                 visualTransformation = if (keyboardOptions.keyboardType == KeyboardType.Password)
@@ -66,7 +67,11 @@ fun WeInput(
             ) { innerTextField ->
                 Box(
                     Modifier.fillMaxSize(),
-                    contentAlignment = alignment
+                    contentAlignment = when (textAlign) {
+                        TextAlign.Center -> Alignment.Center
+                        TextAlign.Right -> Alignment.CenterEnd
+                        else -> Alignment.CenterStart
+                    }
                 ) {
                     innerTextField()
                     if (value.isEmpty() && placeholder?.isNotEmpty() == true) {

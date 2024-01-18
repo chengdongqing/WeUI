@@ -1,5 +1,8 @@
 package top.chengdongqing.weui.ui.components.feedback
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -54,49 +57,56 @@ enum class InformationBarType(
 
 @Composable
 fun WeInformationBar(
+    visible: Boolean = true,
     content: String,
     type: InformationBarType = InformationBarType.SUCCESS,
     linkText: String? = null,
     onLink: (() -> Unit)? = null,
     onClose: (() -> Unit)? = null
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(48.dp)
-            .clip(RoundedCornerShape(8.dp))
-            .background(type.backgroundColor)
-            .padding(16.dp, 12.dp),
-        verticalAlignment = Alignment.CenterVertically
+    AnimatedVisibility(
+        visible = visible,
+        enter = expandVertically(),
+        exit = shrinkVertically()
     ) {
-        Icon(
-            if (type == InformationBarType.SUCCESS) Icons.Outlined.Check else Icons.Outlined.Info,
-            contentDescription = null,
-            tint = type.iconColor
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        Text(text = content, fontSize = 14.sp, color = type.textColor)
-        Spacer(modifier = Modifier.weight(1f))
-        linkText?.let {
-            Text(
-                text = it,
-                fontSize = 14.sp,
-                color = type.linkColor,
-                modifier = Modifier.clickableWithoutRipple {
-                    onLink?.invoke()
-                }
-            )
-        }
-        Spacer(modifier = Modifier.width(8.dp))
-        onClose?.let {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp)
+                .clip(RoundedCornerShape(8.dp))
+                .background(type.backgroundColor)
+                .padding(16.dp, 12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Icon(
-                Icons.Outlined.Close,
+                if (type == InformationBarType.SUCCESS) Icons.Outlined.Check else Icons.Outlined.Info,
                 contentDescription = null,
-                tint = type.closeIconColor,
-                modifier = Modifier.clickableWithoutRipple {
-                    it()
-                }
+                tint = type.iconColor
             )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(text = content, fontSize = 14.sp, color = type.textColor)
+            Spacer(modifier = Modifier.weight(1f))
+            linkText?.let {
+                Text(
+                    text = it,
+                    fontSize = 14.sp,
+                    color = type.linkColor,
+                    modifier = Modifier.clickableWithoutRipple {
+                        onLink?.invoke()
+                    }
+                )
+            }
+            Spacer(modifier = Modifier.width(8.dp))
+            onClose?.let {
+                Icon(
+                    Icons.Outlined.Close,
+                    contentDescription = null,
+                    tint = type.closeIconColor,
+                    modifier = Modifier.clickableWithoutRipple {
+                        it()
+                    }
+                )
+            }
         }
     }
 }

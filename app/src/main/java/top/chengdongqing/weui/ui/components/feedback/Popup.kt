@@ -96,10 +96,10 @@ fun WePopup(
                                 Box(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .heightIn(60.dp),
+                                        .heightIn(50.dp),
                                     contentAlignment = Alignment.Center
                                 ) {
-                                    Text(text = it, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                                    Text(text = it, fontSize = 17.sp, fontWeight = FontWeight.Bold)
                                 }
                             }
                             content()
