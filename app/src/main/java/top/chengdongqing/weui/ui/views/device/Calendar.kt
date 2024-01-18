@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -57,7 +56,7 @@ fun CalendarPage() {
     }
 }
 
-@OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun AddCalendarEvent() {
     val context = LocalContext.current
@@ -85,17 +84,16 @@ fun AddCalendarEvent() {
         label = "事件日期",
         placeholder = "请选择",
         disabled = true,
-        onClick = {
-            visible = true
-        })
+        onClick = { visible = true }
+    )
     WeDatePicker(
         visible,
-        value = date ?: LocalDate.now(),
+        value = date,
         start = LocalDate.now(),
         end = LocalDate.now().plusYears(3),
-        onCancel = { visible = false }) {
-        date = it
-    }
+        onCancel = { visible = false },
+        onChange = { date = it }
+    )
     Spacer(modifier = Modifier.height(20.dp))
 
     WeButton(text = "添加日历事件", type = ButtonType.PLAIN) {

@@ -199,7 +199,7 @@ enum class DateType {
 @Composable
 fun WeDatePicker(
     visible: Boolean,
-    value: LocalDate = LocalDate.now(),
+    value: LocalDate? = null,
     type: DateType = DateType.DAY,
     start: LocalDate = LocalDate.now().minusYears(50),
     end: LocalDate = LocalDate.now().plusYears(10),
@@ -225,10 +225,11 @@ fun WeDatePicker(
             }
         )
     }
-    var localValue by remember(range, value) {
-        val initialValue = if (value.isBefore(start)) start
-        else if (value.isAfter(end)) end
-        else value
+    var localValue by remember(range, value, start, end) {
+        val value1 = value ?: LocalDate.now()
+        val initialValue = if (value1.isBefore(start)) start
+        else if (value1.isAfter(end)) end
+        else value1
 
         mutableStateOf(
             arrayOf(
@@ -300,7 +301,7 @@ enum class TimeType {
 @Composable
 fun WeTimePicker(
     visible: Boolean,
-    value: LocalTime,
+    value: LocalTime? = null,
     type: TimeType = TimeType.SECOND,
     start: LocalTime = LocalTime.MIN,
     end: LocalTime = LocalTime.MAX,
@@ -327,9 +328,10 @@ fun WeTimePicker(
         )
     }
     var localValue by remember(range, value) {
-        val initialValue = if (value.isBefore(start)) start
-        else if (value.isAfter(end)) end
-        else value
+        val value1 = value ?: LocalTime.now()
+        val initialValue = if (value1.isBefore(start)) start
+        else if (value1.isAfter(end)) end
+        else value1
 
         mutableStateOf(
             arrayOf(
