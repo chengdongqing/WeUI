@@ -131,7 +131,7 @@ fun WePicker(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun PickerColumn(
+private fun PickerColumn(
     modifier: Modifier,
     options: List<String>,
     index: Int,
@@ -169,6 +169,27 @@ fun PickerColumn(
     }
 }
 
+@Composable
+fun WeSingleColumnPicker(
+    visible: Boolean,
+    title: String? = null,
+    range: List<String>,
+    value: Int,
+    onChange: (Int) -> Unit,
+    onCancel: () -> Unit
+) {
+    WePicker(
+        visible,
+        title,
+        range = arrayOf(range),
+        value = arrayOf(value),
+        onChange = {
+            onChange(it[0])
+        },
+        onCancel = onCancel
+    )
+}
+
 enum class DateType {
     YEAR,
     MONTH,
@@ -178,7 +199,7 @@ enum class DateType {
 @Composable
 fun WeDatePicker(
     visible: Boolean,
-    value: LocalDate,
+    value: LocalDate = LocalDate.now(),
     type: DateType = DateType.DAY,
     start: LocalDate = LocalDate.now().minusYears(50),
     end: LocalDate = LocalDate.now().plusYears(10),

@@ -28,6 +28,7 @@ import top.chengdongqing.weui.ui.theme.BorderColor
 import top.chengdongqing.weui.ui.theme.FontColor
 import top.chengdongqing.weui.ui.theme.LightColor
 import top.chengdongqing.weui.ui.theme.PrimaryColor
+import top.chengdongqing.weui.utils.clickableWithoutRipple
 
 @Composable
 fun WeInput(
@@ -40,6 +41,7 @@ fun WeInput(
     textAlign: TextAlign? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
+    onClick: (() -> Unit)? = null,
     onChange: ((String) -> Unit)? = null
 ) {
     Column {
@@ -66,7 +68,11 @@ fun WeInput(
                 cursorBrush = SolidColor(PrimaryColor)
             ) { innerTextField ->
                 Box(
-                    Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .then(if (onClick != null) {
+                            Modifier.clickableWithoutRipple { onClick() }
+                        } else Modifier),
                     contentAlignment = when (textAlign) {
                         TextAlign.Center -> Alignment.Center
                         TextAlign.Right -> Alignment.CenterEnd

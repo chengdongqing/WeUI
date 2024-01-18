@@ -7,15 +7,11 @@ import android.provider.CalendarContract
 import android.text.format.DateFormat
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,7 +36,10 @@ import top.chengdongqing.weui.ui.components.feedback.ToastIcon
 import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
 import top.chengdongqing.weui.ui.components.form.ButtonType
 import top.chengdongqing.weui.ui.components.form.WeButton
+import top.chengdongqing.weui.ui.components.form.WeDatePicker
 import top.chengdongqing.weui.ui.components.form.WeInput
+import java.time.LocalDate
+import java.time.ZoneId
 import java.util.Date
 import java.util.TimeZone
 
@@ -70,21 +69,45 @@ fun AddCalendarEvent() {
     }
     WeInput(
         value = title,
-        placeholder = "事件名称",
-        modifier = Modifier.fillMaxWidth()
+        label = "事件名称",
+        placeholder = "请输入"
     ) {
         title = it
     }
-    val datePickerState = rememberDatePickerState(initialDisplayMode = DisplayMode.Input)
-    DatePicker(state = datePickerState)
+    var date by remember {
+        mutableStateOf<LocalDate?>(null)
+    }
+    var visible by remember {
+        mutableStateOf(false)
+    }
+    WeInput(
+        value = date?.toString() ?: "",
+        label = "事件日期",
+        placeholder = "请选择",
+        disabled = true,
+        onClick = {
+            visible = true
+        })
+    WeDatePicker(
+        visible,
+        value = date ?: LocalDate.now(),
+        start = LocalDate.now(),
+        end = LocalDate.now().plusYears(3),
+        onCancel = { visible = false }) {
+        date = it
+    }
+    Spacer(modifier = Modifier.height(20.dp))
 
     WeButton(text = "添加日历事件", type = ButtonType.PLAIN) {
         if (calendarPermissionState.status.isGranted) {
-            if (title.isNotEmpty() && datePickerState.selectedDateMillis != null) {
+            if (title.isNotEmpty() && date != null) {
                 val values = ContentValues().apply {
                     put(CalendarContract.Events.TITLE, title)
-                    put(CalendarContract.Events.DTSTART, datePickerState.selectedDateMillis)
-                    put(CalendarContract.Events.DTEND, datePickerState.selectedDateMillis)
+                    val mills = date!!.atTime(10, 0)
+                        .atZone(ZoneId.systemDefault()).toInstant()
+                        .toEpochMilli()
+                    put(CalendarContract.Events.DTSTART, mills)
+                    put(CalendarContract.Events.DTEND, mills)
                     put(CalendarContract.Events.EVENT_TIMEZONE, TimeZone.getDefault().id)
                     put(CalendarContract.Events.CALENDAR_ID, 1)
                 }
