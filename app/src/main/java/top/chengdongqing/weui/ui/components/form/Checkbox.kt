@@ -2,8 +2,6 @@ package top.chengdongqing.weui.ui.components.form
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,7 +15,6 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -31,6 +28,7 @@ import top.chengdongqing.weui.R
 import top.chengdongqing.weui.ui.theme.BorderColor
 import top.chengdongqing.weui.ui.theme.FontColor
 import top.chengdongqing.weui.ui.theme.PrimaryColor
+import top.chengdongqing.weui.utils.clickableWithoutRipple
 
 data class CheckboxOption(
     val label: String,
@@ -81,13 +79,7 @@ fun WeCheckbox(
     Row(
         Modifier
             .clip(RoundedCornerShape(10.dp))
-            .clickable(
-                remember {
-                    MutableInteractionSource()
-                },
-                indication = null,
-                enabled = !disabled
-            ) {
+            .clickableWithoutRipple(!disabled) {
                 onChange?.invoke(!checked)
             }
             .padding(16.dp)

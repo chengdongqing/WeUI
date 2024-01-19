@@ -70,9 +70,9 @@ fun WeInput(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .then(if (onClick != null) {
-                            Modifier.clickableWithoutRipple { onClick() }
-                        } else Modifier),
+                        .then(onClick?.let {
+                            Modifier.clickableWithoutRipple { it() }
+                        } ?: Modifier),
                     contentAlignment = when (textAlign) {
                         TextAlign.Center -> Alignment.Center
                         TextAlign.Right -> Alignment.CenterEnd

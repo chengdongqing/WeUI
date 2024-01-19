@@ -30,10 +30,11 @@ import kotlin.concurrent.timerTask
 fun Swiper(
     pagerState: PagerState,
     count: Int,
+    modifier: Modifier = Modifier,
     autoplay: Boolean = true,
     interval: Long = 3000,
     showDots: Boolean = true,
-    content: @Composable() (PagerScope.(page: Int) -> Unit)
+    content: @Composable (PagerScope.(page: Int) -> Unit)
 ) {
     if (autoplay) {
         val coroutineScope = rememberCoroutineScope()
@@ -53,7 +54,11 @@ fun Swiper(
     }
 
     Box {
-        HorizontalPager(state = pagerState, pageContent = content)
+        HorizontalPager(
+            state = pagerState,
+            modifier = modifier,
+            pageContent = content
+        )
 
         if (showDots) {
             Row(
@@ -65,7 +70,10 @@ fun Swiper(
                     .clip(RoundedCornerShape(2.dp))
                     .background(Color.White.copy(alpha = 0.2f))
             ) {
-                val offsetX by animateDpAsState(targetValue = (pagerState.currentPage * 16).dp)
+                val offsetX by animateDpAsState(
+                    targetValue = (pagerState.currentPage * 16).dp,
+                    label = "OffsetAnimation"
+                )
                 Box(
                     Modifier
                         .width(16.dp)
@@ -74,7 +82,6 @@ fun Swiper(
                         .clip(RoundedCornerShape(2.dp))
                         .background(Color.White)
                 )
-
             }
         }
     }
