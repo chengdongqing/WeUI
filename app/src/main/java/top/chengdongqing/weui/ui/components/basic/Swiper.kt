@@ -57,6 +57,7 @@ fun Swiper(
         HorizontalPager(
             state = pagerState,
             modifier = modifier,
+            pageSpacing = 20.dp,
             pageContent = content
         )
 

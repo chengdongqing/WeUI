@@ -49,10 +49,8 @@ fun WePicker(
     onChange: (Array<Int>) -> Unit,
     onCancel: () -> Unit
 ) {
-    val localValue by remember(visible) {
-        derivedStateOf {
-            value.copyOf()
-        }
+    val localValue = remember(visible) {
+        value.copyOf()
     }
 
     WePopup(visible, title = title, onClose = onCancel) {

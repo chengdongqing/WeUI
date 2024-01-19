@@ -48,7 +48,8 @@ val menus = listOf(
             MenuItem("Popup", "popup"),
             MenuItem("Toast", "toast"),
             MenuItem("InformationBar", "information-bar"),
-            MenuItem("ContextMenu", "context-menu")
+            MenuItem("ContextMenu", "context-menu"),
+            MenuItem("PullDownRefresh", "pull-down-refresh")
         )
     ),
     MenuGroup(
