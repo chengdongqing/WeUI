@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
@@ -23,19 +25,24 @@ import top.chengdongqing.weui.R
  *
  * @param size 大小
  * @param color 颜色
+ * @param isRotating 是否旋转
  */
 @Composable
-fun WeLoading(size: Dp = 16.dp, color: Color = Color.Unspecified) {
-    val infiniteTransition = rememberInfiniteTransition(label = "LoadingInfiniteTransition")
-    val angle by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 360f,
-        animationSpec = infiniteRepeatable(
-            tween(durationMillis = 1000, easing = LinearEasing),
-            RepeatMode.Restart
-        ),
-        label = "LoadingAnimation"
-    )
+fun WeLoading(size: Dp = 16.dp, color: Color = Color.Unspecified, isRotating: Boolean = true) {
+    val angle by if (isRotating) {
+        val infiniteTransition = rememberInfiniteTransition(label = "LoadingInfiniteTransition")
+        infiniteTransition.animateFloat(
+            initialValue = 0f,
+            targetValue = 360f,
+            animationSpec = infiniteRepeatable(
+                tween(durationMillis = 1000, easing = LinearEasing),
+                RepeatMode.Restart
+            ),
+            label = "LoadingAnimation"
+        )
+    } else {
+        remember { mutableFloatStateOf(0f) }
+    }
 
     Icon(
         painter = painterResource(id = R.drawable.ic_loading),

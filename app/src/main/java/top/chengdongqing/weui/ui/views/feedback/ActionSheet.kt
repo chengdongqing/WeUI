@@ -1,5 +1,9 @@
 package top.chengdongqing.weui.ui.views.feedback
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.launch
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -17,6 +21,7 @@ import top.chengdongqing.weui.ui.components.feedback.rememberWeActionSheet
 import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
 import top.chengdongqing.weui.ui.components.form.ButtonType
 import top.chengdongqing.weui.ui.components.form.WeButton
+import top.chengdongqing.weui.ui.theme.PrimaryColor
 
 @Composable
 fun ActionSheetPage() {
@@ -25,14 +30,14 @@ fun ActionSheetPage() {
         val toast = rememberWeToast()
 
         Column {
-            WeButton(text = "弹出") {
+            WeButton(text = "立即支付", type = ButtonType.PLAIN) {
                 actionSheet.open(
-                    "这是一个标题，可以为一行或者两行。",
+                    "请选择支付方式",
                     listOf(
-                        ActionSheetItem("微信"),
-                        ActionSheetItem("支付宝", "副标题"),
-                        ActionSheetItem("QQ钱包", "红色", color = Color.Red),
-                        ActionSheetItem("小米钱包", "禁用", disabled = true),
+                        ActionSheetItem("微信", color = PrimaryColor),
+                        ActionSheetItem("支付宝", color = Color(0xFF00BBEE)),
+                        ActionSheetItem("QQ钱包", color = Color.Red),
+                        ActionSheetItem("小米钱包", "禁用", disabled = true)
                     )
                 ) {
                     toast.open("点击了第${it + 1}个")
@@ -41,7 +46,7 @@ fun ActionSheetPage() {
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            WeButton(text = "通话", type = ButtonType.PLAIN) {
+            WeButton(text = "开始通话", type = ButtonType.PLAIN) {
                 val options = listOf(
                     ActionSheetItem("视频通话", icon = {
                         Icon(
@@ -63,6 +68,38 @@ fun ActionSheetPage() {
                     options = options
                 ) {
                     toast.open("开始${options[it].label}")
+                }
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            val takePictureLauncher = rememberLauncherForActivityResult(
+                ActivityResultContracts.TakePicturePreview()
+            ) {
+
+            }
+            val pickMultipleMediaLauncher = rememberLauncherForActivityResult(
+                ActivityResultContracts.PickMultipleVisualMedia()
+            ) {
+
+            }
+            WeButton(text = "发朋友圈") {
+                val options = listOf(
+                    ActionSheetItem("拍摄", "照片或视频"),
+                    ActionSheetItem("从相册选择")
+                )
+
+                actionSheet.open(
+                    options = options
+                ) {
+                    when (it) {
+                        0 -> takePictureLauncher.launch()
+                        1 -> pickMultipleMediaLauncher.launch(
+                            PickVisualMediaRequest(
+                                ActivityResultContracts.PickVisualMedia.ImageAndVideo
+                            )
+                        )
+                    }
                 }
             }
         }

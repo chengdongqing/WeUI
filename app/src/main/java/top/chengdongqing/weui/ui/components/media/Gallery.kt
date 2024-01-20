@@ -8,41 +8,42 @@ import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
+import android.util.Size
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.PlayArrow
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import top.chengdongqing.weui.ui.components.form.ButtonType
 import top.chengdongqing.weui.ui.components.form.WeButton
 import java.util.Date
 import kotlin.time.Duration
@@ -57,75 +58,87 @@ fun WeGallery() {
         mutableStateListOf<MediaItem>()
     }
 
-    val pickMultipleMediaLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.PickMultipleVisualMedia()
-    ) {
-        // setMedias(it)
-    }
-    val readStoragePermissionState = rememberPermissionState(
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            Manifest.permission.READ_MEDIA_IMAGES
+    val multiplePermissionsState = rememberMultiplePermissionsState(
+        permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            listOf(
+                Manifest.permission.READ_MEDIA_IMAGES,
+                Manifest.permission.READ_MEDIA_VIDEO
+            )
         } else {
-            Manifest.permission.READ_EXTERNAL_STORAGE
+            listOf(Manifest.permission.READ_EXTERNAL_STORAGE)
         }
     )
 
     Column {
-        Row(
-            Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
+        val coroutineScope = rememberCoroutineScope()
+        var loading by remember {
+            mutableStateOf(false)
+        }
+        WeButton(
+            "读取图片",
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            loading = loading
         ) {
-            WeButton("手动选择图片", type = ButtonType.PLAIN) {
-                pickMultipleMediaLauncher.launch(
-                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo)
-                )
-            }
-            Spacer(modifier = Modifier.width(16.dp))
-
-            val coroutineScope = rememberCoroutineScope()
-            var loading by remember {
-                mutableStateOf(false)
-            }
-            WeButton("自动读取图片", loading = loading) {
-                if (readStoragePermissionState.status.isGranted) {
-                    loading = true
-                    coroutineScope.launch {
-                        mediaItems.clear()
-                        mediaItems.addAll(queryMedias(context))
-                        loading = false
-                    }
-                } else {
-                    readStoragePermissionState.launchPermissionRequest()
+            if (multiplePermissionsState.allPermissionsGranted) {
+                loading = true
+                coroutineScope.launch {
+                    mediaItems.clear()
+                    mediaItems.addAll(queryMedias(context))
+                    loading = false
                 }
+            } else {
+                multiplePermissionsState.launchMultiplePermissionRequest()
             }
         }
         Spacer(Modifier.height(40.dp))
-        ThumbnailGrid(mediaItems)
+        PhotosGrid(context, mediaItems)
     }
 }
 
-private suspend fun queryImages(context: Context): List<Uri> = withContext(Dispatchers.IO) {
-    val imageList = mutableListOf<Uri>()
-    val projection = arrayOf(
-        MediaStore.Images.ImageColumns._ID
-    )
-
-    context.contentResolver.query(
-        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-        projection,
-        null,
-        null,
-        MediaStore.Images.ImageColumns.DATE_ADDED + " DESC"
-    )?.use { cursor ->
-        val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.ImageColumns._ID)
-        while (cursor.moveToNext()) {
-            val id = cursor.getLong(idColumn)
-            val uri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
-            imageList.add(uri)
+@Composable
+private fun PhotosGrid(context: Context, mediaItems: List<MediaItem>) {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(3),
+        horizontalArrangement = Arrangement.spacedBy(2.dp),
+        verticalArrangement = Arrangement.spacedBy(2.dp)
+    ) {
+        items(mediaItems.size) {
+            val item = mediaItems[it]
+            Box(modifier = Modifier.aspectRatio(1f)) {
+                AsyncImage(
+                    model = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        context.contentResolver.loadThumbnail(item.uri, Size(300, 300), null)
+                    } else if (item.isVideo) {
+                        rememberVideoThumbnail(item.uri)
+                    } else {
+                        item.uri
+                    },
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.matchParentSize()
+                )
+                if (item.isVideo) {
+                    Row(
+                        modifier = Modifier
+                            .align(Alignment.BottomStart)
+                            .padding(6.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.PlayArrow,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                        Text(
+                            text = item.duration.toString(),
+                            color = Color.White,
+                            fontSize = 14.sp
+                        )
+                    }
+                }
+            }
         }
     }
-
-    imageList
 }
 
 private suspend fun queryMedias(context: Context): List<MediaItem> = withContext(Dispatchers.IO) {
@@ -143,7 +156,7 @@ private suspend fun queryMedias(context: Context): List<MediaItem> = withContext
     context.contentResolver.query(
         MediaStore.Files.getContentUri("external"),
         projection,
-        MediaStore.Files.FileColumns.MEDIA_TYPE + " = ? OR " + MediaStore.Files.FileColumns.MEDIA_TYPE + " = ?",
+        MediaStore.Files.FileColumns.MEDIA_TYPE + "=? OR " + MediaStore.Files.FileColumns.MEDIA_TYPE + "=?",
         arrayOf(
             MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString(),
             MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString()
@@ -170,7 +183,7 @@ private suspend fun queryMedias(context: Context): List<MediaItem> = withContext
                     name = cursor.getString(nameColumn),
                     isVideo = cursor.getInt(mediaTypeColumn) == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO,
                     mimeType = cursor.getString(mimeTypeColumn),
-                    duration = cursor.getLong(durationColumn).toDuration(DurationUnit.SECONDS),
+                    duration = cursor.getLong(durationColumn).toDuration(DurationUnit.MILLISECONDS),
                     size = cursor.getLong(sizeColumn),
                     date = Date(cursor.getLong(dateColumn)),
                     path = cursor.getString(dataColumn)
@@ -183,30 +196,7 @@ private suspend fun queryMedias(context: Context): List<MediaItem> = withContext
 }
 
 @Composable
-private fun ThumbnailGrid(mediaItems: List<MediaItem>) {
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(4),
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(2.dp),
-        verticalArrangement = Arrangement.spacedBy(2.dp)
-    ) {
-        items(mediaItems) { item ->
-            AsyncImage(
-                model = if (item.isVideo) {
-                    rememberVideoThumbnail(item.uri).value
-                } else {
-                    item.path
-                },
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.aspectRatio(1f)
-            )
-        }
-    }
-}
-
-@Composable
-private fun rememberVideoThumbnail(videoUri: Uri): MutableState<Bitmap?> {
+private fun rememberVideoThumbnail(videoUri: Uri): Bitmap? {
     val context = LocalContext.current
     val thumbnailState = remember { mutableStateOf<Bitmap?>(null) }
 
@@ -220,7 +210,7 @@ private fun rememberVideoThumbnail(videoUri: Uri): MutableState<Bitmap?> {
         thumbnailState.value = thumbnail
     }
 
-    return thumbnailState
+    return thumbnailState.value
 }
 
 private data class MediaItem(

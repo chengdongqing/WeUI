@@ -12,9 +12,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -22,7 +22,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.ui.components.basic.WeLoading
+import top.chengdongqing.weui.ui.theme.FontColo1
 
 private const val threshold = 250f
 
@@ -32,10 +34,10 @@ fun WePullDownRefresh(
     content: @Composable () -> Unit
 ) {
     val isRefreshing = remember { mutableStateOf(false) }
-    val offsetY = remember { mutableStateOf(0f) }
+    val offsetY = remember { mutableFloatStateOf(0f) }
     val tips by remember {
         derivedStateOf {
-            deriveTips(offsetY.value, isRefreshing.value)
+            deriveTips(offsetY.floatValue, isRefreshing.value)
         }
     }
 
@@ -44,20 +46,21 @@ fun WePullDownRefresh(
             .pointerInput(Unit) {
                 detectVerticalDragGestures(
                     onDragEnd = {
-                        if (offsetY.value > threshold && !isRefreshing.value) {
-                            offsetY.value = threshold
+                        if (offsetY.floatValue > threshold && !isRefreshing.value) {
+                            offsetY.floatValue = threshold
                             isRefreshing.value = true
                             onRefresh {
+                                offsetY.floatValue = 0f
                                 isRefreshing.value = false
                             }
                         } else {
-                            offsetY.value = 0f
+                            offsetY.floatValue = 0f
                         }
                     }
                 ) { _, dragAmount ->
                     if (!isRefreshing.value) {
-                        val dampingFactor = calculateDampingFactor(offsetY.value)
-                        offsetY.value += dragAmount * dampingFactor
+                        val dampingFactor = calculateDampingFactor(offsetY.floatValue)
+                        offsetY.floatValue += dragAmount * dampingFactor
                     }
                 }
             }
@@ -69,26 +72,23 @@ fun WePullDownRefresh(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
-            if (isRefreshing.value) {
-                WeLoading()
-                Spacer(modifier = Modifier.width(8.dp))
-            }
-            Text(tips)
+            WeLoading(isRotating = isRefreshing.value)
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(tips, color = FontColo1, fontSize = 14.sp)
         }
 
         val offsetDp = with(LocalDensity.current) {
-            offsetY.value.coerceAtLeast(0f).toDp()
+            offsetY.floatValue.coerceAtLeast(0f).toDp()
         }
         Box(
-            modifier = Modifier.offset(y = animateDpAsState(offsetDp).value)
+            modifier = Modifier.offset(
+                y = animateDpAsState(
+                    offsetDp,
+                    label = "PullDownAnimation"
+                ).value
+            )
         ) {
             content()
-        }
-    }
-
-    LaunchedEffect(isRefreshing.value) {
-        if (!isRefreshing.value) {
-            offsetY.value = 0f
         }
     }
 }

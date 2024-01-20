@@ -1,6 +1,10 @@
 package top.chengdongqing.weui.ui.components.form
 
 import android.util.Log
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
@@ -53,7 +57,12 @@ fun WePicker(
         value.copyOf()
     }
 
-    WePopup(visible, title = title, onClose = onCancel) {
+    WePopup(
+        visible, title = title,
+        enterTransition = fadeIn() + slideInVertically { it / 2 },
+        exitTransition = fadeOut() + slideOutVertically { it / 3 },
+        onClose = onCancel
+    ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Box(modifier = Modifier
                 .height(280.dp)

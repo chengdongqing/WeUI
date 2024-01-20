@@ -1,5 +1,11 @@
 package top.chengdongqing.weui.ui.components.feedback
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,13 +23,14 @@ import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,7 +40,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import top.chengdongqing.weui.ui.components.basic.WeLoading
 import top.chengdongqing.weui.ui.theme.BackgroundColor
 import top.chengdongqing.weui.utils.screenCenterPositionProvider
@@ -67,31 +73,24 @@ fun WeToast(
     onClose: () -> Unit
 ) {
     val hasIcon = icon != ToastIcon.NONE
-    val modifier = if (hasIcon) {
-        Modifier.size(136.dp)
-    } else {
-        Modifier
-            .width(152.dp)
-            .heightIn(44.dp)
+    var localVisible by remember {
+        mutableStateOf(visible)
     }
 
-    val coroutineScope = rememberCoroutineScope()
-    DisposableEffect(visible, duration) {
+    LaunchedEffect(visible, duration) {
         if (visible && duration != Duration.INFINITE) {
-            coroutineScope.launch {
-                delay(duration)
-                onClose()
-            }
-        }
-
-        onDispose {
-            if (visible) {
-                onClose()
-            }
+            delay(duration)
+            onClose()
         }
     }
+    LaunchedEffect(visible) {
+        if (!visible) {
+            delay(150)
+        }
+        localVisible = visible
+    }
 
-    if (visible) {
+    if (visible || localVisible) {
         Popup(
             popupPositionProvider = screenCenterPositionProvider
         ) {
@@ -99,44 +98,56 @@ fun WeToast(
                 modifier = if (mask) Modifier.fillMaxSize() else Modifier,
                 contentAlignment = Alignment.Center
             ) {
-                Box(
-                    modifier = modifier
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(Color(0xFF4C4C4C)),
-                    contentAlignment = Alignment.Center
+                AnimatedVisibility(
+                    visible = visible && localVisible,
+                    enter = fadeIn() + scaleIn(tween(100), initialScale = 0.8f),
+                    exit = fadeOut() + scaleOut(tween(100), targetScale = 0.8f)
                 ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        when (icon) {
-                            ToastIcon.LOADING -> {
-                                WeLoading(size = 43.dp, color = BackgroundColor)
-                                Spacer(modifier = Modifier.height(10.dp))
+                    Box(
+                        modifier = if (hasIcon) {
+                            Modifier.size(136.dp)
+                        } else {
+                            Modifier
+                                .width(152.dp)
+                                .heightIn(44.dp)
+                        }
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(Color(0xFF4C4C4C)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            when (icon) {
+                                ToastIcon.LOADING -> {
+                                    WeLoading(size = 43.dp, color = BackgroundColor)
+                                    Spacer(modifier = Modifier.height(10.dp))
+                                }
+
+                                ToastIcon.SUCCESS,
+                                ToastIcon.FAIL ->
+                                    Icon(
+                                        if (icon == ToastIcon.SUCCESS) Icons.Outlined.Check else Icons.Filled.Info,
+                                        contentDescription = null,
+                                        modifier = Modifier.size(43.dp),
+                                        tint = BackgroundColor
+                                    )
+
+                                else -> {}
                             }
 
-                            ToastIcon.SUCCESS,
-                            ToastIcon.FAIL ->
-                                Icon(
-                                    if (icon == ToastIcon.SUCCESS) Icons.Outlined.Check else Icons.Filled.Info,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(43.dp),
-                                    tint = BackgroundColor
-                                )
-
-                            else -> {}
-                        }
-
-                        val lineCount = remember {
-                            mutableIntStateOf(1)
-                        }
-                        Text(
-                            text = title,
-                            color = Color.White,
-                            fontSize = if (hasIcon && lineCount.intValue == 1) 17.sp else 14.sp,
-                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-                            textAlign = TextAlign.Center,
-                            onTextLayout = {
-                                lineCount.intValue = it.lineCount
+                            val lineCount = remember {
+                                mutableIntStateOf(1)
                             }
-                        )
+                            Text(
+                                text = title,
+                                color = Color.White,
+                                fontSize = if (hasIcon && lineCount.intValue == 1) 17.sp else 14.sp,
+                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                                textAlign = TextAlign.Center,
+                                onTextLayout = {
+                                    lineCount.intValue = it.lineCount
+                                }
+                            )
+                        }
                     }
                 }
             }

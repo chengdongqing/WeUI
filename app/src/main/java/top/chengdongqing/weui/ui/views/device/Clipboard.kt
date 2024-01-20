@@ -28,9 +28,8 @@ fun ClipboardPage() {
     Page(title = "Clipboard", description = "剪贴板") {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             val context = LocalContext.current
-            val weDialog = rememberWeDialog()
+            val dialog = rememberWeDialog()
             val toast = rememberWeToast()
-
             var content by remember {
                 mutableStateOf("")
             }
@@ -41,7 +40,7 @@ fun ClipboardPage() {
             Spacer(modifier = Modifier.height(20.dp))
             WeButton(text = "设置剪贴板内容") {
                 if (content.isEmpty()) {
-                    weDialog.open("设置剪贴板失败", "内容不能为空", onCancel = null)
+                    toast.open("内容不能为空", ToastIcon.FAIL)
                 } else {
                     setClipboardData(context, content)
                     toast.open("已复制", ToastIcon.SUCCESS)
@@ -50,7 +49,7 @@ fun ClipboardPage() {
             Spacer(modifier = Modifier.height(20.dp))
             WeButton(text = "读取剪贴板内容", type = ButtonType.PLAIN) {
                 getClipboardData(context)?.let {
-                    weDialog.open("剪贴板内容", it, onCancel = null)
+                    dialog.open("剪贴板内容", it, onCancel = null)
                 } ?: toast.open("获取失败", ToastIcon.FAIL)
             }
         }

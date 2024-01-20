@@ -53,7 +53,7 @@ fun WeActionSheet(
     onCancel: () -> Unit,
     onChange: (index: Int) -> Unit
 ) {
-    WePopup(visible, onCancel, PaddingValues(0.dp)) {
+    WePopup(visible, onCancel, padding = PaddingValues(0.dp)) {
         Column {
             title?.let {
                 Box(
