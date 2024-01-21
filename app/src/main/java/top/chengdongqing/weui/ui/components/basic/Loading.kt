@@ -34,10 +34,12 @@ fun WeLoading(size: Dp = 16.dp, color: Color = Color.Unspecified, isRotating: Bo
         infiniteTransition.animateFloat(
             initialValue = 0f,
             targetValue = 360f,
-            animationSpec = infiniteRepeatable(
-                tween(durationMillis = 1000, easing = LinearEasing),
-                RepeatMode.Restart
-            ),
+            animationSpec = remember {
+                infiniteRepeatable(
+                    tween(durationMillis = 1000, easing = LinearEasing),
+                    RepeatMode.Restart
+                )
+            },
             label = "LoadingAnimation"
         )
     } else {

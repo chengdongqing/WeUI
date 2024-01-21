@@ -51,11 +51,15 @@ fun WePopup(
     onClose: () -> Unit,
     title: String? = null,
     enterTransition: EnterTransition = slideInVertically(
-        animationSpec = tween(300),
+        animationSpec = remember {
+            tween(300)
+        },
         initialOffsetY = { it }
     ),
     exitTransition: ExitTransition = slideOutVertically(
-        animationSpec = tween(300),
+        animationSpec = remember {
+            tween(300)
+        },
         targetOffsetY = { it }
     ),
     padding: PaddingValues = PaddingValues(12.dp),

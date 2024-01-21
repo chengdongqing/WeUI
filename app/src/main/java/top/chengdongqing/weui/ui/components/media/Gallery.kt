@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Size
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.material3.Icon
@@ -26,7 +28,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -54,8 +55,8 @@ import kotlin.time.toDuration
 @Composable
 fun WeGallery() {
     val context = LocalContext.current
-    val mediaItems = remember {
-        mutableStateListOf<MediaItem>()
+    var mediaItems by remember {
+        mutableStateOf<List<MediaItem>>(emptyList())
     }
 
     val multiplePermissionsState = rememberMultiplePermissionsState(
@@ -82,8 +83,7 @@ fun WeGallery() {
             if (multiplePermissionsState.allPermissionsGranted) {
                 loading = true
                 coroutineScope.launch {
-                    mediaItems.clear()
-                    mediaItems.addAll(queryMedias(context))
+                    mediaItems = queryMedias(context)
                     loading = false
                 }
             } else {
@@ -98,13 +98,16 @@ fun WeGallery() {
 @Composable
 private fun PhotosGrid(context: Context, mediaItems: List<MediaItem>) {
     LazyVerticalGrid(
-        columns = GridCells.Fixed(3),
+        columns = GridCells.Fixed(4),
         horizontalArrangement = Arrangement.spacedBy(2.dp),
         verticalArrangement = Arrangement.spacedBy(2.dp)
     ) {
-        items(mediaItems.size) {
-            val item = mediaItems[it]
-            Box(modifier = Modifier.aspectRatio(1f)) {
+        items(mediaItems, key = { it.path }) { item ->
+            Box(
+                modifier = Modifier
+                    .aspectRatio(1f)
+                    .background(Color.LightGray)
+            ) {
                 AsyncImage(
                     model = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                         context.contentResolver.loadThumbnail(item.uri, Size(300, 300), null)
@@ -213,7 +216,7 @@ private fun rememberVideoThumbnail(videoUri: Uri): Bitmap? {
     return thumbnailState.value
 }
 
-private data class MediaItem(
+data class MediaItem(
     val uri: Uri,
     val name: String,
     val isVideo: Boolean,

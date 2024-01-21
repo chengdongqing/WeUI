@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -32,7 +33,9 @@ fun WeSwitch(
 ) {
     val offsetX by animateDpAsState(
         targetValue = if (checked) 26.dp else 2.dp,
-        animationSpec = tween(durationMillis = 100),
+        animationSpec = remember {
+            tween(durationMillis = 100)
+        },
         label = "SwitchAnimation"
     )
 

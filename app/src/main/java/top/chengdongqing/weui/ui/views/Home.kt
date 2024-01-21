@@ -107,7 +107,11 @@ fun MenuGroup(
     onChange: () -> Unit
 ) {
     val animatedHeight by animateDpAsState(
-        targetValue = if (open && group.children != null) 56.5.dp * group.children.size else 0.dp,
+        targetValue = if (open && group.children != null) {
+            56.5.dp * group.children.size
+        } else {
+            0.dp
+        },
         animationSpec = remember {
             tween(durationMillis = 300)
         },
