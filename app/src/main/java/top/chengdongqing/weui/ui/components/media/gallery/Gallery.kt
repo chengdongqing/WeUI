@@ -11,10 +11,7 @@ import android.util.Size
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -22,12 +19,13 @@ import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,9 +37,7 @@ import coil.compose.AsyncImage
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import top.chengdongqing.weui.ui.components.form.WeButton
 import top.chengdongqing.weui.ui.theme.LightColor
 import top.chengdongqing.weui.utils.clickableWithoutRipple
 import top.chengdongqing.weui.utils.formatDuration
@@ -52,7 +48,7 @@ import kotlin.time.toDuration
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun WeMediaGallery() {
+fun WeGallery() {
     val context = LocalContext.current
     var mediaItems by remember {
         mutableStateOf<List<MediaItem>>(emptyList())
@@ -72,30 +68,19 @@ fun WeMediaGallery() {
         }
     )
 
-    Column {
-        val coroutineScope = rememberCoroutineScope()
-        var loading by remember {
-            mutableStateOf(false)
-        }
-        WeButton(
-            "读取图片",
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            loading = loading
-        ) {
-            if (multiplePermissionsState.allPermissionsGranted) {
-                loading = true
-                coroutineScope.launch {
-                    mediaItems = queryMedias(context)
-                    loading = false
-                }
+    LaunchedEffect(Unit) {
+        snapshotFlow {
+            multiplePermissionsState.allPermissionsGranted
+        }.collect { allPermissionsGranted ->
+            if (allPermissionsGranted) {
+                mediaItems = queryMedias(context)
             } else {
                 multiplePermissionsState.launchMultiplePermissionRequest()
             }
         }
-        Spacer(Modifier.height(40.dp))
-        MediasGrid(context, mediaItems) {
-            activeIndex = it
-        }
+    }
+    MediasGrid(context, mediaItems) {
+        activeIndex = it
     }
 
     activeIndex?.let {
