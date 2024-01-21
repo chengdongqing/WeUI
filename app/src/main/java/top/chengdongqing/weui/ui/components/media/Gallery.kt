@@ -13,7 +13,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.height
@@ -21,14 +20,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.PlayArrow
-import androidx.compose.material3.Icon
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -46,6 +44,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.ui.components.form.WeButton
+import top.chengdongqing.weui.ui.theme.LightColor
+import top.chengdongqing.weui.utils.formatDuration
 import java.util.Date
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
@@ -98,7 +98,7 @@ fun WeGallery() {
 @Composable
 private fun PhotosGrid(context: Context, mediaItems: List<MediaItem>) {
     LazyVerticalGrid(
-        columns = GridCells.Fixed(4),
+        columns = GridCells.Fixed(3),
         horizontalArrangement = Arrangement.spacedBy(2.dp),
         verticalArrangement = Arrangement.spacedBy(2.dp)
     ) {
@@ -108,7 +108,21 @@ private fun PhotosGrid(context: Context, mediaItems: List<MediaItem>) {
                     .aspectRatio(1f)
                     .background(Color.LightGray)
             ) {
-                AsyncImage(
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    produceState<Bitmap?>(initialValue = null, item.uri) {
+                        value = withContext(Dispatchers.IO) {
+                            context.contentResolver.loadThumbnail(item.uri, Size(300, 300), null)
+                        }
+                    }.value?.let {
+                        AsyncImage(
+                            model = it,
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.matchParentSize()
+                        )
+                    }
+                }
+                /*AsyncImage(
                     model = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                         context.contentResolver.loadThumbnail(item.uri, Size(300, 300), null)
                     } else if (item.isVideo) {
@@ -119,23 +133,19 @@ private fun PhotosGrid(context: Context, mediaItems: List<MediaItem>) {
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.matchParentSize()
-                )
+                )*/
                 if (item.isVideo) {
-                    Row(
+                    Box(
                         modifier = Modifier
-                            .align(Alignment.BottomStart)
-                            .padding(6.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                            .align(Alignment.BottomEnd)
+                            .padding(6.dp)
+                            .background(LightColor, RoundedCornerShape(16.dp))
+                            .padding(vertical = 3.dp, horizontal = 6.dp)
                     ) {
-                        Icon(
-                            imageVector = Icons.Outlined.PlayArrow,
-                            contentDescription = null,
-                            tint = Color.White
-                        )
                         Text(
-                            text = item.duration.toString(),
+                            text = formatDuration(item.duration),
                             color = Color.White,
-                            fontSize = 14.sp
+                            fontSize = 10.sp
                         )
                     }
                 }
