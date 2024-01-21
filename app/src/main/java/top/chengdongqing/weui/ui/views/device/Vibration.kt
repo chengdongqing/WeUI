@@ -46,6 +46,7 @@ fun vibrate(context: Context, milliseconds: Long = 400) {
         )
     } else {
         val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        @Suppress("DEPRECATION")
         vibrator.vibrate(milliseconds)
     }
 }
