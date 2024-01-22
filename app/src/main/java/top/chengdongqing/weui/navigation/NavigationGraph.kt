@@ -46,6 +46,7 @@ import top.chengdongqing.weui.ui.views.form.PickerPage
 import top.chengdongqing.weui.ui.views.form.RadioPage
 import top.chengdongqing.weui.ui.views.form.SliderPage
 import top.chengdongqing.weui.ui.views.form.SwitchPage
+import top.chengdongqing.weui.ui.views.layers.LayersPage
 import top.chengdongqing.weui.ui.views.media.gallery.GalleryPage
 import top.chengdongqing.weui.ui.views.media.gallery.GalleryViewModel
 import top.chengdongqing.weui.ui.views.media.gallery.MediaPreviewPage
@@ -95,6 +96,7 @@ fun NavigationGraph() {
         mediaGraph(navController, galleryViewModel)
         deviceGraph()
         searchGraph()
+        layersGraph()
     }
 }
 
@@ -242,5 +244,11 @@ fun NavGraphBuilder.deviceGraph() {
 fun NavGraphBuilder.searchGraph() {
     composable("search-bar") {
         SearchBarPage()
+    }
+}
+
+fun NavGraphBuilder.layersGraph() {
+    composable("layers") {
+        LayersPage()
     }
 }

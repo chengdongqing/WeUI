@@ -114,6 +114,6 @@ val menus = listOf(
     ),
     MenuGroup(
         "层级规范", R.drawable.ic_nav_zindex,
-        path = "z-index"
+        path = "layers"
     )
 )
