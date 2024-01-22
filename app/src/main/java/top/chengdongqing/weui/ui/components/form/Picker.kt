@@ -35,10 +35,12 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.ui.components.feedback.WePopup
 import top.chengdongqing.weui.ui.theme.FontColor
+import top.chengdongqing.weui.ui.views.device.vibrate
 import java.time.LocalDate
 import java.time.LocalTime
 import kotlin.math.roundToInt
@@ -147,11 +149,13 @@ private fun PickerColumn(
     val itemHeight = 56.dp
     val listState = rememberLazyListState(index)
     val snapFlingBehavior = rememberSnapFlingBehavior(listState)
+    val context = LocalContext.current
 
     LaunchedEffect(listState) {
         snapshotFlow { listState.firstVisibleItemIndex }
             .collect {
                 onChange(it)
+                vibrate(context, 1)
             }
     }
 

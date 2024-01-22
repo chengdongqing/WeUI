@@ -1,8 +1,12 @@
 package top.chengdongqing.weui.navigation
 
 import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -42,12 +46,15 @@ import top.chengdongqing.weui.ui.views.form.PickerPage
 import top.chengdongqing.weui.ui.views.form.RadioPage
 import top.chengdongqing.weui.ui.views.form.SliderPage
 import top.chengdongqing.weui.ui.views.form.SwitchPage
-import top.chengdongqing.weui.ui.views.media.GalleryPage
+import top.chengdongqing.weui.ui.views.media.gallery.GalleryPage
+import top.chengdongqing.weui.ui.views.media.gallery.GalleryViewModel
+import top.chengdongqing.weui.ui.views.media.gallery.MediaPreviewPage
 import top.chengdongqing.weui.ui.views.search.SearchBarPage
 
 @Composable
 fun NavigationGraph() {
     val navController = rememberNavController()
+    val galleryViewModel: GalleryViewModel = viewModel()
 
     NavHost(
         navController,
@@ -85,7 +92,7 @@ fun NavigationGraph() {
         basicGraph()
         formGraph()
         feedbackGraph()
-        mediaGraph()
+        mediaGraph(navController, galleryViewModel)
         deviceGraph()
         searchGraph()
     }
@@ -160,9 +167,24 @@ fun NavGraphBuilder.feedbackGraph() {
     }
 }
 
-fun NavGraphBuilder.mediaGraph() {
-    composable("gallery") {
-        GalleryPage()
+fun NavGraphBuilder.mediaGraph(navController: NavController, galleryViewModel: GalleryViewModel) {
+    composable("gallery",
+        enterTransition = {
+            EnterTransition.None
+        }, exitTransition = {
+            ExitTransition.None
+        }
+    ) {
+        GalleryPage(galleryViewModel, navController)
+    }
+    composable("media-preview?index={index}",
+        enterTransition = {
+            EnterTransition.None
+        }, exitTransition = {
+            ExitTransition.None
+        }
+    ) {
+        MediaPreviewPage(galleryViewModel, navController)
     }
 }
 

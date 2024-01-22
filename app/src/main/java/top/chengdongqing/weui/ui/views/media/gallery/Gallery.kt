@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.ui.components.media.gallery
+package top.chengdongqing.weui.ui.views.media.gallery
 
 import android.Manifest
 import android.content.ContentUris
@@ -11,6 +11,7 @@ import android.util.Size
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -23,7 +24,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
@@ -33,12 +33,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
+import top.chengdongqing.weui.ui.components.Page
 import top.chengdongqing.weui.ui.theme.LightColor
 import top.chengdongqing.weui.utils.clickableWithoutRipple
 import top.chengdongqing.weui.utils.formatDuration
@@ -49,15 +52,8 @@ import kotlin.time.toDuration
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun WeGallery() {
+fun GalleryPage(galleryViewModel: GalleryViewModel, navController: NavController) {
     val context = LocalContext.current
-    var mediaItems by remember {
-        mutableStateOf<List<MediaItem>>(emptyList())
-    }
-    var activeIndex by remember {
-        mutableStateOf<Int?>(null)
-    }
-
     val multiplePermissionsState = rememberMultiplePermissionsState(
         permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             listOf(
@@ -75,19 +71,16 @@ fun WeGallery() {
         }.collect { allPermissionsGranted ->
             if (allPermissionsGranted) {
                 delay(500)
-                mediaItems = queryMedias(context)
+                galleryViewModel.setItems(queryMedias(context))
             } else {
                 multiplePermissionsState.launchMultiplePermissionRequest()
             }
         }
     }
-    MediasGrid(context, mediaItems) {
-        activeIndex = it
-    }
 
-    activeIndex?.let {
-        MediaPreview(mediaItems, it) {
-            activeIndex = null
+    Page(title = "Gallery", description = "相册", padding = PaddingValues(0.dp)) {
+        MediasGrid(context, galleryViewModel.mediaItems) {
+            navController.navigate("media-preview?index=$it")
         }
     }
 }
@@ -224,3 +217,12 @@ data class MediaItem(
     val date: Date,
     val path: String
 )
+
+class GalleryViewModel : ViewModel() {
+    var mediaItems by mutableStateOf<List<MediaItem>>(emptyList())
+        private set
+
+    fun setItems(items: List<MediaItem>) {
+        mediaItems = items
+    }
+}

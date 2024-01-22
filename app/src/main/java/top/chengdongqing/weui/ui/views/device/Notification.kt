@@ -21,14 +21,17 @@ import top.chengdongqing.weui.ui.components.form.WeButton
 @Composable
 fun NotificationPage() {
     val context = LocalContext.current
-    val notificationPermissionState =
+    val notificationPermissionState = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
+    } else {
+        null
+    }
     val channelId = "your_channel_id"
     val channelName = "Your Channel Name"
 
     Page(title = "Notification", description = "系统通知") {
         WeButton(text = "发送通知") {
-            if (notificationPermissionState.status.isGranted) {
+            if (notificationPermissionState?.status?.isGranted == true || notificationPermissionState == null) {
                 createNotificationChannel(context, channelId, channelName)
                 sendNotification(context, channelId, "测试标题", "测试内容")
             } else {
@@ -50,7 +53,6 @@ private fun sendNotification(context: Context, channelId: String, title: String,
         notify(System.currentTimeMillis().toInt(), builder.build())
     }
 }
-
 
 private fun createNotificationChannel(context: Context, channelId: String, channelName: String) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

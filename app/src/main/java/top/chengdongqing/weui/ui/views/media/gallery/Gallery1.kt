@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.ui.components.media
+package top.chengdongqing.weui.ui.views.media.gallery
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.core.animateDp
@@ -380,7 +380,7 @@ fun PhotoImage(photo: Photo, modifier: Modifier = Modifier) {
     )
 }
 
-fun Offset.calculateNewOffset(
+private fun Offset.calculateNewOffset(
     centroid: Offset,
     pan: Offset,
     zoom: Float,
@@ -396,7 +396,7 @@ fun Offset.calculateNewOffset(
     )
 }
 
-fun calculateDoubleTapOffset(
+private fun calculateDoubleTapOffset(
     zoom: Float,
     size: IntSize,
     tapOffset: Offset
