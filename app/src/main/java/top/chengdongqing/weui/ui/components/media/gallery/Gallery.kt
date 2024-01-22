@@ -37,6 +37,7 @@ import coil.compose.AsyncImage
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.ui.theme.LightColor
 import top.chengdongqing.weui.utils.clickableWithoutRipple
@@ -73,6 +74,7 @@ fun WeGallery() {
             multiplePermissionsState.allPermissionsGranted
         }.collect { allPermissionsGranted ->
             if (allPermissionsGranted) {
+                delay(500)
                 mediaItems = queryMedias(context)
             } else {
                 multiplePermissionsState.launchMultiplePermissionRequest()
