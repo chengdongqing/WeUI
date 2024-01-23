@@ -73,6 +73,7 @@ val menus = listOf(
             MenuItem("DeviceInfo", "device-info"),
             MenuItem("SystemStatus", "system-status"),
             MenuItem("InstalledApps", "installed-apps"),
+            MenuItem("Downloader", "downloader"),
             MenuItem("Database", "database"),
             MenuItem("Wi-Fi", "wifi"),
             MenuItem("Bluetooth", "bluetooth"),

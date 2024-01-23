@@ -23,6 +23,7 @@ import top.chengdongqing.weui.ui.views.device.ClipboardPage
 import top.chengdongqing.weui.ui.views.device.ContactsPage
 import top.chengdongqing.weui.ui.views.device.DatabasePage
 import top.chengdongqing.weui.ui.views.device.DeviceInfoPage
+import top.chengdongqing.weui.ui.views.device.DownloaderPage
 import top.chengdongqing.weui.ui.views.device.FlashlightPage
 import top.chengdongqing.weui.ui.views.device.InfraredPage
 import top.chengdongqing.weui.ui.views.device.InstalledAppsPage
@@ -242,6 +243,9 @@ fun NavGraphBuilder.deviceGraph() {
     }
     composable("installed-apps") {
         InstalledAppsPage()
+    }
+    composable("downloader") {
+        DownloaderPage()
     }
 }
 
