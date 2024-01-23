@@ -26,10 +26,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import top.chengdongqing.weui.ui.components.Page
 import top.chengdongqing.weui.ui.components.form.ButtonSize
 import top.chengdongqing.weui.ui.components.form.ButtonType
@@ -60,9 +61,8 @@ fun InstalledAppsPage() {
     }
 }
 
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun AppItem(resolveInfo: ResolveInfo, packageManager: PackageManager) {
+private fun AppItem(resolveInfo: ResolveInfo, packageManager: PackageManager) {
     val appName = resolveInfo.loadLabel(packageManager).toString()
     val appIcon = resolveInfo.loadIcon(packageManager).toBitmap().asImageBitmap()
     val packageName = resolveInfo.activityInfo.packageName
@@ -75,7 +75,7 @@ fun AppItem(resolveInfo: ResolveInfo, packageManager: PackageManager) {
 
     Row(verticalAlignment = Alignment.CenterVertically) {
         Column(
-            modifier = Modifier.width(100.dp),
+            modifier = Modifier.weight(1f),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
@@ -85,23 +85,16 @@ fun AppItem(resolveInfo: ResolveInfo, packageManager: PackageManager) {
                 contentScale = ContentScale.Crop
             )
             Text(appName)
-            Text("v$versionName", color = FontColo1, fontSize = 12.sp)
+            Text("v$versionName", color = FontColo1, fontSize = 12.sp, textAlign = TextAlign.Center)
         }
         Spacer(modifier = Modifier.width(20.dp))
-        Column {
-            Text(
-                text = """
-            包名: $packageName
-            最后更新: ${
-                    Instant.ofEpochMilli(installTime).atZone(ZoneId.systemDefault())
-                        .toLocalDateTime()
-                        .format(
-                            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-                        )
-                }
-            APK大小: ${formatFloat(apkSize / 1024 / 1024f)} MB
-            """.trimIndent(), color = FontColor, fontSize = 14.sp
-            )
+        Column(modifier = Modifier.weight(2f)) {
+            val content = buildAnnotatedString {
+                appendLine("包名: $packageName")
+                appendLine("最后更新: ${formatTime(installTime)}")
+                append("APK大小: ${formatFloat(apkSize / 1024 / 1024f)} MB")
+            }
+            Text(content, color = FontColor, fontSize = 14.sp)
             Spacer(modifier = Modifier.height(10.dp))
             WeButton(text = "复制到下载目录", type = ButtonType.PLAIN, size = ButtonSize.SMALL) {
                 copyFileToPublicDirectory(context, apkPath, "$appName-v$versionName.apk")
@@ -110,12 +103,7 @@ fun AppItem(resolveInfo: ResolveInfo, packageManager: PackageManager) {
     }
 }
 
-fun getFileSize(filePath: String): Long {
-    val file = File(filePath)
-    return if (file.exists()) file.length() else 0
-}
-
-fun copyFileToPublicDirectory(
+private fun copyFileToPublicDirectory(
     context: Context,
     sourceFilePath: String,
     destinationFileName: String
@@ -131,12 +119,11 @@ fun copyFileToPublicDirectory(
                 put(
                     MediaStore.MediaColumns.MIME_TYPE,
                     "application/vnd.android.package-archive"
-                ) // APK的MIME类型
+                )
                 put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
             }
 
-            val uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values)
-            uri?.let {
+            resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values)?.let {
                 resolver.openOutputStream(it).use { outputStream ->
                     sourceFile.inputStream().use { input ->
                         if (outputStream != null) {
@@ -154,11 +141,22 @@ fun copyFileToPublicDirectory(
             sourceFile.inputStream().use { input ->
                 destinationFile.outputStream().use { output ->
                     input.copyTo(output)
-                    Toast.makeText(context, "已复制", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "复制成功", Toast.LENGTH_SHORT).show()
                 }
             }
         }
     } catch (e: Exception) {
         Toast.makeText(context, "复制失败: ${e.message}", Toast.LENGTH_SHORT).show()
     }
+}
+
+private fun getFileSize(filePath: String): Long {
+    val file = File(filePath)
+    return if (file.exists()) file.length() else 0
+}
+
+private fun formatTime(milliseconds: Long, pattern: String = "yyyy-MM-dd HH:mm:ss"): String {
+    return Instant.ofEpochMilli(milliseconds).atZone(ZoneId.systemDefault())
+        .toLocalDateTime()
+        .format(DateTimeFormatter.ofPattern(pattern))
 }

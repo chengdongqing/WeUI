@@ -42,7 +42,6 @@ import androidx.compose.ui.window.Popup
 import kotlinx.coroutines.delay
 import top.chengdongqing.weui.ui.components.basic.WeLoading
 import top.chengdongqing.weui.ui.theme.BackgroundColor
-import top.chengdongqing.weui.utils.screenCenterPositionProvider
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -89,9 +88,7 @@ fun WeToast(
     }
 
     if (visible || localVisible) {
-        Popup(
-            popupPositionProvider = screenCenterPositionProvider
-        ) {
+        Popup {
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
