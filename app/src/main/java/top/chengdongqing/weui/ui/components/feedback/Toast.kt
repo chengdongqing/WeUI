@@ -59,7 +59,6 @@ enum class ToastIcon {
  * @param visible 是否显示
  * @param title 标题
  * @param icon 图标
- * @param mask 是否显示透明蒙层，防止触摸穿透
  * @param duration 显示的时长
  * @param onClose 关闭事件
  */
@@ -68,7 +67,6 @@ fun WeToast(
     visible: Boolean,
     title: String,
     icon: ToastIcon = ToastIcon.NONE,
-    mask: Boolean = false,
     duration: Duration = 1500.milliseconds,
     onClose: () -> Unit
 ) {
@@ -95,7 +93,7 @@ fun WeToast(
             popupPositionProvider = screenCenterPositionProvider
         ) {
             Box(
-                modifier = if (mask) Modifier.fillMaxSize() else Modifier,
+                modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
                 AnimatedVisibility(
@@ -168,7 +166,6 @@ fun rememberWeToast(): WeToastState {
         visible = visible.value,
         title = (localState["title"] as String?) ?: "",
         icon = (localState["icon"] as ToastIcon?) ?: ToastIcon.NONE,
-        mask = (localState["mask"] as Boolean?) ?: false,
         duration = (localState["duration"] as Duration?) ?: 1500.milliseconds
     ) {
         visible.value = false
@@ -188,12 +185,10 @@ class WeToastState(
     fun open(
         title: String,
         icon: ToastIcon = ToastIcon.NONE,
-        mask: Boolean = false,
         duration: Duration = 1500.milliseconds
     ) {
         localState["title"] = title
         localState["icon"] = icon
-        localState["mask"] = mask
         localState["duration"] = duration
 
         visible.value = true

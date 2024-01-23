@@ -40,7 +40,6 @@ fun ToastPage() {
                 toast.open(
                     title = "支付中...",
                     icon = ToastIcon.LOADING,
-                    mask = true,
                     duration = Duration.INFINITE
                 )
                 coroutineScope.launch {
