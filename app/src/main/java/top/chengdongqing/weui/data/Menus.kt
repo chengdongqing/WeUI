@@ -72,6 +72,7 @@ val menus = listOf(
         listOf(
             MenuItem("DeviceInfo", "device-info"),
             MenuItem("SystemStatus", "system-status"),
+            MenuItem("InstalledApps", "installed-apps"),
             MenuItem("Database", "database"),
             MenuItem("Wi-Fi", "wifi"),
             MenuItem("Bluetooth", "bluetooth"),
@@ -85,7 +86,7 @@ val menus = listOf(
             MenuItem("Accelerometer", "accelerometer"),
             MenuItem("Clipboard", "clipboard"),
             MenuItem("ScreenBrightness", "screen-brightness"),
-            MenuItem("CallAndContacts", "call-contacts"),
+            MenuItem("Contacts", "contacts"),
             MenuItem("SMS", "sms"),
             MenuItem("Keyboard", "keyboard"),
             MenuItem("Calendar", "calendar"),

@@ -19,12 +19,13 @@ import top.chengdongqing.weui.ui.views.basic.ProgressPage
 import top.chengdongqing.weui.ui.views.basic.StepsPage
 import top.chengdongqing.weui.ui.views.basic.SwiperPage
 import top.chengdongqing.weui.ui.views.device.CalendarPage
-import top.chengdongqing.weui.ui.views.device.CallAndContactsPage
 import top.chengdongqing.weui.ui.views.device.ClipboardPage
+import top.chengdongqing.weui.ui.views.device.ContactsPage
 import top.chengdongqing.weui.ui.views.device.DatabasePage
 import top.chengdongqing.weui.ui.views.device.DeviceInfoPage
 import top.chengdongqing.weui.ui.views.device.FlashlightPage
 import top.chengdongqing.weui.ui.views.device.InfraredPage
+import top.chengdongqing.weui.ui.views.device.InstalledAppsPage
 import top.chengdongqing.weui.ui.views.device.KeyboardPage
 import top.chengdongqing.weui.ui.views.device.NotificationPage
 import top.chengdongqing.weui.ui.views.device.ScreenBrightnessPage
@@ -224,8 +225,8 @@ fun NavGraphBuilder.deviceGraph() {
     composable("screen-brightness") {
         ScreenBrightnessPage()
     }
-    composable("call-contacts") {
-        CallAndContactsPage()
+    composable("contacts") {
+        ContactsPage()
     }
     composable("sms") {
         SmsPage()
@@ -238,6 +239,9 @@ fun NavGraphBuilder.deviceGraph() {
     }
     composable("keyboard") {
         KeyboardPage()
+    }
+    composable("installed-apps") {
+        InstalledAppsPage()
     }
 }
 

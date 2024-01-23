@@ -47,8 +47,8 @@ import top.chengdongqing.weui.ui.components.form.WeInput
 import java.util.Date
 
 @Composable
-fun CallAndContactsPage() {
-    Page(title = "CallAndContacts", description = "拨号和通讯录") {
+fun ContactsPage() {
+    Page(title = "Contacts", description = "拨号与通讯录") {
         Column(
             modifier = Modifier.verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
