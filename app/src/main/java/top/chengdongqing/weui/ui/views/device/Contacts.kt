@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -154,12 +155,8 @@ private fun PhoneContacts() {
         }
     }
     Spacer(modifier = Modifier.height(20.dp))
-    KeyValueCard(
-        Modifier
-            .heightIn(max = LocalConfiguration.current.screenHeightDp.dp / 2)
-            .verticalScroll(rememberScrollState())
-    ) {
-        contacts.forEach {
+    KeyValueCard(Modifier.heightIn(max = LocalConfiguration.current.screenHeightDp.dp / 2)) {
+        items(contacts) {
             KeyValueRow(label = it.first, value = it.second)
         }
     }
@@ -228,12 +225,8 @@ fun PhoneCallLogs() {
         }
     }
     Spacer(modifier = Modifier.height(20.dp))
-    KeyValueCard(
-        Modifier
-            .heightIn(max = LocalConfiguration.current.screenHeightDp.dp / 2)
-            .verticalScroll(rememberScrollState())
-    ) {
-        logs.forEach {
+    KeyValueCard(Modifier.heightIn(max = LocalConfiguration.current.screenHeightDp.dp / 2)) {
+        items(logs) {
             KeyValueRow(label = it.first, value = it.second)
         }
     }

@@ -1,5 +1,8 @@
 package top.chengdongqing.weui.utils
 
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import kotlin.time.Duration
 
 /**
@@ -26,4 +29,10 @@ fun formatDuration(duration: Duration): String {
         minutes > 0 -> String.format("%02d:%02d", minutes, seconds)
         else -> String.format("00:%02d", seconds)
     }
+}
+
+fun formatTime(milliseconds: Long, pattern: String = "yyyy-MM-dd HH:mm:ss"): String {
+    return Instant.ofEpochMilli(milliseconds).atZone(ZoneId.systemDefault())
+        .toLocalDateTime()
+        .format(DateTimeFormatter.ofPattern(pattern))
 }

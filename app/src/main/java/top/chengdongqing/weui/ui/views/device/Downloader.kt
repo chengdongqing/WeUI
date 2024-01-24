@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.Uri
 import android.os.Environment
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -61,20 +62,21 @@ private fun download(context: Context, name: String, url: String) {
     // 加入下载队列
     val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
     val downloadId = downloadManager.enqueue(request)
+    Toast.makeText(context, "开始下载", Toast.LENGTH_SHORT).show()
 
     // 注册广播接收器
     ContextCompat.registerReceiver(
         context,
-        DownloadBroadcastReceiver(downloadManager, downloadId),
+        downloadBroadcastReceiver(downloadManager, downloadId),
         IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE),
         ContextCompat.RECEIVER_NOT_EXPORTED
     )
 }
 
-private class DownloadBroadcastReceiver(
-    val downloadManager: DownloadManager,
-    val downloadId: Long
-) : BroadcastReceiver() {
+private fun downloadBroadcastReceiver(
+    downloadManager: DownloadManager,
+    downloadId: Long
+) = object : BroadcastReceiver() {
     @SuppressLint("Range")
     override fun onReceive(context: Context, intent: Intent) {
         val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
@@ -85,18 +87,13 @@ private class DownloadBroadcastReceiver(
             if (cursor.moveToFirst()) {
                 val status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
                 if (status == DownloadManager.STATUS_SUCCESSFUL) {
+                    Toast.makeText(context, "下载完成", Toast.LENGTH_SHORT).show()
                     // 下载成功
-                    val uriString =
+                    val uri =
                         cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI))
-                    val uri = Uri.parse(uriString)
                     // 如果下载的是APK文件，启动安装
-                    if (uriString.endsWith(".apk")) {
-                        val installIntent = Intent(Intent.ACTION_VIEW).apply {
-                            setDataAndType(uri, "application/vnd.android.package-archive")
-                            flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-                        }
-                        context.startActivity(installIntent)
+                    if (uri.endsWith(".apk")) {
+                        installApk(context, uri)
                     }
                 }
             }

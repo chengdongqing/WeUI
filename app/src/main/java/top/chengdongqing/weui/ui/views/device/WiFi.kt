@@ -6,6 +6,7 @@ import android.content.Context
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiManager
 import android.os.Build
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -53,7 +54,8 @@ import top.chengdongqing.weui.ui.theme.LightColor
 @Composable
 fun WiFiPage() {
     Page(title = "Wi-Fi", description = "无线局域网") {
-        val wifiManager = LocalContext.current.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        val context = LocalContext.current
+        val wifiManager = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
         val permissionState =
             rememberPermissionState(permission = Manifest.permission.ACCESS_FINE_LOCATION)
         var wifiList by remember {
@@ -63,7 +65,11 @@ fun WiFiPage() {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             WeButton(text = "扫描Wi-Fi") {
                 if (permissionState.status.isGranted) {
-                    wifiList = wifiManager.scanResults.sortedByDescending { it.level }
+                    if (wifiManager.isWifiEnabled) {
+                        wifiList = wifiManager.scanResults.sortedByDescending { it.level }
+                    } else {
+                        Toast.makeText(context, "Wi-Fi未打开", Toast.LENGTH_SHORT).show()
+                    }
                 } else {
                     permissionState.launchPermissionRequest()
                 }
@@ -140,9 +146,9 @@ private fun getSSID(wifi: ScanResult): String {
 
 private fun determineWifiBand(frequency: Int): String {
     return when (frequency) {
-        in 2400..2500 -> "2.4GHz"
-        in 4900..5900 -> "5GHz"
-        in 5925..7125 -> "6GHz"
+        in 2400..2500 -> "2.4G"
+        in 4900..5900 -> "5G"
+        in 5925..7125 -> "6G"
         else -> "未知频段"
     }
 }

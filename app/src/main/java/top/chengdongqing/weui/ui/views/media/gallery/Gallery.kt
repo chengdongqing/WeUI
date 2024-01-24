@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.ContentUris
 import android.content.Context
+import android.content.Intent
 import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Build
@@ -187,13 +188,23 @@ private fun MediasGrid(
                         )
                     } else {
                         Modifier.combinedClickable(
-                            onClick = { navigateToPreview(index) },
+                            onClick = {
+                                openMedia(context, item.uri, item.isVideo)
+                                //navigateToPreview(index)
+                            },
                             onLongClick = { selectedIds += index }
                         )
                     })
             )
         }
     }
+}
+
+private fun openMedia(context: Context, imageUri: Uri, isVideo: Boolean) {
+    val intent = Intent(Intent.ACTION_VIEW)
+    intent.setDataAndType(imageUri, "${if (isVideo) "video" else "image"}/*")
+    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    context.startActivity(intent)
 }
 
 @Composable

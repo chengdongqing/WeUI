@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -150,13 +151,8 @@ fun CalendarEvents() {
         }
     }
     Spacer(modifier = Modifier.height(20.dp))
-    KeyValueCard(
-        Modifier
-            .heightIn(max = LocalConfiguration.current.screenHeightDp.dp)
-            .verticalScroll(rememberScrollState())
-    ) {
-
-        events.forEach {
+    KeyValueCard(Modifier.heightIn(max = LocalConfiguration.current.screenHeightDp.dp)) {
+        items(events) {
             KeyValueRow(label = it.first, value = it.second)
         }
     }

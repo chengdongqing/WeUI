@@ -49,6 +49,7 @@ import top.chengdongqing.weui.ui.views.form.RadioPage
 import top.chengdongqing.weui.ui.views.form.SliderPage
 import top.chengdongqing.weui.ui.views.form.SwitchPage
 import top.chengdongqing.weui.ui.views.layers.LayersPage
+import top.chengdongqing.weui.ui.views.media.file.FileBrowserPage
 import top.chengdongqing.weui.ui.views.media.gallery.GalleryPage
 import top.chengdongqing.weui.ui.views.media.gallery.GalleryViewModel
 import top.chengdongqing.weui.ui.views.media.gallery.MediaPreviewPage
@@ -189,6 +190,9 @@ fun NavGraphBuilder.mediaGraph(navController: NavController, galleryViewModel: G
         }
     ) {
         MediaPreviewPage(galleryViewModel, navController)
+    }
+    composable("file-browser") {
+        FileBrowserPage()
     }
 }
 

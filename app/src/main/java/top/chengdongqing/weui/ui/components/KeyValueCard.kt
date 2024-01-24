@@ -1,12 +1,13 @@
 package top.chengdongqing.weui.ui.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
@@ -22,8 +23,8 @@ import top.chengdongqing.weui.ui.theme.FontColo1
 import top.chengdongqing.weui.ui.theme.FontColor
 
 @Composable
-fun KeyValueCard(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
-    Column(
+fun KeyValueCard(modifier: Modifier = Modifier, content: LazyListScope.() -> Unit) {
+    LazyColumn(
         modifier = modifier
             .background(Color.White, RoundedCornerShape(4.dp))
             .padding(horizontal = 16.dp)

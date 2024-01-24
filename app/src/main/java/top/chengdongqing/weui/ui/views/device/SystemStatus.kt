@@ -41,9 +41,11 @@ fun SystemStatusPage() {
 
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             KeyValueCard {
-                KeyValueRow("网络类型", networkType)
-                KeyValueRow("VPN", if (vpnConnected) "已启用" else "未启用")
-                KeyValueRow("系统主题", if (isSystemInDarkTheme()) "深色" else "浅色")
+                item {
+                    KeyValueRow("网络类型", networkType)
+                    KeyValueRow("VPN", if (vpnConnected) "已启用" else "未启用")
+                    KeyValueRow("系统主题", if (isSystemInDarkTheme()) "深色" else "浅色")
+                }
             }
             Spacer(modifier = Modifier.height(40.dp))
 
