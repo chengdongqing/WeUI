@@ -1,11 +1,8 @@
 package top.chengdongqing.weui.ui.views.device
 
-import android.Manifest
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.content.pm.ResolveInfo
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -26,9 +23,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -36,12 +38,11 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.FileProvider
 import androidx.core.graphics.drawable.toBitmap
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberPermissionState
+import kotlinx.coroutines.delay
 import top.chengdongqing.weui.ui.components.Page
+import top.chengdongqing.weui.ui.components.basic.WeLoadMore
 import top.chengdongqing.weui.ui.components.form.ButtonSize
 import top.chengdongqing.weui.ui.components.form.ButtonType
 import top.chengdongqing.weui.ui.components.form.WeButton
@@ -59,38 +60,71 @@ fun InstalledAppsPage() {
     Page(title = "InstalledApps", description = "已安装的应用") {
         val context = LocalContext.current
         val packageManager = context.packageManager
-        val apps = remember {
+        var apps by remember {
+            mutableStateOf<List<AppItem>>(emptyList())
+        }
+        var loading by remember {
+            mutableStateOf(true)
+        }
+
+        LaunchedEffect(Unit) {
+            delay(300)
             val intent = Intent(Intent.ACTION_MAIN, null).apply {
                 addCategory(Intent.CATEGORY_LAUNCHER)
             }
-            packageManager.queryIntentActivities(intent, 0)
+            apps = packageManager.queryIntentActivities(intent, 0).map { resolveInfo ->
+                val name = resolveInfo.loadLabel(packageManager).toString()
+                val icon = resolveInfo.loadIcon(packageManager).toBitmap().asImageBitmap()
+                val packageName = resolveInfo.activityInfo.packageName
+                val packageInfo = packageManager.getPackageInfo(packageName, 0)
+                val versionName = packageInfo.versionName
+                val lastUpdateTime = packageInfo.lastUpdateTime
+                val apkPath = packageInfo.applicationInfo.sourceDir
+                val apkSize = getFileSize(apkPath)
+                AppItem(
+                    name,
+                    icon,
+                    packageName,
+                    versionName,
+                    lastUpdateTime,
+                    apkPath,
+                    apkSize
+                )
+            }.sortedByDescending { it.lastUpdateTime }
+            loading = false
         }
 
         LazyColumn(verticalArrangement = Arrangement.spacedBy(20.dp)) {
             item {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    WeButton(
-                        text = "打开地图查看指定位置",
-                        type = ButtonType.PLAIN,
-                        size = ButtonSize.MEDIUM,
-                        width = 200.dp
+                if (!loading) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End
                     ) {
-                        val latitude = 37.7749
-                        val longitude = -122.4194
-                        val locationUri = Uri.parse("geo:$latitude,$longitude")
-                        val mapIntent = Intent(Intent.ACTION_VIEW, locationUri)
-                        if (mapIntent.resolveActivity(context.packageManager) != null) {
-                            context.startActivity(mapIntent)
-                        } else {
-                            Toast.makeText(context, "未安装地图应用", Toast.LENGTH_SHORT).show()
+                        WeButton(
+                            text = "在地图上查看指定位置",
+                            type = ButtonType.PLAIN,
+                            size = ButtonSize.MEDIUM,
+                            width = 200.dp
+                        ) {
+                            val latitude = 37.7749
+                            val longitude = -122.4194
+                            val locationUri = Uri.parse("geo:$latitude,$longitude")
+                            val mapIntent = Intent(Intent.ACTION_VIEW, locationUri)
+                            if (mapIntent.resolveActivity(context.packageManager) != null) {
+                                context.startActivity(mapIntent)
+                            } else {
+                                Toast.makeText(context, "未安装地图应用", Toast.LENGTH_SHORT).show()
+                            }
                         }
                     }
+                    Spacer(modifier = Modifier.height(20.dp))
+                } else {
+                    WeLoadMore()
                 }
             }
-            items(apps) { resolveInfo ->
-                AppItem(resolveInfo, packageManager)
+            items(apps) {
+                AppItem(it)
             }
         }
     }
@@ -98,15 +132,7 @@ fun InstalledAppsPage() {
 
 @OptIn(ExperimentalLayoutApi::class, ExperimentalPermissionsApi::class)
 @Composable
-private fun AppItem(resolveInfo: ResolveInfo, packageManager: PackageManager) {
-    val appName = resolveInfo.loadLabel(packageManager).toString()
-    val appIcon = resolveInfo.loadIcon(packageManager).toBitmap().asImageBitmap()
-    val packageName = resolveInfo.activityInfo.packageName
-    val packageInfo = packageManager.getPackageInfo(packageName, 0)
-    val versionName = packageInfo.versionName
-    val installTime = packageInfo.lastUpdateTime
-    val apkPath = packageInfo.applicationInfo.sourceDir
-    val apkSize = getFileSize(apkPath)
+private fun AppItem(appItem: AppItem) {
     val context = LocalContext.current
 
     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -115,20 +141,25 @@ private fun AppItem(resolveInfo: ResolveInfo, packageManager: PackageManager) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                bitmap = appIcon,
-                contentDescription = appName,
+                bitmap = appItem.icon,
+                contentDescription = null,
                 modifier = Modifier.size(56.dp),
                 contentScale = ContentScale.Crop
             )
-            Text(appName)
-            Text("v$versionName", color = FontColo1, fontSize = 12.sp, textAlign = TextAlign.Center)
+            Text(appItem.name, textAlign = TextAlign.Center)
+            Text(
+                "v${appItem.versionName}",
+                color = FontColo1,
+                fontSize = 12.sp,
+                textAlign = TextAlign.Center
+            )
         }
         Spacer(modifier = Modifier.width(20.dp))
         Column(modifier = Modifier.weight(2f)) {
             val content = buildAnnotatedString {
-                appendLine("包名: $packageName")
-                appendLine("最后更新: ${formatTime(installTime)}")
-                append("APK大小: ${formatFloat(apkSize / 1024 / 1024f)} MB")
+                appendLine("包名: ${appItem.packageName}")
+                appendLine("最后更新: ${formatTime(appItem.lastUpdateTime)}")
+                append("APK大小: ${formatFloat(appItem.apkSize / 1024 / 1024f)} MB")
             }
             Text(content, color = FontColor, fontSize = 14.sp)
             Spacer(modifier = Modifier.height(10.dp))
@@ -137,7 +168,8 @@ private fun AppItem(resolveInfo: ResolveInfo, packageManager: PackageManager) {
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 WeButton(text = "打开APP", size = ButtonSize.SMALL) {
-                    val intent = context.packageManager.getLaunchIntentForPackage(packageName)
+                    val intent =
+                        context.packageManager.getLaunchIntentForPackage(appItem.packageName)
                     context.startActivity(intent)
                 }
                 WeButton(
@@ -145,37 +177,26 @@ private fun AppItem(resolveInfo: ResolveInfo, packageManager: PackageManager) {
                     type = ButtonType.PLAIN,
                     size = ButtonSize.SMALL
                 ) {
-                    copyFileToPublicDirectory(context, apkPath, "$appName-v$versionName.apk")
+                    copyFileToPublicDirectory(
+                        context,
+                        appItem.apkPath,
+                        "${appItem.name}-v${appItem.versionName}.apk"
+                    )
                 }
-
-                val installPermissionState =
-                    rememberPermissionState(Manifest.permission.REQUEST_INSTALL_PACKAGES)
                 WeButton(
                     text = "安装APK",
                     type = ButtonType.PLAIN,
                     size = ButtonSize.SMALL
                 ) {
-                    if (installPermissionState.status.isGranted) {
-                        installApk(context, packageName, apkPath)
-                    } else {
-                        installPermissionState.launchPermissionRequest()
-                    }
+                    installApk(context, appItem.apkPath)
                 }
             }
         }
     }
 }
 
-private fun installApk(context: Context, packageName: String, apkFilePath: String) {
-    val apkFile = File(apkFilePath)
-    val apkUri = FileProvider.getUriForFile(context, "${packageName}.provider", apkFile)
+private fun installApk(context: Context, apkPath: String) {
 
-    val intent = Intent(Intent.ACTION_VIEW).apply {
-        setDataAndType(apkUri, "application/vnd.android.package-archive")
-        flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-    }
-    context.startActivity(intent)
 }
 
 private fun copyFileToPublicDirectory(
@@ -236,3 +257,13 @@ private fun formatTime(milliseconds: Long, pattern: String = "yyyy-MM-dd HH:mm:s
         .toLocalDateTime()
         .format(DateTimeFormatter.ofPattern(pattern))
 }
+
+private data class AppItem(
+    val name: String,
+    val icon: ImageBitmap,
+    val packageName: String,
+    val versionName: String,
+    val lastUpdateTime: Long,
+    val apkPath: String,
+    val apkSize: Long
+)

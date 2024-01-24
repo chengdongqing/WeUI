@@ -44,7 +44,7 @@ import java.util.TimeZone
 
 @Composable
 fun CalendarPage() {
-    Page(title = "Calendar", description = "日历事件") {
+    Page(title = "CalendarEvents", description = "日历事件") {
         Column(
             modifier = Modifier.verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally

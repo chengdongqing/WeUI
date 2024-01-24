@@ -90,7 +90,7 @@ val menus = listOf(
             MenuItem("Contacts", "contacts"),
             MenuItem("SMS", "sms"),
             MenuItem("Keyboard", "keyboard"),
-            MenuItem("Calendar", "calendar"),
+            MenuItem("CalendarEvents", "calendar"),
             MenuItem("Fingerprint", "fingerprint"),
             MenuItem("Notification", "notification")
         )

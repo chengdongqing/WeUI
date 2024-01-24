@@ -70,6 +70,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.ui.components.Page
+import top.chengdongqing.weui.ui.components.basic.WeLoadMore
 import top.chengdongqing.weui.ui.theme.LightColor
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.utils.formatDuration
@@ -92,14 +93,18 @@ fun GalleryPage(galleryViewModel: GalleryViewModel, navController: NavController
             listOf(Manifest.permission.READ_EXTERNAL_STORAGE)
         }
     )
+    var loading by remember {
+        mutableStateOf(true)
+    }
 
     LaunchedEffect(Unit) {
         snapshotFlow {
             multiplePermissionsState.allPermissionsGranted
         }.collect { allPermissionsGranted ->
             if (allPermissionsGranted) {
-                delay(500)
+                delay(300)
                 galleryViewModel.setItems(queryMedias(context))
+                loading = false
             } else {
                 multiplePermissionsState.launchMultiplePermissionRequest()
             }
@@ -107,11 +112,15 @@ fun GalleryPage(galleryViewModel: GalleryViewModel, navController: NavController
     }
 
     Page(title = "Gallery", description = "相册", padding = PaddingValues(0.dp)) {
-        MediasGrid(
-            context,
-            galleryViewModel.mediaItems
-        ) {
-            navController.navigate("media-preview?index=$it")
+        if (loading) {
+            WeLoadMore()
+        } else {
+            MediasGrid(
+                context,
+                galleryViewModel.mediaItems
+            ) {
+                navController.navigate("media-preview?index=$it")
+            }
         }
     }
 }
