@@ -173,13 +173,7 @@ fun NavGraphBuilder.feedbackGraph() {
 }
 
 fun NavGraphBuilder.mediaGraph(navController: NavController, galleryViewModel: GalleryViewModel) {
-    composable("gallery",
-        enterTransition = {
-            EnterTransition.None
-        }, exitTransition = {
-            ExitTransition.None
-        }
-    ) {
+    composable("gallery") {
         GalleryPage(galleryViewModel, navController)
     }
     composable("media-preview?index={index}",

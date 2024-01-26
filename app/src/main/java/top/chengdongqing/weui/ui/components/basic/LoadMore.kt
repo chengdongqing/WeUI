@@ -28,27 +28,21 @@ enum class LoadMoreType {
 
 @Composable
 fun WeLoadMore(type: LoadMoreType = LoadMoreType.LOADING) {
-    when (type) {
-        LoadMoreType.LOADING ->
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 20.dp),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 20.dp),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        when (type) {
+            LoadMoreType.LOADING -> {
                 WeLoading()
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(text = "正在加载...", color = FontColo1, fontSize = 14.sp)
             }
 
-        LoadMoreType.EMPTY_DATA ->
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 20.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+            LoadMoreType.EMPTY_DATA -> {
                 Box(
                     modifier = Modifier
                         .weight(1f)
@@ -69,13 +63,7 @@ fun WeLoadMore(type: LoadMoreType = LoadMoreType.LOADING) {
                 )
             }
 
-        LoadMoreType.ALL_LOADED ->
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 20.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+            LoadMoreType.ALL_LOADED -> {
                 Box(
                     modifier = Modifier
                         .weight(1f)
@@ -95,5 +83,6 @@ fun WeLoadMore(type: LoadMoreType = LoadMoreType.LOADING) {
                         .background(BorderColor)
                 )
             }
+        }
     }
 }

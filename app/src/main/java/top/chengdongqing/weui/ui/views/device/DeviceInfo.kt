@@ -26,6 +26,7 @@ import top.chengdongqing.weui.utils.formatFloat
 fun DeviceInfoPage() {
     Page(title = "DeviceInfo", description = "设备信息") {
         val context = LocalContext.current
+
         KeyValueCard {
             item {
                 KeyValueRow("设备品牌", Build.BRAND)
@@ -53,18 +54,18 @@ fun DeviceInfoPage() {
                 KeyValueRow("系统版本", "Android ${Build.VERSION.RELEASE}")
 
                 (context.getSystemService(Context.WIFI_SERVICE) as? WifiManager)?.let {
-                    KeyValueRow("WiFi开关", getEnableStatus(it.isWifiEnabled))
+                    KeyValueRow("WiFi开关", formatEnableStatus(it.isWifiEnabled))
                 }
                 (context.getSystemService(Context.BLUETOOTH_SERVICE) as? BluetoothManager)?.let {
-                    KeyValueRow("蓝牙开关", getEnableStatus(it.adapter.isEnabled))
+                    KeyValueRow("蓝牙开关", formatEnableStatus(it.adapter.isEnabled))
                 }
                 (context.getSystemService(Context.LOCATION_SERVICE) as? LocationManager)?.let {
                     val isGpsEnabled = it.isProviderEnabled(LocationManager.GPS_PROVIDER)
-                    KeyValueRow("GPS开关", getEnableStatus(isGpsEnabled))
+                    KeyValueRow("GPS开关", formatEnableStatus(isGpsEnabled))
                 }
                 (context.getSystemService(Context.NFC_SERVICE) as? NfcManager)?.let {
                     val isNfcEnabled = it.defaultAdapter?.isEnabled == true
-                    KeyValueRow("NFC开关", getEnableStatus(isNfcEnabled))
+                    KeyValueRow("NFC开关", formatEnableStatus(isNfcEnabled))
                 }
 
                 val batteryStatus =
@@ -85,6 +86,6 @@ fun DeviceInfoPage() {
     }
 }
 
-private fun getEnableStatus(value: Boolean): String {
+private fun formatEnableStatus(value: Boolean): String {
     return if (value) "开" else "关"
 }

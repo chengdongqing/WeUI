@@ -83,36 +83,34 @@ import kotlin.time.toDuration
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun GalleryPage(galleryViewModel: GalleryViewModel, navController: NavController) {
-    val context = LocalContext.current
-    val multiplePermissionsState = rememberMultiplePermissionsState(
-        permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            listOf(
-                Manifest.permission.READ_MEDIA_IMAGES,
-                Manifest.permission.READ_MEDIA_VIDEO
-            )
-        } else {
-            listOf(Manifest.permission.READ_EXTERNAL_STORAGE)
-        }
-    )
-    var loading by remember {
-        mutableStateOf(true)
-    }
-
-    LaunchedEffect(Unit) {
-        snapshotFlow {
-            multiplePermissionsState.allPermissionsGranted
-        }.collect { allPermissionsGranted ->
-            if (allPermissionsGranted) {
-                delay(300)
-                galleryViewModel.setItems(queryMedias(context))
-                loading = false
+    Page(title = "Gallery", description = "相册", padding = PaddingValues(0.dp)) {
+        val context = LocalContext.current
+        var loading by remember { mutableStateOf(true) }
+        val multiplePermissionsState = rememberMultiplePermissionsState(
+            permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                listOf(
+                    Manifest.permission.READ_MEDIA_IMAGES,
+                    Manifest.permission.READ_MEDIA_VIDEO
+                )
             } else {
-                multiplePermissionsState.launchMultiplePermissionRequest()
+                listOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+            }
+        )
+
+        LaunchedEffect(Unit) {
+            snapshotFlow {
+                multiplePermissionsState.allPermissionsGranted
+            }.collect { allPermissionsGranted ->
+                if (allPermissionsGranted) {
+                    delay(300)
+                    galleryViewModel.setItems(queryMedias(context))
+                    loading = false
+                } else {
+                    multiplePermissionsState.launchMultiplePermissionRequest()
+                }
             }
         }
-    }
 
-    Page(title = "Gallery", description = "相册", padding = PaddingValues(0.dp)) {
         if (loading) {
             WeLoadMore()
         } else {

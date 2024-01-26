@@ -158,7 +158,7 @@ fun CalendarEvents() {
     }
 }
 
-suspend fun readCalendarEvents(context: Context): List<Pair<String, String>> =
+private suspend fun readCalendarEvents(context: Context): List<Pair<String, String>> =
     withContext(Dispatchers.IO) {
         val events = mutableListOf<Pair<String, String>>()
 

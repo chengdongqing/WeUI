@@ -1,12 +1,13 @@
 package top.chengdongqing.weui.utils
 
+import java.io.File
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 import kotlin.time.Duration
 
 /**
- * 浮点类型数值格式化
  * 没有小数则显示为整数
  * 有小数最多保留2位小数
  */
@@ -14,7 +15,7 @@ fun formatFloat(value: Float): String {
     return if (value % 1 == 0f) {
         value.toInt().toString()
     } else {
-        String.format("%.2f", value)
+        String.format(Locale.CHINESE, "%.2f", value)
     }
 }
 
@@ -25,9 +26,9 @@ fun formatDuration(duration: Duration): String {
     val seconds = totalSeconds % 60
 
     return when {
-        hours > 0 -> String.format("%02d:%02d:%02d", hours, minutes, seconds)
-        minutes > 0 -> String.format("%02d:%02d", minutes, seconds)
-        else -> String.format("00:%02d", seconds)
+        hours > 0 -> String.format(Locale.CHINESE, "%02d:%02d:%02d", hours, minutes, seconds)
+        minutes > 0 -> String.format(Locale.CHINESE, "%02d:%02d", minutes, seconds)
+        else -> String.format(Locale.CHINESE, "00:%02d", seconds)
     }
 }
 
@@ -35,4 +36,16 @@ fun formatTime(milliseconds: Long, pattern: String = "yyyy-MM-dd HH:mm:ss"): Str
     return Instant.ofEpochMilli(milliseconds).atZone(ZoneId.systemDefault())
         .toLocalDateTime()
         .format(DateTimeFormatter.ofPattern(pattern))
+}
+
+fun formatFileSize(filePath: String): String {
+    val file = File(filePath)
+    val size = if (file.exists()) file.length() else 0
+
+    return when {
+        size < 1024 -> "$size B"
+        size < 1024 * 1024 -> "${formatFloat(size / 1024f)} KB"
+        size < 1024 * 1024 * 1024 -> "${formatFloat(size / (1024 * 1024f))} MB"
+        else -> "${formatFloat(size / (1024 * 1024 * 1024f))} GB"
+    }
 }

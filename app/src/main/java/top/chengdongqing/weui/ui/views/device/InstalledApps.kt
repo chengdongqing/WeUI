@@ -50,7 +50,7 @@ import top.chengdongqing.weui.ui.components.form.ButtonType
 import top.chengdongqing.weui.ui.components.form.WeButton
 import top.chengdongqing.weui.ui.theme.FontColo1
 import top.chengdongqing.weui.ui.theme.FontColor
-import top.chengdongqing.weui.utils.formatFloat
+import top.chengdongqing.weui.utils.formatFileSize
 import top.chengdongqing.weui.utils.formatTime
 import java.io.File
 
@@ -78,19 +78,19 @@ fun InstalledAppsPage() {
                     val packageName = resolveInfo.activityInfo.packageName
                     val packageInfo = packageManager.getPackageInfo(packageName, 0)
                     val versionName = packageInfo.versionName
-                    val lastUpdateTime = packageInfo.lastUpdateTime
+                    val lastModified = formatTime(packageInfo.lastUpdateTime)
                     val apkPath = packageInfo.applicationInfo.sourceDir
-                    val apkSize = getFileSize(apkPath)
+                    val apkSize = formatFileSize(apkPath)
                     AppItem(
                         name,
                         icon,
                         packageName,
                         versionName,
-                        lastUpdateTime,
+                        lastModified,
                         apkPath,
                         apkSize
                     )
-                }.sortedByDescending { it.lastUpdateTime }
+                }.sortedByDescending { it.lastModified }
                 loading = false
             }
         }
@@ -168,8 +168,8 @@ private fun AppItem(appItem: AppItem) {
         Column(modifier = Modifier.weight(2f)) {
             val content = buildAnnotatedString {
                 appendLine("包名: ${appItem.packageName}")
-                appendLine("最后更新: ${formatTime(appItem.lastUpdateTime)}")
-                append("APK大小: ${formatFloat(appItem.apkSize / 1024 / 1024f)} MB")
+                appendLine("最后更新: ${appItem.lastModified}")
+                append("APK大小: ${appItem.apkSize}")
             }
             Text(content, color = FontColor, fontSize = 14.sp)
             Spacer(modifier = Modifier.height(10.dp))
@@ -272,17 +272,12 @@ private fun copyFileToPublicDirectory(
     }
 }
 
-private fun getFileSize(filePath: String): Long {
-    val file = File(filePath)
-    return if (file.exists()) file.length() else 0
-}
-
 private data class AppItem(
     val name: String,
     val icon: ImageBitmap,
     val packageName: String,
     val versionName: String,
-    val lastUpdateTime: Long,
+    val lastModified: String,
     val apkPath: String,
-    val apkSize: Long
+    val apkSize: String
 )
