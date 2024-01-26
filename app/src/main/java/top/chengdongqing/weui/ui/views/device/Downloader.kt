@@ -67,37 +67,33 @@ private fun download(context: Context, name: String, url: String) {
     // 注册广播接收器
     ContextCompat.registerReceiver(
         context,
-        downloadBroadcastReceiver(downloadManager, downloadId),
+        downloadReceiver(downloadManager, downloadId),
         IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE),
-        ContextCompat.RECEIVER_NOT_EXPORTED
+        ContextCompat.RECEIVER_EXPORTED
     )
 }
 
-private fun downloadBroadcastReceiver(
-    downloadManager: DownloadManager,
-    downloadId: Long
-) = object : BroadcastReceiver() {
-    @SuppressLint("Range")
-    override fun onReceive(context: Context, intent: Intent) {
-        val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
-        if (downloadId == id) {
-            val query = DownloadManager.Query().setFilterById(id)
-            val cursor = downloadManager.query(query)
+private fun downloadReceiver(downloadManager: DownloadManager, downloadId: Long) =
+    object : BroadcastReceiver() {
+        @SuppressLint("Range")
+        override fun onReceive(context: Context, intent: Intent) {
+            val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
+            if (downloadId == id) {
+                val query = DownloadManager.Query().setFilterById(id)
+                val cursor = downloadManager.query(query)
 
-            if (cursor.moveToFirst()) {
-                val status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
-                if (status == DownloadManager.STATUS_SUCCESSFUL) {
-                    Toast.makeText(context, "下载完成", Toast.LENGTH_SHORT).show()
-                    // 下载成功
-                    val uri =
-                        cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI))
-                    // 如果下载的是APK文件，启动安装
-                    if (uri.endsWith(".apk")) {
-                        installApk(context, uri)
+                if (cursor.moveToFirst()) {
+                    val status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
+                    if (status == DownloadManager.STATUS_SUCCESSFUL) {
+                        Toast.makeText(context, "下载完成", Toast.LENGTH_SHORT).show()
+                        val uri =
+                            cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI))
+                        if (uri.endsWith(".apk")) {
+                            installApk(context, uri)
+                        }
                     }
                 }
+                cursor.close()
             }
-            cursor.close()
         }
     }
-}
