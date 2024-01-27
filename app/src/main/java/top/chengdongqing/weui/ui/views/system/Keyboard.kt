@@ -46,7 +46,7 @@ fun KeyboardPage() {
 
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             WeInput(
-                value = "",
+                value = null,
                 placeholder = "键盘高度: ${formatFloat(keyboardHeight.value)}(dp)",
                 modifier = Modifier.focusRequester(focusRequester)
             )

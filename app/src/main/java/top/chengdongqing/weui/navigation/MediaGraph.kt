@@ -26,11 +26,13 @@ fun NavGraphBuilder.mediaGraph(navController: NavController, galleryViewModel: G
     composable("media-preview?index={index}",
         enterTransition = {
             EnterTransition.None
-        }, exitTransition = {
+        },
+        exitTransition = {
             ExitTransition.None
         }
     ) {
-        MediaPreviewPage(galleryViewModel, navController)
+        val index = it.arguments?.getInt("index") ?: 0
+        MediaPreviewPage(galleryViewModel, index)
     }
     composable("file-browser") {
         FileBrowserPage()

@@ -1,5 +1,6 @@
 package top.chengdongqing.weui.navigation
 
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import top.chengdongqing.weui.ui.views.system.CalendarPage
@@ -13,8 +14,9 @@ import top.chengdongqing.weui.ui.views.system.NotificationPage
 import top.chengdongqing.weui.ui.views.system.SmsPage
 import top.chengdongqing.weui.ui.views.system.SystemStatusPage
 import top.chengdongqing.weui.ui.views.system.database.DatabasePage
+import top.chengdongqing.weui.ui.views.system.database.address.AddressFormPage
 
-fun NavGraphBuilder.systemGraph() {
+fun NavGraphBuilder.systemGraph(navController: NavController) {
     composable("device-info") {
         DeviceInfoPage()
     }
@@ -28,7 +30,11 @@ fun NavGraphBuilder.systemGraph() {
         DownloaderPage()
     }
     composable("database") {
-        DatabasePage()
+        DatabasePage(navController)
+    }
+    composable("address-form?id={id}") {
+        val id = it.arguments?.getString("id")
+        AddressFormPage(id)
     }
     composable("clipboard") {
         ClipboardPage()

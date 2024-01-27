@@ -23,7 +23,7 @@ import top.chengdongqing.weui.ui.theme.PrimaryColor
 
 @Composable
 fun WeTextarea(
-    value: String,
+    value: String?,
     modifier: Modifier = Modifier,
     label: String? = null,
     placeholder: String? = null,
@@ -33,6 +33,8 @@ fun WeTextarea(
     topBorder: Boolean = false,
     onChange: ((String) -> Unit)? = null
 ) {
+    val localValue = value ?: ""
+
     Column {
         if (topBorder) {
             WeDivider()
@@ -45,7 +47,7 @@ fun WeTextarea(
                 Spacer(modifier = Modifier.width(16.dp))
             }
             BasicTextField(
-                value = value,
+                value = localValue,
                 onValueChange = { str ->
                     onChange?.apply {
                         if (max != null && str.length > max) {
@@ -55,8 +57,7 @@ fun WeTextarea(
                         }
                     }
                 },
-                modifier = Modifier
-                    .weight(1f),
+                modifier = Modifier.weight(1f),
                 readOnly = disabled,
                 textStyle = TextStyle(color = FontColor, fontSize = 16.sp),
                 minLines = 3,
@@ -65,7 +66,7 @@ fun WeTextarea(
                 Box {
                     innerTextField()
 
-                    if (value.isEmpty() && placeholder?.isNotEmpty() == true) {
+                    if (localValue.isEmpty() && placeholder?.isNotEmpty() == true) {
                         Text(
                             text = placeholder,
                             color = LightColor,
@@ -75,7 +76,7 @@ fun WeTextarea(
 
                     max?.let {
                         Text(
-                            text = "${value.length}/$it",
+                            text = "${localValue.length}/$it",
                             color = LightColor,
                             fontSize = 14.sp,
                             modifier = Modifier.align(Alignment.BottomEnd)

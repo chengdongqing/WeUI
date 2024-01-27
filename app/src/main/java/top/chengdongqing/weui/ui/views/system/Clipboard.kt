@@ -54,7 +54,7 @@ fun ClipboardPage() {
     }
 }
 
-private fun getClipboardData(context: Context): String? {
+fun getClipboardData(context: Context): String? {
     return (context.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager)?.run {
         val clip = primaryClip
         if (clip != null && clip.itemCount > 0) {
@@ -65,7 +65,7 @@ private fun getClipboardData(context: Context): String? {
     }
 }
 
-private fun setClipboardData(context: Context, content: String) {
+fun setClipboardData(context: Context, content: String) {
     (context.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager)?.apply {
         val clip = ClipData.newPlainText("label", content)
         setPrimaryClip(clip)

@@ -24,14 +24,14 @@ fun InputPage() {
                 mutableStateMapOf<String, String>()
             }
             WeInput(
-                value = value["account"] ?: "",
+                value = value["account"],
                 label = "账号",
                 placeholder = "请输入"
             ) {
                 value["account"] = it
             }
             WeInput(
-                value = value["password"] ?: "",
+                value = value["password"],
                 label = "密码",
                 placeholder = "请输入",
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)

@@ -27,17 +27,17 @@ fun NavigationGraph() {
 
     NavHost(
         navController,
-        startDestination = "database",
+        startDestination = "home",
         enterTransition = {
             slideIntoContainer(
                 AnimatedContentTransitionScope.SlideDirection.Left,
-                animationSpec = tween(300)
+                tween(300)
             )
         },
         exitTransition = {
             slideOutOfContainer(
                 AnimatedContentTransitionScope.SlideDirection.Right,
-                animationSpec = tween(300)
+                tween(300)
             )
         }
     ) {
@@ -45,13 +45,13 @@ fun NavigationGraph() {
             enterTransition = {
                 slideIntoContainer(
                     AnimatedContentTransitionScope.SlideDirection.Right,
-                    animationSpec = tween(300)
+                    tween(300)
                 )
             },
             exitTransition = {
                 slideOutOfContainer(
                     AnimatedContentTransitionScope.SlideDirection.Left,
-                    animationSpec = tween(300)
+                    tween(300)
                 )
             }
         ) {
@@ -62,7 +62,7 @@ fun NavigationGraph() {
         formGraph()
         feedbackGraph()
         mediaGraph(navController, galleryViewModel)
-        systemGraph()
+        systemGraph(navController)
         hardwareGraph()
         chartGraph()
         mapGraph()

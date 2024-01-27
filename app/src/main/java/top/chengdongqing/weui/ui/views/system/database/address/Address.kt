@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.ui.views.system.database
+package top.chengdongqing.weui.ui.views.system.database.address
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

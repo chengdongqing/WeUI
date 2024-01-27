@@ -31,7 +31,7 @@ import top.chengdongqing.weui.utils.clickableWithoutRipple
 
 @Composable
 fun WeInput(
-    value: String,
+    value: String?,
     modifier: Modifier = Modifier,
     label: String? = null,
     placeholder: String? = null,
@@ -43,6 +43,8 @@ fun WeInput(
     onClick: (() -> Unit)? = null,
     onChange: ((String) -> Unit)? = null
 ) {
+    val localValue = value ?: ""
+
     Column {
         Row(modifier = modifier.height(56.dp), verticalAlignment = Alignment.CenterVertically) {
             if (label?.isNotEmpty() == true) {
@@ -50,7 +52,7 @@ fun WeInput(
                 Spacer(modifier = Modifier.width(16.dp))
             }
             BasicTextField(
-                value = value,
+                value = localValue,
                 onValueChange = {
                     onChange?.invoke(it)
                 },
@@ -79,7 +81,7 @@ fun WeInput(
                     }
                 ) {
                     innerTextField()
-                    if (value.isEmpty() && placeholder?.isNotEmpty() == true) {
+                    if (localValue.isEmpty() && placeholder?.isNotEmpty() == true) {
                         Text(
                             text = placeholder,
                             color = LightColor,

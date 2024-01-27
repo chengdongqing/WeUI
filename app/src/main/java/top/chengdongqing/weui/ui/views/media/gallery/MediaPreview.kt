@@ -24,18 +24,14 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.navigation.NavController
 import coil.compose.AsyncImage
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MediaPreviewPage(
     galleryViewModel: GalleryViewModel,
-    navController: NavController
+    index: Int
 ) {
-    val index = remember {
-        navController.currentBackStackEntry?.arguments?.getString("index")?.toInt() ?: 0
-    }
     val pagerState = rememberPagerState(initialPage = index) {
         galleryViewModel.mediaItems.size
     }

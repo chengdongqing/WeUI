@@ -81,7 +81,7 @@ fun AddCalendarEvent() {
         mutableStateOf(false)
     }
     WeInput(
-        value = date?.toString() ?: "",
+        value = date?.toString(),
         label = "事件日期",
         placeholder = "请选择",
         disabled = true,
