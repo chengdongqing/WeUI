@@ -111,9 +111,9 @@ fun InstalledAppsPage() {
                             val latitude = 37.7749
                             val longitude = -122.4194
                             val locationUri = Uri.parse("geo:$latitude,$longitude")
-                            val mapIntent = Intent(Intent.ACTION_VIEW, locationUri)
-                            if (mapIntent.resolveActivity(context.packageManager) != null) {
-                                context.startActivity(mapIntent)
+                            val intent = Intent(Intent.ACTION_VIEW, locationUri)
+                            if (intent.resolveActivity(context.packageManager) != null) {
+                                context.startActivity(intent)
                             } else {
                                 Toast.makeText(context, "未安装地图应用", Toast.LENGTH_SHORT).show()
                             }
@@ -218,9 +218,10 @@ fun installApk(context: Context, apkPath: String) {
         "${context.packageName}.provider",
         tempFile
     )
-    val intent = Intent(Intent.ACTION_VIEW)
-    intent.setDataAndType(uri, "application/vnd.android.package-archive")
-    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    val intent = Intent(Intent.ACTION_VIEW, uri).apply {
+        setType("application/vnd.android.package-archive")
+        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    }
     context.startActivity(intent)
 }
 

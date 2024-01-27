@@ -95,9 +95,7 @@ private fun PhoneCall() {
                 if (number.isEmpty()) {
                     toast.open("请输入号码")
                 } else {
-                    val intent = Intent(Intent.ACTION_CALL).apply {
-                        data = Uri.parse("tel:${number}")
-                    }
+                    val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:${number}"))
                     context.startActivity(intent)
                 }
             } else {
@@ -113,9 +111,7 @@ private fun PhoneCall() {
             if (number.isEmpty()) {
                 toast.open("请输入号码")
             } else {
-                val intent = Intent(Intent.ACTION_DIAL).apply {
-                    data = Uri.parse("tel:${number}")
-                }
+                val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:${number}"))
                 context.startActivity(intent)
             }
         }

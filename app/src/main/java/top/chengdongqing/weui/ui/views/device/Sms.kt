@@ -80,8 +80,7 @@ private fun SmsSend() {
             if (number.isEmpty() || content.isEmpty()) {
                 toast.open("请正确输入")
             } else {
-                val intent = Intent(Intent.ACTION_SENDTO).apply {
-                    data = Uri.parse("smsto:$number")
+                val intent = Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:$number")).apply {
                     putExtra("sms_body", content)
                 }
                 context.startActivity(intent)

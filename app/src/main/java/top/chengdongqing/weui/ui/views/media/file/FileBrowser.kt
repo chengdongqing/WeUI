@@ -153,13 +153,13 @@ private fun FileList(
                             navigateToFolder(item.path)
                         },
                         onFileClick = {
-                            val intent = Intent(Intent.ACTION_VIEW).apply {
-                                val uri = FileProvider.getUriForFile(
-                                    context,
-                                    "${context.packageName}.provider",
-                                    File(item.path)
-                                )
-                                setDataAndType(uri, "*/*")
+                            val uri = FileProvider.getUriForFile(
+                                context,
+                                "${context.packageName}.provider",
+                                File(item.path)
+                            )
+                            val intent = Intent(Intent.ACTION_VIEW, uri).apply {
+                                setType("*/*")
                                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                             }
                             context.startActivity(intent)

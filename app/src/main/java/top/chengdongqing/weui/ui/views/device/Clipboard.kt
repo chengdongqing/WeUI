@@ -27,12 +27,10 @@ import top.chengdongqing.weui.ui.components.form.WeTextarea
 fun ClipboardPage() {
     Page(title = "Clipboard", description = "剪贴板") {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            var content by remember { mutableStateOf("") }
             val context = LocalContext.current
             val dialog = rememberWeDialog()
             val toast = rememberWeToast()
-            var content by remember {
-                mutableStateOf("")
-            }
 
             WeTextarea(content, placeholder = "请输入内容", max = 200, topBorder = true) {
                 content = it
@@ -57,18 +55,19 @@ fun ClipboardPage() {
 }
 
 private fun getClipboardData(context: Context): String? {
-    val clipboard =
-        context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-    val clip = clipboard.primaryClip
-    if (clip != null && clip.itemCount > 0) {
-        return clip.getItemAt(0).text.toString()
+    return (context.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager)?.run {
+        val clip = primaryClip
+        if (clip != null && clip.itemCount > 0) {
+            clip.getItemAt(0).text.toString()
+        } else {
+            null
+        }
     }
-    return null
 }
 
 private fun setClipboardData(context: Context, content: String) {
-    val clipboard =
-        context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-    val clip = ClipData.newPlainText("label", content)
-    clipboard.setPrimaryClip(clip)
+    (context.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager)?.apply {
+        val clip = ClipData.newPlainText("label", content)
+        setPrimaryClip(clip)
+    }
 }

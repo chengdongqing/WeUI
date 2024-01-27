@@ -197,8 +197,8 @@ private fun MediasGrid(
 }
 
 private fun openMedia(context: Context, imageUri: Uri, isVideo: Boolean) {
-    val intent = Intent(Intent.ACTION_VIEW).apply {
-        setDataAndType(imageUri, "${if (isVideo) "video" else "image"}/*")
+    val intent = Intent(Intent.ACTION_VIEW, imageUri).apply {
+        setType("${if (isVideo) "video" else "image"}/*")
     }
     context.startActivity(intent)
 }
