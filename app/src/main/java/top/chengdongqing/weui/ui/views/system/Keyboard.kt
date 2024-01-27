@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import top.chengdongqing.weui.ui.components.Page
+import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.form.ButtonType
 import top.chengdongqing.weui.ui.components.form.WeButton
 import top.chengdongqing.weui.ui.components.form.WeInput
@@ -33,7 +33,7 @@ import top.chengdongqing.weui.utils.formatFloat
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun KeyboardPage() {
-    Page(title = "Keyboard", description = "键盘") {
+    WePage(title = "Keyboard", description = "键盘") {
         val keyboardController = LocalSoftwareKeyboardController.current
         val focusRequester = remember {
             FocusRequester()

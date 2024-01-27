@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.ui.components
+package top.chengdongqing.weui.ui.components.basic
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -30,7 +30,7 @@ import top.chengdongqing.weui.ui.theme.FontColor
  * @param content 内容
  */
 @Composable
-fun Page(
+fun WePage(
     title: String,
     description: String,
     padding: PaddingValues = PaddingValues(16.dp),

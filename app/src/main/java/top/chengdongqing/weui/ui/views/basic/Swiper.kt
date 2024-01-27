@@ -12,13 +12,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import top.chengdongqing.weui.ui.components.Page
 import top.chengdongqing.weui.ui.components.basic.Swiper
+import top.chengdongqing.weui.ui.components.basic.WePage
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SwiperPage() {
-    Page(title = "Swiper", description = "滑动视图") {
+    WePage(title = "Swiper", description = "滑动视图") {
         val banners = remember {
             listOf(
                 "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/0b2bb13c396cc6205dd91da3a91a275a.jpg?f=webp&w=1080&h=540&bg=A8D4D5",

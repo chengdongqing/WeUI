@@ -1,11 +1,11 @@
 package top.chengdongqing.weui.ui.views.hardware
 
 import androidx.compose.runtime.Composable
-import top.chengdongqing.weui.ui.components.Page
+import top.chengdongqing.weui.ui.components.basic.WePage
 
 @Composable
 fun FingerprintPage() {
-    Page(title = "Fingerprint", description = "指纹识别") {
+    WePage(title = "Fingerprint", description = "指纹识别") {
 
     }
 }

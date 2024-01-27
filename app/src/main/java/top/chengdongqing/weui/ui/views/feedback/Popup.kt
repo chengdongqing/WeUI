@@ -12,14 +12,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import top.chengdongqing.weui.ui.components.Page
+import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.feedback.WePopup
 import top.chengdongqing.weui.ui.components.form.ButtonType
 import top.chengdongqing.weui.ui.components.form.WeButton
 
 @Composable
 fun PopupPage() {
-    Page(title = "Popup", description = "弹出框") {
+    WePage(title = "Popup", description = "弹出框") {
         var visible by remember {
             mutableStateOf(false)
         }

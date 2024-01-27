@@ -18,9 +18,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
-import top.chengdongqing.weui.ui.components.Page
 import top.chengdongqing.weui.ui.components.basic.WeCircleProgress
 import top.chengdongqing.weui.ui.components.basic.WeDashboardProgress
+import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.basic.WeProgress
 import top.chengdongqing.weui.ui.components.form.WeButton
 import java.util.Timer
@@ -28,7 +28,7 @@ import kotlin.concurrent.timerTask
 
 @Composable
 fun ProgressPage() {
-    Page(title = "Progress", description = "进度条", backgroundColor = Color.White) {
+    WePage(title = "Progress", description = "进度条", backgroundColor = Color.White) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             WeProgress(20f, null)
             WeProgress(44.57898f)

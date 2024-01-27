@@ -20,12 +20,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import kotlinx.coroutines.delay
-import top.chengdongqing.weui.ui.components.Page
+import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.utils.clickableWithoutRipple
 
 @Composable
 fun LayersPage() {
-    Page(title = "WeUI页面层级", description = "用于规范WeUI页面元素所属层级、层级顺序及组合规范。") {
+    WePage(
+        title = "WeUI页面层级",
+        description = "用于规范WeUI页面元素所属层级、层级顺序及组合规范。"
+    ) {
         var expand by remember {
             mutableStateOf(false)
         }

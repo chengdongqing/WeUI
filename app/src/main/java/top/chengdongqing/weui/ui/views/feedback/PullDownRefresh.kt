@@ -21,14 +21,14 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
-import top.chengdongqing.weui.ui.components.Page
 import top.chengdongqing.weui.ui.components.basic.WeLoadMore
+import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.feedback.WePullDownRefresh
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 
 @Composable
 fun PullDownRefreshPage() {
-    Page(title = "PullDownRefresh", description = "下拉刷新") {
+    WePage(title = "PullDownRefresh", description = "下拉刷新") {
         val coroutineScope = rememberCoroutineScope()
 
         WePullDownRefresh(onRefresh = {

@@ -6,14 +6,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import top.chengdongqing.weui.ui.components.Page
+import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.feedback.rememberWeDialog
 import top.chengdongqing.weui.ui.components.form.ButtonType
 import top.chengdongqing.weui.ui.components.form.WeButton
 
 @Composable
 fun DialogPage() {
-    Page(title = "Dialog", description = "对话框") {
+    WePage(title = "Dialog", description = "对话框") {
         Column {
             val weDialog = rememberWeDialog()
             WeButton(text = "Dialog 样式一", type = ButtonType.PLAIN) {

@@ -23,7 +23,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,9 +39,10 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
-import top.chengdongqing.weui.ui.components.Page
 import top.chengdongqing.weui.ui.components.basic.LoadMoreType
+import top.chengdongqing.weui.ui.components.basic.WeDivider
 import top.chengdongqing.weui.ui.components.basic.WeLoadMore
+import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.form.WeButton
 import top.chengdongqing.weui.ui.theme.BorderColor
 import top.chengdongqing.weui.ui.theme.FontColo1
@@ -53,7 +53,7 @@ import top.chengdongqing.weui.ui.theme.LightColor
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun WiFiPage() {
-    Page(title = "Wi-Fi", description = "无线局域网") {
+    WePage(title = "Wi-Fi", description = "无线局域网") {
         val context = LocalContext.current
         val wifiManager = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
         val permissionState =
@@ -83,8 +83,8 @@ fun WiFiPage() {
                 ) {
                     itemsIndexed(wifiList) { index, wifi ->
                         WifiItem(wifi)
-                        if (index < wifiList.size - 1) {
-                            Divider(thickness = 0.5.dp, color = BorderColor)
+                        if (index < wifiList.lastIndex) {
+                            WeDivider()
                         }
                     }
                 }

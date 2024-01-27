@@ -1,11 +1,11 @@
 package top.chengdongqing.weui.ui.views.media.camera
 
 import androidx.compose.runtime.Composable
-import top.chengdongqing.weui.ui.components.Page
+import top.chengdongqing.weui.ui.components.basic.WePage
 
 @Composable
 fun CameraPage() {
-    Page(title = "Camera", description = "相机") {
+    WePage(title = "Camera", description = "相机") {
 
     }
 }

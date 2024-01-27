@@ -43,8 +43,8 @@ import androidx.core.graphics.drawable.toBitmap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
-import top.chengdongqing.weui.ui.components.Page
 import top.chengdongqing.weui.ui.components.basic.WeLoadMore
+import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.form.ButtonSize
 import top.chengdongqing.weui.ui.components.form.ButtonType
 import top.chengdongqing.weui.ui.components.form.WeButton
@@ -56,7 +56,7 @@ import java.io.File
 
 @Composable
 fun InstalledAppsPage() {
-    Page(title = "InstalledApps", description = "已安装的应用") {
+    WePage(title = "InstalledApps", description = "已安装的应用") {
         val context = LocalContext.current
         val packageManager = context.packageManager
         var apps by remember {

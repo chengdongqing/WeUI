@@ -37,9 +37,9 @@ import com.google.accompanist.permissions.rememberPermissionState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import top.chengdongqing.weui.ui.components.KeyValueCard
-import top.chengdongqing.weui.ui.components.KeyValueRow
-import top.chengdongqing.weui.ui.components.Page
+import top.chengdongqing.weui.ui.components.basic.KeyValueCard
+import top.chengdongqing.weui.ui.components.basic.KeyValueRow
+import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
 import top.chengdongqing.weui.ui.components.form.ButtonSize
 import top.chengdongqing.weui.ui.components.form.ButtonType
@@ -49,7 +49,7 @@ import java.util.Date
 
 @Composable
 fun ContactsPage() {
-    Page(title = "Contacts", description = "拨号与通讯录") {
+    WePage(title = "Contacts", description = "拨号与通讯录") {
         Column(
             modifier = Modifier.verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally

@@ -20,14 +20,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import top.chengdongqing.weui.ui.components.Page
+import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.form.ButtonType
 import top.chengdongqing.weui.ui.components.form.WeButton
 import top.chengdongqing.weui.ui.components.form.WeSlider
 
 @Composable
 fun ScreenPage() {
-    Page(title = "Screen", description = "屏幕") {
+    WePage(title = "Screen", description = "屏幕") {
         val context = LocalContext.current
         val window = (context as Activity).window
         var brightness by remember {

@@ -71,8 +71,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
 import okio.IOException
-import top.chengdongqing.weui.ui.components.Page
 import top.chengdongqing.weui.ui.components.basic.WeLoadMore
+import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.theme.LightColor
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.utils.formatDuration
@@ -84,7 +84,7 @@ import kotlin.time.toDuration
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun GalleryPage(galleryViewModel: GalleryViewModel, navController: NavController) {
-    Page(title = "Gallery", description = "相册", padding = PaddingValues(0.dp)) {
+    WePage(title = "Gallery", description = "相册", padding = PaddingValues(0.dp)) {
         val context = LocalContext.current
         var loading by remember { mutableStateOf(true) }
         val multiplePermissionsState = rememberMultiplePermissionsState(

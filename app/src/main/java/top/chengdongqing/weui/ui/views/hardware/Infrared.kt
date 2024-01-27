@@ -4,14 +4,14 @@ import android.content.Context
 import android.hardware.ConsumerIrManager
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import top.chengdongqing.weui.ui.components.Page
+import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.feedback.ToastIcon
 import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
 import top.chengdongqing.weui.ui.components.form.WeButton
 
 @Composable
 fun InfraredPage() {
-    Page(title = "Infrared", description = "红外信号") {
+    WePage(title = "Infrared", description = "红外信号") {
         val context = LocalContext.current
         val irManager = context.getSystemService(Context.CONSUMER_IR_SERVICE) as? ConsumerIrManager
         val toast = rememberWeToast()

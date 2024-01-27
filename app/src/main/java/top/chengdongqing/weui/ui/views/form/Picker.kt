@@ -13,7 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import top.chengdongqing.weui.ui.components.Page
+import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.form.WeButton
 import top.chengdongqing.weui.ui.components.form.WeDatePicker
 import top.chengdongqing.weui.ui.components.form.WeInput
@@ -25,7 +25,7 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 fun PickerPage() {
-    Page(title = "Picker", description = "滚动选择器") {
+    WePage(title = "Picker", description = "滚动选择器") {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             var visible by remember {
                 mutableStateOf(false)

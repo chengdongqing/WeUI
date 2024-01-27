@@ -4,13 +4,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
-import top.chengdongqing.weui.ui.components.Page
+import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.form.CheckboxOption
 import top.chengdongqing.weui.ui.components.form.WeCheckboxGroup
 
 @Composable
 fun CheckboxPage() {
-    Page(title = "Checkbox", description = "复选框", backgroundColor = Color.White) {
+    WePage(title = "Checkbox", description = "复选框", backgroundColor = Color.White) {
         val values = remember {
             mutableStateListOf<Any>(1)
         }

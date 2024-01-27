@@ -9,7 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import top.chengdongqing.weui.ui.components.Page
+import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.feedback.InformationBarType
 import top.chengdongqing.weui.ui.components.feedback.WeInformationBar
 import top.chengdongqing.weui.ui.components.form.ButtonSize
@@ -18,7 +18,7 @@ import top.chengdongqing.weui.ui.components.form.WeButton
 
 @Composable
 fun InformationBarPage() {
-    Page(title = "Information Bar", description = "信息提示条") {
+    WePage(title = "Information Bar", description = "信息提示条") {
         Column(horizontalAlignment = Alignment.End) {
             val visible = remember {
                 mutableStateOf(true)

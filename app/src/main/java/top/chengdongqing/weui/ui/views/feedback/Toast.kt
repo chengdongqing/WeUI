@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import top.chengdongqing.weui.ui.components.Page
+import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.feedback.ToastIcon
 import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
 import top.chengdongqing.weui.ui.components.form.ButtonType
@@ -19,7 +19,7 @@ import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun ToastPage() {
-    Page(title = "Toast", description = "弹出式提示") {
+    WePage(title = "Toast", description = "弹出式提示") {
         val toast = rememberWeToast()
         val coroutineScope = rememberCoroutineScope()
 

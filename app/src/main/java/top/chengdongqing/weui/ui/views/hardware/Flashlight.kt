@@ -6,12 +6,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
-import top.chengdongqing.weui.ui.components.Page
+import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.form.WeSwitch
 
 @Composable
 fun FlashlightPage() {
-    Page(title = "Flashlight", description = "闪光灯") {
+    WePage(title = "Flashlight", description = "闪光灯") {
         val context = LocalContext.current
         val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
 

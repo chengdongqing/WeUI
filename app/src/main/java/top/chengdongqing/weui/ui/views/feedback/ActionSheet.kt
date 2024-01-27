@@ -16,7 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import top.chengdongqing.weui.ui.components.Page
+import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.feedback.ActionSheetItem
 import top.chengdongqing.weui.ui.components.feedback.rememberWeActionSheet
 import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
@@ -26,7 +26,7 @@ import top.chengdongqing.weui.ui.theme.PrimaryColor
 
 @Composable
 fun ActionSheetPage() {
-    Page(title = "ActionSheet", description = "弹出式菜单") {
+    WePage(title = "ActionSheet", description = "弹出式菜单") {
         val actionSheet = rememberWeActionSheet()
         val toast = rememberWeToast()
 

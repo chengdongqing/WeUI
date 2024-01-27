@@ -1,11 +1,11 @@
 package top.chengdongqing.weui.ui.views.hardware
 
 import androidx.compose.runtime.Composable
-import top.chengdongqing.weui.ui.components.Page
+import top.chengdongqing.weui.ui.components.basic.WePage
 
 @Composable
 fun CompassPage() {
-    Page(title = "Compass", description = "罗盘") {
+    WePage(title = "Compass", description = "罗盘") {
 
     }
 }

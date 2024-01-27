@@ -27,7 +27,7 @@ fun NavigationGraph() {
 
     NavHost(
         navController,
-        startDestination = "home",
+        startDestination = "database",
         enterTransition = {
             slideIntoContainer(
                 AnimatedContentTransitionScope.SlideDirection.Left,

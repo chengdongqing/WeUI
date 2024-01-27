@@ -16,9 +16,10 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -156,41 +157,43 @@ fun rememberWeDialog(): WeDialogState {
     val visibleState = remember {
         mutableStateOf(false)
     }
-    val localState = remember {
-        mutableStateMapOf<String, Any?>()
+    var localState by remember {
+        mutableStateOf(Dialog(""))
     }
 
     WeDialog(
         visible = visibleState.value,
-        title = (localState["title"] as String?) ?: "",
-        content = localState["content"] as String?,
-        okText = (localState["okText"] as String?) ?: "",
-        cancelText = (localState["cancelText"] as String?) ?: "",
-        okColor = (localState["okColor"] as Color?) ?: Color.Unspecified,
+        title = localState.title,
+        content = localState.content,
+        okText = localState.okText,
+        cancelText = localState.cancelText,
+        okColor = localState.okColor,
         onOk = {
-            if (localState.contains("onOk")) {
-                (localState["onOk"] as? () -> Unit)?.invoke()
+            if (localState.onOk != null) {
+                localState.onOk?.invoke()
             }
-            if (localState["closeOnAction"] == true) {
+            if (localState.closeOnAction) {
                 visibleState.value = false
             }
         },
-        onCancel = if (localState["onCancel"] != null) {
+        onCancel = if (localState.onCancel != null) {
             {
-                (localState["onCancel"] as? () -> Unit)?.invoke()
-                if (localState["closeOnAction"] == true) {
+                localState.onCancel?.invoke()
+                if (localState.closeOnAction) {
                     visibleState.value = false
                 }
             }
         } else null
     )
 
-    return WeDialogState(visibleState, localState)
+    return WeDialogState(visibleState) {
+        localState = it
+    }
 }
 
 class WeDialogState(
     private val visible: MutableState<Boolean>,
-    private val localState: MutableMap<String, Any?>
+    private val setLocalState: (Dialog) -> Unit
 ) {
     fun visible(): Boolean {
         return this.visible.value
@@ -203,18 +206,21 @@ class WeDialogState(
         cancelText: String = "取消",
         okColor: Color = LinkColor,
         closeOnAction: Boolean = true,
-        onOk: (() -> Unit)? = null,
-        onCancel: (() -> Unit)? = {}
+        onCancel: (() -> Unit)? = {},
+        onOk: (() -> Unit)? = null
     ) {
-        localState["title"] = title
-        localState["content"] = content
-        localState["okText"] = okText
-        localState["cancelText"] = cancelText
-        localState["okColor"] = okColor
-        localState["closeOnAction"] = closeOnAction
-        localState["onOk"] = onOk
-        localState["onCancel"] = onCancel
-
+        setLocalState(
+            Dialog(
+                title,
+                content,
+                okText,
+                cancelText,
+                okColor,
+                closeOnAction,
+                onCancel,
+                onOk
+            )
+        )
         visible.value = true
     }
 
@@ -222,3 +228,14 @@ class WeDialogState(
         visible.value = false
     }
 }
+
+data class Dialog(
+    val title: String,
+    val content: String? = null,
+    val okText: String = "确定",
+    val cancelText: String = "取消",
+    val okColor: Color = LinkColor,
+    val closeOnAction: Boolean = true,
+    val onCancel: (() -> Unit)? = {},
+    val onOk: (() -> Unit)? = null
+)

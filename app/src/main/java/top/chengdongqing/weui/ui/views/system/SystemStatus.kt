@@ -18,16 +18,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import top.chengdongqing.weui.ui.components.KeyValueCard
-import top.chengdongqing.weui.ui.components.KeyValueRow
-import top.chengdongqing.weui.ui.components.Page
+import top.chengdongqing.weui.ui.components.basic.KeyValueCard
+import top.chengdongqing.weui.ui.components.basic.KeyValueRow
+import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.form.ButtonType
 import top.chengdongqing.weui.ui.components.form.WeButton
 import top.chengdongqing.weui.utils.SetupStatusBarStyle
 
 @Composable
 fun SystemStatusPage() {
-    Page(title = "SystemStatus", description = "系统状态，动态更新") {
+    WePage(title = "SystemStatus", description = "系统状态，动态更新") {
         val context = LocalContext.current
         val connectivityManager = remember {
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

@@ -1,11 +1,11 @@
 package top.chengdongqing.weui.ui.views.media.player
 
 import androidx.compose.runtime.Composable
-import top.chengdongqing.weui.ui.components.Page
+import top.chengdongqing.weui.ui.components.basic.WePage
 
 @Composable
 fun AudioPlayerPage() {
-    Page(title = "AudioPlayer", description = "音频播放") {
+    WePage(title = "AudioPlayer", description = "音频播放") {
 
     }
 }

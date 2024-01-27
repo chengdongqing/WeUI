@@ -15,7 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import top.chengdongqing.weui.ui.components.Page
+import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.feedback.ToastIcon
 import top.chengdongqing.weui.ui.components.feedback.rememberWeDialog
 import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
@@ -25,7 +25,7 @@ import top.chengdongqing.weui.ui.components.form.WeTextarea
 
 @Composable
 fun ClipboardPage() {
-    Page(title = "Clipboard", description = "剪贴板") {
+    WePage(title = "Clipboard", description = "剪贴板") {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             var content by remember { mutableStateOf("") }
             val context = LocalContext.current

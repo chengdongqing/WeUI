@@ -26,9 +26,9 @@ import com.google.accompanist.permissions.rememberPermissionState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import top.chengdongqing.weui.ui.components.KeyValueCard
-import top.chengdongqing.weui.ui.components.KeyValueRow
-import top.chengdongqing.weui.ui.components.Page
+import top.chengdongqing.weui.ui.components.basic.KeyValueCard
+import top.chengdongqing.weui.ui.components.basic.KeyValueRow
+import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
 import top.chengdongqing.weui.ui.components.form.ButtonType
 import top.chengdongqing.weui.ui.components.form.WeButton
@@ -37,7 +37,7 @@ import top.chengdongqing.weui.ui.components.form.WeTextarea
 
 @Composable
 fun SmsPage() {
-    Page(title = "SMS", description = "短信") {
+    WePage(title = "SMS", description = "短信") {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             SmsSend()
             Spacer(modifier = Modifier.height(20.dp))

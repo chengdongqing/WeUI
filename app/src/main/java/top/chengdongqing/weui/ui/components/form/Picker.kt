@@ -268,7 +268,7 @@ fun WeDatePicker(
             if (type != DateType.YEAR) {
                 range[1] = when (fullValue[0]) {
                     0 -> IntRange(start.monthValue, 12)
-                    range[0].size - 1 -> IntRange(1, end.monthValue)
+                    range[0].lastIndex -> IntRange(1, end.monthValue)
                     else -> IntRange(1, 12)
                 }.toList()
             }
@@ -277,7 +277,7 @@ fun WeDatePicker(
                     range[2] = (if (fullValue[0] == 0 && it == start.monthValue) {
                         val days = LocalDate.now().withMonth(start.monthValue).lengthOfMonth()
                         IntRange(start.dayOfMonth, days)
-                    } else if (fullValue[0] == range[0].size - 1 && it == end.monthValue) {
+                    } else if (fullValue[0] == range[0].lastIndex && it == end.monthValue) {
                         IntRange(1, end.dayOfMonth)
                     } else {
                         val days = LocalDate.now().withMonth(range[1][fullValue[1]]).lengthOfMonth()
@@ -370,7 +370,7 @@ fun WeTimePicker(
             if (type != TimeType.HOUR) {
                 range[1] = when (fullValue[0]) {
                     0 -> IntRange(start.minute, 59)
-                    range[0].size - 1 -> IntRange(0, end.minute)
+                    range[0].lastIndex -> IntRange(0, end.minute)
                     else -> IntRange(0, 59)
                 }.toList()
             }
@@ -378,7 +378,7 @@ fun WeTimePicker(
                 range[1].getOrNull(fullValue[1])?.let {
                     range[2] = (if (fullValue[0] == 0 && it == start.minute) {
                         IntRange(start.second, 59)
-                    } else if (fullValue[0] == range[0].size - 1 && it == end.minute) {
+                    } else if (fullValue[0] == range[0].lastIndex && it == end.minute) {
                         IntRange(0, end.second)
                     } else {
                         IntRange(0, 59)

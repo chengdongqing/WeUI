@@ -16,9 +16,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -46,53 +46,54 @@ import top.chengdongqing.weui.ui.theme.FontColo1
 
 @Composable
 fun HomePage(navController: NavHostController) {
-    var current by rememberSaveable {
-        mutableIntStateOf(-1)
-    }
-
     Column(
         Modifier
             .fillMaxSize()
             .background(BackgroundColor)
             .statusBarsPadding()
-            .verticalScroll(rememberScrollState())
     ) {
-        Column(Modifier.padding(40.dp)) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_logo),
-                contentDescription = "WeUI",
-                modifier = Modifier.height(21.dp)
-            )
-            Spacer(modifier = Modifier.height(19.dp))
-            Text(
-                text = "WeUI 是一套同微信原生视觉体验一致的基础样式库，由微信官方设计团队为微信内网页和微信小程序量身设计，令用户的使用感知更加统一。",
-                color = FontColo1,
-                fontSize = 14.sp
-            )
-        }
-
-        Column(Modifier.padding(horizontal = 16.dp)) {
-            menus.forEachIndexed { index, item ->
+        var current by rememberSaveable { mutableIntStateOf(-1) }
+        LazyColumn(Modifier.padding(horizontal = 16.dp)) {
+            item {
+                Column(
+                    Modifier
+                        .background(BackgroundColor)
+                        .padding(40.dp)
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_logo),
+                        contentDescription = "WeUI",
+                        modifier = Modifier.height(21.dp)
+                    )
+                    Spacer(modifier = Modifier.height(19.dp))
+                    Text(
+                        text = "WeUI 是一套同微信原生视觉体验一致的基础样式库，由微信官方设计团队为微信内网页和微信小程序量身设计，令用户的使用感知更加统一。",
+                        color = FontColo1,
+                        fontSize = 14.sp
+                    )
+                }
+            }
+            itemsIndexed(menus) { index, item ->
                 MenuGroup(item, index == current, navController) {
                     current = if (current == index) -1 else index
                 }
                 Spacer(Modifier.height(8.dp))
             }
-        }
-
-        Spacer(Modifier.height(60.dp))
-
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 40.dp)
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_footer_link),
-                contentDescription = null,
-                modifier = Modifier.size(84.dp, 19.dp)
-            )
+            item {
+                Spacer(Modifier.height(60.dp))
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 40.dp)
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_footer_link),
+                        contentDescription = null,
+                        modifier = Modifier.size(84.dp, 19.dp)
+                    )
+                }
+            }
         }
     }
 }
@@ -150,9 +151,7 @@ fun MenuGroup(
 
         if (group.children != null) {
             Column(Modifier.height(animatedHeight)) {
-                repeat(group.children.size) { index ->
-                    val item = group.children[index]
-
+                group.children.sortedBy { it.label }.forEachIndexed { index, item ->
                     Row(
                         Modifier
                             .clickable {
@@ -171,7 +170,7 @@ fun MenuGroup(
                             contentDescription = null
                         )
                     }
-                    if (index < group.children.size - 1) {
+                    if (index < group.children.lastIndex) {
                         Divider(
                             Modifier.padding(horizontal = 20.dp),
                             thickness = 0.5.dp,

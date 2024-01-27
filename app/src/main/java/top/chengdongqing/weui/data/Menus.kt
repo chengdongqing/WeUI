@@ -58,16 +58,16 @@ val menus = listOf(
     ),
     MenuGroup(
         "系统服务", R.drawable.ic_nav_layout, listOf(
+            MenuItem("Contacts", "contacts"),
+            MenuItem("Clipboard", "clipboard"),
+            MenuItem("CalendarEvents", "calendar"),
             MenuItem("DeviceInfo", "device-info"),
-            MenuItem("SystemStatus", "system-status"),
-            MenuItem("InstalledApps", "installed-apps"),
             MenuItem("Downloader", "downloader"),
             MenuItem("Database", "database"),
-            MenuItem("Clipboard", "clipboard"),
-            MenuItem("Contacts", "contacts"),
+            MenuItem("SystemStatus", "system-status"),
             MenuItem("SMS", "sms"),
+            MenuItem("InstalledApps", "installed-apps"),
             MenuItem("Keyboard", "keyboard"),
-            MenuItem("CalendarEvents", "calendar"),
             MenuItem("Notification", "notification")
         )
     ),

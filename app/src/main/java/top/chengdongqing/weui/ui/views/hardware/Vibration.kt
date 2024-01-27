@@ -13,13 +13,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import top.chengdongqing.weui.ui.components.Page
+import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.form.ButtonType
 import top.chengdongqing.weui.ui.components.form.WeButton
 
 @Composable
 fun VibrationPage() {
-    Page(title = "Vibration", description = "震动") {
+    WePage(title = "Vibration", description = "震动") {
         val context = LocalContext.current
 
         Column(horizontalAlignment = Alignment.CenterHorizontally) {

@@ -1,11 +1,11 @@
 package top.chengdongqing.weui.ui.views.hardware
 
 import androidx.compose.runtime.Composable
-import top.chengdongqing.weui.ui.components.Page
+import top.chengdongqing.weui.ui.components.basic.WePage
 
 @Composable
 fun NFCPage() {
-    Page(title = "NFC", description = "近场通信") {
+    WePage(title = "NFC", description = "近场通信") {
 
     }
 }

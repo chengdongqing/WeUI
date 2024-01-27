@@ -39,7 +39,7 @@ fun StepItems(items: List<(@Composable () -> Unit)?>, value: Int, isVertical: Bo
             content,
             isActive = index <= value,
             isFirst = index == 0,
-            isLast = index == items.size - 1,
+            isLast = index == items.lastIndex,
             isLastActive = index == value,
             isVertical
         )

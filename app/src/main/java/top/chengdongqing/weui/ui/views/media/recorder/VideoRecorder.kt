@@ -1,11 +1,11 @@
 package top.chengdongqing.weui.ui.views.media.recorder
 
 import androidx.compose.runtime.Composable
-import top.chengdongqing.weui.ui.components.Page
+import top.chengdongqing.weui.ui.components.basic.WePage
 
 @Composable
 fun VideoRecorderPage() {
-    Page(title = "VideoRecorder", description = "视频录制") {
+    WePage(title = "VideoRecorder", description = "视频录制") {
 
     }
 }

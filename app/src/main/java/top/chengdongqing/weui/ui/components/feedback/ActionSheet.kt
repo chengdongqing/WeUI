@@ -17,9 +17,10 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -136,24 +137,26 @@ fun rememberWeActionSheet(): WeActionSheetState {
     val visible = remember {
         mutableStateOf(false)
     }
-    val localState = remember {
-        mutableStateMapOf<String, Any?>()
+    var localState by remember {
+        mutableStateOf(ActionSheet(null, listOf()) {})
     }
 
     WeActionSheet(
         visible = visible.value,
-        title = localState["title"] as String?,
-        options = (localState["options"] as? List<ActionSheetItem>) ?: listOf(),
+        title = localState.title,
+        options = localState.options,
         onCancel = { visible.value = false },
-        onChange = (localState["onChange"] as? (index: Int) -> Unit) ?: {}
+        onChange = localState.onChange
     )
 
-    return WeActionSheetState(visible, localState)
+    return WeActionSheetState(visible) {
+        localState = it
+    }
 }
 
 class WeActionSheetState(
     private val visible: MutableState<Boolean>,
-    private val localState: MutableMap<String, Any?>
+    private val setLocalState: (ActionSheet) -> Unit
 ) {
     fun visible(): Boolean {
         return visible.value
@@ -164,10 +167,7 @@ class WeActionSheetState(
         options: List<ActionSheetItem>,
         onChange: (index: Int) -> Unit
     ) {
-        localState["title"] = title
-        localState["options"] = options
-        localState["onChange"] = onChange
-
+        setLocalState(ActionSheet(title, options, onChange))
         visible.value = true
     }
 
@@ -175,3 +175,9 @@ class WeActionSheetState(
         visible.value = false
     }
 }
+
+data class ActionSheet(
+    val title: String?,
+    val options: List<ActionSheetItem>,
+    val onChange: (index: Int) -> Unit
+)

@@ -14,7 +14,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import top.chengdongqing.weui.R
-import top.chengdongqing.weui.ui.components.Page
+import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.form.WeButton
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -29,7 +29,7 @@ fun NotificationPage() {
     val channelId = "your_channel_id"
     val channelName = "Your Channel Name"
 
-    Page(title = "Notification", description = "系统通知") {
+    WePage(title = "Notification", description = "系统通知") {
         WeButton(text = "发送通知") {
             if (notificationPermissionState?.status?.isGranted == true || notificationPermissionState == null) {
                 createNotificationChannel(context, channelId, channelName)

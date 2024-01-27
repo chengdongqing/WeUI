@@ -22,14 +22,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import top.chengdongqing.weui.ui.components.Page
+import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.form.WeButton
 import top.chengdongqing.weui.ui.components.form.WeInput
 import top.chengdongqing.weui.ui.components.form.WeTextarea
 
 @Composable
 fun DownloaderPage() {
-    Page(title = "Downloader", description = "系统下载") {
+    WePage(title = "Downloader", description = "系统下载") {
         val context = LocalContext.current
         var name by remember {
             mutableStateOf("su7.jpg")

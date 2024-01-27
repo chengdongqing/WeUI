@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -17,7 +16,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.chengdongqing.weui.ui.theme.BorderColor
+import top.chengdongqing.weui.ui.components.basic.WeDivider
 import top.chengdongqing.weui.ui.theme.FontColor
 import top.chengdongqing.weui.ui.theme.LightColor
 import top.chengdongqing.weui.ui.theme.PrimaryColor
@@ -36,7 +35,7 @@ fun WeTextarea(
 ) {
     Column {
         if (topBorder) {
-            Divider(thickness = 0.5.dp, color = BorderColor)
+            WeDivider()
         }
         Row(
             modifier = modifier.padding(vertical = 16.dp)
@@ -85,6 +84,6 @@ fun WeTextarea(
                 }
             }
         }
-        Divider(thickness = 0.5.dp, color = BorderColor)
+        WeDivider()
     }
 }

@@ -7,13 +7,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import top.chengdongqing.weui.ui.components.Page
 import top.chengdongqing.weui.ui.components.basic.WeLoading
+import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 
 @Composable
 fun LoadingPage() {
-    Page(title = "Loading", description = "加载中") {
+    WePage(title = "Loading", description = "加载中") {
         Row(verticalAlignment = Alignment.CenterVertically) {
             WeLoading()
             Spacer(Modifier.width(24.dp))

@@ -1,11 +1,11 @@
 package top.chengdongqing.weui.ui.views.media.cropper
 
 import androidx.compose.runtime.Composable
-import top.chengdongqing.weui.ui.components.Page
+import top.chengdongqing.weui.ui.components.basic.WePage
 
 @Composable
 fun ImageCropperPage() {
-    Page(title = "ImageCropper", description = "图片裁剪") {
+    WePage(title = "ImageCropper", description = "图片裁剪") {
 
     }
 }

@@ -47,9 +47,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.R
-import top.chengdongqing.weui.ui.components.Page
 import top.chengdongqing.weui.ui.components.basic.LoadMoreType
 import top.chengdongqing.weui.ui.components.basic.WeLoadMore
+import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.theme.FontColo1
 import top.chengdongqing.weui.ui.theme.FontColor
 import top.chengdongqing.weui.utils.clickableWithoutRipple
@@ -59,7 +59,7 @@ import java.io.File
 
 @Composable
 fun FileBrowserPage() {
-    Page(
+    WePage(
         title = "FileBrowser",
         description = "文件浏览器",
         backgroundColor = Color.White

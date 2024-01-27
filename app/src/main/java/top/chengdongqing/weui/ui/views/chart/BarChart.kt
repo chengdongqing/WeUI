@@ -1,11 +1,11 @@
 package top.chengdongqing.weui.ui.views.chart
 
 import androidx.compose.runtime.Composable
-import top.chengdongqing.weui.ui.components.Page
+import top.chengdongqing.weui.ui.components.basic.WePage
 
 @Composable
 fun BarChartPage() {
-    Page(title = "BarChart", description = "柱状图") {
+    WePage(title = "BarChart", description = "柱状图") {
 
     }
 }

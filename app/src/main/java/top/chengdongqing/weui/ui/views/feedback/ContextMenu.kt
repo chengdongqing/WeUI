@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -20,14 +19,14 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.chengdongqing.weui.ui.components.Page
+import top.chengdongqing.weui.ui.components.basic.WeDivider
+import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.feedback.WeContextMenu
-import top.chengdongqing.weui.ui.theme.BorderColor
 import top.chengdongqing.weui.ui.theme.FontColor
 
 @Composable
 fun ContextMenuPage() {
-    Page(title = "ContextMenu", description = "上下文菜单") {
+    WePage(title = "ContextMenu", description = "上下文菜单") {
         WeContextMenu(listOf({
             Text(text = "菜单1")
         }, {
@@ -76,5 +75,5 @@ private fun ListItem(content: String) {
             fontWeight = FontWeight.Bold
         )
     }
-    Divider(thickness = 0.5.dp, color = BorderColor)
+    WeDivider()
 }

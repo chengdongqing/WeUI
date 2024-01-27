@@ -27,7 +27,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -155,25 +154,27 @@ fun rememberWeToast(): WeToastState {
     val visible = remember {
         mutableStateOf(false)
     }
-    val localState = remember {
-        mutableStateMapOf<String, Any?>()
+    var localState by remember {
+        mutableStateOf(Toast(""))
     }
 
     WeToast(
         visible = visible.value,
-        title = (localState["title"] as String?) ?: "",
-        icon = (localState["icon"] as ToastIcon?) ?: ToastIcon.NONE,
-        duration = (localState["duration"] as Duration?) ?: 1500.milliseconds
+        title = localState.title,
+        icon = localState.icon,
+        duration = localState.duration
     ) {
         visible.value = false
     }
 
-    return WeToastState(visible, localState)
+    return WeToastState(visible) {
+        localState = it
+    }
 }
 
 class WeToastState(
     private val visible: MutableState<Boolean>,
-    private val localState: MutableMap<String, Any?>
+    private val setLocalState: (Toast) -> Unit
 ) {
     fun visible(): Boolean {
         return visible.value
@@ -184,10 +185,7 @@ class WeToastState(
         icon: ToastIcon = ToastIcon.NONE,
         duration: Duration = 1500.milliseconds
     ) {
-        localState["title"] = title
-        localState["icon"] = icon
-        localState["duration"] = duration
-
+        setLocalState(Toast(title, icon, duration))
         visible.value = true
     }
 
@@ -195,3 +193,9 @@ class WeToastState(
         visible.value = false
     }
 }
+
+data class Toast(
+    val title: String,
+    val icon: ToastIcon = ToastIcon.NONE,
+    val duration: Duration = 1500.milliseconds
+)

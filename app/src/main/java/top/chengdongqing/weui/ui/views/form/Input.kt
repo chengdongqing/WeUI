@@ -11,14 +11,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import top.chengdongqing.weui.ui.components.Page
+import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.form.WeButton
 import top.chengdongqing.weui.ui.components.form.WeInput
 import top.chengdongqing.weui.ui.components.form.WeTextarea
 
 @Composable
 fun InputPage() {
-    Page(title = "Input", description = "输入框") {
+    WePage(title = "Input", description = "输入框") {
         Column {
             val value = remember {
                 mutableStateMapOf<String, String>()

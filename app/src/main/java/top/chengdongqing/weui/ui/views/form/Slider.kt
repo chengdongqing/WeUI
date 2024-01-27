@@ -15,8 +15,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import top.chengdongqing.weui.ui.components.Page
 import top.chengdongqing.weui.ui.components.basic.WeCircleProgress
+import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.form.ButtonSize
 import top.chengdongqing.weui.ui.components.form.ButtonType
 import top.chengdongqing.weui.ui.components.form.WeButton
@@ -24,7 +24,7 @@ import top.chengdongqing.weui.ui.components.form.WeSlider
 
 @Composable
 fun SliderPage() {
-    Page(title = "Slider", description = "滑块", backgroundColor = Color.White) {
+    WePage(title = "Slider", description = "滑块", backgroundColor = Color.White) {
         var value by remember {
             mutableIntStateOf(0)
         }

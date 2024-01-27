@@ -17,14 +17,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import top.chengdongqing.weui.ui.components.KeyValueCard
-import top.chengdongqing.weui.ui.components.KeyValueRow
-import top.chengdongqing.weui.ui.components.Page
+import top.chengdongqing.weui.ui.components.basic.KeyValueCard
+import top.chengdongqing.weui.ui.components.basic.KeyValueRow
+import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.utils.formatFloat
 
 @Composable
 fun DeviceInfoPage() {
-    Page(title = "DeviceInfo", description = "设备信息") {
+    WePage(title = "DeviceInfo", description = "设备信息") {
         val context = LocalContext.current
 
         KeyValueCard {

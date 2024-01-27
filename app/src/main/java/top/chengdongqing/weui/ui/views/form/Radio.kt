@@ -4,13 +4,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
-import top.chengdongqing.weui.ui.components.Page
+import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.form.RadioOption
 import top.chengdongqing.weui.ui.components.form.WeRadioGroup
 
 @Composable
 fun RadioPage() {
-    Page(title = "Radio", description = "单选框", backgroundColor = Color.White) {
+    WePage(title = "Radio", description = "单选框", backgroundColor = Color.White) {
         val value = remember {
             mutableStateOf<Any>("2")
         }
