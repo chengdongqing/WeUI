@@ -19,8 +19,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -40,8 +38,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import top.chengdongqing.weui.R
-import top.chengdongqing.weui.data.MenuGroup
 import top.chengdongqing.weui.data.menus
+import top.chengdongqing.weui.model.MenuGroup
 import top.chengdongqing.weui.ui.theme.BackgroundColor
 import top.chengdongqing.weui.ui.theme.BorderColor
 import top.chengdongqing.weui.ui.theme.FontColo1
@@ -169,9 +167,8 @@ fun MenuGroup(
                             fontSize = 17.sp
                         )
                         Icon(
-                            imageVector = Icons.Default.KeyboardArrowRight,
-                            contentDescription = null,
-                            tint = Color(0f, 0f, 0f, 0.3f)
+                            painter = painterResource(id = R.drawable.ic_arrow_right),
+                            contentDescription = null
                         )
                     }
                     if (index < group.children.size - 1) {

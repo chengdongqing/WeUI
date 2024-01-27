@@ -4,7 +4,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.ContentUris
 import android.content.Context
-import android.content.Intent
 import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Build
@@ -129,7 +128,6 @@ private fun MediasGrid(
     mediaItems: List<MediaItem>,
     navigateToPreview: (Int) -> Unit
 ) {
-    val context = LocalContext.current
     val gridState = rememberLazyGridState()
     var autoScrollSpeed by remember { mutableFloatStateOf(0f) }
     var selectedIds by remember { mutableStateOf(emptySet<Int>()) }
@@ -185,8 +183,7 @@ private fun MediasGrid(
                     } else {
                         Modifier.combinedClickable(
                             onClick = {
-                                openMedia(context, item.uri, item.isVideo)
-                                //navigateToPreview(index)
+                                navigateToPreview(index)
                             },
                             onLongClick = { selectedIds += index }
                         )
@@ -194,13 +191,6 @@ private fun MediasGrid(
             )
         }
     }
-}
-
-private fun openMedia(context: Context, imageUri: Uri, isVideo: Boolean) {
-    val intent = Intent(Intent.ACTION_VIEW, imageUri).apply {
-        setType("${if (isVideo) "video" else "image"}/*")
-    }
-    context.startActivity(intent)
 }
 
 @Composable

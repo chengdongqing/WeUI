@@ -40,7 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.ui.components.feedback.WePopup
 import top.chengdongqing.weui.ui.theme.FontColor
-import top.chengdongqing.weui.ui.views.device.vibrate
+import top.chengdongqing.weui.ui.views.hardware.vibrate
 import java.time.LocalDate
 import java.time.LocalTime
 import kotlin.math.roundToInt

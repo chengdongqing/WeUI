@@ -1,20 +1,8 @@
 package top.chengdongqing.weui.data
 
-import androidx.annotation.DrawableRes
 import top.chengdongqing.weui.R
-
-data class MenuItem(
-    val label: String,
-    val route: String
-)
-
-data class MenuGroup(
-    val title: String,
-    @DrawableRes
-    val iconId: Int,
-    val children: List<MenuItem>? = null,
-    val path: String? = null
-)
+import top.chengdongqing.weui.model.MenuGroup
+import top.chengdongqing.weui.model.MenuItem
 
 val menus = listOf(
     MenuGroup(
@@ -41,6 +29,22 @@ val menus = listOf(
         )
     ),
     MenuGroup(
+        "媒体组件", R.drawable.ic_nav_media,
+        listOf(
+            MenuItem("Gallery", "gallery"),
+            MenuItem("FileBrowser", "file-browser"),
+            MenuItem("MediaPicker", "media-picker"),
+            MenuItem("Camera", "camera"),
+            MenuItem("AudioRecorder", "audio-recorder"),
+            MenuItem("VideoRecorder", "video-recorder"),
+            MenuItem("AudioPlayer", "audio-player"),
+            MenuItem("VideoPlayer", "video-player"),
+            MenuItem("ImageCropper", "image-cropper"),
+            MenuItem("LivePlayer", "live-player"),
+            MenuItem("LivePusher", "live-pusher")
+        )
+    ),
+    MenuGroup(
         "操作反馈", R.drawable.ic_nav_feedback,
         listOf(
             MenuItem("ActionSheet", "action-sheet"),
@@ -53,52 +57,50 @@ val menus = listOf(
         )
     ),
     MenuGroup(
-        "媒体组件", R.drawable.ic_nav_media,
-        listOf(
-            MenuItem("Gallery", "gallery"),
-            MenuItem("FileBrowser", "file-browser"),
-            MenuItem("MediaPicker", "media-picker"),
-            MenuItem("VoiceRecorder", "voice-recorder"),
-            MenuItem("ImageCropper", "image-cropper"),
-            MenuItem("Camera", "camera"),
-            MenuItem("Audio", "audio"),
-            MenuItem("Video", "video"),
-            MenuItem("LivePlayer", "live-player"),
-            MenuItem("LivePusher", "live-pusher")
-        )
-    ),
-    MenuGroup(
-        "设备接口", R.drawable.ic_nav_nav,
-        listOf(
+        "系统服务", R.drawable.ic_nav_layout, listOf(
             MenuItem("DeviceInfo", "device-info"),
             MenuItem("SystemStatus", "system-status"),
             MenuItem("InstalledApps", "installed-apps"),
             MenuItem("Downloader", "downloader"),
             MenuItem("Database", "database"),
-            MenuItem("Wi-Fi", "wifi"),
-            MenuItem("Bluetooth", "bluetooth"),
-            MenuItem("NFC", "nfc"),
-            MenuItem("Flashlight", "flashlight"),
-            MenuItem("Vibration", "vibration"),
-            MenuItem("Infrared", "infrared"),
-            MenuItem("GPS", "gps"),
-            MenuItem("Gyroscope", "gyroscope"),
-            MenuItem("Compass", "compass"),
-            MenuItem("Accelerometer", "accelerometer"),
             MenuItem("Clipboard", "clipboard"),
-            MenuItem("ScreenBrightness", "screen-brightness"),
             MenuItem("Contacts", "contacts"),
             MenuItem("SMS", "sms"),
             MenuItem("Keyboard", "keyboard"),
             MenuItem("CalendarEvents", "calendar"),
-            MenuItem("Fingerprint", "fingerprint"),
             MenuItem("Notification", "notification")
+        )
+    ),
+    MenuGroup(
+        "硬件接口", R.drawable.ic_nav_nav,
+        listOf(
+            MenuItem("Screen", "screen"),
+            MenuItem("Flashlight", "flashlight"),
+            MenuItem("Vibration", "vibration"),
+            MenuItem("Wi-Fi", "wifi"),
+            MenuItem("Bluetooth", "bluetooth"),
+            MenuItem("NFC", "nfc"),
+            MenuItem("GPS", "gps"),
+            MenuItem("Infrared", "infrared"),
+            MenuItem("Gyroscope", "gyroscope"),
+            MenuItem("Compass", "compass"),
+            MenuItem("Accelerometer", "accelerometer"),
+            MenuItem("Fingerprint", "fingerprint")
+        )
+    ),
+    MenuGroup(
+        "图表组件", R.drawable.ic_nav_layout,
+        listOf(
+            MenuItem("BarChart", "bar-chart"),
+            MenuItem("LineChart", "line-chart"),
+            MenuItem("PieChart", "pie-chart")
         )
     ),
     MenuGroup(
         "地图组件", R.drawable.ic_nav_feedback,
         listOf(
-            MenuItem("Map", "map"),
+            MenuItem("LocationPreview", "location-preview"),
+            MenuItem("LocationPicker", "location-picker")
         )
     ),
     MenuGroup(
