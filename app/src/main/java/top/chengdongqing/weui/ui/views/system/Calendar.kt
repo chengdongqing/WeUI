@@ -111,9 +111,9 @@ fun AddCalendarEvent() {
                     put(CalendarContract.Events.CALENDAR_ID, 1)
                 }
                 context.contentResolver.insert(CalendarContract.Events.CONTENT_URI, values)
-                toast.open("已添加", icon = ToastIcon.SUCCESS)
+                toast.show("已添加", icon = ToastIcon.SUCCESS)
             } else {
-                toast.open("请正确输入")
+                toast.show("请正确输入")
             }
         } else {
             calendarPermissionState.launchPermissionRequest()

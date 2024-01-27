@@ -38,17 +38,17 @@ fun ClipboardPage() {
             Spacer(modifier = Modifier.height(20.dp))
             WeButton(text = "设置剪贴板内容") {
                 if (content.isEmpty()) {
-                    toast.open("内容不能为空", ToastIcon.FAIL)
+                    toast.show("内容不能为空", ToastIcon.FAIL)
                 } else {
                     setClipboardData(context, content)
-                    toast.open("已复制", ToastIcon.SUCCESS)
+                    toast.show("已复制", ToastIcon.SUCCESS)
                 }
             }
             Spacer(modifier = Modifier.height(20.dp))
             WeButton(text = "读取剪贴板内容", type = ButtonType.PLAIN) {
                 getClipboardData(context)?.let {
-                    dialog.open("剪贴板内容", it, onCancel = null)
-                } ?: toast.open("获取失败", ToastIcon.FAIL)
+                    dialog.show("剪贴板内容", it, onCancel = null)
+                } ?: toast.show("获取失败", ToastIcon.FAIL)
             }
         }
     }

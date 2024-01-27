@@ -32,7 +32,7 @@ fun ActionSheetPage() {
 
         Column {
             WeButton(text = "立即支付", type = ButtonType.PLAIN) {
-                actionSheet.open(
+                actionSheet.show(
                     "请选择支付方式",
                     listOf(
                         ActionSheetItem("微信", color = PrimaryColor),
@@ -41,7 +41,7 @@ fun ActionSheetPage() {
                         ActionSheetItem("小米钱包", "禁用", disabled = true)
                     )
                 ) {
-                    toast.open("点击了第${it + 1}个")
+                    toast.show("点击了第${it + 1}个")
                 }
             }
 
@@ -65,10 +65,10 @@ fun ActionSheetPage() {
                     })
                 )
 
-                actionSheet.open(
+                actionSheet.show(
                     options = options
                 ) {
-                    toast.open("开始${options[it].label}")
+                    toast.show("开始${options[it].label}")
                 }
             }
 
@@ -90,7 +90,7 @@ fun ActionSheetPage() {
                     ActionSheetItem("从相册选择")
                 )
 
-                actionSheet.open(
+                actionSheet.show(
                     options = options
                 ) {
                     when (it) {

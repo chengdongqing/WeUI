@@ -93,7 +93,7 @@ private fun PhoneCall() {
         ) {
             if (callPermissionState.status.isGranted) {
                 if (number.isEmpty()) {
-                    toast.open("请输入号码")
+                    toast.show("请输入号码")
                 } else {
                     val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:${number}"))
                     context.startActivity(intent)
@@ -109,7 +109,7 @@ private fun PhoneCall() {
             size = ButtonSize.MEDIUM
         ) {
             if (number.isEmpty()) {
-                toast.open("请输入号码")
+                toast.show("请输入号码")
             } else {
                 val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:${number}"))
                 context.startActivity(intent)

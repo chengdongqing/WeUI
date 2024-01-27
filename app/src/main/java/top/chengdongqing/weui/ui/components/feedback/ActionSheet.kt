@@ -162,7 +162,7 @@ class WeActionSheetState(
         return visible.value
     }
 
-    fun open(
+    fun show(
         title: String? = null,
         options: List<ActionSheetItem>,
         onChange: (index: Int) -> Unit
@@ -171,7 +171,7 @@ class WeActionSheetState(
         visible.value = true
     }
 
-    fun close() {
+    fun hide() {
         visible.value = false
     }
 }

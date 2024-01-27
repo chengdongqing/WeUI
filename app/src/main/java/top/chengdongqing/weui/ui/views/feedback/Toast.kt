@@ -25,33 +25,33 @@ fun ToastPage() {
 
         Column {
             WeButton(text = "成功提示", type = ButtonType.PLAIN) {
-                toast.open(title = "已完成", icon = ToastIcon.SUCCESS)
+                toast.show(title = "已完成", icon = ToastIcon.SUCCESS)
             }
             Spacer(modifier = Modifier.height(20.dp))
             WeButton(text = "失败提示", type = ButtonType.PLAIN) {
-                toast.open(title = "获取链接失败", icon = ToastIcon.FAIL)
+                toast.show(title = "获取链接失败", icon = ToastIcon.FAIL)
             }
             Spacer(modifier = Modifier.height(20.dp))
             WeButton(text = "长文案提示", type = ButtonType.PLAIN) {
-                toast.open(title = "此处为长文案提示详情", icon = ToastIcon.FAIL)
+                toast.show(title = "此处为长文案提示详情", icon = ToastIcon.FAIL)
             }
             Spacer(modifier = Modifier.height(20.dp))
             WeButton(text = "立即支付", type = ButtonType.PLAIN) {
-                toast.open(
+                toast.show(
                     title = "支付中...",
                     icon = ToastIcon.LOADING,
                     duration = Duration.INFINITE
                 )
                 coroutineScope.launch {
                     delay(2000.milliseconds)
-                    toast.close()
+                    toast.hide()
                     delay(100.milliseconds)
-                    toast.open(title = "支付成功", icon = ToastIcon.SUCCESS)
+                    toast.show(title = "支付成功", icon = ToastIcon.SUCCESS)
                 }
             }
             Spacer(modifier = Modifier.height(20.dp))
             WeButton(text = "文字提示", type = ButtonType.PLAIN) {
-                toast.open("文字提示")
+                toast.show("文字提示")
             }
         }
     }

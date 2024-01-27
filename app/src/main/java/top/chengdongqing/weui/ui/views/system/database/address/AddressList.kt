@@ -71,16 +71,16 @@ fun AddressList(navController: NavController) {
         itemsIndexed(addresses) { index, item ->
             AddressListItem(item,
                 onLongClick = {
-                    actionSheet.open(options = actions) { action ->
+                    actionSheet.show(options = actions) { action ->
                         when (action) {
                             0 -> {
                                 navigateToForm(item.id)
                             }
 
                             1 -> {
-                                dialog.open("确定删除该地址吗？") {
+                                dialog.show("确定删除该地址吗？") {
                                     addresses.removeAt(index)
-                                    toast.open("删除成功", ToastIcon.SUCCESS)
+                                    toast.show("删除成功", ToastIcon.SUCCESS)
                                 }
                             }
 
@@ -90,7 +90,7 @@ fun AddressList(navController: NavController) {
                                     appendLine("手机号: ${item.phone}")
                                     append("详细地址: ${item.addressDetail}")
                                 })
-                                toast.open("已复制", ToastIcon.SUCCESS)
+                                toast.show("已复制", ToastIcon.SUCCESS)
                             }
                         }
                     }

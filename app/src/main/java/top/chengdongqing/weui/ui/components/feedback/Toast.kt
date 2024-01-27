@@ -180,7 +180,7 @@ class WeToastState(
         return visible.value
     }
 
-    fun open(
+    fun show(
         title: String,
         icon: ToastIcon = ToastIcon.NONE,
         duration: Duration = 1500.milliseconds
@@ -189,7 +189,7 @@ class WeToastState(
         visible.value = true
     }
 
-    fun close() {
+    fun hide() {
         visible.value = false
     }
 }

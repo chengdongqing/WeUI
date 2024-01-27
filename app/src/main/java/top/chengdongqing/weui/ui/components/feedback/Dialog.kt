@@ -199,7 +199,7 @@ class WeDialogState(
         return this.visible.value
     }
 
-    fun open(
+    fun show(
         title: String,
         content: String? = null,
         okText: String = "确定",
@@ -224,7 +224,7 @@ class WeDialogState(
         visible.value = true
     }
 
-    fun close() {
+    fun hide() {
         visible.value = false
     }
 }

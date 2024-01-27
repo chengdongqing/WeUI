@@ -26,9 +26,9 @@ fun InfraredPage() {
                 val frequency = 38000
 
                 irManager.transmit(frequency, pattern)
-                toast.open("已发射", ToastIcon.SUCCESS)
+                toast.show("已发射", ToastIcon.SUCCESS)
             } else {
-                toast.open("此设备没有红外模块", ToastIcon.FAIL)
+                toast.show("此设备没有红外模块", ToastIcon.FAIL)
             }
         }
     }

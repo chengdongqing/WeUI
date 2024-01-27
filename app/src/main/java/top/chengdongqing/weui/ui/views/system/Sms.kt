@@ -78,7 +78,7 @@ private fun SmsSend() {
     ) {
         if (smsPermissionState.status.isGranted) {
             if (number.isEmpty() || content.isEmpty()) {
-                toast.open("请正确输入")
+                toast.show("请正确输入")
             } else {
                 val intent = Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:$number")).apply {
                     putExtra("sms_body", content)

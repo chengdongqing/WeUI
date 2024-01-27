@@ -17,7 +17,7 @@ fun DialogPage() {
         Column {
             val weDialog = rememberWeDialog()
             WeButton(text = "Dialog 样式一", type = ButtonType.PLAIN) {
-                weDialog.open(
+                weDialog.show(
                     "弹窗标题",
                     "弹窗内容，告知当前状态、信息和解决方法，描述文字尽量控制在三行内",
                     "主操作",
@@ -29,7 +29,7 @@ fun DialogPage() {
 
             val weDialog1 = rememberWeDialog()
             WeButton(text = "Dialog 样式二", type = ButtonType.PLAIN) {
-                weDialog1.open(
+                weDialog1.show(
                     "弹窗内容，告知当前状态、信息和解决方法，描述文字尽量控制在三行内",
                     okText = "知道了",
                     onCancel = null
