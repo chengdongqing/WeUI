@@ -38,7 +38,7 @@ fun WeInput(
     placeholder: String? = null,
     disabled: Boolean = false,
     labelWidth: Dp = 68.dp,
-    textAlign: TextAlign? = null,
+    textAlign: TextAlign = TextAlign.Unspecified,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     onClick: (() -> Unit)? = null,

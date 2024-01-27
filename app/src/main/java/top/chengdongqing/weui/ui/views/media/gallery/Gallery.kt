@@ -9,6 +9,7 @@ import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import android.util.Log
 import android.util.Size
 import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.updateTransition
@@ -70,6 +71,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
+import okio.IOException
 import top.chengdongqing.weui.ui.components.Page
 import top.chengdongqing.weui.ui.components.basic.WeLoadMore
 import top.chengdongqing.weui.ui.theme.LightColor
@@ -114,10 +116,7 @@ fun GalleryPage(galleryViewModel: GalleryViewModel, navController: NavController
         if (loading) {
             WeLoadMore()
         } else {
-            MediasGrid(
-                context,
-                galleryViewModel.mediaItems
-            ) {
+            MediasGrid(galleryViewModel.mediaItems) {
                 navController.navigate("media-preview?index=$it")
             }
         }
@@ -127,10 +126,10 @@ fun GalleryPage(galleryViewModel: GalleryViewModel, navController: NavController
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun MediasGrid(
-    context: Context,
     mediaItems: List<MediaItem>,
     navigateToPreview: (Int) -> Unit
 ) {
+    val context = LocalContext.current
     val gridState = rememberLazyGridState()
     var autoScrollSpeed by remember { mutableFloatStateOf(0f) }
     var selectedIds by remember { mutableStateOf(emptySet<Int>()) }
@@ -165,7 +164,6 @@ private fun MediasGrid(
             val selected by remember { derivedStateOf { selectedIds.contains(index) } }
             MediaThumbnail(
                 item,
-                context,
                 inSelectionMode,
                 selected,
                 Modifier
@@ -199,20 +197,21 @@ private fun MediasGrid(
 }
 
 private fun openMedia(context: Context, imageUri: Uri, isVideo: Boolean) {
-    val intent = Intent(Intent.ACTION_VIEW)
-    intent.setDataAndType(imageUri, "${if (isVideo) "video" else "image"}/*")
-    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    val intent = Intent(Intent.ACTION_VIEW).apply {
+        setDataAndType(imageUri, "${if (isVideo) "video" else "image"}/*")
+    }
     context.startActivity(intent)
 }
 
 @Composable
 fun MediaThumbnail(
     item: MediaItem,
-    context: Context,
     inSelectionMode: Boolean,
     selected: Boolean,
     modifier: Modifier
 ) {
+    val context = LocalContext.current
+
     Box(modifier) {
         produceState<Any?>(initialValue = null, item.uri) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q && !item.isVideo) {
@@ -220,34 +219,36 @@ fun MediaThumbnail(
                 value = item.uri
             } else {
                 value = withContext(Dispatchers.IO) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        // 高版本系统支持加载缩略图展示更快
-                        context.contentResolver.loadThumbnail(
-                            item.uri,
-                            Size(300, 300),
-                            null
-                        )
-                    } else {
-                        // 低版本系统获取视频首帧截图
-                        MediaMetadataRetriever().run {
-                            setDataSource(context, item.uri)
-                            extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)?.toInt()
-                            extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)?.toInt()
-                            getFrameAtTime(
-                                1,
-                                MediaMetadataRetriever.OPTION_CLOSEST_SYNC
+                    try {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                            // 高版本系统直接加载缩略图
+                            context.contentResolver.loadThumbnail(
+                                item.uri,
+                                Size(300, 300),
+                                null
                             )
+                        } else {
+                            // 低版本系统获取视频首帧截图
+                            MediaMetadataRetriever().run {
+                                setDataSource(context, item.uri)
+                                extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)?.toInt()
+                                extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)?.toInt()
+                                getFrameAtTime(1, MediaMetadataRetriever.OPTION_CLOSEST_SYNC)
+                            }
                         }
+                    } catch (e: IOException) {
+                        Log.e("Gallery", "Thumbnail load exception", e)
+                        null
                     }
                 }
             }
         }.value?.let {
             val transition = updateTransition(selected, label = "selected")
             val padding by transition.animateDp(label = "padding") { selected ->
-                if (selected) 6.dp else 0.dp
+                if (selected) 12.dp else 0.dp
             }
             val roundedCornerShape by transition.animateDp(label = "corner") { selected ->
-                if (selected) 6.dp else 0.dp
+                if (selected) 12.dp else 0.dp
             }
 
             AsyncImage(

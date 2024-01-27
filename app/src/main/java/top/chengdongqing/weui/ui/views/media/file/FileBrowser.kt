@@ -2,7 +2,7 @@ package top.chengdongqing.weui.ui.views.media.file
 
 import android.Manifest
 import android.content.Intent
-import android.net.Uri
+import android.os.Build
 import android.os.Environment
 import android.webkit.MimeTypeMap
 import androidx.activity.compose.BackHandler
@@ -40,6 +40,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.FileProvider
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import kotlinx.coroutines.Dispatchers
@@ -70,8 +71,38 @@ fun FileBrowserPage() {
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 private fun FileBrowser(folderPath: String) {
+    // 请求相关权限
+    val permissions = remember {
+        mutableListOf<String>().apply {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                add(Manifest.permission.MANAGE_EXTERNAL_STORAGE)
+            } else {
+                add(Manifest.permission.READ_EXTERNAL_STORAGE)
+                add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                addAll(
+                    listOf(
+                        Manifest.permission.READ_MEDIA_IMAGES,
+                        Manifest.permission.READ_MEDIA_VIDEO,
+                        Manifest.permission.READ_MEDIA_AUDIO
+                    )
+                )
+            }
+        }
+    }
+    val permissionState = rememberMultiplePermissionsState(permissions)
+    LaunchedEffect(Unit) {
+        if (!permissionState.allPermissionsGranted) {
+            permissionState.launchMultiplePermissionRequest()
+        }
+    }
+
+    // 是否加载中
     var loading by remember { mutableStateOf(true) }
+    // 已进入的所有文件夹
     val folders = remember { mutableStateListOf(folderPath) }
+    // 当前文件夹下所有文件/文件夹
     val files by produceState<List<FileItem>>(initialValue = emptyList(), folders.size) {
         if (loading) {
             delay(300)
@@ -85,22 +116,6 @@ private fun FileBrowser(folderPath: String) {
     // 返回时递减文件夹层级
     BackHandler(folders.size > 1) {
         folders.removeAt(folders.lastIndex)
-    }
-
-    // 请求相关权限
-    val permissionState = rememberMultiplePermissionsState(
-        listOf(
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.READ_MEDIA_IMAGES,
-            Manifest.permission.READ_MEDIA_VIDEO,
-            Manifest.permission.READ_MEDIA_AUDIO
-        )
-    )
-    LaunchedEffect(Unit) {
-        if (!permissionState.allPermissionsGranted) {
-            permissionState.launchMultiplePermissionRequest()
-        }
     }
 
     Column {
@@ -131,14 +146,22 @@ private fun FileList(
             }
         } else {
             if (files.isNotEmpty()) {
-                items(files) {
-                    FileListItem(it,
-                        onFolderClick = { folder ->
-                            navigateToFolder(folder.path)
+                items(files) { item ->
+                    FileListItem(
+                        item,
+                        onFolderClick = {
+                            navigateToFolder(item.path)
                         },
-                        onFileClick = { file ->
-                            val intent = Intent(Intent.ACTION_VIEW)
-                            intent.setDataAndType(Uri.parse(file.path), "*/*")
+                        onFileClick = {
+                            val intent = Intent(Intent.ACTION_VIEW).apply {
+                                val uri = FileProvider.getUriForFile(
+                                    context,
+                                    "${context.packageName}.provider",
+                                    File(item.path)
+                                )
+                                setDataAndType(uri, "*/*")
+                                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                            }
                             context.startActivity(intent)
                         }
                     )
@@ -155,15 +178,15 @@ private fun FileList(
 @Composable
 private fun FileListItem(
     file: FileItem,
-    onFolderClick: (FileItem) -> Unit,
-    onFileClick: (FileItem) -> Unit
+    onFolderClick: () -> Unit,
+    onFileClick: () -> Unit
 ) {
     Row(
         modifier = Modifier.clickableWithoutRipple {
             if (file.isDirectory) {
-                onFolderClick(file)
+                onFolderClick()
             } else {
-                onFileClick(file)
+                onFileClick()
             }
         },
         verticalAlignment = Alignment.CenterVertically
