@@ -19,10 +19,9 @@ import top.chengdongqing.weui.ui.components.form.WeTextarea
 @Composable
 fun InputPage() {
     WePage(title = "Input", description = "输入框") {
+        val value = remember { mutableStateMapOf<String, String>() }
+
         Column {
-            val value = remember {
-                mutableStateMapOf<String, String>()
-            }
             WeInput(
                 value = value["account"],
                 label = "账号",

@@ -44,7 +44,7 @@ import java.util.Date
 import java.util.TimeZone
 
 @Composable
-fun CalendarPage() {
+fun CalendarEventsPage() {
     WePage(title = "CalendarEvents", description = "日历事件") {
         Column(
             modifier = Modifier.verticalScroll(rememberScrollState()),
@@ -62,11 +62,9 @@ fun CalendarPage() {
 fun AddCalendarEvent() {
     val context = LocalContext.current
     val calendarPermissionState = rememberPermissionState(Manifest.permission.WRITE_CALENDAR)
+    var title by remember { mutableStateOf("") }
     val toast = rememberWeToast()
 
-    var title by remember {
-        mutableStateOf("")
-    }
     WeInput(
         value = title,
         label = "事件名称",
@@ -74,12 +72,8 @@ fun AddCalendarEvent() {
     ) {
         title = it
     }
-    var date by remember {
-        mutableStateOf<LocalDate?>(null)
-    }
-    var visible by remember {
-        mutableStateOf(false)
-    }
+    var date by remember { mutableStateOf<LocalDate?>(null) }
+    var visible by remember { mutableStateOf(false) }
     WeInput(
         value = date?.toString(),
         label = "事件日期",
@@ -125,15 +119,10 @@ fun AddCalendarEvent() {
 @Composable
 fun CalendarEvents() {
     val context = LocalContext.current
-    val calendarPermissionState = rememberPermissionState(Manifest.permission.READ_CALENDAR)
-
     val coroutineScope = rememberCoroutineScope()
-    var loading by remember {
-        mutableStateOf(false)
-    }
-    val events = remember {
-        mutableListOf<Pair<String, String>>()
-    }
+    val calendarPermissionState = rememberPermissionState(Manifest.permission.READ_CALENDAR)
+    var loading by remember { mutableStateOf(false) }
+    val events = remember { mutableListOf<Pair<String, String>>() }
 
     WeButton(text = "读取日历事件", loading = loading) {
         if (calendarPermissionState.status.isGranted) {

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -30,9 +31,7 @@ fun ScreenPage() {
     WePage(title = "Screen", description = "屏幕") {
         val context = LocalContext.current
         val window = (context as Activity).window
-        var brightness by remember {
-            mutableFloatStateOf(getScreenBrightness(context))
-        }
+        var brightness by rememberBrightness(window)
 
         Column(
             modifier = Modifier.padding(horizontal = 12.dp),
@@ -46,44 +45,58 @@ fun ScreenPage() {
                 }
             )
             Spacer(modifier = Modifier.height(40.dp))
-
-            var keepScreenOn by remember {
-                mutableStateOf(false)
-            }
-            WeButton(text = "${if (keepScreenOn) "取消" else "保持"}屏幕常亮") {
-                keepScreenOn = !keepScreenOn
-                if (keepScreenOn) {
-                    window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-                } else {
-                    window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-                }
-            }
+            KeepScreenOn(window)
             Spacer(modifier = Modifier.height(20.dp))
-
-            var screenshotDisabled by remember {
-                mutableStateOf(false)
-            }
-            WeButton(
-                text = "${if (screenshotDisabled) "取消" else "开启"}禁止截屏",
-                type = ButtonType.PLAIN
-            ) {
-                screenshotDisabled = !screenshotDisabled
-                if (screenshotDisabled) {
-                    window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
-                } else {
-                    window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
-                }
-            }
-        }
-
-        DisposableEffect(Unit) {
-            val initialValue = brightness
-
-            onDispose {
-                setScreenBrightness(window, initialValue)
-            }
+            DisabledScreenshot(window)
         }
     }
+}
+
+@Composable
+private fun KeepScreenOn(window: Window) {
+    var value by remember { mutableStateOf(false) }
+
+    WeButton(text = "${if (value) "取消" else "保持"}屏幕常亮") {
+        value = !value
+        if (value) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        } else {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        }
+    }
+}
+
+@Composable
+private fun DisabledScreenshot(window: Window) {
+    var value by remember { mutableStateOf(false) }
+
+    WeButton(
+        text = "${if (value) "取消" else "开启"}禁止截屏",
+        type = ButtonType.PLAIN
+    ) {
+        value = !value
+        if (value) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+        } else {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
+        }
+    }
+}
+
+@Composable
+private fun rememberBrightness(window: Window): MutableState<Float> {
+    val context = LocalContext.current
+    val brightness = remember { mutableFloatStateOf(getScreenBrightness(context)) }
+
+    DisposableEffect(Unit) {
+        val initialValue = brightness.floatValue
+
+        onDispose {
+            setScreenBrightness(window, initialValue)
+        }
+    }
+
+    return brightness
 }
 
 private fun getScreenBrightness(context: Context): Float {

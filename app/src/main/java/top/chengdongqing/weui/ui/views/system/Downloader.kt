@@ -31,15 +31,16 @@ import top.chengdongqing.weui.ui.components.form.WeTextarea
 fun DownloaderPage() {
     WePage(title = "Downloader", description = "系统下载") {
         val context = LocalContext.current
-        var name by remember {
-            mutableStateOf("su7.jpg")
-        }
-        var url by remember {
-            mutableStateOf("https://s1.xiaomiev.com/activity-outer-assets/web/home/section1.jpg")
-        }
+        var name by remember { mutableStateOf("su7.jpg") }
+        var url by remember { mutableStateOf("https://s1.xiaomiev.com/activity-outer-assets/web/home/section1.jpg") }
+
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            WeInput(value = name, label = "文件名称", placeholder = "请输入") { name = it }
-            WeTextarea(value = url, label = "下载地址", placeholder = "请输入") { url = it }
+            WeInput(value = name, label = "文件名称", placeholder = "请输入") {
+                name = it
+            }
+            WeTextarea(value = url, label = "下载地址", placeholder = "请输入") {
+                url = it
+            }
             Spacer(modifier = Modifier.height(20.dp))
             WeButton(text = "下载") {
                 download(context, name, url)

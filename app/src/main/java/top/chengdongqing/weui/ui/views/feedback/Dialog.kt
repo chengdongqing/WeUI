@@ -14,22 +14,20 @@ import top.chengdongqing.weui.ui.components.form.WeButton
 @Composable
 fun DialogPage() {
     WePage(title = "Dialog", description = "对话框") {
+        val dialog = rememberWeDialog()
+
         Column {
-            val weDialog = rememberWeDialog()
             WeButton(text = "Dialog 样式一", type = ButtonType.PLAIN) {
-                weDialog.show(
+                dialog.show(
                     "弹窗标题",
                     "弹窗内容，告知当前状态、信息和解决方法，描述文字尽量控制在三行内",
                     "主操作",
                     "辅助操作"
                 )
             }
-
             Spacer(Modifier.height(16.dp))
-
-            val weDialog1 = rememberWeDialog()
             WeButton(text = "Dialog 样式二", type = ButtonType.PLAIN) {
-                weDialog1.show(
+                dialog.show(
                     "弹窗内容，告知当前状态、信息和解决方法，描述文字尽量控制在三行内",
                     okText = "知道了",
                     onCancel = null

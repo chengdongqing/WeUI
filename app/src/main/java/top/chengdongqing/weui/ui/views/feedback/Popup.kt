@@ -20,28 +20,23 @@ import top.chengdongqing.weui.ui.components.form.WeButton
 @Composable
 fun PopupPage() {
     WePage(title = "Popup", description = "弹出框") {
-        var visible by remember {
-            mutableStateOf(false)
-        }
-        var dragClosable by remember {
-            mutableStateOf(false)
-        }
+        var visible by remember { mutableStateOf(false) }
+        var swipeClosable by remember { mutableStateOf(false) }
 
-        WePopup(visible, dragClosable = dragClosable, onClose = {
+        WePopup(visible, swipeClosable = swipeClosable, onClose = {
             visible = false
         }, title = "标题") {
             Text(text = "内容")
             Spacer(modifier = Modifier.height(200.dp))
         }
-
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             WeButton(text = "样式一", type = ButtonType.PLAIN) {
-                dragClosable = false
+                swipeClosable = false
                 visible = true
             }
             Spacer(modifier = Modifier.height(20.dp))
             WeButton(text = "样式二", type = ButtonType.PLAIN) {
-                dragClosable = true
+                swipeClosable = true
                 visible = true
             }
         }

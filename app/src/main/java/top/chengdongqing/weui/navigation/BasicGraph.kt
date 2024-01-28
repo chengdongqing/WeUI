@@ -3,6 +3,7 @@ package top.chengdongqing.weui.navigation
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import top.chengdongqing.weui.ui.views.basic.BadgePage
+import top.chengdongqing.weui.ui.views.basic.CalendarPage
 import top.chengdongqing.weui.ui.views.basic.LoadMorePage
 import top.chengdongqing.weui.ui.views.basic.LoadingPage
 import top.chengdongqing.weui.ui.views.basic.ProgressPage
@@ -31,5 +32,8 @@ fun NavGraphBuilder.basicGraph() {
     }
     composable("scroll-view") {
         ScrollViewPage()
+    }
+    composable("calendar") {
+        CalendarPage()
     }
 }

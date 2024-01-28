@@ -38,10 +38,8 @@ fun ButtonPage() {
             Spacer(Modifier.height(16.dp))
             WeButton(text = "警示操作", type = ButtonType.DANGER, loading = true)
             Spacer(Modifier.height(32.dp))
-
             WeButton(text = "按钮禁用", disabled = true)
             Spacer(Modifier.height(32.dp))
-
             WeButton(text = "medium 按钮", size = ButtonSize.MEDIUM)
             Spacer(Modifier.height(16.dp))
             WeButton(text = "medium 按钮", size = ButtonSize.MEDIUM, type = ButtonType.PLAIN)
@@ -55,7 +53,6 @@ fun ButtonPage() {
                 Spacer(Modifier.width(12.dp))
                 WeButton(text = "按钮", size = ButtonSize.SMALL, type = ButtonType.DANGER)
             }
-
             Spacer(Modifier.height(100.dp))
         }
     }

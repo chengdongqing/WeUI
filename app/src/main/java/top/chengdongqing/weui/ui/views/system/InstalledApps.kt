@@ -58,107 +58,75 @@ import java.io.File
 fun InstalledAppsPage() {
     WePage(title = "InstalledApps", description = "已安装的应用") {
         val context = LocalContext.current
-        val packageManager = context.packageManager
-        var apps by remember {
-            mutableStateOf<List<AppItem>>(emptyList())
-        }
-        var loading by remember {
-            mutableStateOf(true)
-        }
-
-        LaunchedEffect(Unit) {
-            delay(300)
-            val intent = Intent(Intent.ACTION_MAIN, null).apply {
-                addCategory(Intent.CATEGORY_LAUNCHER)
-            }
-            withContext(Dispatchers.IO) {
-                apps = packageManager.queryIntentActivities(intent, 0).map { resolveInfo ->
-                    val name = resolveInfo.loadLabel(packageManager).toString()
-                    val icon = resolveInfo.loadIcon(packageManager).toBitmap().asImageBitmap()
-                    val packageName = resolveInfo.activityInfo.packageName
-                    val packageInfo = packageManager.getPackageInfo(packageName, 0)
-                    val versionName = packageInfo.versionName
-                    val lastModified = formatTime(packageInfo.lastUpdateTime)
-                    val apkPath = packageInfo.applicationInfo.sourceDir
-                    val apkSize = formatFileSize(apkPath)
-                    AppItem(
-                        name,
-                        icon,
-                        packageName,
-                        versionName,
-                        lastModified,
-                        apkPath,
-                        apkSize
-                    )
-                }.sortedByDescending { it.lastModified }
-                loading = false
-            }
-        }
+        val apps = rememberInstalledApps()
 
         LazyColumn(verticalArrangement = Arrangement.spacedBy(20.dp)) {
             item {
-                if (!loading) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceAround
-                    ) {
-                        WeButton(
-                            text = "打开地图",
-                            type = ButtonType.PLAIN,
-                            size = ButtonSize.MEDIUM,
-                            width = 140.dp
-                        ) {
-                            val latitude = 37.7749
-                            val longitude = -122.4194
-                            val locationUri = Uri.parse("geo:$latitude,$longitude")
-                            val intent = Intent(Intent.ACTION_VIEW, locationUri)
-                            if (intent.resolveActivity(context.packageManager) != null) {
-                                context.startActivity(intent)
-                            } else {
-                                Toast.makeText(context, "未安装地图应用", Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                        WeButton(
-                            text = "打开浏览器",
-                            type = ButtonType.PLAIN,
-                            size = ButtonSize.MEDIUM,
-                            width = 140.dp
-                        ) {
-                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://weui.io"))
-                            context.startActivity(intent)
-                        }
-                    }
-                    Spacer(modifier = Modifier.height(20.dp))
+                if (apps.isNotEmpty()) {
+                    ActionsRow(context)
                 } else {
                     WeLoadMore()
                 }
+                Spacer(modifier = Modifier.height(20.dp))
             }
-            items(apps) {
-                AppItem(it)
+            items(apps) { app ->
+                AppListItem(app, context)
             }
+        }
+    }
+}
+
+@Composable
+private fun ActionsRow(context: Context) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceAround
+    ) {
+        WeButton(
+            text = "打开地图",
+            type = ButtonType.PLAIN,
+            size = ButtonSize.MEDIUM,
+            width = 140.dp
+        ) {
+            val latitude = 37.7749
+            val longitude = -122.4194
+            val locationUri = Uri.parse("geo:$latitude,$longitude")
+            val intent = Intent(Intent.ACTION_VIEW, locationUri)
+            if (intent.resolveActivity(context.packageManager) != null) {
+                context.startActivity(intent)
+            } else {
+                Toast.makeText(context, "未安装地图应用", Toast.LENGTH_SHORT).show()
+            }
+        }
+        WeButton(
+            text = "打开浏览器",
+            type = ButtonType.PLAIN,
+            size = ButtonSize.MEDIUM,
+            width = 140.dp
+        ) {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://weui.io"))
+            context.startActivity(intent)
         }
     }
 }
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun AppItem(appItem: AppItem) {
-    val context = LocalContext.current
-
+private fun AppListItem(app: App, context: Context) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Column(
             modifier = Modifier.weight(1f),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                bitmap = appItem.icon,
+                bitmap = app.icon,
                 contentDescription = null,
                 modifier = Modifier.size(56.dp),
                 contentScale = ContentScale.Crop
             )
-            Text(appItem.name, textAlign = TextAlign.Center)
+            Text(app.name, textAlign = TextAlign.Center)
             Text(
-                "v${appItem.versionName}",
+                "v${app.versionName}",
                 color = FontColo1,
                 fontSize = 12.sp,
                 textAlign = TextAlign.Center
@@ -166,12 +134,11 @@ private fun AppItem(appItem: AppItem) {
         }
         Spacer(modifier = Modifier.width(20.dp))
         Column(modifier = Modifier.weight(2f)) {
-            val content = buildAnnotatedString {
-                appendLine("包名: ${appItem.packageName}")
-                appendLine("最后更新: ${appItem.lastModified}")
-                append("APK大小: ${appItem.apkSize}")
-            }
-            Text(content, color = FontColor, fontSize = 14.sp)
+            Text(buildAnnotatedString {
+                appendLine("包名: ${app.packageName}")
+                appendLine("最后更新: ${app.lastModified}")
+                append("APK大小: ${app.apkSize}")
+            }, color = FontColor, fontSize = 14.sp)
             Spacer(modifier = Modifier.height(10.dp))
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
@@ -179,7 +146,7 @@ private fun AppItem(appItem: AppItem) {
             ) {
                 WeButton(text = "打开APP", size = ButtonSize.SMALL) {
                     val intent = context.packageManager
-                        .getLaunchIntentForPackage(appItem.packageName)
+                        .getLaunchIntentForPackage(app.packageName)
                     context.startActivity(intent)
                 }
                 WeButton(
@@ -189,8 +156,8 @@ private fun AppItem(appItem: AppItem) {
                 ) {
                     copyFileToPublicDirectory(
                         context,
-                        appItem.apkPath,
-                        "${appItem.name}-v${appItem.versionName}.apk"
+                        app.apkPath,
+                        "${app.name}-v${app.versionName}.apk"
                     )
                 }
                 WeButton(
@@ -198,10 +165,7 @@ private fun AppItem(appItem: AppItem) {
                     type = ButtonType.PLAIN,
                     size = ButtonSize.SMALL
                 ) {
-                    installApk(
-                        context,
-                        appItem.apkPath
-                    )
+                    installApk(context, app.apkPath)
                 }
             }
         }
@@ -212,14 +176,14 @@ fun installApk(context: Context, apkPath: String) {
     // 复制到可访问的临时文件
     val tempFile = File.createTempFile("app_", ".apk", context.externalCacheDir)
     File(apkPath).copyTo(tempFile, true)
-    // 创建公共文件路径
+    // 创建公共文件访问路径
     val uri = FileProvider.getUriForFile(
         context,
         "${context.packageName}.provider",
         tempFile
     )
-    val intent = Intent(Intent.ACTION_VIEW, uri).apply {
-        setType("application/vnd.android.package-archive")
+    val intent = Intent(Intent.ACTION_VIEW).apply {
+        setDataAndType(uri, "application/vnd.android.package-archive")
         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
     }
     context.startActivity(intent)
@@ -273,7 +237,46 @@ private fun copyFileToPublicDirectory(
     }
 }
 
-private data class AppItem(
+@Composable
+private fun rememberInstalledApps(): List<App> {
+    val context = LocalContext.current
+    val packageManager = context.packageManager
+    var apps by remember { mutableStateOf<List<App>>(emptyList()) }
+
+    LaunchedEffect(Unit) {
+        delay(300)
+        val intent = Intent(Intent.ACTION_MAIN, null).apply {
+            addCategory(Intent.CATEGORY_LAUNCHER)
+        }
+        withContext(Dispatchers.IO) {
+            apps = packageManager.queryIntentActivities(intent, 0).map { resolveInfo ->
+                val name = resolveInfo.loadLabel(packageManager).toString()
+                val icon = resolveInfo.loadIcon(packageManager).toBitmap().asImageBitmap()
+                val packageName = resolveInfo.activityInfo.packageName
+                val packageInfo = packageManager.getPackageInfo(packageName, 0)
+                val versionName = packageInfo.versionName
+                val lastModified = formatTime(packageInfo.lastUpdateTime)
+                val apkPath = packageInfo.applicationInfo.sourceDir
+                val apkSize = formatFileSize(apkPath)
+                App(
+                    name,
+                    icon,
+                    packageName,
+                    versionName,
+                    lastModified,
+                    apkPath,
+                    apkSize
+                )
+            }.sortedByDescending {
+                it.lastModified
+            }
+        }
+    }
+
+    return apps
+}
+
+private data class App(
     val name: String,
     val icon: ImageBitmap,
     val packageName: String,

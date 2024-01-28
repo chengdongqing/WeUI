@@ -28,62 +28,77 @@ import top.chengdongqing.weui.utils.SetupStatusBarStyle
 @Composable
 fun SystemStatusPage() {
     WePage(title = "SystemStatus", description = "系统状态，动态更新") {
-        val context = LocalContext.current
-        val connectivityManager = remember {
-            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        }
-        var networkType by remember {
-            mutableStateOf(getNetworkType(connectivityManager))
-        }
-        var vpnConnected by remember {
-            mutableStateOf(isVpnConnected(connectivityManager))
-        }
-
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             KeyValueCard {
                 item {
-                    KeyValueRow("网络类型", networkType)
-                    KeyValueRow("VPN", if (vpnConnected) "已启用" else "未启用")
+                    NetworkInfoRows()
                     KeyValueRow("系统主题", if (isSystemInDarkTheme()) "深色" else "浅色")
                 }
             }
             Spacer(modifier = Modifier.height(40.dp))
-
-            var isDark by remember {
-                mutableStateOf(true)
-            }
-            SetupStatusBarStyle(isDark)
-            WeButton(text = "切换状态栏样式", type = ButtonType.PLAIN) {
-                isDark = !isDark
-            }
-        }
-
-        DisposableEffect(Unit) {
-            val callbackHandler = object : ConnectivityManager.NetworkCallback() {
-                override fun onCapabilitiesChanged(
-                    network: Network,
-                    networkCapabilities: NetworkCapabilities
-                ) {
-                    getNetworkStatus()
-                }
-
-                override fun onLost(network: Network) {
-                    getNetworkStatus()
-                }
-
-                private fun getNetworkStatus() {
-                    networkType = getNetworkType(connectivityManager)
-                    vpnConnected = isVpnConnected(connectivityManager)
-                }
-            }
-            connectivityManager.registerDefaultNetworkCallback(callbackHandler)
-
-            onDispose {
-                connectivityManager.unregisterNetworkCallback(callbackHandler)
-            }
+            StatusBarAction()
         }
     }
 }
+
+@Composable
+private fun NetworkInfoRows() {
+    val network = observeNetwork()
+
+    KeyValueRow("网络类型", network.type)
+    KeyValueRow("VPN", if (network.isVpnConnected) "已启用" else "未启用")
+}
+
+@Composable
+private fun StatusBarAction() {
+    var isDark by remember { mutableStateOf(true) }
+
+    SetupStatusBarStyle(isDark)
+    WeButton(text = "切换状态栏样式", type = ButtonType.PLAIN) {
+        isDark = !isDark
+    }
+}
+
+@Composable
+private fun observeNetwork(): NetworkInfo {
+    val context = LocalContext.current
+    val connectivityManager =
+        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    var networkType by remember { mutableStateOf(getNetworkType(connectivityManager)) }
+    var isVpnConnected by remember { mutableStateOf(isVpnConnected(connectivityManager)) }
+
+    DisposableEffect(Unit) {
+        val callbackHandler = object : ConnectivityManager.NetworkCallback() {
+            override fun onCapabilitiesChanged(
+                network: Network,
+                networkCapabilities: NetworkCapabilities
+            ) {
+                getNetworkStatus()
+            }
+
+            override fun onLost(network: Network) {
+                getNetworkStatus()
+            }
+
+            private fun getNetworkStatus() {
+                networkType = getNetworkType(connectivityManager)
+                isVpnConnected = isVpnConnected(connectivityManager)
+            }
+        }
+        connectivityManager.registerDefaultNetworkCallback(callbackHandler)
+
+        onDispose {
+            connectivityManager.unregisterNetworkCallback(callbackHandler)
+        }
+    }
+
+    return NetworkInfo(networkType, isVpnConnected)
+}
+
+private data class NetworkInfo(
+    val type: String,
+    val isVpnConnected: Boolean
+)
 
 private fun getNetworkType(connectivityManager: ConnectivityManager): String {
     val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)

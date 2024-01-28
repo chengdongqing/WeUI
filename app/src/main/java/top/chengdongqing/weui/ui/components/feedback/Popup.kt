@@ -53,7 +53,7 @@ import top.chengdongqing.weui.utils.clickableWithoutRipple
  * @param enterTransition 弹出时的过渡动画
  * @param exitTransition 收起时的过渡动画
  * @param padding 内边距
- * @param dragClosable 是否可拖拽关闭
+ * @param swipeClosable 是否可滑动关闭
  * @param onClose 关闭事件
  * @param content 内容
  */
@@ -74,7 +74,7 @@ fun WePopup(
         targetOffsetY = { it }
     ),
     padding: PaddingValues = PaddingValues(12.dp),
-    dragClosable: Boolean = false,
+    swipeClosable: Boolean = false,
     onClose: () -> Unit,
     content: @Composable () -> Unit
 ) {
@@ -136,7 +136,7 @@ fun WePopup(
                             }
                     ) {
                         Column {
-                            if (dragClosable) {
+                            if (swipeClosable) {
                                 Box(
                                     modifier = Modifier
                                         .fillMaxWidth()

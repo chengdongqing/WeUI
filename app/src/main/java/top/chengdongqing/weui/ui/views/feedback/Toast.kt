@@ -20,8 +20,8 @@ import kotlin.time.Duration.Companion.milliseconds
 @Composable
 fun ToastPage() {
     WePage(title = "Toast", description = "弹出式提示") {
-        val toast = rememberWeToast()
         val coroutineScope = rememberCoroutineScope()
+        val toast = rememberWeToast()
 
         Column {
             WeButton(text = "成功提示", type = ButtonType.PLAIN) {

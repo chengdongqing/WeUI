@@ -1,5 +1,6 @@
 package top.chengdongqing.weui.ui.views.system
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -67,13 +68,10 @@ fun ContactsPage() {
 @Composable
 private fun PhoneCall() {
     val context = LocalContext.current
-    val callPermissionState =
-        rememberPermissionState(android.Manifest.permission.CALL_PHONE)
+    val callPermissionState = rememberPermissionState(Manifest.permission.CALL_PHONE)
+    var number by remember { mutableStateOf("") }
     val toast = rememberWeToast()
 
-    var number by remember {
-        mutableStateOf("")
-    }
     WeInput(
         value = number,
         placeholder = "请输入号码",
@@ -122,16 +120,10 @@ private fun PhoneCall() {
 @Composable
 private fun PhoneContacts() {
     val context = LocalContext.current
-    val contactsPermissionState =
-        rememberPermissionState(android.Manifest.permission.READ_CONTACTS)
-
     val coroutineScope = rememberCoroutineScope()
-    var loading by remember {
-        mutableStateOf(false)
-    }
-    val contacts = remember {
-        mutableStateListOf<Pair<String, String>>()
-    }
+    val contactsPermissionState = rememberPermissionState(Manifest.permission.READ_CONTACTS)
+    var loading by remember { mutableStateOf(false) }
+    val contacts = remember { mutableStateListOf<Pair<String, String>>() }
 
     WeButton(text = "读取通讯录", loading = loading) {
         if (contactsPermissionState.status.isGranted) {
@@ -192,16 +184,10 @@ private suspend fun readContacts(context: Context): (List<Pair<String, List<Stri
 @Composable
 fun PhoneCallLogs() {
     val context = LocalContext.current
-    val callLogPermissionState =
-        rememberPermissionState(android.Manifest.permission.READ_CALL_LOG)
-
     val coroutineScope = rememberCoroutineScope()
-    var loading by remember {
-        mutableStateOf(false)
-    }
-    val logs = remember {
-        mutableStateListOf<Pair<String, String>>()
-    }
+    val callLogPermissionState = rememberPermissionState(Manifest.permission.READ_CALL_LOG)
+    var loading by remember { mutableStateOf(false) }
+    val logs = remember { mutableStateListOf<Pair<String, String>>() }
 
     WeButton(text = "读取通话记录", type = ButtonType.PLAIN, loading = loading) {
         if (callLogPermissionState.status.isGranted) {

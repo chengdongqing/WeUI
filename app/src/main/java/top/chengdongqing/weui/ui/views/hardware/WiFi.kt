@@ -56,17 +56,14 @@ fun WiFiPage() {
     WePage(title = "Wi-Fi", description = "无线局域网") {
         val context = LocalContext.current
         val wifiManager = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
-        val permissionState =
-            rememberPermissionState(permission = Manifest.permission.ACCESS_FINE_LOCATION)
-        var wifiList by remember {
-            mutableStateOf<List<ScanResult>>(emptyList())
-        }
+        var wifiList by remember { mutableStateOf<List<WiFi>>(emptyList()) }
+        val permissionState = rememberPermissionState(Manifest.permission.ACCESS_FINE_LOCATION)
 
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             WeButton(text = "扫描Wi-Fi") {
                 if (permissionState.status.isGranted) {
                     if (wifiManager.isWifiEnabled) {
-                        wifiList = wifiManager.scanResults.sortedByDescending { it.level }
+                        wifiList = buildWiFiList(wifiManager.scanResults)
                     } else {
                         Toast.makeText(context, "Wi-Fi未打开", Toast.LENGTH_SHORT).show()
                     }
@@ -75,28 +72,33 @@ fun WiFiPage() {
                 }
             }
             Spacer(modifier = Modifier.height(40.dp))
-            if (wifiList.isNotEmpty()) {
-                LazyColumn(
-                    modifier = Modifier
-                        .background(Color.White, RoundedCornerShape(12.dp))
-                        .padding(horizontal = 12.dp)
-                ) {
-                    itemsIndexed(wifiList) { index, wifi ->
-                        WifiItem(wifi)
-                        if (index < wifiList.lastIndex) {
-                            WeDivider()
-                        }
-                    }
-                }
-            } else {
-                WeLoadMore(type = LoadMoreType.ALL_LOADED)
-            }
+            WiFiList(wifiList)
         }
     }
 }
 
 @Composable
-private fun WifiItem(wifi: ScanResult) {
+private fun WiFiList(wifiList: List<WiFi>) {
+    if (wifiList.isNotEmpty()) {
+        LazyColumn(
+            modifier = Modifier
+                .background(Color.White, RoundedCornerShape(12.dp))
+                .padding(horizontal = 12.dp)
+        ) {
+            itemsIndexed(wifiList) { index, wifi ->
+                WiFiListItem(wifi)
+                if (index < wifiList.lastIndex) {
+                    WeDivider()
+                }
+            }
+        }
+    } else {
+        WeLoadMore(type = LoadMoreType.ALL_LOADED)
+    }
+}
+
+@Composable
+private fun WiFiListItem(wifi: WiFi) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -105,10 +107,10 @@ private fun WifiItem(wifi: ScanResult) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(text = getSSID(wifi))
+            Text(text = wifi.name)
             Spacer(modifier = Modifier.width(4.dp))
             Text(
-                text = determineWifiBand(wifi.frequency),
+                text = wifi.band,
                 color = FontColo1,
                 fontSize = 10.sp,
                 modifier = Modifier
@@ -117,7 +119,7 @@ private fun WifiItem(wifi: ScanResult) {
             )
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
-            if (isWifiSecure(wifi.capabilities)) {
+            if (wifi.secure) {
                 Icon(
                     imageVector = Icons.Filled.Lock,
                     contentDescription = "加密",
@@ -127,13 +129,32 @@ private fun WifiItem(wifi: ScanResult) {
             }
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = "${calculateSignalLevel(wifi.level, 100)}%",
+                text = wifi.level,
                 color = FontColor,
                 fontSize = 14.sp
             )
         }
     }
 }
+
+private fun buildWiFiList(scanResultList: List<ScanResult>): List<WiFi> {
+    return scanResultList.sortedByDescending { it.level }
+        .map { item ->
+            WiFi(
+                name = getSSID(item),
+                band = determineWifiBand(item.frequency),
+                level = "${calculateSignalLevel(item.level)}%",
+                secure = isWifiSecure(item.capabilities)
+            )
+        }
+}
+
+private data class WiFi(
+    val name: String,
+    val band: String,
+    val level: String,
+    val secure: Boolean
+)
 
 private fun getSSID(wifi: ScanResult): String {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -153,7 +174,7 @@ private fun determineWifiBand(frequency: Int): String {
     }
 }
 
-private fun calculateSignalLevel(rssi: Int, numLevels: Int = 5): Int {
+private fun calculateSignalLevel(rssi: Int, numLevels: Int = 100): Int {
     val minRssi = -100
     val maxRssi = -55
     if (rssi <= minRssi) {

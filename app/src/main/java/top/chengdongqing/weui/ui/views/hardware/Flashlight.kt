@@ -14,7 +14,6 @@ fun FlashlightPage() {
     WePage(title = "Flashlight", description = "闪光灯") {
         val context = LocalContext.current
         val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
-
         val isFlashOn = remember { mutableStateOf(false) }
 
         WeSwitch(isFlashOn.value) { checked ->

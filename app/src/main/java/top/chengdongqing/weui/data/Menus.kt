@@ -14,7 +14,8 @@ val menus = listOf(
             MenuItem("Progress", "progress"),
             MenuItem("Steps", "steps"),
             MenuItem("Swiper", "swiper"),
-            MenuItem("ScrollView", "scroll-view")
+            MenuItem("ScrollView", "scroll-view"),
+            MenuItem("Calendar", "calendar")
         )
     ),
     MenuGroup(
@@ -61,7 +62,7 @@ val menus = listOf(
         listOf(
             MenuItem("Contacts", "contacts"),
             MenuItem("Clipboard", "clipboard"),
-            MenuItem("CalendarEvents", "calendar"),
+            MenuItem("CalendarEvents", "calendar-events"),
             MenuItem("DeviceInfo", "device-info"),
             MenuItem("Downloader", "downloader"),
             MenuItem("Database", "database"),

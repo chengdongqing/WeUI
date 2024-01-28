@@ -13,7 +13,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -30,16 +29,13 @@ import top.chengdongqing.weui.ui.components.form.WeButton
 import top.chengdongqing.weui.ui.components.form.WeInput
 import top.chengdongqing.weui.utils.formatFloat
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun KeyboardPage() {
     WePage(title = "Keyboard", description = "键盘") {
         val keyboardController = LocalSoftwareKeyboardController.current
-        val focusRequester = remember {
-            FocusRequester()
-        }
         val keyboardHeight = rememberKeyboardHeight()
 
+        val focusRequester = remember { FocusRequester() }
         LaunchedEffect(Unit) {
             focusRequester.requestFocus()
         }
@@ -62,33 +58,29 @@ fun KeyboardPage() {
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun rememberKeyboardHeight(): Dp {
-    val rootView = LocalView.current
+    val view = LocalView.current
     val density = LocalDensity.current
     val keyboardController = LocalSoftwareKeyboardController.current
-
-    var height by remember {
-        mutableStateOf(0.dp)
-    }
+    var height by remember { mutableStateOf(0.dp) }
 
     DisposableEffect(keyboardController) {
         val listener = ViewTreeObserver.OnGlobalLayoutListener {
             val rect = Rect()
-            rootView.getWindowVisibleDisplayFrame(rect)
-            val windowInsets = ViewCompat.getRootWindowInsets(rootView)
+            view.getWindowVisibleDisplayFrame(rect)
+            val windowInsets = ViewCompat.getRootWindowInsets(view)
             val bottomInset =
                 windowInsets?.getInsets(WindowInsetsCompat.Type.systemBars())?.bottom ?: 0
-            val keyboardHeight = rootView.height - rect.bottom - bottomInset
+            val keyboardHeight = view.height - rect.bottom - bottomInset
             height = density.run {
                 keyboardHeight.toDp()
             }
         }
-        rootView.viewTreeObserver.addOnGlobalLayoutListener(listener)
+        view.viewTreeObserver.addOnGlobalLayoutListener(listener)
 
         onDispose {
-            rootView.viewTreeObserver.removeOnGlobalLayoutListener(listener)
+            view.viewTreeObserver.removeOnGlobalLayoutListener(listener)
         }
     }
 

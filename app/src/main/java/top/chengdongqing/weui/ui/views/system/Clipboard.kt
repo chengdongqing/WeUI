@@ -26,12 +26,12 @@ import top.chengdongqing.weui.ui.components.form.WeTextarea
 @Composable
 fun ClipboardPage() {
     WePage(title = "Clipboard", description = "剪贴板") {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            var content by remember { mutableStateOf("") }
-            val context = LocalContext.current
-            val dialog = rememberWeDialog()
-            val toast = rememberWeToast()
+        var content by remember { mutableStateOf("") }
+        val context = LocalContext.current
+        val dialog = rememberWeDialog()
+        val toast = rememberWeToast()
 
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
             WeTextarea(content, placeholder = "请输入内容", max = 200, topBorder = true) {
                 content = it
             }

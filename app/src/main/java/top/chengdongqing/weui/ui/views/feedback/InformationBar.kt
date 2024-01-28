@@ -20,9 +20,7 @@ import top.chengdongqing.weui.ui.components.form.WeButton
 fun InformationBarPage() {
     WePage(title = "Information Bar", description = "信息提示条") {
         Column(horizontalAlignment = Alignment.End) {
-            val visible = remember {
-                mutableStateOf(true)
-            }
+            val visible = remember { mutableStateOf(true) }
             WeInformationBar(
                 visible = visible.value,
                 content = "成功提示 success",

@@ -25,12 +25,8 @@ import top.chengdongqing.weui.ui.components.form.WeSlider
 @Composable
 fun SliderPage() {
     WePage(title = "Slider", description = "滑块", backgroundColor = Color.White) {
-        var value by remember {
-            mutableIntStateOf(0)
-        }
-        var step by remember {
-            mutableIntStateOf(1)
-        }
+        var value by remember { mutableIntStateOf(0) }
+        var step by remember { mutableIntStateOf(1) }
 
         Column(
             modifier = Modifier.padding(horizontal = 12.dp),

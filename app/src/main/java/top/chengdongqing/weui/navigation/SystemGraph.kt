@@ -3,7 +3,7 @@ package top.chengdongqing.weui.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import top.chengdongqing.weui.ui.views.system.CalendarPage
+import top.chengdongqing.weui.ui.views.system.CalendarEventsPage
 import top.chengdongqing.weui.ui.views.system.ClipboardPage
 import top.chengdongqing.weui.ui.views.system.ContactsPage
 import top.chengdongqing.weui.ui.views.system.DeviceInfoPage
@@ -48,8 +48,8 @@ fun NavGraphBuilder.systemGraph(navController: NavController) {
     composable("keyboard") {
         KeyboardPage()
     }
-    composable("calendar") {
-        CalendarPage()
+    composable("calendar-events") {
+        CalendarEventsPage()
     }
     composable("notification") {
         NotificationPage()

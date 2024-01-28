@@ -1,5 +1,6 @@
 package top.chengdongqing.weui.ui.views.system
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -50,16 +51,10 @@ fun SmsPage() {
 @Composable
 private fun SmsSend() {
     val context = LocalContext.current
-    val smsPermissionState =
-        rememberPermissionState(android.Manifest.permission.SEND_SMS)
+    val smsPermissionState = rememberPermissionState(Manifest.permission.SEND_SMS)
+    var number by remember { mutableStateOf("") }
+    var content by remember { mutableStateOf("") }
     val toast = rememberWeToast()
-
-    var number by remember {
-        mutableStateOf("")
-    }
-    var content by remember {
-        mutableStateOf("")
-    }
 
     WeInput(
         value = number,
@@ -72,10 +67,7 @@ private fun SmsSend() {
         content = it
     }
     Spacer(modifier = Modifier.height(20.dp))
-    WeButton(
-        text = "发送短信",
-        type = ButtonType.PLAIN
-    ) {
+    WeButton(text = "发送短信", type = ButtonType.PLAIN) {
         if (smsPermissionState.status.isGranted) {
             if (number.isEmpty() || content.isEmpty()) {
                 toast.show("请正确输入")
@@ -95,16 +87,10 @@ private fun SmsSend() {
 @Composable
 private fun SmsMessages() {
     val context = LocalContext.current
-    val readSmsPermissionState =
-        rememberPermissionState(android.Manifest.permission.READ_SMS)
-
     val coroutineScope = rememberCoroutineScope()
-    var loading by remember {
-        mutableStateOf(false)
-    }
-    val messages = remember {
-        mutableStateListOf<Pair<String, String>>()
-    }
+    val readSmsPermissionState = rememberPermissionState(Manifest.permission.READ_SMS)
+    var loading by remember { mutableStateOf(false) }
+    val messages = remember { mutableStateListOf<Pair<String, String>>() }
 
     WeButton(text = "读取短信", loading = loading) {
         if (readSmsPermissionState.status.isGranted) {

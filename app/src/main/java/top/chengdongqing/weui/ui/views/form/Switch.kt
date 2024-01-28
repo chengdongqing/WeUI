@@ -15,9 +15,7 @@ import top.chengdongqing.weui.ui.components.form.WeSwitch
 @Composable
 fun SwitchPage() {
     WePage(title = "Switch", description = "开关", backgroundColor = Color.White) {
-        val checked = remember {
-            mutableStateOf(false)
-        }
+        val checked = remember { mutableStateOf(false) }
 
         Column {
             WeSwitch(checked = checked.value) {

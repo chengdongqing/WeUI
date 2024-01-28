@@ -27,80 +27,82 @@ import java.time.format.DateTimeFormatter
 fun PickerPage() {
     WePage(title = "Picker", description = "滚动选择器") {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            var visible by remember {
-                mutableStateOf(false)
-            }
-            var value by remember {
-                mutableStateOf(LocalDate.now())
-            }
-            WeDatePicker(visible, value, onCancel = { visible = false }) { value = it }
-            WeInput(
-                value = value.format(DateTimeFormatter.ofPattern("yyyy年MM月dd日")),
-                textAlign = TextAlign.Center,
-                disabled = true
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-            WeButton(text = "选择日期") {
-                visible = true
-            }
-
+            DatePickDemo()
             Spacer(modifier = Modifier.height(40.dp))
-
-            var visible1 by remember {
-                mutableStateOf(false)
-            }
-            var value1 by remember {
-                mutableStateOf(LocalTime.now())
-            }
-            WeTimePicker(visible1, value1, onCancel = { visible1 = false }) { value1 = it }
-            WeInput(
-                value = value1.format(DateTimeFormatter.ofPattern("HH:mm:ss")),
-                textAlign = TextAlign.Center,
-                disabled = true
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-            WeButton(text = "选择时间") {
-                visible1 = true
-            }
-
+            TimePickDemo()
             Spacer(modifier = Modifier.height(40.dp))
-
-            var visible2 by remember {
-                mutableStateOf(false)
-            }
-            val range = remember {
-                listOf(
-                    "中国",
-                    "美国",
-                    "德国",
-                    "法国",
-                    "英国",
-                    "瑞士",
-                    "希腊",
-                    "西班牙",
-                    "荷兰"
-                )
-            }
-            var value2 by remember {
-                mutableIntStateOf(0)
-            }
-            WeSingleColumnPicker(
-                visible2,
-                title = "选择国家",
-                range = range,
-                value = value2,
-                onChange = { value2 = it },
-                onCancel = { visible2 = false }
-            )
-            WeInput(
-                value = range[value2],
-                textAlign = TextAlign.Center,
-                disabled = true
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-            WeButton(text = "选择国家") {
-                visible2 = true
-            }
+            CountryPickDemo()
         }
+    }
+}
+
+@Composable
+private fun DatePickDemo() {
+    var visible by remember { mutableStateOf(false) }
+    var value by remember { mutableStateOf(LocalDate.now()) }
+
+    WeDatePicker(visible, value, onCancel = { visible = false }) { value = it }
+    WeInput(
+        value = value.format(DateTimeFormatter.ofPattern("yyyy年MM月dd日")),
+        textAlign = TextAlign.Center,
+        disabled = true
+    )
+    Spacer(modifier = Modifier.height(20.dp))
+    WeButton(text = "选择日期") {
+        visible = true
+    }
+}
+
+@Composable
+private fun TimePickDemo() {
+    var visible by remember { mutableStateOf(false) }
+    var value by remember { mutableStateOf(LocalTime.now()) }
+
+    WeTimePicker(visible, value, onCancel = { visible = false }) { value = it }
+    WeInput(
+        value = value.format(DateTimeFormatter.ofPattern("HH:mm:ss")),
+        textAlign = TextAlign.Center,
+        disabled = true
+    )
+    Spacer(modifier = Modifier.height(20.dp))
+    WeButton(text = "选择时间") {
+        visible = true
+    }
+}
+
+@Composable
+private fun CountryPickDemo() {
+    var visible by remember { mutableStateOf(false) }
+    var value by remember { mutableIntStateOf(0) }
+    val range = remember {
+        listOf(
+            "中国",
+            "美国",
+            "德国",
+            "法国",
+            "英国",
+            "瑞士",
+            "希腊",
+            "西班牙",
+            "荷兰"
+        )
+    }
+
+    WeSingleColumnPicker(
+        visible,
+        title = "选择国家",
+        range = range,
+        value = value,
+        onChange = { value = it },
+        onCancel = { visible = false }
+    )
+    WeInput(
+        value = range[value],
+        textAlign = TextAlign.Center,
+        disabled = true
+    )
+    Spacer(modifier = Modifier.height(20.dp))
+    WeButton(text = "选择国家") {
+        visible = true
     }
 }

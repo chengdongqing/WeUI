@@ -68,36 +68,8 @@ fun FileBrowserPage() {
     }
 }
 
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 private fun FileBrowser(folderPath: String) {
-    // 请求相关权限
-    val permissions = remember {
-        mutableListOf<String>().apply {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                add(Manifest.permission.MANAGE_EXTERNAL_STORAGE)
-            } else {
-                add(Manifest.permission.READ_EXTERNAL_STORAGE)
-                add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                addAll(
-                    listOf(
-                        Manifest.permission.READ_MEDIA_IMAGES,
-                        Manifest.permission.READ_MEDIA_VIDEO,
-                        Manifest.permission.READ_MEDIA_AUDIO
-                    )
-                )
-            }
-        }
-    }
-    val permissionState = rememberMultiplePermissionsState(permissions)
-    LaunchedEffect(Unit) {
-        if (!permissionState.allPermissionsGranted) {
-            permissionState.launchMultiplePermissionRequest()
-        }
-    }
-
     // 是否加载中
     var loading by remember { mutableStateOf(true) }
     // 已进入的所有文件夹
@@ -113,7 +85,9 @@ private fun FileBrowser(folderPath: String) {
         loading = false
     }
 
-    // 返回时递减文件夹层级
+    // 处理权限
+    SetupPermission()
+    // 处理返回
     BackHandler(folders.size > 1) {
         folders.removeAt(folders.lastIndex)
     }
@@ -158,8 +132,8 @@ private fun FileList(
                                 "${context.packageName}.provider",
                                 File(item.path)
                             )
-                            val intent = Intent(Intent.ACTION_VIEW, uri).apply {
-                                setType("*/*")
+                            val intent = Intent(Intent.ACTION_VIEW).apply {
+                                setDataAndType(uri, "*/*")
                                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                             }
                             context.startActivity(intent)
@@ -241,6 +215,37 @@ private fun FileListItem(
             painterResource(id = R.drawable.ic_arrow_right),
             contentDescription = "下一级"
         )
+    }
+}
+
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+private fun SetupPermission() {
+    val permissions = remember {
+        mutableListOf<String>().apply {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                add(Manifest.permission.MANAGE_EXTERNAL_STORAGE)
+            } else {
+                add(Manifest.permission.READ_EXTERNAL_STORAGE)
+                add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                addAll(
+                    listOf(
+                        Manifest.permission.READ_MEDIA_IMAGES,
+                        Manifest.permission.READ_MEDIA_VIDEO,
+                        Manifest.permission.READ_MEDIA_AUDIO
+                    )
+                )
+            }
+        }
+    }
+    val permissionState = rememberMultiplePermissionsState(permissions)
+
+    LaunchedEffect(Unit) {
+        if (!permissionState.allPermissionsGranted) {
+            permissionState.launchMultiplePermissionRequest()
+        }
     }
 }
 

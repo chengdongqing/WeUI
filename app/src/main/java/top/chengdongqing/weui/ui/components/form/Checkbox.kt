@@ -30,9 +30,9 @@ import top.chengdongqing.weui.ui.theme.FontColor
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.utils.clickableWithoutRipple
 
-data class CheckboxOption(
+data class CheckboxOption<T>(
     val label: String,
-    val value: Any,
+    val value: T,
     val disabled: Boolean = false
 )
 
@@ -45,11 +45,11 @@ data class CheckboxOption(
  * @param onChange 选中项改变事件
  */
 @Composable
-fun WeCheckboxGroup(
-    options: List<CheckboxOption>,
-    values: List<Any> = listOf(),
+fun <T> WeCheckboxGroup(
+    options: List<CheckboxOption<T>>,
+    values: List<T> = listOf(),
     disabled: Boolean = false,
-    onChange: ((values: List<Any>) -> Unit)? = null
+    onChange: ((values: List<T>) -> Unit)? = null
 ) {
     Column {
         for (option in options) {
@@ -58,12 +58,12 @@ fun WeCheckboxGroup(
                 checked = values.contains(option.value),
                 disabled = disabled || option.disabled
             ) {
-                val values1 = if (values.contains(option.value)) {
+                val newValues = if (values.contains(option.value)) {
                     values.filter { it != option.value }
                 } else {
-                    values.plusElement(option.value)
+                    values + option.value
                 }
-                onChange?.invoke(values1)
+                onChange?.invoke(newValues)
             }
         }
     }
@@ -77,7 +77,7 @@ fun WeCheckbox(
     onChange: ((checked: Boolean) -> Unit)? = null
 ) {
     Row(
-        Modifier
+        modifier = Modifier
             .clip(RoundedCornerShape(10.dp))
             .clickableWithoutRipple(!disabled) {
                 onChange?.invoke(!checked)
@@ -105,9 +105,7 @@ fun WeCheckbox(
                 tint = if (checked) Color.White else Color.Transparent
             )
         }
-
         Spacer(Modifier.width(16.dp))
-
         Column {
             Text(text = label, color = FontColor, fontSize = 17.sp)
             Divider(modifier = Modifier.offset(y = 16.dp), thickness = 0.5.dp, color = BorderColor)
