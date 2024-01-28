@@ -19,6 +19,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.feedback.ToastIcon
@@ -101,6 +102,7 @@ fun AddressFormPage(navController: NavController, id: Int?) {
                         addressDao.update(value.copy(id = id))
                         toast.show("修改成功", ToastIcon.SUCCESS)
                     }
+                    delay(1000)
                     navController.popBackStack()
                 }
             }

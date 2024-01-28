@@ -31,7 +31,7 @@ fun NavGraphBuilder.mediaGraph(navController: NavController, galleryViewModel: G
             ExitTransition.None
         }
     ) {
-        val index = it.arguments?.getInt("index") ?: 0
+        val index = it.arguments?.getString("index")?.toInt() ?: 0
         MediaPreviewPage(galleryViewModel, index)
     }
     composable("file-browser") {
