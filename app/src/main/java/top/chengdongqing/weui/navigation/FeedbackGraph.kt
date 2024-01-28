@@ -7,7 +7,6 @@ import top.chengdongqing.weui.ui.views.feedback.ContextMenuPage
 import top.chengdongqing.weui.ui.views.feedback.DialogPage
 import top.chengdongqing.weui.ui.views.feedback.InformationBarPage
 import top.chengdongqing.weui.ui.views.feedback.PopupPage
-import top.chengdongqing.weui.ui.views.feedback.PullDownRefreshPage
 import top.chengdongqing.weui.ui.views.feedback.ToastPage
 
 fun NavGraphBuilder.feedbackGraph() {
@@ -28,8 +27,5 @@ fun NavGraphBuilder.feedbackGraph() {
     }
     composable("context-menu") {
         ContextMenuPage()
-    }
-    composable("pull-down-refresh") {
-        PullDownRefreshPage()
     }
 }

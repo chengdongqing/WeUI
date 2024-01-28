@@ -1,7 +1,9 @@
 package top.chengdongqing.weui.ui.components.feedback
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.compose.ui.window.Popup
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun WeContextMenu(options: List<@Composable () -> Unit>, content: @Composable () -> Unit) {
     var showPopup by remember { mutableStateOf(false) }
@@ -44,6 +47,11 @@ fun WeContextMenu(options: List<@Composable () -> Unit>, content: @Composable ()
                 println("elementSize: $elementSize")
                 println("popupPosition: $popupPosition")
             }
+            .combinedClickable(onClick = {
+                println("onClick inside----------")
+            }, onLongClick = {
+                println("onLongClick inside---------")
+            })
     ) {
         content()
 

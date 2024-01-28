@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.ui.components.feedback
+package top.chengdongqing.weui.ui.components.basic
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
@@ -23,13 +23,12 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.chengdongqing.weui.ui.components.basic.WeLoading
 import top.chengdongqing.weui.ui.theme.FontColo1
 
 private const val threshold = 250f
 
 @Composable
-fun WePullDownRefresh(
+fun WeScrollView(
     onRefresh: (() -> Unit) -> Unit,
     content: @Composable () -> Unit
 ) {

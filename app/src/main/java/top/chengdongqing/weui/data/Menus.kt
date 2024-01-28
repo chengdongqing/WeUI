@@ -13,7 +13,8 @@ val menus = listOf(
             MenuItem("LoadMore", "load-more"),
             MenuItem("Progress", "progress"),
             MenuItem("Steps", "steps"),
-            MenuItem("Swiper", "swiper")
+            MenuItem("Swiper", "swiper"),
+            MenuItem("ScrollView", "scroll-view")
         )
     ),
     MenuGroup(
@@ -52,8 +53,7 @@ val menus = listOf(
             MenuItem("Popup", "popup"),
             MenuItem("Toast", "toast"),
             MenuItem("InformationBar", "information-bar"),
-            MenuItem("ContextMenu", "context-menu"),
-            MenuItem("PullDownRefresh", "pull-down-refresh")
+            MenuItem("ContextMenu", "context-menu")
         )
     ),
     MenuGroup(

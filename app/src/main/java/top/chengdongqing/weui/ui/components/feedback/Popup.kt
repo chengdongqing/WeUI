@@ -8,7 +8,9 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectVerticalDragGestures
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -32,7 +34,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
@@ -140,20 +141,21 @@ fun WePopup(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .offset(y = -(12.dp))
-                                        .pointerInput(height) {
-                                            detectVerticalDragGestures(onDragEnd = {
+                                        .draggable(
+                                            state = rememberDraggableState { dragAmount ->
+                                                val value = offsetY + dragAmount
+                                                if (value >= 0) {
+                                                    offsetY = value
+                                                }
+                                            },
+                                            orientation = Orientation.Vertical,
+                                            onDragStopped = {
                                                 if (offsetY < height / 2) {
                                                     offsetY = 0f
                                                 } else {
                                                     onClose()
                                                 }
-                                            }) { _, dragAmount ->
-                                                val value = offsetY + dragAmount
-                                                if (value >= 0) {
-                                                    offsetY = value
-                                                }
-                                            }
-                                        }
+                                            })
                                         .padding(top = 12.dp),
                                     contentAlignment = Alignment.Center
                                 ) {
