@@ -9,9 +9,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import top.chengdongqing.weui.ui.views.HomePage
-import top.chengdongqing.weui.ui.views.chart.BarChartPage
-import top.chengdongqing.weui.ui.views.chart.LineChartPage
-import top.chengdongqing.weui.ui.views.chart.PieChartPage
 import top.chengdongqing.weui.ui.views.layers.LayersPage
 import top.chengdongqing.weui.ui.views.map.LocationPickerPage
 import top.chengdongqing.weui.ui.views.map.LocationPreviewPage
@@ -63,24 +60,13 @@ fun NavigationGraph() {
         feedbackGraph()
         mediaGraph(navController, galleryViewModel)
         systemGraph(navController)
+        networkGraph()
         hardwareGraph()
         chartGraph()
         mapGraph()
         navigationGraph()
         searchGraph()
         layersGraph()
-    }
-}
-
-fun NavGraphBuilder.chartGraph() {
-    composable("bar-chart") {
-        BarChartPage()
-    }
-    composable("line-chart") {
-        LineChartPage()
-    }
-    composable("pie-chart") {
-        PieChartPage()
     }
 }
 

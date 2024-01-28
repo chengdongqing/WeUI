@@ -57,7 +57,8 @@ val menus = listOf(
         )
     ),
     MenuGroup(
-        "系统服务", R.drawable.ic_nav_layout, listOf(
+        "系统服务", R.drawable.ic_nav_layout,
+        listOf(
             MenuItem("Contacts", "contacts"),
             MenuItem("Clipboard", "clipboard"),
             MenuItem("CalendarEvents", "calendar"),
@@ -69,6 +70,15 @@ val menus = listOf(
             MenuItem("InstalledApps", "installed-apps"),
             MenuItem("Keyboard", "keyboard"),
             MenuItem("Notification", "notification")
+        )
+    ),
+    MenuGroup(
+        "网络服务", R.drawable.ic_nav_search,
+        listOf(
+            MenuItem("HTTPRequest", "http-request"),
+            MenuItem("FileUpload", "file-upload"),
+            MenuItem("FileDownload", "file-download"),
+            MenuItem("Socket", "socket")
         )
     ),
     MenuGroup(

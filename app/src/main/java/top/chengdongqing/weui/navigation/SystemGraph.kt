@@ -33,8 +33,8 @@ fun NavGraphBuilder.systemGraph(navController: NavController) {
         DatabasePage(navController)
     }
     composable("address-form?id={id}") {
-        val id = it.arguments?.getString("id")
-        AddressFormPage(id)
+        val id = it.arguments?.getString("id")?.toInt()
+        AddressFormPage(navController, id)
     }
     composable("clipboard") {
         ClipboardPage()

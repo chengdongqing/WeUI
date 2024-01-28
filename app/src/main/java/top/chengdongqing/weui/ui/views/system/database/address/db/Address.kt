@@ -1,10 +1,10 @@
-package top.chengdongqing.weui.ui.views.system.database.address
+package top.chengdongqing.weui.ui.views.system.database.address.db
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity
+@Entity(tableName = "address")
 data class Address(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,

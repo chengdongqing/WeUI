@@ -68,7 +68,9 @@ dependencies {
     implementation(libs.material.icons.extended)
     implementation(libs.coil.compose)
     implementation(libs.androidx.room.runtime)
-    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.runtime.livedata) // room支持使用livedataAsState
+    implementation(libs.androidx.room.ktx) // room支持协程
+    ksp(libs.androidx.room.compiler) // room支持注解
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
