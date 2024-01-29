@@ -24,6 +24,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
@@ -157,13 +158,15 @@ private fun produceThumbnail(item: MediaItem): Any? {
 private fun rememberMedias(viewModel: GalleryViewModel): List<MediaItem> {
     val context = LocalContext.current
     val multiplePermissionsState = rememberMultiplePermissionsState(
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            listOf(
-                Manifest.permission.READ_MEDIA_IMAGES,
-                Manifest.permission.READ_MEDIA_VIDEO
-            )
-        } else {
-            listOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+        remember {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                listOf(
+                    Manifest.permission.READ_MEDIA_IMAGES,
+                    Manifest.permission.READ_MEDIA_VIDEO
+                )
+            } else {
+                listOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+            }
         }
     )
 

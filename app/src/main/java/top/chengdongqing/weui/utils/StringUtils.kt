@@ -49,3 +49,22 @@ fun formatFileSize(filePath: String): String {
         else -> "${formatFloat(size / (1024 * 1024 * 1024f))} GB"
     }
 }
+
+fun bytesToHex(bytes: ByteArray): String {
+    val hexChars = CharArray(bytes.size * 2)
+    for (i in bytes.indices) {
+        val v = bytes[i].toInt() and 0xFF
+        hexChars[i * 2] = "0123456789ABCDEF"[v shr 4]
+        hexChars[i * 2 + 1] = "0123456789ABCDEF"[v and 0x0F]
+    }
+    return String(hexChars)
+}
+
+fun hexToBytes(hex: String): ByteArray {
+    val result = ByteArray(hex.length / 2)
+    for (i in hex.indices step 2) {
+        val byteValue = hex.substring(i, i + 2).toInt(16)
+        result[i / 2] = byteValue.toByte()
+    }
+    return result
+}

@@ -3,9 +3,11 @@ package top.chengdongqing.weui.ui.views.hardware
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiManager
 import android.os.Build
+import android.provider.Settings
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -37,8 +39,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import top.chengdongqing.weui.ui.components.basic.LoadMoreType
 import top.chengdongqing.weui.ui.components.basic.WeDivider
 import top.chengdongqing.weui.ui.components.basic.WeLoadMore
@@ -56,19 +57,28 @@ fun WiFiPage() {
     WePage(title = "Wi-Fi", description = "无线局域网") {
         val context = LocalContext.current
         val wifiManager = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
-        var wifiList by remember { mutableStateOf<List<WiFi>>(emptyList()) }
-        val permissionState = rememberPermissionState(Manifest.permission.ACCESS_FINE_LOCATION)
+        var wifiList by remember { mutableStateOf<List<WiFiInfo>>(emptyList()) }
+        val permissionState = rememberMultiplePermissionsState(
+            remember {
+                listOf(
+                    Manifest.permission.ACCESS_WIFI_STATE,
+                    Manifest.permission.CHANGE_WIFI_STATE,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                )
+            }
+        )
 
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             WeButton(text = "扫描Wi-Fi") {
-                if (permissionState.status.isGranted) {
+                if (permissionState.allPermissionsGranted) {
                     if (wifiManager.isWifiEnabled) {
                         wifiList = buildWiFiList(wifiManager.scanResults)
                     } else {
-                        Toast.makeText(context, "Wi-Fi未打开", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Wi-Fi未开启", Toast.LENGTH_SHORT).show()
+                        context.startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
                     }
                 } else {
-                    permissionState.launchPermissionRequest()
+                    permissionState.launchMultiplePermissionRequest()
                 }
             }
             Spacer(modifier = Modifier.height(40.dp))
@@ -78,10 +88,11 @@ fun WiFiPage() {
 }
 
 @Composable
-private fun WiFiList(wifiList: List<WiFi>) {
+private fun WiFiList(wifiList: List<WiFiInfo>) {
     if (wifiList.isNotEmpty()) {
         LazyColumn(
             modifier = Modifier
+                .fillMaxWidth()
                 .background(Color.White, RoundedCornerShape(12.dp))
                 .padding(horizontal = 12.dp)
         ) {
@@ -98,7 +109,7 @@ private fun WiFiList(wifiList: List<WiFi>) {
 }
 
 @Composable
-private fun WiFiListItem(wifi: WiFi) {
+private fun WiFiListItem(wifi: WiFiInfo) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -137,10 +148,10 @@ private fun WiFiListItem(wifi: WiFi) {
     }
 }
 
-private fun buildWiFiList(scanResultList: List<ScanResult>): List<WiFi> {
+private fun buildWiFiList(scanResultList: List<ScanResult>): List<WiFiInfo> {
     return scanResultList.sortedByDescending { it.level }
         .map { item ->
-            WiFi(
+            WiFiInfo(
                 name = getSSID(item),
                 band = determineWifiBand(item.frequency),
                 level = "${calculateSignalLevel(item.level)}%",
@@ -149,7 +160,7 @@ private fun buildWiFiList(scanResultList: List<ScanResult>): List<WiFi> {
         }
 }
 
-private data class WiFi(
+private data class WiFiInfo(
     val name: String,
     val band: String,
     val level: String,
@@ -182,7 +193,7 @@ private fun calculateSignalLevel(rssi: Int, numLevels: Int = 100): Int {
     } else if (rssi >= maxRssi) {
         return numLevels - 1
     } else {
-        val inputRange: Float = (maxRssi - minRssi).toFloat()
+        val inputRange = (maxRssi - minRssi).toFloat()
         val outputRange = (numLevels - 1).toFloat()
         return ((rssi - minRssi).toFloat() * outputRange / inputRange).toInt()
     }
