@@ -21,9 +21,9 @@ import top.chengdongqing.weui.ui.components.form.WeButton
 fun PopupPage() {
     WePage(title = "Popup", description = "弹出框") {
         var visible by remember { mutableStateOf(false) }
-        var swipeClosable by remember { mutableStateOf(false) }
+        var swipeable by remember { mutableStateOf(false) }
 
-        WePopup(visible, swipeClosable = swipeClosable, onClose = {
+        WePopup(visible, swipeable = swipeable, onClose = {
             visible = false
         }, title = "标题") {
             Text(text = "内容")
@@ -31,12 +31,12 @@ fun PopupPage() {
         }
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             WeButton(text = "样式一", type = ButtonType.PLAIN) {
-                swipeClosable = false
+                swipeable = false
                 visible = true
             }
             Spacer(modifier = Modifier.height(20.dp))
             WeButton(text = "样式二", type = ButtonType.PLAIN) {
-                swipeClosable = true
+                swipeable = true
                 visible = true
             }
         }

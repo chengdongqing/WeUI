@@ -44,8 +44,6 @@ fun ToastPage() {
                 )
                 coroutineScope.launch {
                     delay(2000.milliseconds)
-                    toast.hide()
-                    delay(100.milliseconds)
                     toast.show(title = "支付成功", icon = ToastIcon.SUCCESS)
                 }
             }

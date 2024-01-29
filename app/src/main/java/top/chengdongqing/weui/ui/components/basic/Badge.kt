@@ -33,8 +33,6 @@ fun WeBadge(
     holder: (@Composable () -> Unit)? = null
 ) {
     Box {
-        holder?.invoke()
-
         val density = LocalDensity.current
         var localWidth by remember {
             mutableStateOf(0.dp)
@@ -65,13 +63,14 @@ fun WeBadge(
             else -> -size / 2
         }
 
+        holder?.invoke()
         Box(
             modifier = Modifier
                 .align(alignment)
                 .widthIn(size)
                 .height(size)
                 .onSizeChanged {
-                    density.run {
+                    with(density) {
                         localWidth = it.width.toDp()
                     }
                 }

@@ -24,7 +24,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -46,13 +46,14 @@ import top.chengdongqing.weui.ui.theme.FontColo1
 
 @Composable
 fun HomePage(navController: NavHostController) {
+    var current by rememberSaveable { mutableStateOf<Int?>(null) }
+
     Column(
         Modifier
             .fillMaxSize()
             .background(BackgroundColor)
             .statusBarsPadding()
     ) {
-        var current by rememberSaveable { mutableIntStateOf(-1) }
         LazyColumn(Modifier.padding(horizontal = 16.dp)) {
             item {
                 Column(
@@ -75,7 +76,7 @@ fun HomePage(navController: NavHostController) {
             }
             itemsIndexed(menus) { index, item ->
                 MenuGroup(item, index == current, navController) {
-                    current = if (current == index) -1 else index
+                    current = if (current == index) null else index
                 }
                 Spacer(Modifier.height(8.dp))
             }
@@ -111,9 +112,7 @@ fun MenuGroup(
         } else {
             0.dp
         },
-        animationSpec = remember {
-            tween(durationMillis = 300)
-        },
+        animationSpec = remember { tween(durationMillis = 300) },
         label = "MenuGroupHeightAnimation"
     )
 
@@ -151,7 +150,7 @@ fun MenuGroup(
 
         if (group.children != null) {
             Column(Modifier.height(animatedHeight)) {
-                group.children.sortedBy { it.label }.forEachIndexed { index, item ->
+                remember { group.children.sortedBy { it.label } }.forEachIndexed { index, item ->
                     Row(
                         Modifier
                             .clickable {

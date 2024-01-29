@@ -63,7 +63,7 @@ fun InstalledAppsPage() {
         LazyColumn(verticalArrangement = Arrangement.spacedBy(20.dp)) {
             item {
                 if (apps.isNotEmpty()) {
-                    ActionsRow(context)
+                    ActionsBar(context)
                 } else {
                     WeLoadMore()
                 }
@@ -77,7 +77,7 @@ fun InstalledAppsPage() {
 }
 
 @Composable
-private fun ActionsRow(context: Context) {
+private fun ActionsBar(context: Context) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceAround

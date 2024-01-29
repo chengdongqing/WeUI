@@ -43,24 +43,14 @@ fun SystemStatusPage() {
 
 @Composable
 private fun NetworkInfoRows() {
-    val network = observeNetwork()
+    val network = rememberNetworkObserver()
 
     KeyValueRow("网络类型", network.type)
     KeyValueRow("VPN", if (network.isVpnConnected) "已启用" else "未启用")
 }
 
 @Composable
-private fun StatusBarAction() {
-    var isDark by remember { mutableStateOf(true) }
-
-    SetupStatusBarStyle(isDark)
-    WeButton(text = "切换状态栏样式", type = ButtonType.PLAIN) {
-        isDark = !isDark
-    }
-}
-
-@Composable
-private fun observeNetwork(): NetworkInfo {
+private fun rememberNetworkObserver(): NetworkInfo {
     val context = LocalContext.current
     val connectivityManager =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -93,6 +83,16 @@ private fun observeNetwork(): NetworkInfo {
     }
 
     return NetworkInfo(networkType, isVpnConnected)
+}
+
+@Composable
+private fun StatusBarAction() {
+    var isDark by remember { mutableStateOf(true) }
+
+    SetupStatusBarStyle(isDark)
+    WeButton(text = "切换状态栏样式", type = ButtonType.PLAIN) {
+        isDark = !isDark
+    }
 }
 
 private data class NetworkInfo(

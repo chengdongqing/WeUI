@@ -7,6 +7,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import top.chengdongqing.weui.ui.views.HomePage
 import top.chengdongqing.weui.ui.views.layers.LayersPage
@@ -28,73 +29,75 @@ fun NavigationGraph() {
         enterTransition = {
             slideIntoContainer(
                 AnimatedContentTransitionScope.SlideDirection.Left,
-                tween(300)
+                animationSpec = tween(300)
             )
         },
         exitTransition = {
             slideOutOfContainer(
+                AnimatedContentTransitionScope.SlideDirection.Left,
+                animationSpec = tween(300)
+            )
+        },
+        popEnterTransition = {
+            slideIntoContainer(
                 AnimatedContentTransitionScope.SlideDirection.Right,
-                tween(300)
+                animationSpec = tween(300)
+            )
+        },
+        popExitTransition = {
+            slideOutOfContainer(
+                AnimatedContentTransitionScope.SlideDirection.Right,
+                animationSpec = tween(300)
             )
         }
     ) {
-        composable("home",
-            enterTransition = {
-                slideIntoContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Right,
-                    tween(300)
-                )
-            },
-            exitTransition = {
-                slideOutOfContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Left,
-                    tween(300)
-                )
-            }
-        ) {
+        composable("home") {
             HomePage(navController)
         }
-
-        basicGraph()
-        formGraph()
-        feedbackGraph()
-        mediaGraph(navController, galleryViewModel)
-        systemGraph(navController)
-        networkGraph()
-        hardwareGraph()
-        chartGraph()
-        mapGraph()
-        navigationGraph()
-        searchGraph()
-        layersGraph()
+        addBasicGraph()
+        addFormGraph()
+        addFeedbackGraph()
+        addMediaGraph(navController, galleryViewModel)
+        addSystemGraph(navController)
+        addNetworkGraph()
+        addHardwareGraph()
+        addChartGraph()
+        addMapGraph()
+        addNavigationGraph()
+        addSearchGraph()
+        addLayersGraph()
     }
 }
 
-fun NavGraphBuilder.mapGraph() {
-    composable("location-preview") {
-        LocationPreviewPage()
-    }
-    composable("location-picker") {
-        LocationPickerPage()
-    }
-}
-
-fun NavGraphBuilder.navigationGraph() {
-    composable("nav-bar") {
-        NavBarPage()
-    }
-    composable("tab-bar") {
-        TabBarPage()
+fun NavGraphBuilder.addMapGraph() {
+    navigation("preview", "location") {
+        composable("preview") {
+            LocationPreviewPage()
+        }
+        composable("picker") {
+            LocationPickerPage()
+        }
     }
 }
 
-fun NavGraphBuilder.searchGraph() {
+fun NavGraphBuilder.addNavigationGraph() {
+    navigation("nav-bar", "navigation") {
+        composable("nav-bar") {
+            NavBarPage()
+        }
+        composable("tab-bar") {
+            TabBarPage()
+        }
+    }
+}
+
+fun NavGraphBuilder.addSearchGraph() {
     composable("search-bar") {
         SearchBarPage()
     }
 }
 
-fun NavGraphBuilder.layersGraph() {
+fun NavGraphBuilder.addLayersGraph() {
     composable("layers") {
         LayersPage()
     }

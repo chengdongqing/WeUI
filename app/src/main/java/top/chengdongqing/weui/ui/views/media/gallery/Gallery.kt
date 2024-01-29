@@ -7,7 +7,6 @@ import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
-import android.util.Log
 import android.util.Size
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -43,10 +42,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import okio.IOException
+import top.chengdongqing.weui.extensions.clickableWithoutRipple
 import top.chengdongqing.weui.ui.components.basic.WeLoadMore
 import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.theme.LightColor
-import top.chengdongqing.weui.utils.clickableWithoutRipple
 import top.chengdongqing.weui.utils.formatDuration
 import java.util.Date
 import kotlin.time.Duration
@@ -77,21 +76,20 @@ private fun MediaGrid(
         verticalArrangement = Arrangement.spacedBy(2.dp),
     ) {
         itemsIndexed(mediaItems) { index, item ->
-            MediaGridItem(
-                item, Modifier
-                    .aspectRatio(1f)
-                    .background(Color.LightGray)
-                    .clickableWithoutRipple {
-                        navigateToPreview(index)
-                    }
-            )
+            MediaGridItem(item, Modifier.clickableWithoutRipple {
+                navigateToPreview(index)
+            })
         }
     }
 }
 
 @Composable
 fun MediaGridItem(item: MediaItem, modifier: Modifier) {
-    Box(modifier) {
+    Box(
+        modifier
+            .aspectRatio(1f)
+            .background(Color.LightGray)
+    ) {
         AsyncImage(
             model = produceThumbnail(item),
             contentDescription = "Gallery Item",
@@ -136,15 +134,17 @@ private fun produceThumbnail(item: MediaItem): Any? {
                         )
                     } else {
                         // 视频在低版本系统获取首帧
-                        MediaMetadataRetriever().run {
-                            setDataSource(context, item.uri)
-                            extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)?.toInt()
-                            extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)?.toInt()
-                            getFrameAtTime(1, MediaMetadataRetriever.OPTION_CLOSEST_SYNC)
+                        MediaMetadataRetriever().use {
+                            it.setDataSource(context, item.uri)
+                            it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)
+                                ?.toInt()
+                            it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)
+                                ?.toInt()
+                            it.getFrameAtTime(1, MediaMetadataRetriever.OPTION_CLOSEST_SYNC)
                         }
                     }
                 } catch (e: IOException) {
-                    Log.e("Gallery", "Thumbnail load exception", e)
+                    e.printStackTrace()
                     null
                 }
             }

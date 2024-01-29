@@ -43,31 +43,28 @@ fun MediaPreviewPage(
             .background(Color.Black)
     ) {
         val media = galleryViewModel.mediaItems[it]
-        if (!media.isVideo) {
-            ImagePreview(media.uri)
-        } else {
+        if (media.isVideo) {
             VideoPreview(media.uri)
+        } else {
+            ImagePreview(media.uri)
         }
     }
 }
 
 @Composable
-fun VideoPreview(uri: Uri) {
+private fun VideoPreview(uri: Uri) {
     AndroidView(
         factory = { context ->
             VideoView(context).apply {
                 setVideoURI(uri)
-
                 // 添加媒体控制器
                 val mediaController = MediaController(context)
                 setMediaController(mediaController)
                 mediaController.setAnchorView(this)
-
                 // 设置循环播放
                 setOnCompletionListener {
                     start()
                 }
-
                 start()
             }
         },
@@ -76,7 +73,7 @@ fun VideoPreview(uri: Uri) {
 }
 
 @Composable
-fun ImagePreview(uri: Uri) {
+private fun ImagePreview(uri: Uri) {
     var offset by remember { mutableStateOf(Offset.Zero) }
     var zoom by remember { mutableFloatStateOf(1f) }
 

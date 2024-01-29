@@ -1,10 +1,10 @@
 package top.chengdongqing.weui.navigation
 
 import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import androidx.navigation.navigation
 import top.chengdongqing.weui.ui.views.media.camera.CameraPage
 import top.chengdongqing.weui.ui.views.media.cropper.ImageCropperPage
 import top.chengdongqing.weui.ui.views.media.filebrowser.FileBrowserPage
@@ -19,49 +19,50 @@ import top.chengdongqing.weui.ui.views.media.player.VideoPlayerPage
 import top.chengdongqing.weui.ui.views.media.recorder.AudioRecorderPage
 import top.chengdongqing.weui.ui.views.media.recorder.VideoRecorderPage
 
-fun NavGraphBuilder.mediaGraph(navController: NavController, galleryViewModel: GalleryViewModel) {
-    composable("gallery") {
-        GalleryPage(galleryViewModel, navController)
-    }
-    composable("media-preview?index={index}",
-        enterTransition = {
-            EnterTransition.None
-        },
-        exitTransition = {
-            ExitTransition.None
+fun NavGraphBuilder.addMediaGraph(
+    navController: NavController,
+    galleryViewModel: GalleryViewModel
+) {
+    navigation("gallery", "media") {
+        composable("gallery") {
+            GalleryPage(galleryViewModel, navController)
         }
-    ) {
-        val index = it.arguments?.getString("index")?.toInt() ?: 0
-        MediaPreviewPage(galleryViewModel, index)
-    }
-    composable("file-browser") {
-        FileBrowserPage()
-    }
-    composable("camera") {
-        CameraPage()
-    }
-    composable("image-cropper") {
-        ImageCropperPage()
-    }
-    composable("live-pusher") {
-        LivePusherPage()
-    }
-    composable("live-player") {
-        LivePlayerPage()
-    }
-    composable("media-picker") {
-        MediaPickerPage()
-    }
-    composable("audio-player") {
-        AudioPlayerPage()
-    }
-    composable("video-player") {
-        VideoPlayerPage()
-    }
-    composable("audio-recorder") {
-        AudioRecorderPage()
-    }
-    composable("video-recorder") {
-        VideoRecorderPage()
+        composable(
+            "media-preview?index={index}",
+            enterTransition = { EnterTransition.None }
+        ) {
+            val index = it.arguments?.getString("index")?.toInt() ?: 0
+            MediaPreviewPage(galleryViewModel, index)
+        }
+        composable("file-browser") {
+            FileBrowserPage()
+        }
+        composable("camera") {
+            CameraPage()
+        }
+        composable("image-cropper") {
+            ImageCropperPage()
+        }
+        composable("live-pusher") {
+            LivePusherPage()
+        }
+        composable("live-player") {
+            LivePlayerPage()
+        }
+        composable("media-picker") {
+            MediaPickerPage()
+        }
+        composable("audio-player") {
+            AudioPlayerPage()
+        }
+        composable("video-player") {
+            VideoPlayerPage()
+        }
+        composable("audio-recorder") {
+            AudioRecorderPage()
+        }
+        composable("video-recorder") {
+            VideoRecorderPage()
+        }
     }
 }

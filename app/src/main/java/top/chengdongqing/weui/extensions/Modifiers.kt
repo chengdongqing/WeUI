@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.utils
+package top.chengdongqing.weui.extensions
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource

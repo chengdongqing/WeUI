@@ -11,7 +11,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -40,16 +39,16 @@ import top.chengdongqing.weui.ui.components.form.WeTextarea
 fun SmsPage() {
     WePage(title = "SMS", description = "短信") {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            SmsSend()
+            WriteSms()
             Spacer(modifier = Modifier.height(20.dp))
-            SmsMessages()
+            ReadSms()
         }
     }
 }
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-private fun SmsSend() {
+private fun WriteSms() {
     val context = LocalContext.current
     val smsPermissionState = rememberPermissionState(Manifest.permission.SEND_SMS)
     var number by remember { mutableStateOf("") }
@@ -85,22 +84,18 @@ private fun SmsSend() {
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-private fun SmsMessages() {
+private fun ReadSms() {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     val readSmsPermissionState = rememberPermissionState(Manifest.permission.READ_SMS)
     var loading by remember { mutableStateOf(false) }
-    val messages = remember { mutableStateListOf<Pair<String, String>>() }
+    var messages by remember { mutableStateOf<List<Pair<String, String>>>(emptyList()) }
 
     WeButton(text = "读取短信", loading = loading) {
         if (readSmsPermissionState.status.isGranted) {
             loading = true
             coroutineScope.launch {
-                val messages1 = readSmsMessages(context)
-                if (messages.isNotEmpty()) {
-                    messages.clear()
-                }
-                messages.addAll(messages1)
+                messages = loadSmsMessages(context)
                 loading = false
             }
         } else {
@@ -115,7 +110,7 @@ private fun SmsMessages() {
     }
 }
 
-private suspend fun readSmsMessages(context: Context): List<Pair<String, String>> =
+private suspend fun loadSmsMessages(context: Context): List<Pair<String, String>> =
     withContext(Dispatchers.IO) {
         val messages = mutableListOf<Pair<String, String>>()
 

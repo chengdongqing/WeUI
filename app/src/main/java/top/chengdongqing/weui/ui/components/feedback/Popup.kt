@@ -42,8 +42,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import kotlinx.coroutines.delay
+import top.chengdongqing.weui.extensions.clickableWithoutRipple
 import top.chengdongqing.weui.ui.theme.BackgroundColor
-import top.chengdongqing.weui.utils.clickableWithoutRipple
 
 /**
  * 从底部弹出的半屏弹窗
@@ -53,7 +53,7 @@ import top.chengdongqing.weui.utils.clickableWithoutRipple
  * @param enterTransition 弹出时的过渡动画
  * @param exitTransition 收起时的过渡动画
  * @param padding 内边距
- * @param swipeClosable 是否可滑动关闭
+ * @param swipeable 是否可滑动关闭
  * @param onClose 关闭事件
  * @param content 内容
  */
@@ -74,7 +74,7 @@ fun WePopup(
         targetOffsetY = { it }
     ),
     padding: PaddingValues = PaddingValues(12.dp),
-    swipeClosable: Boolean = false,
+    swipeable: Boolean = false,
     onClose: () -> Unit,
     content: @Composable () -> Unit
 ) {
@@ -136,7 +136,7 @@ fun WePopup(
                             }
                     ) {
                         Column {
-                            if (swipeClosable) {
+                            if (swipeable) {
                                 Box(
                                     modifier = Modifier
                                         .fillMaxWidth()

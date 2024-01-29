@@ -122,17 +122,13 @@ fun CalendarEvents() {
     val coroutineScope = rememberCoroutineScope()
     val calendarPermissionState = rememberPermissionState(Manifest.permission.READ_CALENDAR)
     var loading by remember { mutableStateOf(false) }
-    val events = remember { mutableListOf<Pair<String, String>>() }
+    var events by remember { mutableStateOf<List<Pair<String, String>>>(emptyList()) }
 
     WeButton(text = "读取日历事件", loading = loading) {
         if (calendarPermissionState.status.isGranted) {
             loading = true
             coroutineScope.launch {
-                val events1 = readCalendarEvents(context)
-                if (events.isNotEmpty()) {
-                    events.clear()
-                }
-                events.addAll(events1)
+                events = loadCalendarEvents(context)
                 loading = false
             }
         } else {
@@ -147,7 +143,7 @@ fun CalendarEvents() {
     }
 }
 
-private suspend fun readCalendarEvents(context: Context): List<Pair<String, String>> =
+private suspend fun loadCalendarEvents(context: Context): List<Pair<String, String>> =
     withContext(Dispatchers.IO) {
         val events = mutableListOf<Pair<String, String>>()
 

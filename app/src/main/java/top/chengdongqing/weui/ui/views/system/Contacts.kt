@@ -21,7 +21,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -123,19 +122,15 @@ private fun PhoneContacts() {
     val coroutineScope = rememberCoroutineScope()
     val contactsPermissionState = rememberPermissionState(Manifest.permission.READ_CONTACTS)
     var loading by remember { mutableStateOf(false) }
-    val contacts = remember { mutableStateListOf<Pair<String, String>>() }
+    var contacts by remember { mutableStateOf<List<Pair<String, String>>>(emptyList()) }
 
     WeButton(text = "读取通讯录", loading = loading) {
         if (contactsPermissionState.status.isGranted) {
             loading = true
             coroutineScope.launch {
-                val contacts1 = readContacts(context)
-                if (contacts.isNotEmpty()) {
-                    contacts.clear()
-                }
-                contacts.addAll(contacts1.map {
+                contacts = loadContacts(context).map {
                     it.first to it.second.joinToString("\n")
-                })
+                }
                 loading = false
             }
         } else {
@@ -150,7 +145,7 @@ private fun PhoneContacts() {
     }
 }
 
-private suspend fun readContacts(context: Context): (List<Pair<String, List<String>>>) =
+private suspend fun loadContacts(context: Context): (List<Pair<String, List<String>>>) =
     withContext(Dispatchers.IO) {
         val contacts = mutableListOf<Pair<String, String>>()
         context.contentResolver.query(
@@ -187,19 +182,15 @@ fun PhoneCallLogs() {
     val coroutineScope = rememberCoroutineScope()
     val callLogPermissionState = rememberPermissionState(Manifest.permission.READ_CALL_LOG)
     var loading by remember { mutableStateOf(false) }
-    val logs = remember { mutableStateListOf<Pair<String, String>>() }
+    var logs by remember { mutableStateOf<List<Pair<String, String>>>(emptyList()) }
 
     WeButton(text = "读取通话记录", type = ButtonType.PLAIN, loading = loading) {
         if (callLogPermissionState.status.isGranted) {
             loading = true
             coroutineScope.launch {
-                val logs1 = readCallLogs(context)
-                if (logs.isNotEmpty()) {
-                    logs.clear()
-                }
-                logs.addAll(logs1.map {
+                logs = loadCallLogs(context).map {
                     it.first to it.second.joinToString("\n")
-                })
+                }
                 loading = false
             }
         } else {
@@ -214,7 +205,7 @@ fun PhoneCallLogs() {
     }
 }
 
-private suspend fun readCallLogs(context: Context): (List<Pair<String, List<String>>>) =
+private suspend fun loadCallLogs(context: Context): (List<Pair<String, List<String>>>) =
     withContext(Dispatchers.IO) {
         val logs = mutableListOf<Pair<String, List<String>>>()
         context.contentResolver.query(
