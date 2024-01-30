@@ -64,20 +64,21 @@ dependencies {
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.lifecycle.viewmodel.compose)
     implementation(libs.activity.compose)
-    implementation(libs.navigation.compose)
-    implementation(libs.accompanist.navigation.animation)
-    implementation(libs.accompanist.permissions)
+    implementation(libs.navigation.compose) // 支持页面间导航
+    implementation(libs.accompanist.navigation.animation) // 导航支持动画
+    implementation(libs.accompanist.permissions) // 简化权限请求
     implementation(platform(libs.compose.bom))
     implementation(libs.ui)
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
-    implementation(libs.material.icons.extended)
-    implementation(libs.coil.compose)
+    implementation(libs.material.icons.extended) // 图标扩展
+    implementation(libs.coil.compose) // 异步图片加载
     implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.runtime.livedata) // room支持使用livedataAsState
+    implementation(libs.androidx.runtime.livedata) // room支持livedataAsState
     implementation(libs.androidx.room.ktx) // room支持协程
     ksp(libs.androidx.room.compiler) // room支持注解
+    implementation(libs.androidx.biometric) // 简化生物认证
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
