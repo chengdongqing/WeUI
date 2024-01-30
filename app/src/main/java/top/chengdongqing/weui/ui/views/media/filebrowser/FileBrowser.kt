@@ -35,7 +35,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -196,7 +195,7 @@ private fun FileListItem(
             Spacer(modifier = Modifier.height(2.dp))
             Row {
                 Text(
-                    text = buildAnnotatedString {
+                    text = buildString {
                         append(file.lastModified)
                         append(" | ")
                         if (file.isDirectory) {
@@ -222,7 +221,7 @@ private fun FileListItem(
 @Composable
 private fun SetupPermission() {
     val permissions = remember {
-        mutableListOf<String>().apply {
+        buildList {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 add(Manifest.permission.MANAGE_EXTERNAL_STORAGE)
             } else {

@@ -8,7 +8,7 @@ import top.chengdongqing.weui.ui.views.hardware.BluetoothPage
 import top.chengdongqing.weui.ui.views.hardware.CompassPage
 import top.chengdongqing.weui.ui.views.hardware.FingerprintPage
 import top.chengdongqing.weui.ui.views.hardware.FlashlightPage
-import top.chengdongqing.weui.ui.views.hardware.GPSPage
+import top.chengdongqing.weui.ui.views.hardware.GNSSPage
 import top.chengdongqing.weui.ui.views.hardware.GyroscopePage
 import top.chengdongqing.weui.ui.views.hardware.InfraredPage
 import top.chengdongqing.weui.ui.views.hardware.NFCPage
@@ -17,7 +17,7 @@ import top.chengdongqing.weui.ui.views.hardware.VibrationPage
 import top.chengdongqing.weui.ui.views.hardware.WiFiPage
 
 fun NavGraphBuilder.addHardwareGraph() {
-    navigation("screen", "hardware") {
+    navigation("gnss", "hardware") {
         composable("screen") {
             ScreenPage()
         }
@@ -36,8 +36,8 @@ fun NavGraphBuilder.addHardwareGraph() {
         composable("nfc") {
             NFCPage()
         }
-        composable("gps") {
-            GPSPage()
+        composable("gnss") {
+            GNSSPage()
         }
         composable("infrared") {
             InfraredPage()

@@ -34,7 +34,6 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -134,7 +133,7 @@ private fun AppListItem(app: App, context: Context) {
         }
         Spacer(modifier = Modifier.width(20.dp))
         Column(modifier = Modifier.weight(2f)) {
-            Text(buildAnnotatedString {
+            Text(buildString {
                 appendLine("包名: ${app.packageName}")
                 appendLine("最后更新: ${app.lastModified}")
                 append("APK大小: ${app.apkSize}")

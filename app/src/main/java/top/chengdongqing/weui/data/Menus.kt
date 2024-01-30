@@ -91,7 +91,7 @@ val menus = listOf(
             MenuItem("Wi-Fi", "wifi"),
             MenuItem("Bluetooth", "bluetooth"),
             MenuItem("NFC", "nfc"),
-            MenuItem("GPS", "gps"),
+            MenuItem("GNSS", "gnss"),
             MenuItem("Infrared", "infrared"),
             MenuItem("Gyroscope", "gyroscope"),
             MenuItem("Compass", "compass"),

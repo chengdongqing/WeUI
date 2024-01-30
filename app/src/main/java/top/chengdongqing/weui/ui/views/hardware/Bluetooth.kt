@@ -32,7 +32,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -52,11 +51,14 @@ fun BluetoothPage() {
         val context = LocalContext.current
         val permissionState = rememberMultiplePermissionsState(
             remember {
-                mutableListOf(
-                    Manifest.permission.BLUETOOTH,
-                    Manifest.permission.BLUETOOTH_ADMIN,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ).apply {
+                buildList {
+                    addAll(
+                        listOf(
+                            Manifest.permission.BLUETOOTH,
+                            Manifest.permission.BLUETOOTH_ADMIN,
+                            Manifest.permission.ACCESS_FINE_LOCATION
+                        )
+                    )
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                         add(Manifest.permission.BLUETOOTH_CONNECT)
                         add(Manifest.permission.BLUETOOTH_SCAN)
@@ -75,6 +77,7 @@ fun BluetoothPage() {
                     if (!bluetoothAdapter.isEnabled) {
                         launchBluetooth()
                     } else {
+                        bluetoothList.clear()
                         bluetoothAdapter.startDiscovery()
                     }
                 } else {
@@ -96,7 +99,7 @@ private fun BluetoothList(bluetoothList: List<BluetoothInfo>) {
                 .background(Color.White, RoundedCornerShape(12.dp))
                 .padding(horizontal = 20.dp)
         ) {
-            itemsIndexed(bluetoothList) { index, device ->
+            itemsIndexed(bluetoothList, key = { _, item -> item.address }) { index, device ->
                 BluetoothListItem(device)
                 if (index < bluetoothList.lastIndex) {
                     WeDivider()
@@ -114,7 +117,7 @@ private fun BluetoothListItem(bluetooth: BluetoothInfo) {
         Text(text = bluetooth.name, fontSize = 17.sp)
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = buildAnnotatedString {
+            text = buildString {
                 appendLine("信号强度：${bluetooth.rssi}")
                 appendLine("MAC地址：${bluetooth.address}")
                 appendLine("蓝牙类型：${bluetooth.type}")
@@ -128,7 +131,7 @@ private fun BluetoothListItem(bluetooth: BluetoothInfo) {
 }
 
 @Composable
-private fun rememberBluetoothDevices(): List<BluetoothInfo> {
+private fun rememberBluetoothDevices(): MutableList<BluetoothInfo> {
     val context = LocalContext.current
     val bluetoothList = remember { mutableStateListOf<BluetoothInfo>() }
 
@@ -201,14 +204,14 @@ private fun buildBluetoothInfo(device: BluetoothDevice, rssi: Int): BluetoothInf
     return BluetoothInfo(
         name = device.name,
         address = device.address,
-        rssi = "${rssi}dBm (${calculateSinglePercent(rssi)}%)",
+        rssi = "${rssi}dBm (${calculateSinglePercentage(rssi)}%)",
         type = determineBluetoothType(device.type),
         bondState = determineBluetoothBondState(device.bondState),
         uuids = device.uuids?.map { it.toString() }?.distinct() ?: listOf()
     )
 }
 
-private fun calculateSinglePercent(rssi: Int): Int {
+private fun calculateSinglePercentage(rssi: Int): Int {
     return ((rssi + 100) * 100) / 100
 }
 

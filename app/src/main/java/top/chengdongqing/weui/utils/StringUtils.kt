@@ -4,7 +4,6 @@ import java.io.File
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.Locale
 import kotlin.time.Duration
 
 /**
@@ -15,8 +14,19 @@ fun formatFloat(value: Float): String {
     return if (value % 1 == 0f) {
         value.toInt().toString()
     } else {
-        String.format(Locale.CHINESE, "%.2f", value)
+        "%.2f".format(value)
     }
+}
+
+fun formatDouble(value: Double): String {
+    if (value % 1.0 == 0.0) {
+        return "%.0f".format(value)
+    }
+    return "%.2f".format(value)
+}
+
+fun formatDegree(value: Float): String {
+    return "$value°"
 }
 
 fun formatDuration(duration: Duration): String {
@@ -26,9 +36,9 @@ fun formatDuration(duration: Duration): String {
     val seconds = totalSeconds % 60
 
     return when {
-        hours > 0 -> String.format(Locale.CHINESE, "%02d:%02d:%02d", hours, minutes, seconds)
-        minutes > 0 -> String.format(Locale.CHINESE, "%02d:%02d", minutes, seconds)
-        else -> String.format(Locale.CHINESE, "00:%02d", seconds)
+        hours > 0 -> "%02d:%02d:%02d".format(hours, minutes, seconds)
+        minutes > 0 -> "%02d:%02d".format(minutes, seconds)
+        else -> "00:%02d".format(seconds)
     }
 }
 
@@ -48,23 +58,4 @@ fun formatFileSize(filePath: String): String {
         size < 1024 * 1024 * 1024 -> "${formatFloat(size / (1024 * 1024f))} MB"
         else -> "${formatFloat(size / (1024 * 1024 * 1024f))} GB"
     }
-}
-
-fun bytesToHex(bytes: ByteArray): String {
-    val hexChars = CharArray(bytes.size * 2)
-    for (i in bytes.indices) {
-        val v = bytes[i].toInt() and 0xFF
-        hexChars[i * 2] = "0123456789ABCDEF"[v shr 4]
-        hexChars[i * 2 + 1] = "0123456789ABCDEF"[v and 0x0F]
-    }
-    return String(hexChars)
-}
-
-fun hexToBytes(hex: String): ByteArray {
-    val result = ByteArray(hex.length / 2)
-    for (i in hex.indices step 2) {
-        val byteValue = hex.substring(i, i + 2).toInt(16)
-        result[i / 2] = byteValue.toByte()
-    }
-    return result
 }
