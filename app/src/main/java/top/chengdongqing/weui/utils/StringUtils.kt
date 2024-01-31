@@ -6,15 +6,11 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import kotlin.time.Duration
 
-/**
- * 没有小数则显示为整数
- * 有小数最多保留2位小数
- */
-fun formatFloat(value: Float): String {
+fun formatFloat(value: Float, decimals: Int = 2): String {
     return if (value % 1 == 0f) {
         value.toInt().toString()
     } else {
-        "%.2f".format(value)
+        "%.${decimals}f".format(value)
     }
 }
 

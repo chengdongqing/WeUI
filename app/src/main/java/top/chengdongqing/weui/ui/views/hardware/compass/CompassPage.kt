@@ -28,7 +28,7 @@ import top.chengdongqing.weui.utils.formatFloat
 
 @Composable
 fun CompassPage() {
-    WePage(title = "Compass", description = "罗盘") {
+    WePage(title = "Compass", description = "罗盘（指南针），基于磁力计与加速度计") {
         val (observing, setObserving) = remember { mutableStateOf(false) }
 
         val context = LocalContext.current
@@ -43,7 +43,11 @@ fun CompassPage() {
                 Text(text = "精度：${determineAccuracy(it)}", color = FontColo1, fontSize = 10.sp)
             }
             pressure?.let {
-                Text(text = "气压：${formatFloat(pressure)}hPa", color = FontColo1, fontSize = 10.sp)
+                Text(
+                    text = "气压：${formatFloat(pressure)}hPa（百帕斯卡）",
+                    color = FontColo1,
+                    fontSize = 10.sp
+                )
             }
             Spacer(modifier = Modifier.height(40.dp))
             if (!observing) {
@@ -69,7 +73,7 @@ private fun rememberDegrees(sensorManager: SensorManager, observing: Boolean): P
     // 磁力计
     val magnetometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
 
-    val compassListener = remember {
+    val eventListener = remember {
         CompassListener(
             onDegreesChange = {
                 setDegrees(it)
@@ -83,22 +87,22 @@ private fun rememberDegrees(sensorManager: SensorManager, observing: Boolean): P
     LaunchedEffect(observing) {
         if (observing) {
             sensorManager.registerListener(
-                compassListener,
+                eventListener,
                 accelerometerSensor,
                 SensorManager.SENSOR_DELAY_UI
             )
             sensorManager.registerListener(
-                compassListener,
+                eventListener,
                 magnetometerSensor,
                 SensorManager.SENSOR_DELAY_UI
             )
         } else {
-            sensorManager.unregisterListener(compassListener)
+            sensorManager.unregisterListener(eventListener)
         }
     }
     DisposableEffect(Unit) {
         onDispose {
-            sensorManager.unregisterListener(compassListener)
+            sensorManager.unregisterListener(eventListener)
         }
     }
 
@@ -146,32 +150,35 @@ private fun rememberPressure(sensorManager: SensorManager, observing: Boolean): 
     val barometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE)
     val (pressure, setPressure) = remember { mutableStateOf<Float?>(null) }
 
-    val pressureListener = remember {
-        object : SensorEventListener {
-            override fun onSensorChanged(event: SensorEvent) {
-                if (event.sensor.type == Sensor.TYPE_PRESSURE) {
-                    setPressure(event.values[0])
+    barometerSensor?.let {
+        val eventListener = remember {
+            object : SensorEventListener {
+                override fun onSensorChanged(event: SensorEvent) {
+                    if (event.sensor.type == Sensor.TYPE_PRESSURE) {
+                        setPressure(event.values[0])
+                    }
                 }
+
+                override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
             }
-
-            override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
         }
-    }
 
-    LaunchedEffect(observing) {
-        if (observing) {
-            sensorManager.registerListener(
-                pressureListener,
-                barometerSensor,
-                SensorManager.SENSOR_DELAY_NORMAL
-            )
-        } else {
-            sensorManager.unregisterListener(pressureListener)
+        LaunchedEffect(observing) {
+            if (observing) {
+                sensorManager.registerListener(
+                    eventListener,
+                    barometerSensor,
+                    SensorManager.SENSOR_DELAY_NORMAL
+                )
+            } else {
+                sensorManager.unregisterListener(eventListener)
+            }
         }
-    }
-    DisposableEffect(barometerSensor) {
-        onDispose {
-            sensorManager.unregisterListener(pressureListener)
+
+        DisposableEffect(barometerSensor) {
+            onDispose {
+                sensorManager.unregisterListener(eventListener)
+            }
         }
     }
 

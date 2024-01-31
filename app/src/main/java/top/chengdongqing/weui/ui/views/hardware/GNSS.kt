@@ -60,6 +60,7 @@ fun GNSSPage() {
         val permissionState = rememberPermissionState(Manifest.permission.ACCESS_FINE_LOCATION)
         val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val (observing, setObserving) = remember { mutableStateOf(false) }
+
         val (satelliteList, location) = rememberSatelliteList(locationManager, observing)
         val groupedList by remember {
             derivedStateOf {

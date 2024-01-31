@@ -2,6 +2,10 @@ package top.chengdongqing.weui.ui.views.hardware
 
 import android.app.Activity
 import android.content.Context
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.provider.Settings
 import android.view.Window
 import android.view.WindowManager
@@ -9,6 +13,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
@@ -21,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.form.ButtonType
 import top.chengdongqing.weui.ui.components.form.WeButton
@@ -31,19 +37,22 @@ fun ScreenPage() {
     WePage(title = "Screen", description = "屏幕") {
         val context = LocalContext.current
         val window = (context as Activity).window
-        var brightness by rememberBrightness(window)
+        var screenBrightness by rememberScreenBrightness(window)
+        val lightBrightness = rememberLightBrightness()
 
         Column(
             modifier = Modifier.padding(horizontal = 12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             WeSlider(
-                value = (brightness * 100).toInt(),
+                value = (screenBrightness * 100).toInt(),
                 onChange = {
-                    brightness = it / 100f
-                    setScreenBrightness(window, brightness)
+                    screenBrightness = it / 100f
+                    setScreenBrightness(window, screenBrightness)
                 }
             )
+            Spacer(modifier = Modifier.height(20.dp))
+            Text(text = "光线强度：${lightBrightness} Lux（勒克斯）", fontSize = 10.sp)
             Spacer(modifier = Modifier.height(40.dp))
             KeepScreenOn(window)
             Spacer(modifier = Modifier.height(20.dp))
@@ -84,7 +93,7 @@ private fun DisabledScreenshot(window: Window) {
 }
 
 @Composable
-private fun rememberBrightness(window: Window): MutableState<Float> {
+private fun rememberScreenBrightness(window: Window): MutableState<Float> {
     val context = LocalContext.current
     val brightness = remember { mutableFloatStateOf(getScreenBrightness(context)) }
 
@@ -93,6 +102,39 @@ private fun rememberBrightness(window: Window): MutableState<Float> {
 
         onDispose {
             setScreenBrightness(window, initialValue)
+        }
+    }
+
+    return brightness
+}
+
+@Composable
+private fun rememberLightBrightness(): Float {
+    val context = LocalContext.current
+    val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+    val lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
+    val (brightness, setBrightness) = remember { mutableFloatStateOf(0f) }
+
+    val eventListener = remember {
+        object : SensorEventListener {
+            override fun onSensorChanged(event: SensorEvent) {
+                if (event.sensor.type == Sensor.TYPE_LIGHT) {
+                    setBrightness(event.values[0])
+                }
+            }
+
+            override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
+        }
+    }
+    DisposableEffect(Unit) {
+        sensorManager.registerListener(
+            eventListener,
+            lightSensor,
+            SensorManager.SENSOR_DELAY_NORMAL
+        )
+
+        onDispose {
+            sensorManager.unregisterListener(eventListener)
         }
     }
 

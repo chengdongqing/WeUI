@@ -24,7 +24,7 @@ import top.chengdongqing.weui.ui.theme.FontColor
 fun KeyValueCard(modifier: Modifier = Modifier, content: LazyListScope.() -> Unit) {
     LazyColumn(
         modifier = modifier
-            .background(Color.White, RoundedCornerShape(4.dp))
+            .background(Color.White, RoundedCornerShape(8.dp))
             .padding(horizontal = 16.dp)
     ) {
         content()
