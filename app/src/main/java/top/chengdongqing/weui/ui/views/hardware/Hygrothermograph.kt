@@ -4,28 +4,25 @@ import android.hardware.Sensor
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.ui.components.basic.KeyValueCard
 import top.chengdongqing.weui.ui.components.basic.KeyValueRow
 import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.form.ButtonType
 import top.chengdongqing.weui.ui.components.form.WeButton
-import top.chengdongqing.weui.ui.views.hardware.sensor.rememberSensorValues
-import top.chengdongqing.weui.utils.formatFloat
+import top.chengdongqing.weui.ui.views.hardware.sensor.rememberSensorValue
 
 @Composable
-fun AccelerometerPage() {
-    WePage(title = "Accelerometer", description = "加速度计，用于测量加速度，包括重力加速度") {
+fun HygrothermographPage() {
+    WePage(title = "Hygrothermograph", description = "温湿度计") {
         val (observing, setObserving) = remember { mutableStateOf(false) }
-        val values = rememberSensorValues(Sensor.TYPE_ACCELEROMETER, observing)
+        val temperature = rememberSensorValue(Sensor.TYPE_AMBIENT_TEMPERATURE, observing)
+        val humidity = rememberSensorValue(Sensor.TYPE_RELATIVE_HUMIDITY, observing)
 
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             if (!observing) {
@@ -40,27 +37,17 @@ fun AccelerometerPage() {
 
             Spacer(modifier = Modifier.height(40.dp))
 
-            values?.let {
-                Text(text = "单位：m/s²（米/秒平方）", fontSize = 10.sp)
-                Spacer(modifier = Modifier.height(20.dp))
-                KeyValueCard {
-                    itemsIndexed(it) { index, value ->
-                        KeyValueRow(
-                            label = "${getAxisLabel(index)}轴",
-                            value = formatFloat(value)
-                        )
-                    }
+            KeyValueCard {
+                item {
+                    KeyValueRow(
+                        label = "温度",
+                        value = temperature?.let { "${temperature}°C" } ?: "未知"
+                    )
+                    KeyValueRow(
+                        label = "湿度",
+                        value = humidity?.let { "${humidity}%" } ?: "未知")
                 }
             }
         }
-    }
-}
-
-private fun getAxisLabel(index: Int): String {
-    return when (index) {
-        0 -> "X"
-        1 -> "Y"
-        2 -> "Z"
-        else -> ""
     }
 }

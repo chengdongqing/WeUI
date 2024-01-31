@@ -24,17 +24,15 @@ import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.form.ButtonType
 import top.chengdongqing.weui.ui.components.form.WeButton
 import top.chengdongqing.weui.ui.theme.FontColo1
+import top.chengdongqing.weui.ui.views.hardware.sensor.rememberSensorValue
 import top.chengdongqing.weui.utils.formatFloat
 
 @Composable
 fun CompassPage() {
     WePage(title = "Compass", description = "罗盘（指南针），基于磁力计与加速度计") {
         val (observing, setObserving) = remember { mutableStateOf(false) }
-
-        val context = LocalContext.current
-        val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        val (degrees, accuracy) = rememberDegrees(sensorManager, observing)
-        val pressure = rememberPressure(sensorManager, observing)
+        val pressure = rememberSensorValue(Sensor.TYPE_PRESSURE, observing)
+        val (degrees, accuracy) = rememberDegrees(observing)
 
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Compass(degrees)
@@ -64,10 +62,12 @@ fun CompassPage() {
 }
 
 @Composable
-private fun rememberDegrees(sensorManager: SensorManager, observing: Boolean): Pair<Int, Int?> {
+private fun rememberDegrees(observing: Boolean): Pair<Int, Int?> {
     val (degrees, setDegrees) = remember { mutableIntStateOf(0) }
     val (accuracy, setAccuracy) = remember { mutableStateOf<Int?>(null) }
 
+    val context = LocalContext.current
+    val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
     // 加速度计
     val accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
     // 磁力计
@@ -143,46 +143,6 @@ private class CompassListener(
             onAccuracyChange(accuracy)
         }
     }
-}
-
-@Composable
-private fun rememberPressure(sensorManager: SensorManager, observing: Boolean): Float? {
-    val barometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE)
-    val (pressure, setPressure) = remember { mutableStateOf<Float?>(null) }
-
-    barometerSensor?.let {
-        val eventListener = remember {
-            object : SensorEventListener {
-                override fun onSensorChanged(event: SensorEvent) {
-                    if (event.sensor.type == Sensor.TYPE_PRESSURE) {
-                        setPressure(event.values[0])
-                    }
-                }
-
-                override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
-            }
-        }
-
-        LaunchedEffect(observing) {
-            if (observing) {
-                sensorManager.registerListener(
-                    eventListener,
-                    barometerSensor,
-                    SensorManager.SENSOR_DELAY_NORMAL
-                )
-            } else {
-                sensorManager.unregisterListener(eventListener)
-            }
-        }
-
-        DisposableEffect(barometerSensor) {
-            onDispose {
-                sensorManager.unregisterListener(eventListener)
-            }
-        }
-    }
-
-    return pressure
 }
 
 private fun determineAccuracy(accuracy: Int): String? {

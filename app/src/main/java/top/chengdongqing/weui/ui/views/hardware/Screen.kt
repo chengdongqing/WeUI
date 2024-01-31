@@ -3,9 +3,6 @@ package top.chengdongqing.weui.ui.views.hardware
 import android.app.Activity
 import android.content.Context
 import android.hardware.Sensor
-import android.hardware.SensorEvent
-import android.hardware.SensorEventListener
-import android.hardware.SensorManager
 import android.provider.Settings
 import android.view.Window
 import android.view.WindowManager
@@ -31,6 +28,7 @@ import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.form.ButtonType
 import top.chengdongqing.weui.ui.components.form.WeButton
 import top.chengdongqing.weui.ui.components.form.WeSlider
+import top.chengdongqing.weui.ui.views.hardware.sensor.rememberSensorValue
 
 @Composable
 fun ScreenPage() {
@@ -38,7 +36,7 @@ fun ScreenPage() {
         val context = LocalContext.current
         val window = (context as Activity).window
         var screenBrightness by rememberScreenBrightness(window)
-        val lightBrightness = rememberLightBrightness()
+        val lightBrightness = rememberSensorValue(Sensor.TYPE_LIGHT, true)
 
         Column(
             modifier = Modifier.padding(horizontal = 12.dp),
@@ -102,39 +100,6 @@ private fun rememberScreenBrightness(window: Window): MutableState<Float> {
 
         onDispose {
             setScreenBrightness(window, initialValue)
-        }
-    }
-
-    return brightness
-}
-
-@Composable
-private fun rememberLightBrightness(): Float {
-    val context = LocalContext.current
-    val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
-    val lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
-    val (brightness, setBrightness) = remember { mutableFloatStateOf(0f) }
-
-    val eventListener = remember {
-        object : SensorEventListener {
-            override fun onSensorChanged(event: SensorEvent) {
-                if (event.sensor.type == Sensor.TYPE_LIGHT) {
-                    setBrightness(event.values[0])
-                }
-            }
-
-            override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
-        }
-    }
-    DisposableEffect(Unit) {
-        sensorManager.registerListener(
-            eventListener,
-            lightSensor,
-            SensorManager.SENSOR_DELAY_NORMAL
-        )
-
-        onDispose {
-            sensorManager.unregisterListener(eventListener)
         }
     }
 

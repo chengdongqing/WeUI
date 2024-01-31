@@ -9,6 +9,7 @@ import top.chengdongqing.weui.ui.views.hardware.FingerprintPage
 import top.chengdongqing.weui.ui.views.hardware.FlashlightPage
 import top.chengdongqing.weui.ui.views.hardware.GNSSPage
 import top.chengdongqing.weui.ui.views.hardware.GyroscopePage
+import top.chengdongqing.weui.ui.views.hardware.HygrothermographPage
 import top.chengdongqing.weui.ui.views.hardware.InfraredPage
 import top.chengdongqing.weui.ui.views.hardware.NFCPage
 import top.chengdongqing.weui.ui.views.hardware.ScreenPage
@@ -50,6 +51,9 @@ fun NavGraphBuilder.addHardwareGraph() {
         }
         composable("accelerometer") {
             AccelerometerPage()
+        }
+        composable("hygrothermograph") {
+            HygrothermographPage()
         }
         composable("fingerprint") {
             FingerprintPage()

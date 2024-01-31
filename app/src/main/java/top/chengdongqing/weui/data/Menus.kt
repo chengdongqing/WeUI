@@ -96,6 +96,7 @@ val menus = listOf(
             MenuItem("Gyroscope", "gyroscope"),
             MenuItem("Compass", "compass"),
             MenuItem("Accelerometer", "accelerometer"),
+            MenuItem("Hygrothermograph", "hygrothermograph"),
             MenuItem("Fingerprint", "fingerprint")
         )
     ),
