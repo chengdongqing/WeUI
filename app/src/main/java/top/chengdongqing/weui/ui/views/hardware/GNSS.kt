@@ -27,6 +27,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -44,6 +45,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import top.chengdongqing.weui.ui.components.basic.WePage
+import top.chengdongqing.weui.ui.components.form.ButtonType
 import top.chengdongqing.weui.ui.components.form.WeButton
 import top.chengdongqing.weui.utils.formatDegree
 import top.chengdongqing.weui.utils.formatDouble
@@ -57,9 +59,8 @@ fun GNSSPage() {
         val context = LocalContext.current
         val permissionState = rememberPermissionState(Manifest.permission.ACCESS_FINE_LOCATION)
         val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        var observing by remember { mutableStateOf(false) }
-        var location by remember { mutableStateOf<Location?>(null) }
-        val satelliteList = remember { mutableStateListOf<SatelliteInfo>() }
+        val (observing, setObserving) = remember { mutableStateOf(false) }
+        val (satelliteList, location) = rememberSatelliteList(locationManager, observing)
         val groupedList by remember {
             derivedStateOf {
                 // 根据类型分组
@@ -70,53 +71,23 @@ fun GNSSPage() {
             }
         }
 
-        val satelliteStatusCallback = remember {
-            SatelliteStatusCallback(satelliteList)
-        }
-        val locationListener = remember {
-            LocationListener { location = it }
-        }
-
-        fun stopScan() {
-            locationManager.removeUpdates(locationListener)
-            locationManager.unregisterGnssStatusCallback(satelliteStatusCallback)
-        }
-        DisposableEffect(Unit) {
-            onDispose {
-                stopScan()
-            }
-        }
-
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             if (!observing) {
-                WeButton(text = "扫描GNSS") {
+                WeButton(text = "开始扫描") {
                     if (permissionState.status.isGranted) {
                         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                             Toast.makeText(context, "位置服务未开启", Toast.LENGTH_SHORT).show()
                             context.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
                         } else {
-                            // 监听卫星状态变化
-                            locationManager.registerGnssStatusCallback(
-                                satelliteStatusCallback,
-                                Handler(Looper.getMainLooper())
-                            )
-                            // 监听位置更新
-                            locationManager.requestLocationUpdates(
-                                LocationManager.GPS_PROVIDER,
-                                1000, // 多久更新一次
-                                0f, // 移动超过多少米才更新
-                                locationListener
-                            )
-                            observing = true
+                            setObserving(true)
                         }
                     } else {
                         permissionState.launchPermissionRequest()
                     }
                 }
             } else {
-                WeButton(text = "停止扫描") {
-                    observing = false
-                    stopScan()
+                WeButton(text = "停止扫描", type = ButtonType.PLAIN) {
+                    setObserving(false)
                 }
             }
 
@@ -178,8 +149,8 @@ private fun SatelliteTable(groups: Map<String, List<SatelliteInfo>>) {
                 SatelliteTableRow(
                     listOf(
                         it.svid.toString(),
-                        it.azimuthDegree,
-                        it.elevationDegree,
+                        it.azimuthDegrees,
+                        it.elevationDegrees,
                         it.frequency,
                         "${it.signalStrength}dBHz"
                     )
@@ -206,8 +177,51 @@ private fun SatelliteTableRow(columns: List<String>) {
     }
 }
 
-private class SatelliteStatusCallback(val satelliteList: MutableList<SatelliteInfo>) :
-    GnssStatus.Callback() {
+@SuppressLint("MissingPermission")
+@Composable
+private fun rememberSatelliteList(
+    locationManager: LocationManager,
+    observing: Boolean
+): Pair<List<SatelliteInfo>, Location?> {
+    val satelliteList = remember { mutableStateListOf<SatelliteInfo>() }
+    var location by remember { mutableStateOf<Location?>(null) }
+
+    val satelliteStatusCallback = remember { SatelliteStatusCallback(satelliteList) }
+    val locationListener = remember { LocationListener { location = it } }
+
+    fun stopScan() {
+        locationManager.removeUpdates(locationListener)
+        locationManager.unregisterGnssStatusCallback(satelliteStatusCallback)
+    }
+
+    LaunchedEffect(observing) {
+        if (observing) {
+            locationManager.registerGnssStatusCallback(
+                satelliteStatusCallback,
+                Handler(Looper.getMainLooper())
+            )
+            locationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER,
+                1000, // 多久更新一次
+                0f, // 移动超过多少米才更新
+                locationListener
+            )
+        } else {
+            stopScan()
+        }
+    }
+    DisposableEffect(Unit) {
+        onDispose {
+            stopScan()
+        }
+    }
+
+    return Pair(satelliteList, location)
+}
+
+private class SatelliteStatusCallback(
+    val satelliteList: MutableList<SatelliteInfo>
+) : GnssStatus.Callback() {
     override fun onSatelliteStatusChanged(status: GnssStatus) {
         val svidArray = Array(status.satelliteCount) { status.getSvid(it) }
         satelliteList.removeIf { !svidArray.contains(it.svid) }
@@ -216,8 +230,8 @@ private class SatelliteStatusCallback(val satelliteList: MutableList<SatelliteIn
             val info = SatelliteInfo(
                 type = determineSatelliteType(status.getConstellationType(i)),
                 svid = status.getSvid(i),
-                azimuthDegree = formatDegree(status.getAzimuthDegrees(i)),
-                elevationDegree = formatDegree(status.getElevationDegrees(i)),
+                azimuthDegrees = formatDegree(status.getAzimuthDegrees(i), 1),
+                elevationDegrees = formatDegree(status.getElevationDegrees(i), 1),
                 frequency = formatFrequency(status.getCarrierFrequencyHz(i)),
                 signalStrength = status.getCn0DbHz(i)
             )
@@ -267,11 +281,11 @@ private data class SatelliteInfo(
     /**
      * 方位角
      */
-    val azimuthDegree: String,
+    val azimuthDegrees: String,
     /**
      * 高度角
      */
-    val elevationDegree: String,
+    val elevationDegrees: String,
     /**
      * 频点
      */

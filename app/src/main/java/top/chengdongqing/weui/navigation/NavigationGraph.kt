@@ -70,11 +70,11 @@ fun NavigationGraph() {
 }
 
 fun NavGraphBuilder.addMapGraph() {
-    navigation("preview", "location") {
-        composable("preview") {
+    navigation("location-preview", "location") {
+        composable("location-preview") {
             LocationPreviewPage()
         }
-        composable("picker") {
+        composable("location-picker") {
             LocationPickerPage()
         }
     }

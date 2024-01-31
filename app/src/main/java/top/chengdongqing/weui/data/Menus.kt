@@ -110,8 +110,8 @@ val menus = listOf(
     MenuGroup(
         "地图组件", R.drawable.ic_nav_feedback,
         listOf(
-            MenuItem("LocationPreview", "preview"),
-            MenuItem("LocationPicker", "picker")
+            MenuItem("LocationPreview", "location-preview"),
+            MenuItem("LocationPicker", "location-picker")
         )
     ),
     MenuGroup(

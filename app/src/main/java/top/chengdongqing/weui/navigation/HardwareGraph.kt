@@ -5,7 +5,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import top.chengdongqing.weui.ui.views.hardware.AccelerometerPage
 import top.chengdongqing.weui.ui.views.hardware.BluetoothPage
-import top.chengdongqing.weui.ui.views.hardware.CompassPage
 import top.chengdongqing.weui.ui.views.hardware.FingerprintPage
 import top.chengdongqing.weui.ui.views.hardware.FlashlightPage
 import top.chengdongqing.weui.ui.views.hardware.GNSSPage
@@ -15,9 +14,10 @@ import top.chengdongqing.weui.ui.views.hardware.NFCPage
 import top.chengdongqing.weui.ui.views.hardware.ScreenPage
 import top.chengdongqing.weui.ui.views.hardware.VibrationPage
 import top.chengdongqing.weui.ui.views.hardware.WiFiPage
+import top.chengdongqing.weui.ui.views.hardware.compass.CompassPage
 
 fun NavGraphBuilder.addHardwareGraph() {
-    navigation("gnss", "hardware") {
+    navigation("screen", "hardware") {
         composable("screen") {
             ScreenPage()
         }

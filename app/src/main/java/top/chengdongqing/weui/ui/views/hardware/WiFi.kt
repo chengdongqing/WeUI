@@ -160,13 +160,6 @@ private fun buildWiFiList(scanResultList: List<ScanResult>): List<WiFiInfo> {
         }
 }
 
-private data class WiFiInfo(
-    val name: String,
-    val band: String,
-    val level: String,
-    val secure: Boolean
-)
-
 private fun getSSID(wifi: ScanResult): String {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         wifi.wifiSsid?.bytes?.decodeToString() ?: ""
@@ -202,3 +195,10 @@ private fun calculateSignalLevel(rssi: Int, numLevels: Int = 100): Int {
 private fun isWifiSecure(capabilities: String): Boolean {
     return capabilities.contains("WEP") || capabilities.contains("PSK") || capabilities.contains("EAP")
 }
+
+private data class WiFiInfo(
+    val name: String,
+    val band: String,
+    val level: String,
+    val secure: Boolean
+)

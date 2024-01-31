@@ -18,9 +18,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.drawText
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
@@ -91,32 +96,42 @@ fun WeCircleProgress(
         targetValue = 360 * (localPercent / 100),
         label = "CircleProgressAnimation"
     )
+    val textMeasurer = rememberTextMeasurer()
 
-    Box(modifier = Modifier.padding(vertical = 20.dp), contentAlignment = Alignment.Center) {
-        Canvas(modifier = Modifier.size(size)) {
-            drawCircle(
-                color = Color(0f, 0f, 0f, 0.06f),
-                radius = this.size.width / 2,
-                style = Stroke(width = strokeWidth.toPx())
+    Canvas(
+        modifier = Modifier
+            .padding(vertical = 20.dp)
+            .size(size)
+    ) {
+        val radius = this.size.width / 2
+        drawCircle(
+            color = Color(0f, 0f, 0f, 0.06f),
+            radius = radius,
+            style = Stroke(width = strokeWidth.toPx())
+        )
+        drawArc(
+            color = PrimaryColor,
+            startAngle = -90f,
+            sweepAngle = animatedAngle,
+            useCenter = false,
+            style = Stroke(
+                width = strokeWidth.toPx(),
+                cap = StrokeCap.Round
             )
-            drawArc(
-                color = PrimaryColor,
-                startAngle = -90f,
-                sweepAngle = animatedAngle,
-                useCenter = false,
-                style = Stroke(
-                    width = strokeWidth.toPx(),
-                    cap = StrokeCap.Round
-                )
-            )
-        }
-
+        )
         formatter?.also {
-            Text(
-                text = it(localPercent),
-                color = FontColor,
-                fontSize = fontSize,
-                textAlign = TextAlign.End
+            val text = AnnotatedString(
+                it(localPercent),
+                SpanStyle(fontSize = fontSize, color = FontColor)
+            )
+            val textLayoutResult = textMeasurer.measure(text)
+            drawText(
+                textMeasurer,
+                text,
+                Offset(
+                    x = radius - textLayoutResult.size.width / 2,
+                    y = radius - textLayoutResult.size.height / 2
+                )
             )
         }
     }
@@ -166,8 +181,7 @@ fun WeDashboardProgress(
             Text(
                 text = it(localPercent),
                 color = FontColor,
-                fontSize = fontSize,
-                textAlign = TextAlign.End
+                fontSize = fontSize
             )
         }
     }

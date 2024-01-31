@@ -9,7 +9,6 @@ import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import androidx.biometric.BiometricPrompt
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.form.WeButton
@@ -28,10 +27,11 @@ fun FingerprintPage() {
 class BiometricActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
             .setTitle("指纹认证")
             .setAllowedAuthenticators(BIOMETRIC_STRONG)
-            .setNegativeButtonText("取消")
+            .setNegativeButtonText("取消认证")
             .build()
         createBiometricPrompt(this).authenticate(promptInfo)
     }
@@ -42,8 +42,6 @@ class BiometricActivity : FragmentActivity() {
 }
 
 private fun createBiometricPrompt(activity: FragmentActivity): BiometricPrompt {
-    val executor = ContextCompat.getMainExecutor(activity)
-
     val callback = object : BiometricPrompt.AuthenticationCallback() {
         override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
             super.onAuthenticationError(errorCode, errString)
@@ -62,6 +60,5 @@ private fun createBiometricPrompt(activity: FragmentActivity): BiometricPrompt {
             Toast.makeText(activity, "认证成功", Toast.LENGTH_SHORT).show()
         }
     }
-
-    return BiometricPrompt(activity, executor, callback)
+    return BiometricPrompt(activity, callback)
 }
