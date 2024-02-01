@@ -18,20 +18,20 @@ import top.chengdongqing.weui.ui.components.form.WeButton
 
 @Composable
 fun InformationBarPage() {
-    WePage(title = "Information Bar", description = "信息提示条") {
+    WePage(title = "InformationBar", description = "信息提示条") {
         Column(horizontalAlignment = Alignment.End) {
-            val visible = remember { mutableStateOf(true) }
+            val (visible, setVisible) = remember { mutableStateOf(true) }
             WeInformationBar(
-                visible = visible.value,
+                visible = visible,
                 content = "成功提示 success",
                 type = InformationBarType.SUCCESS,
                 linkText = "详情"
             ) {
-                visible.value = false
+                setVisible(false)
             }
-            if (!visible.value) {
+            if (!visible) {
                 WeButton(text = "显示", type = ButtonType.PLAIN, size = ButtonSize.SMALL) {
-                    visible.value = true
+                    setVisible(true)
                 }
             }
             Spacer(modifier = Modifier.height(20.dp))
