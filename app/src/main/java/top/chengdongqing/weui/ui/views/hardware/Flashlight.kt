@@ -18,7 +18,7 @@ fun FlashlightPage() {
 
         WeSwitch(isFlashOn.value) { checked ->
             isFlashOn.value = checked
-            cameraManager.setTorchMode(cameraManager.cameraIdList[0], checked)
+            cameraManager.setTorchMode(cameraManager.cameraIdList.first(), checked)
         }
     }
 }

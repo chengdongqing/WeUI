@@ -154,8 +154,10 @@ private fun PickerColumn(
     LaunchedEffect(listState) {
         snapshotFlow { listState.firstVisibleItemIndex }
             .collect {
-                onChange(it)
-                vibrate(context, 1)
+                if (it != index) {
+                    onChange(it)
+                    vibrate(context, 1)
+                }
             }
     }
 
@@ -195,7 +197,7 @@ fun WeSingleColumnPicker(
         range = arrayOf(range),
         value = arrayOf(value),
         onChange = {
-            onChange(it[0])
+            onChange(it.first())
         },
         onCancel = onCancel
     )
@@ -244,7 +246,7 @@ fun WeDatePicker(
 
         mutableStateOf(
             arrayOf(
-                range[0].indexOf(initialValue.year),
+                range.first().indexOf(initialValue.year),
                 range.getOrNull(1)?.indexOf(initialValue.monthValue) ?: 0,
                 range.getOrNull(2)?.indexOf(initialValue.dayOfMonth) ?: 0
             )
@@ -266,18 +268,18 @@ fun WeDatePicker(
         value = localValue,
         onColumnChange = { column, _, fullValue ->
             if (type != DateType.YEAR) {
-                range[1] = when (fullValue[0]) {
+                range[1] = when (fullValue.first()) {
                     0 -> IntRange(start.monthValue, 12)
-                    range[0].lastIndex -> IntRange(1, end.monthValue)
+                    range.first().lastIndex -> IntRange(1, end.monthValue)
                     else -> IntRange(1, 12)
                 }.toList()
             }
             if (type == DateType.DAY) {
                 range[1].getOrNull(fullValue[1])?.let {
-                    range[2] = (if (fullValue[0] == 0 && it == start.monthValue) {
+                    range[2] = (if (fullValue.first() == 0 && it == start.monthValue) {
                         val days = LocalDate.now().withMonth(start.monthValue).lengthOfMonth()
                         IntRange(start.dayOfMonth, days)
-                    } else if (fullValue[0] == range[0].lastIndex && it == end.monthValue) {
+                    } else if (fullValue.first() == range.first().lastIndex && it == end.monthValue) {
                         IntRange(1, end.dayOfMonth)
                     } else {
                         val days = LocalDate.now().withMonth(range[1][fullValue[1]]).lengthOfMonth()
@@ -293,7 +295,7 @@ fun WeDatePicker(
             localValue = it
 
             val date = LocalDate.of(
-                range[0][it[0]],
+                range.first()[it.first()],
                 range.getOrNull(1)?.get(it[1]) ?: 1,
                 range.getOrNull(2)?.get(it[2]) ?: 1
             )
@@ -346,7 +348,7 @@ fun WeTimePicker(
 
         mutableStateOf(
             arrayOf(
-                range[0].indexOf(initialValue.hour),
+                range.first().indexOf(initialValue.hour),
                 range.getOrNull(1)?.indexOf(initialValue.minute) ?: 0,
                 range.getOrNull(2)?.indexOf(initialValue.second) ?: 0
             )
@@ -368,17 +370,17 @@ fun WeTimePicker(
         value = localValue,
         onColumnChange = { column, _, fullValue ->
             if (type != TimeType.HOUR) {
-                range[1] = when (fullValue[0]) {
+                range[1] = when (fullValue.first()) {
                     0 -> IntRange(start.minute, 59)
-                    range[0].lastIndex -> IntRange(0, end.minute)
+                    range.first().lastIndex -> IntRange(0, end.minute)
                     else -> IntRange(0, 59)
                 }.toList()
             }
             if (type == TimeType.SECOND) {
                 range[1].getOrNull(fullValue[1])?.let {
-                    range[2] = (if (fullValue[0] == 0 && it == start.minute) {
+                    range[2] = (if (fullValue.first() == 0 && it == start.minute) {
                         IntRange(start.second, 59)
-                    } else if (fullValue[0] == range[0].lastIndex && it == end.minute) {
+                    } else if (fullValue.first() == range.first().lastIndex && it == end.minute) {
                         IntRange(0, end.second)
                     } else {
                         IntRange(0, 59)
@@ -393,7 +395,7 @@ fun WeTimePicker(
             localValue = it
 
             val date = LocalTime.of(
-                range[0][it[0]],
+                range.first()[it.first()],
                 range.getOrNull(1)?.get(it[1]) ?: 0,
                 range.getOrNull(2)?.get(it[2]) ?: 0
             )

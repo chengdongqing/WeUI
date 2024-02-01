@@ -79,6 +79,7 @@ dependencies {
     implementation(libs.androidx.room.ktx) // room支持协程
     ksp(libs.androidx.room.compiler) // room支持注解
     implementation(libs.androidx.biometric) // 简化生物认证
+    implementation(libs.lunar) // 农历计算库
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)

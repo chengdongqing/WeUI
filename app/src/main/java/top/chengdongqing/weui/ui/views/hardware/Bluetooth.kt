@@ -51,14 +51,11 @@ fun BluetoothPage() {
         val context = LocalContext.current
         val permissionState = rememberMultiplePermissionsState(
             remember {
-                buildList {
-                    addAll(
-                        listOf(
-                            Manifest.permission.BLUETOOTH,
-                            Manifest.permission.BLUETOOTH_ADMIN,
-                            Manifest.permission.ACCESS_FINE_LOCATION
-                        )
-                    )
+                mutableListOf(
+                    Manifest.permission.BLUETOOTH,
+                    Manifest.permission.BLUETOOTH_ADMIN,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ).apply {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                         add(Manifest.permission.BLUETOOTH_CONNECT)
                         add(Manifest.permission.BLUETOOTH_SCAN)

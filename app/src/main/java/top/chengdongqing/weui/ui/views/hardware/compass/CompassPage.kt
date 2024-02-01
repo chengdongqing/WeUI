@@ -135,7 +135,7 @@ private class CompassListener(
             if (success) {
                 val orientation = FloatArray(3)
                 SensorManager.getOrientation(r, orientation)
-                var azimuth = Math.toDegrees(orientation[0].toDouble())
+                var azimuth = Math.toDegrees(orientation.first().toDouble())
                 if (azimuth < 0) {
                     azimuth += 360
                 }

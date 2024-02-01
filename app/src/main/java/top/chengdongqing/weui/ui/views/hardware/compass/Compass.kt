@@ -4,7 +4,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -47,10 +47,11 @@ fun Compass(degrees: Int) {
         drawCurrentDegrees(radius, degrees, textMeasurer)
     }
 
-    // 触发震动
-    SideEffect {
-        if (degrees % 90 == 0) {
-            vibrate(context, 50)
+    DisposableEffect(degrees) {
+        onDispose {
+            if (degrees % 90 == 0) {
+                vibrate(context, 15)
+            }
         }
     }
 }

@@ -19,6 +19,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -37,45 +38,17 @@ fun DeviceInfoPage() {
         val battery = rememberBatteryInfo()
 
         val deviceInfoItems = remember {
-            buildList<Pair<String, String>> {
-                add(Pair("设备品牌", Build.BRAND))
-                add(Pair("设备型号", Build.MODEL))
-                add(
-                    Pair(
-                        "屏幕宽高",
-                        "${configuration.screenWidthDp}x${configuration.screenHeightDp}(dp)"
-                    )
-                )
-                val displayMetrics = context.resources.displayMetrics
-                add(
-                    Pair(
-                        "屏幕分辨率",
-                        "${displayMetrics.widthPixels}x${displayMetrics.heightPixels}(px)"
-                    )
-                )
-                add(Pair("屏幕像素比", density.density.toString()))
-                val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-                add(Pair("屏幕方向", if (isLandscape) "横屏" else "竖屏"))
-                add(Pair("状态栏高度", "${formatFloat(statusBarHeight.value)}(dp)"))
-                add(Pair("系统语言", configuration.locales.toLanguageTags()))
-                add(Pair("字体缩放", configuration.fontScale.toString()))
-                add(Pair("系统版本", "Android ${Build.VERSION.RELEASE}"))
-                (context.getSystemService(Context.WIFI_SERVICE) as? WifiManager)?.let {
-                    add(Pair("WiFi", formatEnableStatus(it.isWifiEnabled)))
-                }
-                (context.getSystemService(Context.BLUETOOTH_SERVICE) as? BluetoothManager)?.let {
-                    add(Pair("蓝牙", formatEnableStatus(it.adapter.isEnabled)))
-                }
-                (context.getSystemService(Context.LOCATION_SERVICE) as? LocationManager)?.let {
-                    val isGpsEnabled = it.isProviderEnabled(LocationManager.GPS_PROVIDER)
-                    add(Pair("GPS", formatEnableStatus(isGpsEnabled)))
-                }
-                (context.getSystemService(Context.NFC_SERVICE) as? NfcManager)?.let {
-                    val isNfcEnabled = it.defaultAdapter?.isEnabled == true
-                    add(Pair("NFC", formatEnableStatus(isNfcEnabled)))
-                }
-                add(Pair("电量", "${battery.level}%"))
-                add(Pair("充电中", if (battery.isCharging) "是" else "否"))
+            mutableListOf(
+                Pair("设备品牌", Build.BRAND),
+                Pair("设备型号", Build.MODEL),
+                Pair("系统版本", "Android ${Build.VERSION.RELEASE}"),
+                Pair("系统语言", configuration.locales.toLanguageTags()),
+                Pair("字体缩放", configuration.fontScale.toString()),
+                Pair("电量", "${battery.level}%"),
+                Pair("充电中", if (battery.isCharging) "是" else "否")
+            ).apply {
+                addScreenItems(context, density, configuration, statusBarHeight)
+                addHardwareItems(context)
             }
         }
 
@@ -84,6 +57,48 @@ fun DeviceInfoPage() {
                 KeyValueRow(it.first, it.second)
             }
         }
+    }
+}
+
+private fun MutableList<Pair<String, String>>.addScreenItems(
+    context: Context,
+    density: Density,
+    configuration: Configuration,
+    statusBarHeight: Dp
+) {
+    add(
+        Pair(
+            "屏幕宽高",
+            "${configuration.screenWidthDp}x${configuration.screenHeightDp}(dp)"
+        )
+    )
+    val displayMetrics = context.resources.displayMetrics
+    add(
+        Pair(
+            "屏幕分辨率",
+            "${displayMetrics.widthPixels}x${displayMetrics.heightPixels}(px)"
+        )
+    )
+    add(Pair("屏幕像素比", density.density.toString()))
+    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+    add(Pair("屏幕方向", if (isLandscape) "横屏" else "竖屏"))
+    add(Pair("状态栏高度", "${formatFloat(statusBarHeight.value)}(dp)"))
+}
+
+private fun MutableList<Pair<String, String>>.addHardwareItems(context: Context) {
+    (context.getSystemService(Context.WIFI_SERVICE) as? WifiManager)?.let {
+        add(Pair("WiFi", formatEnableStatus(it.isWifiEnabled)))
+    }
+    (context.getSystemService(Context.BLUETOOTH_SERVICE) as? BluetoothManager)?.let {
+        add(Pair("蓝牙", formatEnableStatus(it.adapter.isEnabled)))
+    }
+    (context.getSystemService(Context.LOCATION_SERVICE) as? LocationManager)?.let {
+        val isGpsEnabled = it.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        add(Pair("GPS", formatEnableStatus(isGpsEnabled)))
+    }
+    (context.getSystemService(Context.NFC_SERVICE) as? NfcManager)?.let {
+        val isNfcEnabled = it.defaultAdapter?.isEnabled == true
+        add(Pair("NFC", formatEnableStatus(isNfcEnabled)))
     }
 }
 

@@ -14,7 +14,7 @@ import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun rememberSensorValue(type: Int, observing: Boolean): Float? {
-    return rememberSensorValues(type, observing)?.let { it[0] }
+    return rememberSensorValues(type, observing)?.first()
 }
 
 @Composable
