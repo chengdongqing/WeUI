@@ -15,7 +15,8 @@ val menus = listOf(
             MenuItem("Steps", "steps"),
             MenuItem("Swiper", "swiper"),
             MenuItem("ScrollView", "scroll-view"),
-            MenuItem("Calendar", "calendar")
+            MenuItem("Calendar", "calendar"),
+            MenuItem("Clock", "clock")
         )
     ),
     MenuGroup(

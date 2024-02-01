@@ -35,7 +35,7 @@ fun KeyValueCard(modifier: Modifier = Modifier, content: LazyListScope.() -> Uni
 fun KeyValueRow(label: String, value: String) {
     Row(
         modifier = Modifier
-            .heightIn(56.dp)
+            .heightIn(60.dp)
             .padding(vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {

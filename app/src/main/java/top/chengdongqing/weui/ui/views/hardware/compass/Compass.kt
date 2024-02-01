@@ -41,10 +41,10 @@ fun Compass(degrees: Int) {
         val center = Offset(size.width / 2, size.height / 2)
         val radius = size.minDimension / 2
 
-        drawCompassBase(center, radius)
-        drawCompassScale(center, radius, degrees, textMeasurer)
+        drawCompassFace(center, radius)
+        drawCompassScales(center, radius, degrees, textMeasurer)
         drawNorthIndicator(radius)
-        drawCurrentDegree(radius, degrees, textMeasurer)
+        drawCurrentDegrees(radius, degrees, textMeasurer)
     }
 
     // 触发震动
@@ -55,8 +55,8 @@ fun Compass(degrees: Int) {
     }
 }
 
-// 画罗盘的基础部分
-private fun DrawScope.drawCompassBase(center: Offset, radius: Float) {
+// 绘制圆盘
+private fun DrawScope.drawCompassFace(center: Offset, radius: Float) {
     drawCircle(
         color = Color.White,
         center = center,
@@ -64,8 +64,8 @@ private fun DrawScope.drawCompassBase(center: Offset, radius: Float) {
     )
 }
 
-// 画罗盘的刻度和文本
-private fun DrawScope.drawCompassScale(
+// 绘制罗盘的刻度和方位
+private fun DrawScope.drawCompassScales(
     center: Offset,
     radius: Float,
     degrees: Int,
@@ -79,7 +79,7 @@ private fun DrawScope.drawCompassScale(
     }
 }
 
-// 绘制罗盘刻度线
+// 绘制刻度线
 private fun DrawScope.drawScaleLine(
     center: Offset,
     radius: Float,
@@ -172,8 +172,8 @@ private fun DrawScope.drawNorthIndicator(radius: Float) {
     )
 }
 
-// 显示当前度数
-private fun DrawScope.drawCurrentDegree(radius: Float, degrees: Int, textMeasurer: TextMeasurer) {
+// 绘制当前度数
+private fun DrawScope.drawCurrentDegrees(radius: Float, degrees: Int, textMeasurer: TextMeasurer) {
     val degreeText = AnnotatedString(
         formatDegree(degrees.toFloat()),
         SpanStyle(fontSize = 40.sp, fontWeight = FontWeight.Bold)
@@ -188,7 +188,7 @@ private fun DrawScope.drawCurrentDegree(radius: Float, degrees: Int, textMeasure
 }
 
 // 将极坐标转换为笛卡尔坐标
-private fun polarToCartesian(
+fun polarToCartesian(
     center: Offset,
     radius: Float,
     angleRadians: Double

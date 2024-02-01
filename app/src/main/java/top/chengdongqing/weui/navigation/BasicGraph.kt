@@ -5,6 +5,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import top.chengdongqing.weui.ui.views.basic.BadgePage
 import top.chengdongqing.weui.ui.views.basic.CalendarPage
+import top.chengdongqing.weui.ui.views.basic.ClockPage
 import top.chengdongqing.weui.ui.views.basic.LoadMorePage
 import top.chengdongqing.weui.ui.views.basic.LoadingPage
 import top.chengdongqing.weui.ui.views.basic.ProgressPage
@@ -37,6 +38,9 @@ fun NavGraphBuilder.addBasicGraph() {
         }
         composable("calendar") {
             CalendarPage()
+        }
+        composable("clock") {
+            ClockPage()
         }
     }
 }
