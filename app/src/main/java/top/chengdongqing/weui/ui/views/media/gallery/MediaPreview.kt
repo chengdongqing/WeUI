@@ -25,6 +25,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.viewinterop.AndroidView
 import coil.compose.AsyncImage
+import top.chengdongqing.weui.utils.SetupFullscreen
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -36,6 +37,7 @@ fun MediaPreviewPage(
         galleryViewModel.mediaItems.size
     }
 
+    SetupFullscreen()
     HorizontalPager(
         state = pagerState,
         modifier = Modifier
