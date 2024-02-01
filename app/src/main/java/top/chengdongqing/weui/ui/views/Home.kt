@@ -42,7 +42,7 @@ import top.chengdongqing.weui.data.menus
 import top.chengdongqing.weui.model.MenuGroup
 import top.chengdongqing.weui.ui.theme.BackgroundColor
 import top.chengdongqing.weui.ui.theme.BorderColor
-import top.chengdongqing.weui.ui.theme.FontColo1
+import top.chengdongqing.weui.ui.theme.FontColor1
 
 @Composable
 fun HomePage(navController: NavHostController) {
@@ -69,7 +69,7 @@ fun HomePage(navController: NavHostController) {
                     Spacer(modifier = Modifier.height(19.dp))
                     Text(
                         text = "WeUI 是一套同微信原生视觉体验一致的基础样式库，由微信官方设计团队为微信内网页和微信小程序量身设计，令用户的使用感知更加统一。",
-                        color = FontColo1,
+                        color = FontColor1,
                         fontSize = 14.sp
                     )
                 }

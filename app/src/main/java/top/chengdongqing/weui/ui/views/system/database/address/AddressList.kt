@@ -36,7 +36,7 @@ import top.chengdongqing.weui.ui.components.feedback.ToastIcon
 import top.chengdongqing.weui.ui.components.feedback.rememberWeActionSheet
 import top.chengdongqing.weui.ui.components.feedback.rememberWeDialog
 import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
-import top.chengdongqing.weui.ui.theme.FontColo1
+import top.chengdongqing.weui.ui.theme.FontColor1
 import top.chengdongqing.weui.ui.theme.LinkColor
 import top.chengdongqing.weui.ui.views.system.database.address.db.Address
 import top.chengdongqing.weui.ui.views.system.database.address.db.ShopDatabase
@@ -125,7 +125,7 @@ private fun AddressListItem(address: Address, onLongClick: () -> Unit, onClick: 
         Spacer(modifier = Modifier.height(6.dp))
         Text(
             text = address.addressDetail,
-            color = FontColo1,
+            color = FontColor1,
             fontSize = 14.sp,
             overflow = TextOverflow.Ellipsis
         )

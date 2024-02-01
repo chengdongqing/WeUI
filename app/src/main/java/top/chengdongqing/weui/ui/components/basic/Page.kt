@@ -17,8 +17,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.ui.theme.BackgroundColor
-import top.chengdongqing.weui.ui.theme.FontColo1
 import top.chengdongqing.weui.ui.theme.FontColor
+import top.chengdongqing.weui.ui.theme.FontColor1
 
 /**
  * 页面组件
@@ -50,7 +50,7 @@ fun WePage(
                 lineHeight = 32.sp
             )
             Spacer(Modifier.height(4.dp))
-            Text(text = description, color = FontColo1, fontSize = 14.sp)
+            Text(text = description, color = FontColor1, fontSize = 14.sp)
         }
 
         Spacer(Modifier.height(30.dp))

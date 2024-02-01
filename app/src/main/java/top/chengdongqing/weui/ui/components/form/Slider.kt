@@ -34,7 +34,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.ui.theme.BorderColor
-import top.chengdongqing.weui.ui.theme.FontColo1
+import top.chengdongqing.weui.ui.theme.FontColor1
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 
 /**
@@ -141,7 +141,7 @@ fun WeSlider(
             Text(
                 text = it(value),
                 modifier = Modifier.widthIn(40.dp),
-                color = FontColo1,
+                color = FontColor1,
                 fontSize = 14.sp,
                 textAlign = TextAlign.End
             )

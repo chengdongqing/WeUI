@@ -41,7 +41,7 @@ import top.chengdongqing.weui.ui.components.basic.WeDivider
 import top.chengdongqing.weui.ui.components.basic.WeLoadMore
 import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.form.WeButton
-import top.chengdongqing.weui.ui.theme.FontColo1
+import top.chengdongqing.weui.ui.theme.FontColor1
 
 @SuppressLint("MissingPermission")
 @OptIn(ExperimentalPermissionsApi::class)
@@ -123,7 +123,7 @@ private fun BluetoothListItem(bluetooth: BluetoothInfo) {
                 appendLine("蓝牙类型：${bluetooth.type}")
                 append("绑定状态：${bluetooth.bondState}")
             },
-            color = FontColo1,
+            color = FontColor1,
             fontSize = 10.sp,
             lineHeight = 14.sp
         )

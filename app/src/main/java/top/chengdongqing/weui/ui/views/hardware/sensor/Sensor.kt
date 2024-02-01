@@ -5,7 +5,6 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -57,8 +56,6 @@ fun rememberSensorValues(type: Int, observing: Boolean): Array<Float>? {
                 sensorManager.unregisterListener(eventListener)
             }
         }
-    } else {
-        Toast.makeText(context, "传感器类型不支持", Toast.LENGTH_SHORT).show()
     }
 
     return values

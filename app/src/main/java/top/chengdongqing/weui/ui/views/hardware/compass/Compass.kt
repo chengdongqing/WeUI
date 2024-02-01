@@ -20,7 +20,7 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.ui.theme.BorderColor
-import top.chengdongqing.weui.ui.theme.FontColo1
+import top.chengdongqing.weui.ui.theme.FontColor1
 import top.chengdongqing.weui.ui.theme.LightColor
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.ui.views.hardware.vibrate
@@ -116,7 +116,7 @@ private fun DrawScope.drawDegreeText(
             angle.toString(),
             SpanStyle(
                 fontSize = 12.sp,
-                color = if (angle % 90 == 0) FontColo1 else BorderColor
+                color = if (angle % 90 == 0) FontColor1 else BorderColor
             )
         )
         val textRadius = radius - 8.dp.toPx() - 26.dp.toPx()

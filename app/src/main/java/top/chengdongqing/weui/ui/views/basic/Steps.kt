@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.basic.WeSteps
 import top.chengdongqing.weui.ui.components.form.WeButton
-import top.chengdongqing.weui.ui.theme.FontColo1
+import top.chengdongqing.weui.ui.theme.FontColor1
 
 @Composable
 fun StepsPage() {
@@ -45,19 +45,19 @@ fun StepsPage() {
                         {
                             Column {
                                 Text(text = "步骤一")
-                                Text(text = "描述内容详情", color = FontColo1, fontSize = 14.sp)
+                                Text(text = "描述内容详情", color = FontColor1, fontSize = 14.sp)
                             }
                         },
                         {
                             Column(modifier = Modifier.height(120.dp)) {
                                 Text(text = "步骤二")
-                                Text(text = "描述内容详情", color = FontColo1, fontSize = 14.sp)
+                                Text(text = "描述内容详情", color = FontColor1, fontSize = 14.sp)
                             }
                         },
                         {
                             Column {
                                 Text(text = "步骤三")
-                                Text(text = "描述内容详情", color = FontColo1, fontSize = 14.sp)
+                                Text(text = "描述内容详情", color = FontColor1, fontSize = 14.sp)
                             }
                         },
                         {
@@ -88,7 +88,7 @@ fun StepsPage() {
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 Text(text = "步骤三")
-                                Text(text = "描述内容详情", color = FontColo1, fontSize = 14.sp)
+                                Text(text = "描述内容详情", color = FontColor1, fontSize = 14.sp)
                             }
                         }
                     ),

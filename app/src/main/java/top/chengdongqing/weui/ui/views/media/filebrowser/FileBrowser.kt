@@ -50,8 +50,8 @@ import top.chengdongqing.weui.extensions.clickableWithoutRipple
 import top.chengdongqing.weui.ui.components.basic.LoadMoreType
 import top.chengdongqing.weui.ui.components.basic.WeLoadMore
 import top.chengdongqing.weui.ui.components.basic.WePage
-import top.chengdongqing.weui.ui.theme.FontColo1
 import top.chengdongqing.weui.ui.theme.FontColor
+import top.chengdongqing.weui.ui.theme.FontColor1
 import top.chengdongqing.weui.utils.formatFileSize
 import top.chengdongqing.weui.utils.formatTime
 import java.io.File
@@ -204,7 +204,7 @@ private fun FileListItem(
                             append(file.size)
                         }
                     },
-                    color = FontColo1,
+                    color = FontColor1,
                     fontSize = 14.sp
                 )
             }

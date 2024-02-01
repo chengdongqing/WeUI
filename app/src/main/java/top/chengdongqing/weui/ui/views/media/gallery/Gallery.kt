@@ -85,7 +85,7 @@ private fun MediaGrid(
 }
 
 @Composable
-fun MediaGridItem(item: MediaItem, modifier: Modifier) {
+private fun MediaGridItem(item: MediaItem, modifier: Modifier) {
     Box(
         modifier
             .aspectRatio(1f)

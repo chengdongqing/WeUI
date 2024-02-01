@@ -23,7 +23,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.chengdongqing.weui.ui.theme.FontColo1
+import top.chengdongqing.weui.ui.theme.FontColor1
 
 private const val threshold = 250f
 
@@ -73,7 +73,7 @@ fun WeScrollView(
         ) {
             WeLoading(isRotating = isRefreshing.value)
             Spacer(modifier = Modifier.width(8.dp))
-            Text(tips, color = FontColo1, fontSize = 14.sp)
+            Text(tips, color = FontColor1, fontSize = 14.sp)
         }
 
         val offsetDp = with(LocalDensity.current) {

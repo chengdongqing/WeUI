@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.ui.theme.BorderColor
-import top.chengdongqing.weui.ui.theme.FontColo1
+import top.chengdongqing.weui.ui.theme.FontColor1
 
 enum class LoadMoreType {
     LOADING,
@@ -39,7 +39,7 @@ fun WeLoadMore(type: LoadMoreType = LoadMoreType.LOADING) {
             LoadMoreType.LOADING -> {
                 WeLoading()
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(text = "正在加载...", color = FontColo1, fontSize = 14.sp)
+                Text(text = "正在加载...", color = FontColor1, fontSize = 14.sp)
             }
 
             LoadMoreType.EMPTY_DATA -> {
@@ -51,7 +51,7 @@ fun WeLoadMore(type: LoadMoreType = LoadMoreType.LOADING) {
                 )
                 Text(
                     text = "暂无数据",
-                    color = FontColo1,
+                    color = FontColor1,
                     fontSize = 14.sp,
                     modifier = Modifier.padding(horizontal = 8.dp)
                 )

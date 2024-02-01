@@ -17,8 +17,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.chengdongqing.weui.ui.theme.FontColo1
 import top.chengdongqing.weui.ui.theme.FontColor
+import top.chengdongqing.weui.ui.theme.FontColor1
 
 @Composable
 fun KeyValueCard(modifier: Modifier = Modifier, content: LazyListScope.() -> Unit) {
@@ -50,7 +50,7 @@ fun KeyValueRow(label: String, value: String) {
         Text(
             text = value,
             modifier = Modifier.weight(1f),
-            color = FontColo1,
+            color = FontColor1,
             fontSize = 14.sp,
             fontWeight = FontWeight.Bold
         )

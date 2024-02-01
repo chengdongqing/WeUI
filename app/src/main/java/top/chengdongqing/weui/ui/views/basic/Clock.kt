@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -14,6 +15,7 @@ import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
@@ -29,11 +31,12 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.theme.BorderColor
-import top.chengdongqing.weui.ui.theme.FontColo1
+import top.chengdongqing.weui.ui.theme.FontColor1
 import top.chengdongqing.weui.ui.theme.LightColor
+import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.ui.views.hardware.compass.polarToCartesian
-import java.util.Calendar
-import java.util.TimeZone
+import java.time.Instant
+import java.time.ZoneId
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -41,13 +44,13 @@ import kotlin.math.sin
 fun ClockPage() {
     WePage(title = "Clock", description = "时钟") {
         val timeZones = remember {
-            mapOf(
-                Pair("上海（中国）", "Asia/Shanghai"),
-                Pair("莫斯科（俄罗斯）", "Europe/Moscow"),
-                Pair("伦敦（英格兰）", "Europe/London"),
-                Pair("圣保罗（巴西）", "America/Sao_Paulo"),
-                Pair("洛杉矶（美国）", "America/Los_Angeles"),
-                Pair("悉尼（澳大利亚）", "Australia/Sydney")
+            listOf(
+                TimeZoneItem("上海（中国）", "Asia/Shanghai", BorderColor),
+                TimeZoneItem("莫斯科（俄罗斯）", "Europe/Moscow", PrimaryColor),
+                TimeZoneItem("伦敦（英格兰）", "Europe/London", Color.Black),
+                TimeZoneItem("圣保罗（巴西）", "America/Sao_Paulo", Color.Yellow),
+                TimeZoneItem("洛杉矶（美国）", "America/Los_Angeles", Color.Magenta),
+                TimeZoneItem("悉尼（澳大利亚）", "Australia/Sydney", Color.Cyan)
             )
         }
 
@@ -56,19 +59,27 @@ fun ClockPage() {
             verticalArrangement = Arrangement.spacedBy(40.dp),
             contentPadding = PaddingValues(bottom = 100.dp)
         ) {
-            timeZones.forEach {
-                item {
-                    Text(text = it.key, color = FontColo1, fontSize = 14.sp)
-                    Spacer(modifier = Modifier.height(20.dp))
-                    Clock(TimeZone.getTimeZone(it.value))
-                }
+            items(timeZones) {
+                Clock(ZoneId.of(it.zoneId), it.color)
+                Spacer(modifier = Modifier.height(20.dp))
+                Text(text = it.name, color = FontColor1, fontSize = 14.sp)
             }
         }
     }
 }
 
+private data class TimeZoneItem(
+    val name: String,
+    val zoneId: String,
+    val color: Color
+)
+
 @Composable
-fun Clock(timeZone: TimeZone = TimeZone.getDefault()) {
+private fun Clock(
+    zoneId: ZoneId = ZoneId.systemDefault(),
+    borderColor: Color = BorderColor,
+    scale: Float = 1f
+) {
     val (currentTime, setCurrentTime) = remember {
         mutableLongStateOf(System.currentTimeMillis())
     }
@@ -80,26 +91,30 @@ fun Clock(timeZone: TimeZone = TimeZone.getDefault()) {
     }
 
     val textMeasurer = rememberTextMeasurer()
-    Canvas(modifier = Modifier.size(300.dp)) {
+    Canvas(
+        modifier = Modifier
+            .size(300.dp)
+            .scale(scale)
+    ) {
         val canvasSize = size.minDimension
         val radius = canvasSize / 2
         val center = Offset(x = radius, y = radius)
 
-        drawClockFace(radius)
+        drawClockFace(radius, borderColor)
         drawClockScales(radius, center, textMeasurer)
-        drawClockIndicators(radius, center, currentTime, timeZone)
+        drawClockIndicators(radius, center, currentTime, zoneId)
         drawIndicatorLock()
     }
 }
 
 // 绘制圆盘和边框
-private fun DrawScope.drawClockFace(radius: Float) {
+private fun DrawScope.drawClockFace(radius: Float, borderColor: Color) {
     // 绘制圆盘
     drawCircle(Color.White)
     // 绘制边框
     val borderWidth = 6.dp.toPx()
     drawCircle(
-        color = BorderColor,
+        color = borderColor,
         radius = radius - borderWidth / 2,
         style = Stroke(width = borderWidth)
     )
@@ -117,7 +132,7 @@ private fun DrawScope.drawClockScales(radius: Float, center: Offset, textMeasure
         }
         // 绘制刻度
         drawLine(
-            color = if (i % 5 == 0) FontColo1 else LightColor,
+            color = if (i % 5 == 0) FontColor1 else LightColor,
             start = Offset(
                 x = center.x + cos(Math.toRadians(angle.toDouble())).toFloat() * startRadius,
                 y = center.y + sin(Math.toRadians(angle.toDouble())).toFloat() * startRadius
@@ -130,8 +145,6 @@ private fun DrawScope.drawClockScales(radius: Float, center: Offset, textMeasure
         )
         // 绘制数字
         if (i % 5 == 0) {
-            println("i: $i")
-
             val angleRadians = Math.toRadians(angle.toDouble() - 90)
             val text = AnnotatedString(
                 (i / 5).let { if (it == 0) 12 else it }.toString(),
@@ -155,14 +168,12 @@ private fun DrawScope.drawClockIndicators(
     radius: Float,
     center: Offset,
     currentTime: Long,
-    timeZone: TimeZone
+    zoneId: ZoneId
 ) {
-    val calendar = Calendar.getInstance(timeZone).apply {
-        timeInMillis = currentTime
-    }
-    val hours = calendar.get(Calendar.HOUR_OF_DAY) % 12
-    val minutes = calendar.get(Calendar.MINUTE)
-    val seconds = calendar.get(Calendar.SECOND)
+    val time = Instant.ofEpochMilli(currentTime).atZone(zoneId).toLocalTime()
+    val hours = time.hour % 12
+    val minutes = time.minute
+    val seconds = time.second
 
     val hourAngle = (hours + minutes / 60f) * 30f - 90
     val minuteAngle = minutes * 6f - 90

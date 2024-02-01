@@ -47,8 +47,8 @@ import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.form.ButtonSize
 import top.chengdongqing.weui.ui.components.form.ButtonType
 import top.chengdongqing.weui.ui.components.form.WeButton
-import top.chengdongqing.weui.ui.theme.FontColo1
 import top.chengdongqing.weui.ui.theme.FontColor
+import top.chengdongqing.weui.ui.theme.FontColor1
 import top.chengdongqing.weui.utils.formatFileSize
 import top.chengdongqing.weui.utils.formatTime
 import java.io.File
@@ -126,7 +126,7 @@ private fun AppListItem(app: App, context: Context) {
             Text(app.name, textAlign = TextAlign.Center)
             Text(
                 "v${app.versionName}",
-                color = FontColo1,
+                color = FontColor1,
                 fontSize = 12.sp,
                 textAlign = TextAlign.Center
             )

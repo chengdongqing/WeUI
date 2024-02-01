@@ -46,8 +46,8 @@ import top.chengdongqing.weui.ui.components.basic.WeLoadMore
 import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.form.WeButton
 import top.chengdongqing.weui.ui.theme.BorderColor
-import top.chengdongqing.weui.ui.theme.FontColo1
 import top.chengdongqing.weui.ui.theme.FontColor
+import top.chengdongqing.weui.ui.theme.FontColor1
 import top.chengdongqing.weui.ui.theme.LightColor
 
 @SuppressLint("MissingPermission")
@@ -122,7 +122,7 @@ private fun WiFiListItem(wifi: WiFiInfo) {
             Spacer(modifier = Modifier.width(4.dp))
             Text(
                 text = wifi.band,
-                color = FontColo1,
+                color = FontColor1,
                 fontSize = 10.sp,
                 modifier = Modifier
                     .border(0.5.dp, BorderColor, RoundedCornerShape(3.dp))

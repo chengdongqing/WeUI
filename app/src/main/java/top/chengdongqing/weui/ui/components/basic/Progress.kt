@@ -32,8 +32,8 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.ui.theme.BackgroundColor
-import top.chengdongqing.weui.ui.theme.FontColo1
 import top.chengdongqing.weui.ui.theme.FontColor
+import top.chengdongqing.weui.ui.theme.FontColor1
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.utils.formatFloat
 
@@ -73,7 +73,7 @@ fun WeProgress(
             Text(
                 text = it(localPercent),
                 modifier = Modifier.widthIn(40.dp),
-                color = FontColo1,
+                color = FontColor1,
                 fontSize = 14.sp,
                 textAlign = TextAlign.End
             )

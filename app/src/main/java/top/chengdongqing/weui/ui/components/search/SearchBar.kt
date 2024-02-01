@@ -34,7 +34,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.extensions.clickableWithoutRipple
-import top.chengdongqing.weui.ui.theme.FontColo1
+import top.chengdongqing.weui.ui.theme.FontColor1
 import top.chengdongqing.weui.ui.theme.LightColor
 import top.chengdongqing.weui.ui.theme.LinkColor
 import top.chengdongqing.weui.ui.theme.PrimaryColor
@@ -89,7 +89,7 @@ fun WeSearchBar(value: String, onChange: (value: String) -> Unit) {
                                 modifier = Modifier
                                     .padding(start = 8.dp, end = 4.dp)
                                     .size(20.dp),
-                                tint = FontColo1
+                                tint = FontColor1
                             )
                             Box(
                                 modifier = Modifier.fillMaxSize(),
@@ -122,9 +122,9 @@ fun WeSearchBar(value: String, onChange: (value: String) -> Unit) {
                         modifier = Modifier
                             .padding(end = 4.dp)
                             .size(20.dp),
-                        tint = FontColo1
+                        tint = FontColor1
                     )
-                    Text(text = "搜索", color = FontColo1, fontSize = 16.sp)
+                    Text(text = "搜索", color = FontColor1, fontSize = 16.sp)
                 }
             }
         }
