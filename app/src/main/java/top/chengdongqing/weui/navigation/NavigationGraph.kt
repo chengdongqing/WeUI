@@ -3,7 +3,6 @@ package top.chengdongqing.weui.navigation
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -13,7 +12,6 @@ import top.chengdongqing.weui.ui.views.HomePage
 import top.chengdongqing.weui.ui.views.layers.LayersPage
 import top.chengdongqing.weui.ui.views.map.LocationPickerPage
 import top.chengdongqing.weui.ui.views.map.LocationPreviewPage
-import top.chengdongqing.weui.ui.views.media.gallery.GalleryViewModel
 import top.chengdongqing.weui.ui.views.navigation.NavBarPage
 import top.chengdongqing.weui.ui.views.navigation.TabBarPage
 import top.chengdongqing.weui.ui.views.search.SearchBarPage
@@ -21,7 +19,6 @@ import top.chengdongqing.weui.ui.views.search.SearchBarPage
 @Composable
 fun NavigationGraph() {
     val navController = rememberNavController()
-    val galleryViewModel: GalleryViewModel = viewModel()
 
     NavHost(
         navController,
@@ -57,7 +54,7 @@ fun NavigationGraph() {
         addBasicGraph()
         addFormGraph()
         addFeedbackGraph()
-        addMediaGraph(navController, galleryViewModel)
+        addMediaGraph()
         addSystemGraph(navController)
         addNetworkGraph()
         addHardwareGraph()

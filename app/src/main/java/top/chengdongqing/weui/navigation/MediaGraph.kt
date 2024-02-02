@@ -1,7 +1,5 @@
 package top.chengdongqing.weui.navigation
 
-import androidx.compose.animation.EnterTransition
-import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
@@ -9,8 +7,6 @@ import top.chengdongqing.weui.ui.views.media.camera.CameraPage
 import top.chengdongqing.weui.ui.views.media.cropper.ImageCropperPage
 import top.chengdongqing.weui.ui.views.media.filebrowser.FileBrowserPage
 import top.chengdongqing.weui.ui.views.media.gallery.GalleryPage
-import top.chengdongqing.weui.ui.views.media.gallery.GalleryViewModel
-import top.chengdongqing.weui.ui.views.media.gallery.MediaPreviewPage
 import top.chengdongqing.weui.ui.views.media.live.LivePlayerPage
 import top.chengdongqing.weui.ui.views.media.live.LivePusherPage
 import top.chengdongqing.weui.ui.views.media.picker.MediaPickerPage
@@ -19,20 +15,10 @@ import top.chengdongqing.weui.ui.views.media.player.VideoPlayerPage
 import top.chengdongqing.weui.ui.views.media.recorder.AudioRecorderPage
 import top.chengdongqing.weui.ui.views.media.recorder.VideoRecorderPage
 
-fun NavGraphBuilder.addMediaGraph(
-    navController: NavController,
-    galleryViewModel: GalleryViewModel
-) {
+fun NavGraphBuilder.addMediaGraph() {
     navigation("gallery", "media") {
         composable("gallery") {
-            GalleryPage(galleryViewModel, navController)
-        }
-        composable(
-            "media-preview?index={index}",
-            enterTransition = { EnterTransition.None }
-        ) {
-            val index = it.arguments?.getString("index")?.toInt() ?: 0
-            MediaPreviewPage(galleryViewModel, index)
+            GalleryPage()
         }
         composable("file-browser") {
             FileBrowserPage()

@@ -3,6 +3,7 @@ package top.chengdongqing.weui.ui.views.media.gallery
 import android.Manifest
 import android.content.ContentUris
 import android.content.Context
+import android.content.Intent
 import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Build
@@ -34,8 +35,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
-import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
@@ -54,14 +53,21 @@ import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
 @Composable
-fun GalleryPage(viewModel: GalleryViewModel, navController: NavController) {
+fun GalleryPage() {
     WePage(title = "Gallery", description = "相册", padding = PaddingValues(0.dp)) {
-        if (viewModel.loading) {
+        val context = LocalContext.current
+        val (mediaItems, loading) = rememberMedias()
+
+        if (loading) {
             WeLoadMore()
         }
-
-        MediaGrid(rememberMedias(viewModel)) {
-            navController.navigate("media-preview?index=$it")
+        MediaGrid(mediaItems) { index ->
+            val intent = MediaPreviewActivity.newIntent(context).apply {
+                putExtra("uris", mediaItems.map { it.path }.toTypedArray())
+                putExtra("current", index)
+                addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            }
+            context.startActivity(intent)
         }
     }
 }
@@ -155,7 +161,7 @@ private fun produceThumbnail(item: MediaItem): Any? {
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-private fun rememberMedias(viewModel: GalleryViewModel): List<MediaItem> {
+private fun rememberMedias(): Pair<List<MediaItem>, Boolean> {
     val context = LocalContext.current
     val multiplePermissionsState = rememberMultiplePermissionsState(
         remember {
@@ -170,21 +176,24 @@ private fun rememberMedias(viewModel: GalleryViewModel): List<MediaItem> {
         }
     )
 
+    var mediaItems by remember { mutableStateOf<List<MediaItem>>(emptyList()) }
+    var loading by remember { mutableStateOf(true) }
+
     LaunchedEffect(Unit) {
         snapshotFlow {
             multiplePermissionsState.allPermissionsGranted
         }.collect { allPermissionsGranted ->
             if (allPermissionsGranted) {
                 delay(300)
-                viewModel.setItems(queryMedias(context))
-                viewModel.setLoadingState(false)
+                mediaItems = queryMedias(context)
+                loading = false
             } else {
                 multiplePermissionsState.launchMultiplePermissionRequest()
             }
         }
     }
 
-    return viewModel.mediaItems
+    return Pair(mediaItems, loading)
 }
 
 private suspend fun queryMedias(context: Context): List<MediaItem> =
@@ -260,15 +269,3 @@ data class MediaItem(
     val date: Date,
     val path: String
 )
-
-class GalleryViewModel : ViewModel() {
-    var mediaItems by mutableStateOf<List<MediaItem>>(emptyList())
-    fun setItems(value: List<MediaItem>) {
-        mediaItems = value
-    }
-
-    var loading by mutableStateOf(true)
-    fun setLoadingState(value: Boolean) {
-        loading = value
-    }
-}

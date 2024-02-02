@@ -69,9 +69,13 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ui.views.media.gallery.MediaPreviewActivity"
+            android:exported="true"
+            android:theme="@style/Theme.WeUI" />
+        <activity
             android:name=".ui.views.hardware.BiometricActivity"
             android:exported="true"
-            android:theme="@style/Theme.Transparent" />
+            android:theme="@style/Theme.Floating" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
