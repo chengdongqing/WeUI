@@ -19,7 +19,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -69,6 +71,11 @@ fun FileBrowserPage() {
 
 @Composable
 private fun FileBrowser(folderPath: String) {
+    val listState = rememberLazyListState()
+    val firstVisibleItemOfFolders = remember {
+        mutableStateListOf(Pair(0, 0))
+    }
+
     // 是否加载中
     var loading by remember { mutableStateOf(true) }
     // 已进入的所有文件夹
@@ -80,8 +87,23 @@ private fun FileBrowser(folderPath: String) {
         } else {
             loading = true
         }
+        if (folders.size > firstVisibleItemOfFolders.size) {
+            firstVisibleItemOfFolders.add(
+                Pair(
+                    listState.firstVisibleItemIndex,
+                    listState.firstVisibleItemScrollOffset
+                )
+            )
+        }
         value = buildFiles(folders.last())
         loading = false
+        if (folders.size <= firstVisibleItemOfFolders.size) {
+            firstVisibleItemOfFolders.getOrNull(firstVisibleItemOfFolders.lastIndex)?.let {
+                delay(100)
+                listState.scrollToItem(it.first, it.second)
+                firstVisibleItemOfFolders.removeAt(firstVisibleItemOfFolders.lastIndex)
+            }
+        }
     }
 
     // 处理权限
@@ -94,7 +116,7 @@ private fun FileBrowser(folderPath: String) {
     Column {
         NavigationBar(folders)
         Spacer(modifier = Modifier.height(20.dp))
-        FileList(files, loading) {
+        FileList(listState, files, loading) {
             folders.add(it)
         }
     }
@@ -102,6 +124,7 @@ private fun FileBrowser(folderPath: String) {
 
 @Composable
 private fun FileList(
+    listState: LazyListState,
     files: List<FileItem>,
     loading: Boolean,
     navigateToFolder: (String) -> Unit
@@ -109,6 +132,7 @@ private fun FileList(
     val context = LocalContext.current
 
     LazyColumn(
+        state = listState,
         modifier = Modifier.fillMaxWidth(),
         contentPadding = PaddingValues(start = 10.dp, end = 10.dp, bottom = 60.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)

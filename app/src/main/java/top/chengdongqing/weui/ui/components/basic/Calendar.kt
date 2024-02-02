@@ -185,6 +185,7 @@ private fun DaysGrid(pagerState: PagerState) {
         val firstDayOfWeek = date.withDayOfMonth(1).dayOfWeek.value - 1
 
         Box(contentAlignment = Alignment.Center) {
+            // 月份背景
             Text(
                 text = date.monthValue.toString(),
                 color = PrimaryColor.copy(alpha = 0.2f),
@@ -192,6 +193,7 @@ private fun DaysGrid(pagerState: PagerState) {
                 fontWeight = FontWeight.Bold,
                 fontFamily = FontFamily.Cursive
             )
+            // 日期网格
             LazyVerticalGrid(
                 columns = GridCells.Fixed(7),
                 contentPadding = PaddingValues(vertical = 10.dp)
