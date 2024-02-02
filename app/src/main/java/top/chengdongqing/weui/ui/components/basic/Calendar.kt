@@ -6,10 +6,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -34,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -41,8 +40,6 @@ import androidx.compose.ui.unit.sp
 import com.nlf.calendar.Lunar
 import com.nlf.calendar.Solar
 import kotlinx.coroutines.launch
-import top.chengdongqing.weui.ui.components.form.ButtonType
-import top.chengdongqing.weui.ui.components.form.WeButton
 import top.chengdongqing.weui.ui.theme.FontColor
 import top.chengdongqing.weui.ui.theme.FontColor1
 import top.chengdongqing.weui.ui.theme.LightColor
@@ -57,21 +54,20 @@ private val today = LocalDate.now()
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun WeCalendar() {
+fun rememberCalendarState(initialDate: LocalDate = today): CalendarState {
     val (currentMonth, setCurrentMonth) = remember {
-        mutableStateOf(today)
+        mutableStateOf(initialDate)
     }
-
-    val coroutineScope = rememberCoroutineScope()
     val pagerState = rememberPagerState(initialPage = startIndex) { 200 }
-    val initialMonth = remember { YearMonth.now().minusMonths(startIndex.toLong()) }
+    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(pagerState.currentPage) {
         val offset = pagerState.currentPage - startIndex
         setCurrentMonth(today.plusMonths(offset.toLong()))
     }
 
-    fun setMonth(value: LocalDate) {
+    val initialMonth = remember { YearMonth.now().minusMonths(startIndex.toLong()) }
+    val setMonth = fun(value: LocalDate) {
         setCurrentMonth(value)
         val page = ChronoUnit.MONTHS.between(initialMonth, YearMonth.from(value)).toInt()
         coroutineScope.launch {
@@ -79,19 +75,30 @@ fun WeCalendar() {
         }
     }
 
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Column(modifier = Modifier.background(Color.White, RoundedCornerShape(10.dp))) {
-            Header(currentMonth) {
-                setMonth(it)
-            }
-            WeekDaysBar()
-            WeDivider()
-            DaysGrid(pagerState)
+    return CalendarState(currentMonth, setMonth, pagerState)
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+data class CalendarState(
+    val currentMonth: LocalDate,
+    val setMonth: (LocalDate) -> Unit,
+    val pagerState: PagerState
+) {
+    fun toToday() {
+        setMonth(today)
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun WeCalendar(state: CalendarState = rememberCalendarState()) {
+    Column(modifier = Modifier.background(Color.White, RoundedCornerShape(10.dp))) {
+        Header(state.currentMonth) {
+            state.setMonth(it)
         }
-        Spacer(modifier = Modifier.height(20.dp))
-        WeButton(text = "回到今天", type = ButtonType.PLAIN) {
-            setMonth(today)
-        }
+        WeekDaysBar()
+        WeDivider()
+        DaysGrid(state.pagerState)
     }
 }
 
@@ -177,43 +184,52 @@ private fun DaysGrid(pagerState: PagerState) {
         // 当月第一天是星期几
         val firstDayOfWeek = date.withDayOfMonth(1).dayOfWeek.value - 1
 
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(7),
-            contentPadding = PaddingValues(vertical = 10.dp)
-        ) {
-            items(7 * 6) { index ->
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(1f),
-                    contentAlignment = Alignment.Center
-                ) {
-                    when {
-                        // 上月的日期
-                        index <= firstDayOfWeek -> {
-                            val lastMonth = date.minusMonths(1)
-                            val day = lastMonth.lengthOfMonth() - (firstDayOfWeek - index)
-                            DayItem(
-                                date = date.minusMonths(1).withDayOfMonth(day),
-                                outInMonth = true
-                            )
-                        }
-                        // 下月的日期
-                        index - firstDayOfWeek > daysOfMonth -> {
-                            val day = index - (daysOfMonth + firstDayOfWeek)
-                            DayItem(
-                                date = date.plusMonths(1).withDayOfMonth(day),
-                                outInMonth = true
-                            )
-                        }
-                        // 本月的日期
-                        else -> {
-                            val isToday = today == date.withDayOfMonth(index - firstDayOfWeek)
-                            val day = index - firstDayOfWeek
-                            DayItem(
-                                date = date.withDayOfMonth(day),
-                                isToday
-                            )
+        Box(contentAlignment = Alignment.Center) {
+            Text(
+                text = date.monthValue.toString(),
+                color = PrimaryColor.copy(alpha = 0.2f),
+                fontSize = 160.sp,
+                fontWeight = FontWeight.Bold,
+                fontFamily = FontFamily.Cursive
+            )
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(7),
+                contentPadding = PaddingValues(vertical = 10.dp)
+            ) {
+                items(7 * 6) { index ->
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(1f),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        when {
+                            // 上月的日期
+                            index <= firstDayOfWeek -> {
+                                val lastMonth = date.minusMonths(1)
+                                val day = lastMonth.lengthOfMonth() - (firstDayOfWeek - index)
+                                DayItem(
+                                    date = date.minusMonths(1).withDayOfMonth(day),
+                                    outInMonth = true
+                                )
+                            }
+                            // 下月的日期
+                            index - firstDayOfWeek > daysOfMonth -> {
+                                val day = index - (daysOfMonth + firstDayOfWeek)
+                                DayItem(
+                                    date = date.plusMonths(1).withDayOfMonth(day),
+                                    outInMonth = true
+                                )
+                            }
+                            // 本月的日期
+                            else -> {
+                                val isToday = today == date.withDayOfMonth(index - firstDayOfWeek)
+                                val day = index - firstDayOfWeek
+                                DayItem(
+                                    date = date.withDayOfMonth(day),
+                                    isToday
+                                )
+                            }
                         }
                     }
                 }

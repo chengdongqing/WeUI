@@ -10,6 +10,8 @@ import android.net.wifi.WifiManager
 import android.nfc.NfcManager
 import android.os.BatteryManager
 import android.os.Build
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -18,11 +20,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import top.chengdongqing.weui.ui.components.basic.KeyValueCard
 import top.chengdongqing.weui.ui.components.basic.KeyValueRow
 import top.chengdongqing.weui.ui.components.basic.WePage
@@ -104,13 +103,13 @@ private fun MutableList<Pair<String, String>>.addHardwareItems(context: Context)
 
 @Composable
 private fun rememberStatusBarHeight(): Dp {
-    val view = LocalView.current
     val density = LocalDensity.current
+    val statusBars = WindowInsets.statusBars
 
     return remember {
-        val height = ViewCompat.getRootWindowInsets(view)
-            ?.getInsets(WindowInsetsCompat.Type.statusBars())?.top ?: 0
-        density.run { height.toDp() }
+        with(density) {
+            statusBars.getTop(this).toDp()
+        }
     }
 }
 

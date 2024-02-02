@@ -26,20 +26,13 @@ fun SetupFullscreen() {
 
     DisposableEffect(Unit) {
         val controller = WindowCompat.getInsetsController(window, view)
-        controller.hide(
-            WindowInsetsCompat.Type.displayCutout() or
-                    WindowInsetsCompat.Type.statusBars()
-                    or WindowInsetsCompat.Type.navigationBars()
-        )
+        controller.hide(WindowInsetsCompat.Type.systemBars())
         // 当手动将状态栏或导航栏划出后只短暂显示一会儿
         controller.systemBarsBehavior =
             WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
 
         onDispose {
-            controller.show(
-                WindowInsetsCompat.Type.statusBars()
-                        or WindowInsetsCompat.Type.navigationBars()
-            )
+            controller.show(WindowInsetsCompat.Type.systemBars())
         }
     }
 }
