@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.ui.views.media.gallery
+package top.chengdongqing.weui.ui.views.media.gallery.preview
 
 import android.content.Context
 import android.content.Intent
@@ -13,12 +13,10 @@ class MediaPreviewActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val extras = intent.extras
+        val uris = intent.extras?.getStringArray("uris")?.map { it.toUri() }
+        val current = intent.extras?.getInt("current", 0)
         setContent {
-            MediaPreviewPage(
-                extras?.getStringArray("uris")?.map { it.toUri() } ?: emptyList(),
-                extras?.getInt("current", 0) ?: 0
-            )
+            MediaPreviewPage(uris ?: emptyList(), current ?: 0)
         }
     }
 

@@ -69,7 +69,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.views.media.gallery.MediaPreviewActivity"
+            android:name=".ui.views.media.gallery.preview.MediaPreviewActivity"
             android:exported="true"
             android:theme="@style/Theme.WeUI" />
         <activity

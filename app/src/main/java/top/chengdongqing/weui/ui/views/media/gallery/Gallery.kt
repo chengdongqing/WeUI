@@ -46,6 +46,7 @@ import top.chengdongqing.weui.extensions.clickableWithoutRipple
 import top.chengdongqing.weui.ui.components.basic.WeLoadMore
 import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.theme.LightColor
+import top.chengdongqing.weui.ui.views.media.gallery.preview.MediaPreviewActivity
 import top.chengdongqing.weui.utils.formatDuration
 import java.util.Date
 import kotlin.time.Duration

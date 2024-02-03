@@ -26,7 +26,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -34,6 +33,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -128,18 +129,16 @@ fun WeToast(
                                 else -> {}
                             }
 
-                            val lineCount = remember {
-                                mutableIntStateOf(1)
+                            val textMeasurer = rememberTextMeasurer()
+                            val textLayoutResult = remember(title) {
+                                textMeasurer.measure(title, TextStyle(fontSize = 17.sp))
                             }
                             Text(
                                 text = title,
                                 color = Color.White,
-                                fontSize = if (hasIcon && lineCount.intValue == 1) 17.sp else 14.sp,
+                                fontSize = if (hasIcon && textLayoutResult.size.width <= 354) 17.sp else 14.sp,
                                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-                                textAlign = TextAlign.Center,
-                                onTextLayout = {
-                                    lineCount.intValue = it.lineCount
-                                }
+                                textAlign = TextAlign.Center
                             )
                         }
                     }
