@@ -8,6 +8,7 @@ import android.webkit.MimeTypeMap
 import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,22 +20,23 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -46,14 +48,24 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.R
-import top.chengdongqing.weui.extensions.clickableWithoutRipple
+import top.chengdongqing.weui.ui.components.basic.KeyValueRow
 import top.chengdongqing.weui.ui.components.basic.LoadMoreType
 import top.chengdongqing.weui.ui.components.basic.WeLoadMore
 import top.chengdongqing.weui.ui.components.basic.WePage
+import top.chengdongqing.weui.ui.components.feedback.ActionSheetItem
+import top.chengdongqing.weui.ui.components.feedback.ToastIcon
+import top.chengdongqing.weui.ui.components.feedback.WePopup
+import top.chengdongqing.weui.ui.components.feedback.rememberWeActionSheet
+import top.chengdongqing.weui.ui.components.feedback.rememberWeDialog
+import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
 import top.chengdongqing.weui.ui.theme.FontColor
 import top.chengdongqing.weui.ui.theme.FontColor1
+import top.chengdongqing.weui.utils.calculateFileSize
+import top.chengdongqing.weui.utils.deleteFile
+import top.chengdongqing.weui.utils.format
 import top.chengdongqing.weui.utils.formatFileSize
 import top.chengdongqing.weui.utils.formatTime
 import java.io.File
@@ -70,69 +82,44 @@ fun FileBrowserPage() {
 }
 
 @Composable
-private fun FileBrowser(folderPath: String) {
-    val listState = rememberLazyListState()
-    val firstVisibleItemOfFolders = remember {
-        mutableStateListOf(Pair(0, 0))
-    }
-
-    // 是否加载中
-    var loading by remember { mutableStateOf(true) }
-    // 已进入的所有文件夹
-    val folders = remember { mutableStateListOf(folderPath) }
-    // 当前文件夹下所有文件/文件夹
-    val files by produceState<List<FileItem>>(initialValue = emptyList(), folders.size) {
-        if (loading) {
-            delay(300)
-        } else {
-            loading = true
-        }
-        if (folders.size > firstVisibleItemOfFolders.size) {
-            firstVisibleItemOfFolders.add(
-                Pair(
-                    listState.firstVisibleItemIndex,
-                    listState.firstVisibleItemScrollOffset
-                )
-            )
-        }
-        value = buildFiles(folders.last())
-        loading = false
-        if (folders.size <= firstVisibleItemOfFolders.size) {
-            firstVisibleItemOfFolders.getOrNull(firstVisibleItemOfFolders.lastIndex)?.let {
-                delay(100)
-                listState.scrollToItem(it.first, it.second)
-                firstVisibleItemOfFolders.removeAt(firstVisibleItemOfFolders.lastIndex)
-            }
-        }
-    }
-
-    // 处理权限
-    SetupPermission()
-    // 处理返回
-    BackHandler(folders.size > 1) {
-        folders.removeAt(folders.lastIndex)
-    }
+private fun FileBrowser(rootFolderPath: String) {
+    val coroutineScope = rememberCoroutineScope()
+    val folders = remember { mutableStateListOf(rootFolderPath) }
+    val children = rememberFolderChildren(folders)
+    var files by children.first
+    var loading by children.second
 
     Column {
         NavigationBar(folders)
         Spacer(modifier = Modifier.height(20.dp))
-        FileList(listState, files, loading) {
-            folders.add(it)
+        FileList(
+            files,
+            loading,
+            navigateToFolder = {
+                files = emptyList()
+                folders.add(it)
+            }
+        ) {
+            coroutineScope.launch {
+                loading = true
+                files = buildFiles(folders.last())
+                delay(300)
+                loading = false
+            }
         }
     }
 }
 
 @Composable
 private fun FileList(
-    listState: LazyListState,
     files: List<FileItem>,
     loading: Boolean,
-    navigateToFolder: (String) -> Unit
+    navigateToFolder: (String) -> Unit,
+    onDeleted: () -> Unit
 ) {
     val context = LocalContext.current
 
     LazyColumn(
-        state = listState,
         modifier = Modifier.fillMaxWidth(),
         contentPadding = PaddingValues(start = 10.dp, end = 10.dp, bottom = 60.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
@@ -141,32 +128,32 @@ private fun FileList(
             item {
                 WeLoadMore()
             }
-        } else {
-            if (files.isNotEmpty()) {
-                items(files) { item ->
-                    FileListItem(
-                        item,
-                        onFolderClick = {
-                            navigateToFolder(item.path)
-                        },
-                        onFileClick = {
-                            val uri = FileProvider.getUriForFile(
-                                context,
-                                "${context.packageName}.provider",
-                                File(item.path)
-                            )
-                            val intent = Intent(Intent.ACTION_VIEW).apply {
-                                setDataAndType(uri, "*/*")
-                                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                            }
-                            context.startActivity(intent)
+        } else if (files.isEmpty()) {
+            item {
+                WeLoadMore(type = LoadMoreType.ALL_LOADED)
+            }
+        }
+        if (files.isNotEmpty()) {
+            items(files, key = { it.path }) { item ->
+                FileListItem(
+                    item,
+                    onFolderClick = {
+                        navigateToFolder(item.path)
+                    },
+                    onFileClick = {
+                        val uri = FileProvider.getUriForFile(
+                            context,
+                            "${context.packageName}.provider",
+                            File(item.path)
+                        )
+                        val intent = Intent(Intent.ACTION_VIEW).apply {
+                            setDataAndType(uri, "*/*")
+                            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                         }
-                    )
-                }
-            } else {
-                item {
-                    WeLoadMore(type = LoadMoreType.ALL_LOADED)
-                }
+                        context.startActivity(intent)
+                    },
+                    onDeleted
+                )
             }
         }
     }
@@ -176,16 +163,57 @@ private fun FileList(
 private fun FileListItem(
     file: FileItem,
     onFolderClick: () -> Unit,
-    onFileClick: () -> Unit
+    onFileClick: () -> Unit,
+    onDeleted: () -> Unit
 ) {
+    val actionSheet = rememberWeActionSheet()
+    val dialog = rememberWeDialog()
+    val toast = rememberWeToast()
+
+    val menus = remember {
+        listOf(
+            ActionSheetItem("详情"),
+            ActionSheetItem("删除", color = Color.Red)
+        )
+    }
+
+    // 详情弹窗
+    val (visible, setVisible) = remember {
+        mutableStateOf(false)
+    }
+    FileDetailsPopup(visible, file) {
+        setVisible(false)
+    }
+
     Row(
-        modifier = Modifier.clickableWithoutRipple {
-            if (file.isDirectory) {
-                onFolderClick()
-            } else {
-                onFileClick()
-            }
-        },
+        modifier = Modifier
+            .pointerInput(Unit) {
+                detectTapGestures(onLongPress = {
+                    actionSheet.show(options = menus) {
+                        when (it) {
+                            0 -> {
+                                setVisible(true)
+                            }
+
+                            1 -> {
+                                dialog.show("确定删除吗？") {
+                                    if (!deleteFile(File(file.path))) {
+                                        toast.show("删除失败", ToastIcon.FAIL)
+                                    } else {
+                                        onDeleted()
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }) {
+                    if (file.isDirectory) {
+                        onFolderClick()
+                    } else {
+                        onFileClick()
+                    }
+                }
+            },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
@@ -241,6 +269,57 @@ private fun FileListItem(
     }
 }
 
+@Composable
+private fun FileDetailsPopup(visible: Boolean, file: FileItem, onClose: () -> Unit) {
+    WePopup(
+        visible,
+        title = file.name,
+        padding = PaddingValues(20.dp),
+        swipeable = true,
+        onClose = onClose
+    ) {
+        val originalFile = remember { File(file.path) }
+        val size by produceState(initialValue = 0L) {
+            value = calculateFileSize(originalFile)
+        }
+
+        KeyValueRow(label = "位置", value = file.path)
+        KeyValueRow(label = "大小", value = formatFileSize(size))
+        KeyValueRow(label = "时间", value = file.lastModified)
+        KeyValueRow(label = "可读", value = originalFile.canRead().format())
+        KeyValueRow(label = "可写", value = originalFile.canWrite().format())
+        KeyValueRow(label = "隐藏", value = originalFile.isHidden.format())
+    }
+}
+
+@Composable
+private fun rememberFolderChildren(folders: MutableList<String>): Pair<MutableState<List<FileItem>>, MutableState<Boolean>> {
+    // 是否加载中
+    val loading = remember { mutableStateOf(true) }
+    // 当前文件夹下所有文件/文件夹
+    val files = remember { mutableStateOf<List<FileItem>>(emptyList()) }
+
+    // 处理权限
+    SetupPermission()
+    // 处理返回
+    BackHandler(folders.size > 1) {
+        folders.removeAt(folders.lastIndex)
+    }
+
+    // 处理文件夹子项加载
+    LaunchedEffect(folders.size) {
+        if (loading.value) {
+            delay(300)
+        } else {
+            loading.value = true
+        }
+        files.value = buildFiles(folders.last())
+        loading.value = false
+    }
+
+    return Pair(files, loading)
+}
+
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 private fun SetupPermission() {
@@ -281,7 +360,7 @@ private suspend fun buildFiles(filePath: String): List<FileItem> = withContext(D
                 name = file.name,
                 path = file.path,
                 isDirectory = file.isDirectory,
-                size = formatFileSize(file.path),
+                size = formatFileSize(file),
                 lastModified = formatTime(file.lastModified()),
                 childrenCount = file.listFiles()?.filter { !it.isHidden }?.size ?: 0,
                 iconId = getFileCategoryIcon(file)

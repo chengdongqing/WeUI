@@ -45,10 +45,12 @@ fun formatTime(milliseconds: Long, pattern: String = "yyyy-MM-dd HH:mm:ss"): Str
         .format(DateTimeFormatter.ofPattern(pattern))
 }
 
-fun formatFileSize(filePath: String): String {
-    val file = File(filePath)
+fun formatFileSize(file: File): String {
     val size = if (file.exists()) file.length() else 0
+    return formatFileSize(size)
+}
 
+fun formatFileSize(size: Long): String {
     return when {
         size < 1024 -> "$size B"
         size < 1024 * 1024 -> "${formatFloat(size / 1024f)} KB"
@@ -56,3 +58,6 @@ fun formatFileSize(filePath: String): String {
         else -> "${formatFloat(size / (1024 * 1024 * 1024f))} GB"
     }
 }
+
+fun Boolean.format(trueLabel: String = "是", falseLabel: String = "否") =
+    if (this) trueLabel else falseLabel

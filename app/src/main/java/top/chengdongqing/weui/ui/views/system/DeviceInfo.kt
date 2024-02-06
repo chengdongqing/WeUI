@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.Dp
 import top.chengdongqing.weui.ui.components.basic.KeyValueCard
 import top.chengdongqing.weui.ui.components.basic.KeyValueRow
 import top.chengdongqing.weui.ui.components.basic.WePage
+import top.chengdongqing.weui.utils.format
 import top.chengdongqing.weui.utils.formatFloat
 
 @Composable
@@ -44,7 +45,7 @@ fun DeviceInfoPage() {
                 Pair("系统语言", configuration.locales.toLanguageTags()),
                 Pair("字体缩放", configuration.fontScale.toString()),
                 Pair("电量", "${battery.level}%"),
-                Pair("充电中", if (battery.isCharging) "是" else "否")
+                Pair("充电中", battery.isCharging.format())
             ).apply {
                 addScreenItems(context, density, configuration, statusBarHeight)
                 addHardwareItems(context)
