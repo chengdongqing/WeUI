@@ -254,7 +254,7 @@ private fun rememberInstalledApps(): List<App> {
                 val versionName = packageInfo.versionName
                 val lastModified = formatTime(packageInfo.lastUpdateTime)
                 val apkPath = packageInfo.applicationInfo.sourceDir
-                val apkSize = formatFileSize(apkPath)
+                val apkSize = formatFileSize(File(apkPath))
                 App(
                     name,
                     icon,
