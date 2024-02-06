@@ -33,7 +33,7 @@ import top.chengdongqing.weui.ui.theme.FontColor1
 fun WePage(
     title: String,
     description: String,
-    padding: PaddingValues = PaddingValues(horizontal = 16.dp),
+    padding: PaddingValues = PaddingValues(16.dp),
     backgroundColor: Color = BackgroundColor,
     content: @Composable () -> Unit
 ) {

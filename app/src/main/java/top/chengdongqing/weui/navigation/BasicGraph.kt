@@ -14,7 +14,7 @@ import top.chengdongqing.weui.ui.views.basic.StepsPage
 import top.chengdongqing.weui.ui.views.basic.SwiperPage
 
 fun NavGraphBuilder.addBasicGraph() {
-    navigation("badge", "basic") {
+    navigation("scroll-view", "basic") {
         composable("badge") {
             BadgePage()
         }

@@ -210,12 +210,10 @@ private fun copyFileToPublicDirectory(
             }
 
             resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values)?.let {
-                resolver.openOutputStream(it).use { outputStream ->
+                resolver.openOutputStream(it)?.use { outputStream ->
                     sourceFile.inputStream().use { input ->
-                        if (outputStream != null) {
-                            input.copyTo(outputStream)
-                            Toast.makeText(context, "已复制", Toast.LENGTH_SHORT).show()
-                        }
+                        input.copyTo(outputStream)
+                        Toast.makeText(context, "已复制", Toast.LENGTH_SHORT).show()
                     }
                 }
             }

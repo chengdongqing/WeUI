@@ -238,7 +238,11 @@ private suspend fun queryMedias(context: Context): List<MediaItem> =
 
             while (cursor.moveToNext()) {
                 val uri = ContentUris.withAppendedId(
-                    MediaStore.Files.getContentUri("external"),
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+                    } else {
+                        MediaStore.Files.getContentUri("external")
+                    },
                     cursor.getLong(idColumn)
                 )
                 mediaItems.add(

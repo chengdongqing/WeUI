@@ -1,7 +1,6 @@
 package top.chengdongqing.weui.ui.components.basic
 
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -17,53 +16,67 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.launch
 import top.chengdongqing.weui.ui.theme.FontColor1
 
 private const val threshold = 250f
 
 @Composable
 fun WeScrollView(
-    onRefresh: (() -> Unit) -> Unit,
+    onRefresh: (suspend () -> Unit)? = null,
+    onReachBottom: (suspend () -> Unit)? = null,
     content: @Composable () -> Unit
 ) {
-    val isRefreshing = remember { mutableStateOf(false) }
-    val offsetY = remember { mutableFloatStateOf(0f) }
+    val scope = rememberCoroutineScope()
+    var isRefreshing by remember { mutableStateOf(false) }
+    var isLoadingMore by remember { mutableStateOf(false) }
+    var offsetY by remember { mutableFloatStateOf(0f) }
     val tips by remember {
         derivedStateOf {
-            deriveTips(offsetY.floatValue, isRefreshing.value)
+            deriveTips(offsetY, isRefreshing)
         }
     }
 
-    Box(
-        modifier = Modifier
-            .pointerInput(Unit) {
-                detectVerticalDragGestures(
-                    onDragEnd = {
-                        if (offsetY.floatValue > threshold && !isRefreshing.value) {
-                            offsetY.floatValue = threshold
-                            isRefreshing.value = true
-                            onRefresh {
-                                offsetY.floatValue = 0f
-                                isRefreshing.value = false
-                            }
-                        } else {
-                            offsetY.floatValue = 0f
+    val scrollConnection = remember {
+        object : NestedScrollConnection {
+            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                val dampingFactor = calculateDampingFactor(offsetY)
+                offsetY += available.y * dampingFactor
+                return super.onPreScroll(available, source)
+            }
+
+            override fun onPostScroll(
+                consumed: Offset,
+                available: Offset,
+                source: NestedScrollSource
+            ): Offset {
+                // 上拉加载更多逻辑
+                if (available.y < 0) {
+                    if (!isLoadingMore) {
+                        scope.launch {
+                            isLoadingMore = true
+                            onReachBottom?.invoke()
+                            isLoadingMore = false
                         }
                     }
-                ) { _, dragAmount ->
-                    if (!isRefreshing.value) {
-                        val dampingFactor = calculateDampingFactor(offsetY.floatValue)
-                        offsetY.floatValue += dragAmount * dampingFactor
-                    }
                 }
+                return super.onPostScroll(consumed, available, source)
             }
-    ) {
+        }
+    }
+
+    Box(modifier = Modifier.nestedScroll(scrollConnection)) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -71,13 +84,13 @@ fun WeScrollView(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
-            WeLoading(isRotating = isRefreshing.value)
+            WeLoading(isRotating = isRefreshing)
             Spacer(modifier = Modifier.width(8.dp))
             Text(tips, color = FontColor1, fontSize = 14.sp)
         }
 
         val offsetDp = with(LocalDensity.current) {
-            offsetY.floatValue.coerceAtLeast(0f).toDp()
+            offsetY.coerceAtLeast(0f).toDp()
         }
         Box(
             modifier = Modifier.offset(

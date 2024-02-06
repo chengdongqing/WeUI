@@ -1,17 +1,17 @@
 package top.chengdongqing.weui.ui.components.feedback
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,58 +21,74 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.layout.positionInRoot
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.toSize
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
+import top.chengdongqing.weui.ui.components.basic.WeDivider
+import top.chengdongqing.weui.ui.theme.FontColor
+import kotlin.math.roundToInt
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun WeContextMenu(options: List<@Composable () -> Unit>, content: @Composable () -> Unit) {
+fun WeContextMenu(options: List<String>) {
     var showPopup by remember { mutableStateOf(false) }
-    var popupPosition by remember { mutableStateOf(Offset.Zero) }
-    var elementSize by remember { mutableStateOf(Size.Zero) }
+    var offset by remember { mutableStateOf(IntOffset.Zero) }
 
-    Box(
-        Modifier
-            .onGloballyPositioned { coordinates ->
-                elementSize = coordinates.size.toSize()
-                popupPosition = coordinates.positionInRoot()
-
-                println("elementSize: $elementSize")
-                println("popupPosition: $popupPosition")
+    LazyColumn(
+        modifier = Modifier
+            .clip(RoundedCornerShape(4.dp))
+            .background(Color.White)
+            .pointerInput(Unit) {
+                detectTapGestures(onLongPress = {
+                    offset = IntOffset(it.x.roundToInt(), it.y.roundToInt())
+                    showPopup = true
+                })
             }
-            .combinedClickable(onClick = {
-                println("onClick inside----------")
-            }, onLongClick = {
-                println("onLongClick inside---------")
-            })
     ) {
-        content()
+        items(20) { index ->
+            ListItem("item${index + 1}")
+        }
+    }
 
-        if (showPopup) {
-            Popup(offset = IntOffset(x = 0, y = 0)) {
-                Column(
-                    modifier = Modifier
-                        .width(180.dp)
-                        .shadow(8.dp)
-                        .clip(RoundedCornerShape(2.dp))
-                        .background(Color.White)
-                ) {
-                    options.forEach {
-                        MenuItem(onClick = {}) {
-                            it()
-                        }
+    if (showPopup) {
+        Popup(offset = offset) {
+            Column(
+                modifier = Modifier
+                    .width(180.dp)
+                    .shadow(8.dp)
+                    .clip(RoundedCornerShape(2.dp))
+                    .background(Color.White)
+            ) {
+                options.forEach {
+                    MenuItem(onClick = {}) {
+                        Text(text = it)
                     }
                 }
             }
         }
     }
+}
+
+@Composable
+private fun ListItem(content: String) {
+    Row(
+        modifier = Modifier
+            .heightIn(56.dp)
+            .padding(12.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = content,
+            modifier = Modifier.weight(1f),
+            color = FontColor,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Bold
+        )
+    }
+    WeDivider()
 }
 
 @Composable
