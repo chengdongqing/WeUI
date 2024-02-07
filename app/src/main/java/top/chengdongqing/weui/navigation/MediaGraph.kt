@@ -9,6 +9,7 @@ import top.chengdongqing.weui.ui.views.media.filebrowser.FileBrowserPage
 import top.chengdongqing.weui.ui.views.media.gallery.GalleryPage
 import top.chengdongqing.weui.ui.views.media.live.LivePlayerPage
 import top.chengdongqing.weui.ui.views.media.live.LivePusherPage
+import top.chengdongqing.weui.ui.views.media.paint.PaintPage
 import top.chengdongqing.weui.ui.views.media.picker.MediaPickerPage
 import top.chengdongqing.weui.ui.views.media.player.AudioPlayerPage
 import top.chengdongqing.weui.ui.views.media.player.VideoPlayerPage
@@ -49,6 +50,9 @@ fun NavGraphBuilder.addMediaGraph() {
         }
         composable("video-recorder") {
             VideoRecorderPage()
+        }
+        composable("paint") {
+            PaintPage()
         }
     }
 }

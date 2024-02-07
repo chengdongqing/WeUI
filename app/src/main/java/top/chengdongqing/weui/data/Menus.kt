@@ -44,7 +44,8 @@ val menus = listOf(
             MenuItem("VideoPlayer", "video-player"),
             MenuItem("ImageCropper", "image-cropper"),
             MenuItem("LivePlayer", "live-player"),
-            MenuItem("LivePusher", "live-pusher")
+            MenuItem("LivePusher", "live-pusher"),
+            MenuItem("Paint", "paint")
         )
     ),
     MenuGroup(
