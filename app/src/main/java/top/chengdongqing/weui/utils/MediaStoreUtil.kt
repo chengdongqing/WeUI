@@ -59,30 +59,31 @@ object MediaStoreUtil {
         }
     }
 
-    // 创建用于插入媒体文件的ContentValues
-    private fun createContentValues(
+    fun createContentValues(
         filename: String,
         mimeType: String,
         mediaType: MediaType,
         appName: String
     ): ContentValues =
         ContentValues().apply {
-            put(MediaStore.MediaColumns.DISPLAY_NAME, filename) // 设置文件名
-            put(MediaStore.MediaColumns.MIME_TYPE, mimeType) // 设置MIME类型
+            // 设置文件名
+            put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
+            // 设置MIME类型
+            put(MediaStore.MediaColumns.MIME_TYPE, mimeType)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 val directory = when (mediaType) {
                     MediaType.IMAGE -> Environment.DIRECTORY_PICTURES
                     MediaType.VIDEO -> Environment.DIRECTORY_MOVIES
                 }
-                // 设置文件保存的相对路径
                 val relativePath = "$directory/$appName"
+                // 设置文件的相对路径
                 put(MediaStore.MediaColumns.RELATIVE_PATH, relativePath)
-                put(MediaStore.MediaColumns.IS_PENDING, 1) // 标记文件为等待状态
+                // 标记文件为等待状态
+                put(MediaStore.MediaColumns.IS_PENDING, 1)
             }
         }
 
-    // 获取媒体文件类型对应的ContentUri
-    private fun getContentUri(mediaType: MediaType): Uri =
+    fun getContentUri(mediaType: MediaType): Uri =
         when (mediaType) {
             MediaType.IMAGE -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)

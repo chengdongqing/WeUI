@@ -21,7 +21,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -165,13 +164,11 @@ private fun BoxScope.VideoControls(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(text = formatDuration(passed.milliseconds), color = Color.White)
-        val progress by remember(passed, duration) {
-            derivedStateOf {
-                if (duration > 0) {
-                    (passed / duration.toFloat() * 100).roundToInt()
-                } else {
-                    0
-                }
+        val progress = remember(passed, duration) {
+            if (duration > 0) {
+                (passed / duration.toFloat() * 100).roundToInt()
+            } else {
+                0
             }
         }
         WeSlider(

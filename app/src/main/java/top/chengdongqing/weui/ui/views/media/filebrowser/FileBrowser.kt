@@ -299,8 +299,8 @@ private fun rememberFolderChildren(folders: MutableList<String>): Pair<MutableSt
     // 当前文件夹下所有文件/文件夹
     val files = remember { mutableStateOf<List<FileItem>>(emptyList()) }
 
-    // 处理权限
-    SetupPermission()
+    // 请求权限
+    RequestPermission()
     // 处理返回
     BackHandler(folders.size > 1) {
         folders.removeAt(folders.lastIndex)
@@ -322,7 +322,7 @@ private fun rememberFolderChildren(folders: MutableList<String>): Pair<MutableSt
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-private fun SetupPermission() {
+private fun RequestPermission() {
     val permissions = remember {
         buildList {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {

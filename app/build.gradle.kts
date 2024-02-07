@@ -76,9 +76,12 @@ dependencies {
     implementation(libs.coil.compose) // 异步图片加载
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.runtime.livedata) // room支持livedataAsState
-    implementation(libs.androidx.room.ktx) // room支持协程
+    implementation(libs.androidx.room.ktx)  // room支持协程
     ksp(libs.androidx.room.compiler) // room支持注解
     implementation(libs.androidx.biometric) // 简化生物认证
+    implementation(libs.androidx.camera.camera2) // 简化相机调用
+    implementation(libs.androidx.camera.lifecycle)
+    implementation(libs.androidx.camera.view)
     implementation(libs.lunar) // 农历计算库
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)

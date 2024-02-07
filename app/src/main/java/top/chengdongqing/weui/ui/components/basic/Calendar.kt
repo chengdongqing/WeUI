@@ -67,7 +67,7 @@ fun rememberCalendarState(initialDate: LocalDate = today): CalendarState {
     }
 
     val initialMonth = remember { YearMonth.now().minusMonths(startIndex.toLong()) }
-    val setMonth = fun(value: LocalDate) {
+    fun setMonth(value: LocalDate) {
         setCurrentMonth(value)
         val page = ChronoUnit.MONTHS.between(initialMonth, YearMonth.from(value)).toInt()
         coroutineScope.launch {
@@ -75,7 +75,7 @@ fun rememberCalendarState(initialDate: LocalDate = today): CalendarState {
         }
     }
 
-    return CalendarState(currentMonth, setMonth, pagerState)
+    return CalendarState(currentMonth, ::setMonth, pagerState)
 }
 
 @OptIn(ExperimentalFoundationApi::class)
