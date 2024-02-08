@@ -34,7 +34,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -140,15 +139,19 @@ private fun rememberAudioRecord(isRecording: Boolean): Duration {
     val (timer, setTimer) = remember { mutableStateOf<Timer?>(null) }
     val (duration, setDuration) = remember { mutableStateOf(0.seconds) }
     val latestDuration = rememberUpdatedState(newValue = duration)
-    var mediaRecorder by remember { mutableStateOf<MediaRecorder?>(null) }
+    val (mediaRecorder, setMediaRecorder) = remember { mutableStateOf<MediaRecorder?>(null) }
     val context = LocalContext.current
     val toast = rememberWeToast()
 
     fun stopRecording() {
-        timer?.cancel()
+        timer?.apply {
+            cancel()
+            setTimer(null)
+        }
         mediaRecorder?.apply {
             stop()
             release()
+            setMediaRecorder(null)
         }
     }
 
@@ -161,9 +164,9 @@ private fun rememberAudioRecord(isRecording: Boolean): Duration {
                     setDuration(latestDuration.value + 1.seconds)
                 }, 1000, 1000)
             })
-            mediaRecorder = buildAudioRecorder(context).apply {
+            setMediaRecorder(buildAudioRecorder(context).apply {
                 start()
-            }
+            })
         } else if (timer != null) {
             // 结束录音
             stopRecording()

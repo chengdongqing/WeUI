@@ -71,9 +71,9 @@ private fun Camera() {
     val imageCapture = remember { ImageCapture.Builder().build() }
     var cameraSelector by remember { mutableStateOf(CameraSelector.DEFAULT_BACK_CAMERA) }
     val toast = rememberWeToast()
-    val (isFlashOn, toggleFlashMode) = rememberToggle(
-        ImageCapture.FLASH_MODE_ON,
-        ImageCapture.FLASH_MODE_OFF
+    val (flashMode, toggleFlashMode) = rememberToggle(
+        ImageCapture.FLASH_MODE_OFF,
+        ImageCapture.FLASH_MODE_ON
     )
     val (_, toggleCameraSelector) = rememberToggle(
         CameraSelector.DEFAULT_BACK_CAMERA,
@@ -83,7 +83,7 @@ private fun Camera() {
     Column {
         CameraPreview(cameraProviderFuture, imageCapture, cameraSelector)
         ControlBar(
-            isFlashOn = isFlashOn == ImageCapture.FLASH_MODE_ON,
+            isFlashOn = flashMode == ImageCapture.FLASH_MODE_ON,
             onTakePhoto = { takePhoto(context, imageCapture, toast) },
             onToggleFlash = {
                 imageCapture.flashMode = toggleFlashMode()
