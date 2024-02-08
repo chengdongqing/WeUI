@@ -1,5 +1,6 @@
 package top.chengdongqing.weui.navigation
 
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
@@ -16,7 +17,7 @@ import top.chengdongqing.weui.ui.views.media.player.VideoPlayerPage
 import top.chengdongqing.weui.ui.views.media.recorder.AudioRecorderPage
 import top.chengdongqing.weui.ui.views.media.recorder.VideoRecorderPage
 
-fun NavGraphBuilder.addMediaGraph() {
+fun NavGraphBuilder.addMediaGraph(navController: NavController) {
     navigation("gallery", "media") {
         composable("gallery") {
             GalleryPage()
@@ -25,7 +26,7 @@ fun NavGraphBuilder.addMediaGraph() {
             FileBrowserPage()
         }
         composable("camera") {
-            CameraPage()
+            CameraPage(navController)
         }
         composable("image-cropper") {
             ImageCropperPage()

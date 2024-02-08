@@ -16,8 +16,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -42,25 +42,24 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.navigation.NavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.common.util.concurrent.ListenableFuture
 import top.chengdongqing.weui.R
-import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.feedback.ToastIcon
 import top.chengdongqing.weui.ui.components.feedback.WeToastState
 import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
 import top.chengdongqing.weui.utils.MediaStoreUtil
 import top.chengdongqing.weui.utils.MediaType
+import top.chengdongqing.weui.utils.SetupFullscreen
 import top.chengdongqing.weui.utils.rememberToggle
 
 @Composable
-fun CameraPage() {
-    WePage(title = "Camera", description = "相机", padding = PaddingValues(0.dp)) {
-        RequestPermission {
-            Camera()
-        }
+fun CameraPage(navController: NavController) {
+    RequestCameraPermission(navController) {
+        Camera()
     }
 }
 
@@ -102,24 +101,24 @@ private fun ColumnScope.CameraPreview(
     cameraSelector: CameraSelector
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
+    var cameraProvider by remember { mutableStateOf<ProcessCameraProvider?>(null) }
+    var preview by remember { mutableStateOf<Preview?>(null) }
 
     AndroidView(
         factory = { context ->
+            val previewView = PreviewView(context)
+            cameraProvider = cameraProviderFuture.get()
+            preview = Preview.Builder().build().also {
+                it.setSurfaceProvider(previewView.surfaceProvider)
+            }
             imageCapture.setCropAspectRatio(Rational(9, 16))
-            PreviewView(context)
+            previewView
         },
         modifier = Modifier.weight(1f)
-    ) { previewView ->
-        val cameraProvider = cameraProviderFuture.get()
-        val preview = Preview.Builder().build().also {
-            it.setSurfaceProvider(previewView.surfaceProvider)
-        }
-
+    ) {
         try {
-            cameraProvider.unbindAll()
-            cameraProvider.bindToLifecycle(
-                lifecycleOwner, cameraSelector, preview, imageCapture
-            )
+            cameraProvider?.unbindAll()
+            cameraProvider?.bindToLifecycle(lifecycleOwner, cameraSelector, preview, imageCapture)
         } catch (e: RuntimeException) {
             e.printStackTrace()
         }
@@ -168,8 +167,15 @@ private fun ControlBar(
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-private fun RequestPermission(content: @Composable () -> Unit) {
-    val permissionState = rememberPermissionState(Manifest.permission.CAMERA)
+fun RequestCameraPermission(
+    navController: NavController,
+    content: @Composable () -> Unit
+) {
+    val permissionState = rememberPermissionState(Manifest.permission.CAMERA) { res ->
+        if (!res) {
+            navController.popBackStack()
+        }
+    }
 
     LaunchedEffect(permissionState) {
         if (!permissionState.status.isGranted) {
@@ -177,8 +183,15 @@ private fun RequestPermission(content: @Composable () -> Unit) {
         }
     }
 
-    if (permissionState.status.isGranted) {
-        content()
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black)
+    ) {
+        if (permissionState.status.isGranted) {
+            SetupFullscreen()
+            content()
+        }
     }
 }
 

@@ -111,6 +111,12 @@ val menus = listOf(
         )
     ),
     MenuGroup(
+        "二维码", R.drawable.ic_nav_form, listOf(
+            MenuItem("QrCodeScanner", "qrcode-scanner"),
+            MenuItem("QrCodeGenerator", "qrcode-generator")
+        )
+    ),
+    MenuGroup(
         "地图组件", R.drawable.ic_nav_feedback,
         listOf(
             MenuItem("LocationPreview", "location-preview"),

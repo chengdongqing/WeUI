@@ -110,9 +110,7 @@ private fun ShareToTimeline() {
             when (it) {
                 0 -> takePictureLauncher.launch()
                 1 -> pickMultipleMediaLauncher.launch(
-                    PickVisualMediaRequest(
-                        ActivityResultContracts.PickVisualMedia.ImageAndVideo
-                    )
+                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo)
                 )
             }
         }

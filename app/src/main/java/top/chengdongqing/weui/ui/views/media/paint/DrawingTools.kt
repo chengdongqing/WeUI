@@ -96,7 +96,7 @@ private fun MoreColors(onColorChange: (Color) -> Unit) {
 private fun MoreTools(onRollback: () -> Unit, onClear: () -> Unit) {
     Row(
         modifier = Modifier
-            .padding(top = 4.dp)
+            .padding(top = 8.dp)
             .height(with(LocalDensity.current) { 196.toDp() }),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -130,7 +130,7 @@ private fun PaintBrushes(color: Color, onChange: (Float) -> Unit) {
     Column {
         FloatingActionButton(
             onClick = { visible = !visible },
-            modifier = Modifier.padding(vertical = 4.dp)
+            modifier = Modifier.padding(vertical = 8.dp)
         ) {
             Icon(
                 imageVector = Icons.Default.Brush,

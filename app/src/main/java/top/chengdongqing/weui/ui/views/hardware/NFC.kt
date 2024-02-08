@@ -16,15 +16,15 @@ import top.chengdongqing.weui.ui.components.form.WeButton
 fun NFCPage() {
     WePage(title = "NFC", description = "近场通信") {
         val context = LocalContext.current
-        val nfcAdapter =
-            (context.getSystemService(Context.NFC_SERVICE) as? NfcManager)?.defaultAdapter
+        val nfcManager = context.getSystemService(Context.NFC_SERVICE) as? NfcManager
+        val nfcAdapter = nfcManager?.defaultAdapter
 
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             WeButton(text = "扫描NFC") {
                 if (nfcAdapter == null) {
                     Toast.makeText(context, "此设备不支持NFC", Toast.LENGTH_SHORT).show()
                 } else if (nfcAdapter.isEnabled) {
-                    // TODO
+                    Toast.makeText(context, "示例待完善", Toast.LENGTH_SHORT).show()
                 } else {
                     Toast.makeText(context, "NFC未开启", Toast.LENGTH_SHORT).show()
                     context.startActivity(Intent(Settings.ACTION_NFC_SETTINGS))

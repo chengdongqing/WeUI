@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
@@ -14,6 +15,8 @@ import top.chengdongqing.weui.ui.views.map.LocationPickerPage
 import top.chengdongqing.weui.ui.views.map.LocationPreviewPage
 import top.chengdongqing.weui.ui.views.navigation.NavBarPage
 import top.chengdongqing.weui.ui.views.navigation.TabBarPage
+import top.chengdongqing.weui.ui.views.qrcode.generator.QrCodeGeneratePage
+import top.chengdongqing.weui.ui.views.qrcode.scanner.QrCodeScanPage
 import top.chengdongqing.weui.ui.views.search.SearchBarPage
 
 @Composable
@@ -54,11 +57,12 @@ fun NavigationGraph() {
         addBasicGraph()
         addFormGraph()
         addFeedbackGraph()
-        addMediaGraph()
+        addMediaGraph(navController)
         addSystemGraph(navController)
         addNetworkGraph()
         addHardwareGraph()
         addChartGraph()
+        addQrCodeGraph(navController)
         addMapGraph()
         addNavigationGraph()
         addSearchGraph()
@@ -66,7 +70,18 @@ fun NavigationGraph() {
     }
 }
 
-fun NavGraphBuilder.addMapGraph() {
+private fun NavGraphBuilder.addQrCodeGraph(navController: NavHostController) {
+    navigation("qrcode-generator", "qrcode") {
+        composable("qrcode-scanner") {
+            QrCodeScanPage(navController)
+        }
+        composable("qrcode-generator") {
+            QrCodeGeneratePage()
+        }
+    }
+}
+
+private fun NavGraphBuilder.addMapGraph() {
     navigation("location-preview", "location") {
         composable("location-preview") {
             LocationPreviewPage()
@@ -77,7 +92,7 @@ fun NavGraphBuilder.addMapGraph() {
     }
 }
 
-fun NavGraphBuilder.addNavigationGraph() {
+private fun NavGraphBuilder.addNavigationGraph() {
     navigation("nav-bar", "navigation") {
         composable("nav-bar") {
             NavBarPage()
@@ -88,13 +103,13 @@ fun NavGraphBuilder.addNavigationGraph() {
     }
 }
 
-fun NavGraphBuilder.addSearchGraph() {
+private fun NavGraphBuilder.addSearchGraph() {
     composable("search-bar") {
         SearchBarPage()
     }
 }
 
-fun NavGraphBuilder.addLayersGraph() {
+private fun NavGraphBuilder.addLayersGraph() {
     composable("layers") {
         LayersPage()
     }

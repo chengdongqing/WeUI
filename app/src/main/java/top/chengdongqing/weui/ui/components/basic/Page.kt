@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -27,6 +28,7 @@ import top.chengdongqing.weui.ui.theme.FontColor1
  * @param description 描述
  * @param padding 内边距
  * @param backgroundColor 背景颜色
+ * @param backgroundBrush 背景颜色
  * @param content 内容
  */
 @Composable
@@ -35,11 +37,18 @@ fun WePage(
     description: String,
     padding: PaddingValues = PaddingValues(16.dp),
     backgroundColor: Color = BackgroundColor,
+    backgroundBrush: Brush? = null,
     content: @Composable () -> Unit
 ) {
     Column(
         Modifier
-            .background(backgroundColor)
+            .then(
+                if (backgroundBrush != null) {
+                    Modifier.background(backgroundBrush)
+                } else {
+                    Modifier.background(backgroundColor)
+                }
+            )
             .statusBarsPadding()
     ) {
         Column(Modifier.padding(40.dp)) {
