@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.R
 import top.chengdongqing.weui.extensions.clickableWithoutRipple
-import top.chengdongqing.weui.ui.theme.BorderColor
+import top.chengdongqing.weui.ui.components.basic.WeDivider
 import top.chengdongqing.weui.ui.theme.FontColor
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 
@@ -108,7 +107,7 @@ fun WeCheckbox(
         Spacer(Modifier.width(16.dp))
         Column {
             Text(text = label, color = FontColor, fontSize = 17.sp)
-            Divider(modifier = Modifier.offset(y = 16.dp), thickness = 0.5.dp, color = BorderColor)
+            WeDivider(Modifier.offset(y = 16.dp))
         }
     }
 }

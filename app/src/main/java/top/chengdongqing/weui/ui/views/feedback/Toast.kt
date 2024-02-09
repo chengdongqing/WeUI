@@ -11,6 +11,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.feedback.ToastIcon
+import top.chengdongqing.weui.ui.components.feedback.WeToastOptions
 import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
 import top.chengdongqing.weui.ui.components.form.ButtonType
 import top.chengdongqing.weui.ui.components.form.WeButton
@@ -25,31 +26,33 @@ fun ToastPage() {
 
         Column {
             WeButton(text = "成功提示", type = ButtonType.PLAIN) {
-                toast.show(title = "已完成", icon = ToastIcon.SUCCESS)
+                toast.show(WeToastOptions(title = "已完成", icon = ToastIcon.SUCCESS))
             }
             Spacer(modifier = Modifier.height(20.dp))
             WeButton(text = "失败提示", type = ButtonType.PLAIN) {
-                toast.show(title = "获取链接失败", icon = ToastIcon.FAIL)
+                toast.show(WeToastOptions(title = "获取链接失败", icon = ToastIcon.FAIL))
             }
             Spacer(modifier = Modifier.height(20.dp))
             WeButton(text = "长文案提示", type = ButtonType.PLAIN) {
-                toast.show(title = "此处为长文案提示详情", icon = ToastIcon.FAIL)
+                toast.show(WeToastOptions(title = "此处为长文案提示详情", icon = ToastIcon.FAIL))
             }
             Spacer(modifier = Modifier.height(20.dp))
             WeButton(text = "立即支付", type = ButtonType.PLAIN) {
                 toast.show(
-                    title = "支付中...",
-                    icon = ToastIcon.LOADING,
-                    duration = Duration.INFINITE
+                    WeToastOptions(
+                        title = "支付中...",
+                        icon = ToastIcon.LOADING,
+                        duration = Duration.INFINITE
+                    )
                 )
                 coroutineScope.launch {
                     delay(2000.milliseconds)
-                    toast.show(title = "支付成功", icon = ToastIcon.SUCCESS)
+                    toast.show(WeToastOptions(title = "支付成功", icon = ToastIcon.SUCCESS))
                 }
             }
             Spacer(modifier = Modifier.height(20.dp))
             WeButton(text = "文字提示", type = ButtonType.PLAIN) {
-                toast.show("文字提示")
+                toast.show(WeToastOptions("文字提示"))
             }
         }
     }

@@ -17,6 +17,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.feedback.ToastIcon
+import top.chengdongqing.weui.ui.components.feedback.WeDialogOptions
+import top.chengdongqing.weui.ui.components.feedback.WeToastOptions
 import top.chengdongqing.weui.ui.components.feedback.rememberWeDialog
 import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
 import top.chengdongqing.weui.ui.components.form.ButtonType
@@ -38,17 +40,23 @@ fun ClipboardPage() {
             Spacer(modifier = Modifier.height(20.dp))
             WeButton(text = "设置剪贴板内容") {
                 if (content.isEmpty()) {
-                    toast.show("内容不能为空", ToastIcon.FAIL)
+                    toast.show(WeToastOptions("内容不能为空", ToastIcon.FAIL))
                 } else {
                     setClipboardData(context, content)
-                    toast.show("已复制", ToastIcon.SUCCESS)
+                    toast.show(WeToastOptions("已复制", ToastIcon.SUCCESS))
                 }
             }
             Spacer(modifier = Modifier.height(20.dp))
             WeButton(text = "读取剪贴板内容", type = ButtonType.PLAIN) {
                 getClipboardData(context)?.let {
-                    dialog.show("剪贴板内容", it, onCancel = null)
-                } ?: toast.show("获取失败", ToastIcon.FAIL)
+                    dialog.show(
+                        WeDialogOptions(
+                            title = "剪贴板内容",
+                            content = it,
+                            onCancel = null
+                        )
+                    )
+                } ?: toast.show(WeToastOptions("获取失败", ToastIcon.FAIL))
             }
         }
     }

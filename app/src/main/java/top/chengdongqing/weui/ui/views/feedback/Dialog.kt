@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.ui.components.basic.WePage
+import top.chengdongqing.weui.ui.components.feedback.WeDialogOptions
 import top.chengdongqing.weui.ui.components.feedback.rememberWeDialog
 import top.chengdongqing.weui.ui.components.form.ButtonType
 import top.chengdongqing.weui.ui.components.form.WeButton
@@ -19,18 +20,22 @@ fun DialogPage() {
         Column {
             WeButton(text = "Dialog 样式一", type = ButtonType.PLAIN) {
                 dialog.show(
-                    "弹窗标题",
-                    "弹窗内容，告知当前状态、信息和解决方法，描述文字尽量控制在三行内",
-                    "主操作",
-                    "辅助操作"
+                    WeDialogOptions(
+                        title = "弹窗标题",
+                        content = "弹窗内容，告知当前状态、信息和解决方法，描述文字尽量控制在三行内",
+                        okText = "主操作",
+                        cancelText = "辅助操作"
+                    )
                 )
             }
             Spacer(Modifier.height(16.dp))
             WeButton(text = "Dialog 样式二", type = ButtonType.PLAIN) {
                 dialog.show(
-                    "弹窗内容，告知当前状态、信息和解决方法，描述文字尽量控制在三行内",
-                    okText = "知道了",
-                    onCancel = null
+                    WeDialogOptions(
+                        title = "弹窗内容，告知当前状态、信息和解决方法，描述文字尽量控制在三行内",
+                        okText = "知道了",
+                        onCancel = null
+                    )
                 )
             }
         }

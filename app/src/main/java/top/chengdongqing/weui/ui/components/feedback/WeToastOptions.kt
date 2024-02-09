@@ -24,7 +24,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -150,50 +149,43 @@ fun WeToast(
 
 @Composable
 fun rememberWeToast(): WeToastState {
-    val visible = remember {
+    var visible by remember {
         mutableStateOf(false)
     }
-    var localState by remember {
-        mutableStateOf(Toast(""))
+    var localOptions by remember {
+        mutableStateOf<WeToastOptions?>(null)
     }
 
-    WeToast(
-        visible = visible.value,
-        title = localState.title,
-        icon = localState.icon,
-        duration = localState.duration
-    ) {
-        visible.value = false
+    localOptions?.let { options ->
+        WeToast(
+            visible = visible,
+            title = options.title,
+            icon = options.icon,
+            duration = options.duration
+        ) {
+            visible = false
+        }
     }
 
-    return WeToastState(visible) {
-        localState = it
-    }
+    return WeToastState(
+        visible,
+        show = {
+            localOptions = it
+            visible = true
+        },
+        hide = {
+            visible = false
+        }
+    )
 }
 
 class WeToastState(
-    private val visible: MutableState<Boolean>,
-    private val setLocalState: (Toast) -> Unit
-) {
-    fun visible(): Boolean {
-        return visible.value
-    }
+    val visible: Boolean,
+    val show: (WeToastOptions) -> Unit,
+    val hide: () -> Unit
+)
 
-    fun show(
-        title: String,
-        icon: ToastIcon = ToastIcon.NONE,
-        duration: Duration = 1500.milliseconds
-    ) {
-        setLocalState(Toast(title, icon, duration))
-        visible.value = true
-    }
-
-    fun hide() {
-        visible.value = false
-    }
-}
-
-data class Toast(
+data class WeToastOptions(
     val title: String,
     val icon: ToastIcon = ToastIcon.NONE,
     val duration: Duration = 1500.milliseconds

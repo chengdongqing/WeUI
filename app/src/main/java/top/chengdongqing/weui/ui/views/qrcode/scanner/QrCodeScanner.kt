@@ -30,6 +30,8 @@ import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
 import top.chengdongqing.weui.ui.components.feedback.ToastIcon
+import top.chengdongqing.weui.ui.components.feedback.WeDialogOptions
+import top.chengdongqing.weui.ui.components.feedback.WeToastOptions
 import top.chengdongqing.weui.ui.components.feedback.rememberWeDialog
 import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
 import top.chengdongqing.weui.ui.views.media.camera.RequestCameraPermission
@@ -45,13 +47,15 @@ fun QrCodeScanPage(navController: NavController) {
     RequestCameraPermission(navController) {
         QrCodeScanner { res ->
             dialog.show(
-                title = "扫描结果",
-                content = res,
-                cancelText = "复制",
-                onCancel = {
-                    setClipboardData(context, res)
-                    toast.show("已复制", ToastIcon.SUCCESS)
-                }
+                WeDialogOptions(
+                    title = "扫描结果",
+                    content = res,
+                    cancelText = "复制",
+                    onCancel = {
+                        setClipboardData(context, res)
+                        toast.show(WeToastOptions("已复制", ToastIcon.SUCCESS))
+                    }
+                )
             )
         }
     }
@@ -109,7 +113,7 @@ private fun QrCodeScanner(onChange: (String) -> Unit) {
         ScannerTools(camera) { uri ->
             scanFromPhoto(context, uri) { barcodes ->
                 barcodes.firstOrNull()?.rawValue?.let(onChange)
-                    ?: toast.show("识别失败", ToastIcon.FAIL)
+                    ?: toast.show(WeToastOptions("识别失败", ToastIcon.FAIL))
             }
         }
     }

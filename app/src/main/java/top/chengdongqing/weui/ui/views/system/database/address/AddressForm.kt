@@ -23,6 +23,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.feedback.ToastIcon
+import top.chengdongqing.weui.ui.components.feedback.WeToastOptions
 import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
 import top.chengdongqing.weui.ui.components.form.WeButton
 import top.chengdongqing.weui.ui.components.form.WeInput
@@ -97,10 +98,10 @@ fun AddressFormPage(navController: NavController, id: Int?) {
                 coroutineScope.launch {
                     if (id == null) {
                         addressDao.insert(value)
-                        toast.show("添加成功", ToastIcon.SUCCESS)
+                        toast.show(WeToastOptions("添加成功", ToastIcon.SUCCESS))
                     } else {
                         addressDao.update(value.copy(id = id))
-                        toast.show("修改成功", ToastIcon.SUCCESS)
+                        toast.show(WeToastOptions("修改成功", ToastIcon.SUCCESS))
                     }
                     delay(1000)
                     navController.popBackStack()

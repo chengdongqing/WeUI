@@ -27,6 +27,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.feedback.ToastIcon
+import top.chengdongqing.weui.ui.components.feedback.WeToastOptions
 import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
 import top.chengdongqing.weui.ui.components.form.ButtonType
 import top.chengdongqing.weui.ui.components.form.WeButton
@@ -54,7 +55,7 @@ fun QrCodeGeneratePage() {
                 if (content.isNotEmpty()) {
                     finalContent = content
                 } else {
-                    toast.show("请输入内容", ToastIcon.FAIL)
+                    toast.show(WeToastOptions("请输入内容", ToastIcon.FAIL))
                 }
             }
             Spacer(modifier = Modifier.height(60.dp))

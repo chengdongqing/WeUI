@@ -259,13 +259,13 @@ private fun formatFrequency(value: Float): String {
 
 private fun determineSatelliteType(constellationType: Int): String {
     return when (constellationType) {
-        GnssStatus.CONSTELLATION_GPS -> "GPS（美国）"
-        GnssStatus.CONSTELLATION_SBAS -> "SBAS（地面导航增强系统）"
-        GnssStatus.CONSTELLATION_GLONASS -> "GLONASS（俄罗斯）"
-        GnssStatus.CONSTELLATION_QZSS -> "QZSS（日本）"
         GnssStatus.CONSTELLATION_BEIDOU -> "北斗（中国）"
+        GnssStatus.CONSTELLATION_GPS -> "GPS（美国）"
+        GnssStatus.CONSTELLATION_GLONASS -> "GLONASS（俄罗斯）"
         GnssStatus.CONSTELLATION_GALILEO -> "GALILEO（欧盟）"
+        GnssStatus.CONSTELLATION_QZSS -> "QZSS（日本）"
         GnssStatus.CONSTELLATION_IRNSS -> "IRNSS（印度）"
+        GnssStatus.CONSTELLATION_SBAS -> "SBAS（地面导航增强系统）"
         else -> "未知"
     }
 }

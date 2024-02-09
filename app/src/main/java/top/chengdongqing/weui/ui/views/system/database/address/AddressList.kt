@@ -33,6 +33,9 @@ import kotlinx.coroutines.launch
 import top.chengdongqing.weui.ui.components.basic.WeDivider
 import top.chengdongqing.weui.ui.components.feedback.ActionSheetItem
 import top.chengdongqing.weui.ui.components.feedback.ToastIcon
+import top.chengdongqing.weui.ui.components.feedback.WeActionSheetOptions
+import top.chengdongqing.weui.ui.components.feedback.WeDialogOptions
+import top.chengdongqing.weui.ui.components.feedback.WeToastOptions
 import top.chengdongqing.weui.ui.components.feedback.rememberWeActionSheet
 import top.chengdongqing.weui.ui.components.feedback.rememberWeDialog
 import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
@@ -72,19 +75,19 @@ fun AddressList(navController: NavController) {
         items(addresses) { item ->
             AddressListItem(item,
                 onLongClick = {
-                    actionSheet.show(options = actions) { action ->
+                    actionSheet.show(WeActionSheetOptions(actions) { action ->
                         when (action) {
                             0 -> {
                                 navigateToForm(item.id)
                             }
 
                             1 -> {
-                                dialog.show("确定删除该地址吗？") {
+                                dialog.show(WeDialogOptions(title = "确定删除该地址吗？") {
                                     coroutineScope.launch {
                                         addressDao.delete(item)
-                                        toast.show("删除成功", ToastIcon.SUCCESS)
+                                        toast.show(WeToastOptions("删除成功", ToastIcon.SUCCESS))
                                     }
-                                }
+                                })
                             }
 
                             2 -> {
@@ -93,10 +96,10 @@ fun AddressList(navController: NavController) {
                                     appendLine("手机号: ${item.phone}")
                                     append("详细地址: ${item.addressDetail}")
                                 })
-                                toast.show("已复制", ToastIcon.SUCCESS)
+                                toast.show(WeToastOptions("已复制", ToastIcon.SUCCESS))
                             }
                         }
-                    }
+                    })
                 }) {
                 navigateToForm(item.id)
             }

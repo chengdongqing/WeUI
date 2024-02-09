@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,8 +39,8 @@ import androidx.navigation.NavHostController
 import top.chengdongqing.weui.R
 import top.chengdongqing.weui.data.menus
 import top.chengdongqing.weui.model.MenuGroup
+import top.chengdongqing.weui.ui.components.basic.WeDivider
 import top.chengdongqing.weui.ui.theme.BackgroundColor
-import top.chengdongqing.weui.ui.theme.BorderColor
 import top.chengdongqing.weui.ui.theme.FontColor1
 
 @Composable
@@ -170,11 +169,7 @@ fun MenuGroup(
                         )
                     }
                     if (index < group.children.lastIndex) {
-                        Divider(
-                            Modifier.padding(horizontal = 20.dp),
-                            thickness = 0.5.dp,
-                            color = BorderColor
-                        )
+                        WeDivider(Modifier.padding(horizontal = 20.dp))
                     }
                 }
             }

@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.R
 import top.chengdongqing.weui.extensions.clickableWithoutRipple
-import top.chengdongqing.weui.ui.theme.BorderColor
+import top.chengdongqing.weui.ui.components.basic.WeDivider
 import top.chengdongqing.weui.ui.theme.FontColor
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 
@@ -83,10 +82,6 @@ fun WeRadio(label: String, checked: Boolean, disabled: Boolean, onClick: () -> U
                 tint = if (checked) PrimaryColor else Color.Transparent
             )
         }
-        Divider(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            thickness = 0.5.dp,
-            color = BorderColor
-        )
+        WeDivider(Modifier.padding(horizontal = 16.dp))
     }
 }

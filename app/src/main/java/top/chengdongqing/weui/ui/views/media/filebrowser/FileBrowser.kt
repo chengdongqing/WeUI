@@ -57,7 +57,10 @@ import top.chengdongqing.weui.ui.components.basic.WeLoadMore
 import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.feedback.ActionSheetItem
 import top.chengdongqing.weui.ui.components.feedback.ToastIcon
+import top.chengdongqing.weui.ui.components.feedback.WeActionSheetOptions
+import top.chengdongqing.weui.ui.components.feedback.WeDialogOptions
 import top.chengdongqing.weui.ui.components.feedback.WePopup
+import top.chengdongqing.weui.ui.components.feedback.WeToastOptions
 import top.chengdongqing.weui.ui.components.feedback.rememberWeActionSheet
 import top.chengdongqing.weui.ui.components.feedback.rememberWeDialog
 import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
@@ -189,23 +192,23 @@ private fun FileListItem(
         modifier = Modifier
             .pointerInput(Unit) {
                 detectTapGestures(onLongPress = {
-                    actionSheet.show(options = menus) {
+                    actionSheet.show(WeActionSheetOptions(menus) {
                         when (it) {
                             0 -> {
                                 setVisible(true)
                             }
 
                             1 -> {
-                                dialog.show("确定删除吗？") {
+                                dialog.show(WeDialogOptions(title = "确定删除吗？") {
                                     if (!deleteFile(File(file.path))) {
-                                        toast.show("删除失败", ToastIcon.FAIL)
+                                        toast.show(WeToastOptions("删除失败", ToastIcon.FAIL))
                                     } else {
                                         onDeleted()
                                     }
-                                }
+                                })
                             }
                         }
-                    }
+                    })
                 }) {
                     if (file.isDirectory) {
                         onFolderClick()

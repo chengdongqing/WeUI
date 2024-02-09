@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import top.chengdongqing.weui.ui.components.feedback.ToastIcon
+import top.chengdongqing.weui.ui.components.feedback.WeToastOptions
 import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
 import top.chengdongqing.weui.ui.theme.FontColor1
 import top.chengdongqing.weui.utils.MediaStoreUtil
@@ -94,9 +95,9 @@ private fun BoxScope.MediaPreviewInfo(uris: List<Uri>, pagerState: PagerState) {
             onClick = {
                 coroutineScope.launch {
                     if (saveMediaToGallery(context, uri)) {
-                        toast.show("已保存到相册", icon = ToastIcon.SUCCESS)
+                        toast.show(WeToastOptions("已保存到相册", icon = ToastIcon.SUCCESS))
                     } else {
-                        toast.show("保存到相册失败", icon = ToastIcon.FAIL)
+                        toast.show(WeToastOptions("保存到相册失败", icon = ToastIcon.FAIL))
                     }
                 }
             },

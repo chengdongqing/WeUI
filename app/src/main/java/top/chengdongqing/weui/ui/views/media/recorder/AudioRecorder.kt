@@ -48,6 +48,7 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import top.chengdongqing.weui.R
 import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.feedback.ToastIcon
+import top.chengdongqing.weui.ui.components.feedback.WeToastOptions
 import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
 import top.chengdongqing.weui.ui.theme.FontColor1
 import top.chengdongqing.weui.utils.formatDuration
@@ -166,7 +167,7 @@ private fun RecordingHandler(isRecording: Boolean, duration: MutableState<Durati
             // 重置定时器
             timer.value = null
 
-            toast.show("录音已保存", ToastIcon.SUCCESS)
+            toast.show(WeToastOptions("录音已保存", ToastIcon.SUCCESS))
         }
     }
 }

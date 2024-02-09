@@ -49,6 +49,7 @@ import com.google.accompanist.permissions.rememberPermissionState
 import com.google.common.util.concurrent.ListenableFuture
 import top.chengdongqing.weui.R
 import top.chengdongqing.weui.ui.components.feedback.ToastIcon
+import top.chengdongqing.weui.ui.components.feedback.WeToastOptions
 import top.chengdongqing.weui.ui.components.feedback.WeToastState
 import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
 import top.chengdongqing.weui.utils.MediaStoreUtil
@@ -214,11 +215,11 @@ private fun takePhoto(context: Context, imageCapture: ImageCapture, toast: WeToa
         ContextCompat.getMainExecutor(context),
         object : ImageCapture.OnImageSavedCallback {
             override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                toast.show("照片已保存", ToastIcon.SUCCESS)
+                toast.show(WeToastOptions("照片已保存", ToastIcon.SUCCESS))
             }
 
             override fun onError(e: ImageCaptureException) {
-                toast.show("拍照失败", ToastIcon.FAIL)
+                toast.show(WeToastOptions("拍照失败", ToastIcon.FAIL))
                 e.printStackTrace()
             }
         }

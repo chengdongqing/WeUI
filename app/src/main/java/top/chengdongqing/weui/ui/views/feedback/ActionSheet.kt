@@ -1,5 +1,6 @@
 package top.chengdongqing.weui.ui.views.feedback
 
+import android.Manifest
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,8 +18,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.feedback.ActionSheetItem
+import top.chengdongqing.weui.ui.components.feedback.WeActionSheetOptions
+import top.chengdongqing.weui.ui.components.feedback.WeToastOptions
 import top.chengdongqing.weui.ui.components.feedback.rememberWeActionSheet
 import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
 import top.chengdongqing.weui.ui.components.form.ButtonType
@@ -52,9 +58,9 @@ private fun RequestPay() {
     }
 
     WeButton(text = "立即支付", type = ButtonType.PLAIN) {
-        actionSheet.show("请选择支付方式", options) {
-            toast.show("点击了第${it + 1}个")
-        }
+        actionSheet.show(WeActionSheetOptions(options, "请选择支付方式") {
+            toast.show(WeToastOptions("点击了第${it + 1}个"))
+        })
     }
 }
 
@@ -82,14 +88,16 @@ private fun MakeCall() {
     }
 
     WeButton(text = "开始通话", type = ButtonType.PLAIN) {
-        actionSheet.show(options = options) {
-            toast.show("开始${options[it].label}")
-        }
+        actionSheet.show(WeActionSheetOptions(options) {
+            toast.show(WeToastOptions("开始${options[it].label}"))
+        })
     }
 }
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 private fun ShareToTimeline() {
+    val permissionState = rememberPermissionState(Manifest.permission.CAMERA)
     val takePictureLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.TakePicturePreview()
     ) {}
@@ -106,13 +114,20 @@ private fun ShareToTimeline() {
     }
 
     WeButton(text = "发朋友圈") {
-        actionSheet.show(options = options) {
+        actionSheet.show(WeActionSheetOptions(options) {
             when (it) {
-                0 -> takePictureLauncher.launch()
+                0 -> {
+                    if (permissionState.status.isGranted) {
+                        takePictureLauncher.launch()
+                    } else {
+                        permissionState.launchPermissionRequest()
+                    }
+                }
+
                 1 -> pickMultipleMediaLauncher.launch(
                     PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo)
                 )
             }
-        }
+        })
     }
 }

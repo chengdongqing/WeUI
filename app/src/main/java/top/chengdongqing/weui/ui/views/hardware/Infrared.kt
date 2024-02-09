@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.feedback.ToastIcon
+import top.chengdongqing.weui.ui.components.feedback.WeToastOptions
 import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
 import top.chengdongqing.weui.ui.components.form.WeButton
 
@@ -26,9 +27,9 @@ fun InfraredPage() {
                 val frequency = 38000
 
                 irManager.transmit(frequency, pattern)
-                toast.show("已发射", ToastIcon.SUCCESS)
+                toast.show(WeToastOptions("已发射", ToastIcon.SUCCESS))
             } else {
-                toast.show("此设备没有红外模块", ToastIcon.FAIL)
+                toast.show(WeToastOptions("此设备没有红外模块", ToastIcon.FAIL))
             }
         }
     }

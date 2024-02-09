@@ -29,6 +29,7 @@ import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.ui.components.basic.KeyValueCard
 import top.chengdongqing.weui.ui.components.basic.KeyValueRow
 import top.chengdongqing.weui.ui.components.basic.WePage
+import top.chengdongqing.weui.ui.components.feedback.WeToastOptions
 import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
 import top.chengdongqing.weui.ui.components.form.ButtonType
 import top.chengdongqing.weui.ui.components.form.WeButton
@@ -69,7 +70,7 @@ private fun WriteSms() {
     WeButton(text = "发送短信", type = ButtonType.PLAIN) {
         if (smsPermissionState.status.isGranted) {
             if (number.isEmpty() || content.isEmpty()) {
-                toast.show("请正确输入")
+                toast.show(WeToastOptions("请正确输入"))
             } else {
                 val intent = Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:$number")).apply {
                     putExtra("sms_body", content)

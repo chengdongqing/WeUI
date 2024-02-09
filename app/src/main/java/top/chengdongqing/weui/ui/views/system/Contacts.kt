@@ -40,6 +40,7 @@ import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.ui.components.basic.KeyValueCard
 import top.chengdongqing.weui.ui.components.basic.KeyValueRow
 import top.chengdongqing.weui.ui.components.basic.WePage
+import top.chengdongqing.weui.ui.components.feedback.WeToastOptions
 import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
 import top.chengdongqing.weui.ui.components.form.ButtonSize
 import top.chengdongqing.weui.ui.components.form.ButtonType
@@ -90,7 +91,7 @@ private fun PhoneCall() {
         ) {
             if (callPermissionState.status.isGranted) {
                 if (number.isEmpty()) {
-                    toast.show("请输入号码")
+                    toast.show(WeToastOptions("请输入号码"))
                 } else {
                     val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:${number}"))
                     context.startActivity(intent)
@@ -106,7 +107,7 @@ private fun PhoneCall() {
             size = ButtonSize.MEDIUM
         ) {
             if (number.isEmpty()) {
-                toast.show("请输入号码")
+                toast.show(WeToastOptions("请输入号码"))
             } else {
                 val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:${number}"))
                 context.startActivity(intent)

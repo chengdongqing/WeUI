@@ -10,12 +10,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,6 +28,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import top.chengdongqing.weui.ui.components.basic.WeDivider
+import top.chengdongqing.weui.ui.theme.BorderColor
 import top.chengdongqing.weui.ui.theme.FontColor
 import top.chengdongqing.weui.ui.theme.FontColor1
 import top.chengdongqing.weui.ui.theme.LinkColor
@@ -103,7 +103,7 @@ fun WeDialog(
                         )
                     }
                     Spacer(modifier = Modifier.height(32.dp))
-                    Divider(thickness = 0.5.dp, color = Color(0f, 0f, 0f, 0.1f))
+                    WeDivider()
                     Row(
                         modifier = Modifier
                             .fillMaxWidth(),
@@ -124,11 +124,10 @@ fun WeDialog(
                                     fontWeight = FontWeight.Bold
                                 )
                             }
-                            Divider(
-                                modifier = Modifier
-                                    .width(0.5.dp)
-                                    .height(56.dp),
-                                color = Color(0f, 0f, 0f, 0.1f)
+                            VerticalDivider(
+                                modifier = Modifier.height(56.dp),
+                                thickness = 0.5.dp,
+                                color = BorderColor
                             )
                         }
                         Box(
@@ -154,82 +153,57 @@ fun WeDialog(
 
 @Composable
 fun rememberWeDialog(): WeDialogState {
-    val visibleState = remember {
+    var visible by remember {
         mutableStateOf(false)
     }
-    var localState by remember {
-        mutableStateOf(Dialog(""))
+    var localOptions by remember {
+        mutableStateOf<WeDialogOptions?>(null)
     }
 
-    WeDialog(
-        visible = visibleState.value,
-        title = localState.title,
-        content = localState.content,
-        okText = localState.okText,
-        cancelText = localState.cancelText,
-        okColor = localState.okColor,
-        onOk = {
-            if (localState.onOk != null) {
-                localState.onOk?.invoke()
-            }
-            if (localState.closeOnAction) {
-                visibleState.value = false
-            }
-        },
-        onCancel = if (localState.onCancel != null) {
-            {
-                localState.onCancel?.invoke()
-                if (localState.closeOnAction) {
-                    visibleState.value = false
+    localOptions?.let { options ->
+        WeDialog(
+            visible = visible,
+            title = options.title,
+            content = options.content,
+            okText = options.okText,
+            cancelText = options.cancelText,
+            okColor = options.okColor,
+            onOk = {
+                options.onOk?.invoke()
+                if (options.closeOnAction) {
+                    visible = false
                 }
-            }
-        } else null
-    )
-
-    return WeDialogState(visibleState) {
-        localState = it
+            },
+            onCancel = if (options.onCancel != null) {
+                {
+                    options.onCancel.invoke()
+                    if (options.closeOnAction) {
+                        visible = false
+                    }
+                }
+            } else null
+        )
     }
+
+    return WeDialogState(
+        visible,
+        show = {
+            localOptions = it
+            visible = true
+        },
+        hide = {
+            visible = false
+        }
+    )
 }
 
 class WeDialogState(
-    private val visible: MutableState<Boolean>,
-    private val setLocalState: (Dialog) -> Unit
-) {
-    fun visible(): Boolean {
-        return this.visible.value
-    }
+    val visible: Boolean,
+    val show: (WeDialogOptions) -> Unit,
+    val hide: () -> Unit
+)
 
-    fun show(
-        title: String,
-        content: String? = null,
-        okText: String = "确定",
-        cancelText: String = "取消",
-        okColor: Color = LinkColor,
-        closeOnAction: Boolean = true,
-        onCancel: (() -> Unit)? = {},
-        onOk: (() -> Unit)? = null
-    ) {
-        setLocalState(
-            Dialog(
-                title,
-                content,
-                okText,
-                cancelText,
-                okColor,
-                closeOnAction,
-                onCancel,
-                onOk
-            )
-        )
-        visible.value = true
-    }
-
-    fun hide() {
-        visible.value = false
-    }
-}
-
-data class Dialog(
+data class WeDialogOptions(
     val title: String,
     val content: String? = null,
     val okText: String = "确定",

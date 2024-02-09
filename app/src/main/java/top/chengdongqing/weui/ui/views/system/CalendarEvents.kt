@@ -33,6 +33,7 @@ import top.chengdongqing.weui.ui.components.basic.KeyValueCard
 import top.chengdongqing.weui.ui.components.basic.KeyValueRow
 import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.feedback.ToastIcon
+import top.chengdongqing.weui.ui.components.feedback.WeToastOptions
 import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
 import top.chengdongqing.weui.ui.components.form.ButtonType
 import top.chengdongqing.weui.ui.components.form.WeButton
@@ -105,9 +106,9 @@ fun AddCalendarEvent() {
                     put(CalendarContract.Events.CALENDAR_ID, 1)
                 }
                 context.contentResolver.insert(CalendarContract.Events.CONTENT_URI, values)
-                toast.show("已添加", icon = ToastIcon.SUCCESS)
+                toast.show(WeToastOptions("已添加", icon = ToastIcon.SUCCESS))
             } else {
-                toast.show("请正确输入")
+                toast.show(WeToastOptions("请正确输入", ToastIcon.FAIL))
             }
         } else {
             calendarPermissionState.launchPermissionRequest()
