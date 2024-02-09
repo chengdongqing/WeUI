@@ -30,10 +30,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -63,18 +64,19 @@ fun AudioRecorderPage() {
         val permissionState = rememberMultiplePermissionsState(
             buildList {
                 add(Manifest.permission.RECORD_AUDIO)
-                // 安卓Q及以上版本用MediaStore不需要写权限
+                // 安卓Q及以上版本将用MediaStore不需要写权限
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                     add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 }
             }
         )
-        val (isRecording, setRecording) = remember { mutableStateOf(false) }
-        val duration = rememberAudioRecord(isRecording)
+        var isRecording by remember { mutableStateOf(false) }
+        val duration = remember { mutableStateOf(0.seconds) }
+        RecordingHandler(isRecording, duration)
 
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
-                text = formatDuration(duration, true),
+                text = formatDuration(duration.value, true),
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -89,7 +91,7 @@ fun AudioRecorderPage() {
                         .background(Color.White)
                         .clickable {
                             if (permissionState.allPermissionsGranted) {
-                                setRecording(!isRecording)
+                                isRecording = !isRecording
                             } else {
                                 permissionState.launchMultiplePermissionRequest()
                             }
@@ -135,69 +137,75 @@ private fun RecordIcon(isRecording: Boolean) {
 }
 
 @Composable
-private fun rememberAudioRecord(isRecording: Boolean): Duration {
-    val (timer, setTimer) = remember { mutableStateOf<Timer?>(null) }
-    val (duration, setDuration) = remember { mutableStateOf(0.seconds) }
-    val latestDuration = rememberUpdatedState(newValue = duration)
-    val (mediaRecorder, setMediaRecorder) = remember { mutableStateOf<MediaRecorder?>(null) }
+private fun RecordingHandler(isRecording: Boolean, duration: MutableState<Duration>) {
+    val recorder = rememberAudioRecorder()
+    val timer = remember { mutableStateOf<Timer?>(null) }
     val context = LocalContext.current
     val toast = rememberWeToast()
 
-    fun stopRecording() {
-        timer?.apply {
-            cancel()
-            setTimer(null)
-        }
-        mediaRecorder?.apply {
-            stop()
-            release()
-            setMediaRecorder(null)
-        }
-    }
-
     LaunchedEffect(isRecording) {
         if (isRecording) {
+            // 重置计时
+            duration.value = 0.seconds
+            // 准备录音
+            prepareRecording(recorder, context)
             // 开始录音
-            setDuration(0.seconds)
-            setTimer(Timer().also {
-                it.schedule(timerTask {
-                    setDuration(latestDuration.value + 1.seconds)
+            recorder.start()
+            // 开始计时
+            Timer().apply {
+                schedule(timerTask {
+                    duration.value += 1.seconds
                 }, 1000, 1000)
-            })
-            setMediaRecorder(buildAudioRecorder(context).apply {
-                start()
-            })
-        } else if (timer != null) {
+                timer.value = this
+            }
+        } else if (timer.value != null) {
             // 结束录音
-            stopRecording()
+            recorder.stop()
+            // 取消计时
+            timer.value?.cancel()
+            // 重置定时器
+            timer.value = null
+
             toast.show("录音已保存", ToastIcon.SUCCESS)
         }
+    }
+}
+
+@Composable
+private fun rememberAudioRecorder(): MediaRecorder {
+    val context = LocalContext.current
+    val recorder = remember {
+        (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            MediaRecorder(context)
+        } else {
+            @Suppress("DEPRECATION")
+            MediaRecorder()
+        })
     }
 
     DisposableEffect(Unit) {
         onDispose {
-            stopRecording()
+            recorder.release()
         }
     }
 
-    return duration
+    return recorder
 }
 
-private fun buildAudioRecorder(context: Context): MediaRecorder {
-    val audioRecorder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        MediaRecorder(context)
-    } else {
-        @Suppress("DEPRECATION")
-        MediaRecorder()
-    }
-
-    audioRecorder.apply {
+private fun prepareRecording(recorder: MediaRecorder, context: Context) {
+    recorder.apply {
+        reset()
+        // 设置音源
         setAudioSource(MediaRecorder.AudioSource.MIC)
+        // 设置输出格式
         setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+        // 设置编码器
         setAudioEncoder(MediaRecorder.AudioEncoder.HE_AAC)
     }
 
+    // 设置文件名
     val filename = "recording_${System.currentTimeMillis()}.mp3"
+    // 设置存储路径
     val appName = context.getString(R.string.app_name)
     val relativePath = "Recordings/$appName"
 
@@ -211,8 +219,8 @@ private fun buildAudioRecorder(context: Context): MediaRecorder {
         val contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
         context.contentResolver.insert(contentUri, values)?.let { uri ->
             context.contentResolver.openFileDescriptor(uri, "w")?.use {
-                audioRecorder.setOutputFile(it.fileDescriptor)
-                audioRecorder.prepare()
+                recorder.setOutputFile(it.fileDescriptor)
+                recorder.prepare()
             }
         }
     } else {
@@ -222,9 +230,7 @@ private fun buildAudioRecorder(context: Context): MediaRecorder {
         val file = File(directory, filename).apply {
             createNewFile()
         }
-        audioRecorder.setOutputFile(file)
-        audioRecorder.prepare()
+        recorder.setOutputFile(file)
+        recorder.prepare()
     }
-
-    return audioRecorder
 }

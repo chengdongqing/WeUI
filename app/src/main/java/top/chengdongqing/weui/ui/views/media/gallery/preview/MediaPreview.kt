@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Download
 import androidx.compose.material3.Icon
@@ -35,7 +34,6 @@ import kotlinx.coroutines.launch
 import top.chengdongqing.weui.ui.components.feedback.ToastIcon
 import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
 import top.chengdongqing.weui.ui.theme.FontColor1
-import top.chengdongqing.weui.ui.theme.LightColor
 import top.chengdongqing.weui.utils.MediaStoreUtil
 import top.chengdongqing.weui.utils.MediaType
 import top.chengdongqing.weui.utils.SetupFullscreen
@@ -84,8 +82,6 @@ private fun BoxScope.MediaPreviewInfo(uris: List<Uri>, pagerState: PagerState) {
         modifier = Modifier
             .align(Alignment.TopCenter)
             .padding(top = 50.dp)
-            .background(LightColor, RoundedCornerShape(20.dp))
-            .padding(horizontal = 10.dp, vertical = 4.dp)
     )
     // 按钮组
     Row(

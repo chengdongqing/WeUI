@@ -19,13 +19,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,14 +33,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
 import top.chengdongqing.weui.R
 import top.chengdongqing.weui.extensions.clickableWithoutRipple
 import top.chengdongqing.weui.ui.components.form.WeSlider
 import top.chengdongqing.weui.ui.theme.BorderColor
+import top.chengdongqing.weui.utils.UpdateProgress
 import top.chengdongqing.weui.utils.formatDuration
+import top.chengdongqing.weui.utils.rememberPlayProgress
 import kotlin.math.roundToInt
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -53,12 +50,21 @@ internal fun VideoPreview(uri: Uri) {
     val isMute = remember { mutableStateOf(false) }
     var duration by remember { mutableIntStateOf(0) }
     var passed by remember { mutableIntStateOf(0) }
+    UpdateProgress(player, isPlaying.value) { passed = it }
 
-    UpdateProgress(player, isPlaying.value) {
-        passed = it
-    }
-
-    Box {
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .clickableWithoutRipple {
+            player?.let {
+                isPlaying.value = !player.isPlaying
+                if (player.isPlaying) {
+                    player.pause()
+                } else {
+                    player.start()
+                }
+            }
+        }
+    ) {
         VideoPlayerView(
             uri,
             setPlayer = {
@@ -67,19 +73,7 @@ internal fun VideoPreview(uri: Uri) {
             },
             setDuration = {
                 duration = it
-            },
-            modifier = Modifier
-                .fillMaxSize()
-                .clickableWithoutRipple {
-                    player?.let {
-                        isPlaying.value = !player.isPlaying
-                        if (player.isPlaying) {
-                            player.pause()
-                        } else {
-                            player.start()
-                        }
-                    }
-                }
+            }
         )
         player?.let {
             VideoControls(player, isPlaying, isMute, duration, passed)
@@ -91,8 +85,7 @@ internal fun VideoPreview(uri: Uri) {
 private fun VideoPlayerView(
     uri: Uri,
     setPlayer: (MediaPlayer) -> Unit,
-    setDuration: (Int) -> Unit,
-    modifier: Modifier
+    setDuration: (Int) -> Unit
 ) {
     AndroidView(
         factory = { context ->
@@ -106,31 +99,8 @@ private fun VideoPlayerView(
                 }
             }
         },
-        modifier = modifier
+        modifier = Modifier.fillMaxSize()
     )
-}
-
-@Composable
-private fun UpdateProgress(
-    player: MediaPlayer?,
-    isPlaying: Boolean,
-    onUpdate: (Int) -> Unit
-) {
-    val coroutineScope = rememberCoroutineScope()
-
-    DisposableEffect(isPlaying) {
-        if (isPlaying && player != null) {
-            val job = coroutineScope.launch {
-                while (isActive) {
-                    onUpdate(player.currentPosition)
-                    delay(500)
-                }
-            }
-            onDispose { job.cancel() }
-        } else {
-            onDispose { }
-        }
-    }
 }
 
 @Composable
@@ -164,52 +134,58 @@ private fun BoxScope.VideoControls(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(text = formatDuration(passed.milliseconds), color = Color.White)
-        val progress = remember(passed, duration) {
-            if (duration > 0) {
-                (passed / duration.toFloat() * 100).roundToInt()
-            } else {
-                0
-            }
-        }
+
+        val progress = rememberPlayProgress(passed, duration)
         WeSlider(
-            value = progress,
+            value = progress.intValue,
             modifier = Modifier
                 .weight(1f)
                 .padding(horizontal = 16.dp),
             formatter = null
         ) {
+            progress.intValue = it
             player.seekTo((it.toFloat() / 100 * duration).roundToInt())
+            if (!player.isPlaying) {
+                player.start()
+                isPlaying.value = true
+            }
         }
+
         Text(text = formatDuration(duration.milliseconds), color = Color.White)
-        IconButton(onClick = {
-            if (isMute.value) {
-                audioManager.adjustStreamVolume(
-                    AudioManager.STREAM_MUSIC,
-                    AudioManager.ADJUST_UNMUTE,
-                    0
-                )
-            } else {
-                audioManager.adjustStreamVolume(
-                    AudioManager.STREAM_MUSIC,
-                    AudioManager.ADJUST_MUTE,
-                    0
-                )
-            }
-            isMute.value = !isMute.value
-        }) {
-            if (isMute.value) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Outlined.VolumeOff,
-                    contentDescription = "静音",
-                    tint = Color.White
-                )
-            } else {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Outlined.VolumeUp,
-                    contentDescription = "取消静音",
-                    tint = Color.White
-                )
-            }
+        MuteControl(isMute, audioManager)
+    }
+}
+
+@Composable
+private fun MuteControl(isMute: MutableState<Boolean>, audioManager: AudioManager) {
+    IconButton(onClick = {
+        if (isMute.value) {
+            audioManager.adjustStreamVolume(
+                AudioManager.STREAM_MUSIC,
+                AudioManager.ADJUST_UNMUTE,
+                0
+            )
+        } else {
+            audioManager.adjustStreamVolume(
+                AudioManager.STREAM_MUSIC,
+                AudioManager.ADJUST_MUTE,
+                0
+            )
+        }
+        isMute.value = !isMute.value
+    }) {
+        if (isMute.value) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Outlined.VolumeOff,
+                contentDescription = "静音",
+                tint = Color.White
+            )
+        } else {
+            Icon(
+                imageVector = Icons.AutoMirrored.Outlined.VolumeUp,
+                contentDescription = "取消静音",
+                tint = Color.White
+            )
         }
     }
 }
