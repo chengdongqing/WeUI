@@ -11,14 +11,15 @@ fun formatFloat(value: Float, decimals: Int = 2): String {
         value.toInt().toString()
     } else {
         "%.${decimals}f".format(value)
+        // %.2f: 格式说明符，用于格式化浮点数（f 表示浮点数）。.2 表示小数点后保留两位数字。
     }
 }
 
-fun formatDouble(value: Double): String {
-    return if (value % 1.0 == 0.0) {
+fun formatDouble(value: Double, decimals: Int = 2): String {
+    return if (value % 1 == 0.0) {
         value.toInt().toString()
     } else {
-        "%.2f".format(value)
+        "%.${decimals}f".format(value)
     }
 }
 
@@ -36,6 +37,7 @@ fun formatDuration(duration: Duration, fullDuration: Boolean = false): String {
         hours > 0 || fullDuration -> "%02d:%02d:%02d".format(hours, minutes, seconds)
         minutes > 0 -> "%02d:%02d".format(minutes, seconds)
         else -> "00:%02d".format(seconds)
+        // %02d: 格式说明符，用于格式化整数（d 表示整数）。02 表示如果数字少于两位，会在前面补零以达到两位数
     }
 }
 

@@ -30,7 +30,7 @@ import top.chengdongqing.weui.R
 @Composable
 fun WeLoading(size: Dp = 16.dp, color: Color = Color.Unspecified, isRotating: Boolean = true) {
     val angle by if (isRotating) {
-        val infiniteTransition = rememberInfiniteTransition(label = "LoadingInfiniteTransition")
+        val infiniteTransition = rememberInfiniteTransition(label = "LoadingTransition")
         infiniteTransition.animateFloat(
             initialValue = 0f,
             targetValue = 360f,

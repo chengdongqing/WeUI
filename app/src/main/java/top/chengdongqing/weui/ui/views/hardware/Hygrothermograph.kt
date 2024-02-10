@@ -16,6 +16,7 @@ import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.form.ButtonType
 import top.chengdongqing.weui.ui.components.form.WeButton
 import top.chengdongqing.weui.ui.views.hardware.sensor.rememberSensorValue
+import top.chengdongqing.weui.utils.formatFloat
 
 @Composable
 fun HygrothermographPage() {
@@ -41,11 +42,11 @@ fun HygrothermographPage() {
                 item {
                     KeyValueRow(
                         label = "温度",
-                        value = temperature?.let { "${temperature}°C" } ?: "未知"
+                        value = temperature?.let { "${formatFloat(temperature)}°C" } ?: "未知"
                     )
                     KeyValueRow(
                         label = "湿度",
-                        value = humidity?.let { "${humidity}%" } ?: "未知")
+                        value = humidity?.let { "${formatFloat(humidity)}%" } ?: "未知")
                 }
             }
         }
