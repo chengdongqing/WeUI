@@ -53,6 +53,10 @@ fun WeScrollView(
             override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
                 val dampingFactor = calculateDampingFactor(offsetY)
                 offsetY += available.y * dampingFactor
+
+                scope.launch {
+                    onRefresh?.invoke()
+                }
                 return super.onPreScroll(available, source)
             }
 

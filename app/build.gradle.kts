@@ -22,7 +22,6 @@ android {
         }
 
         javaCompileOptions {
-            // Room schema export directory
             annotationProcessorOptions {
                 argument("room.schemaLocation", "$projectDir/schemas")
             }
