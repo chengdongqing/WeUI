@@ -107,7 +107,9 @@ private fun LocationBar(location: Location, satelliteCount: Int) {
     Text(
         text = buildString {
             appendLine("卫星数量：${satelliteCount}颗")
-            appendLine("坐标：${location.latitude}, ${location.longitude}")
+            val latitude = formatDouble(location.latitude, 6)
+            val longitude = formatDouble(location.longitude, 6)
+            appendLine("坐标：$latitude, $longitude")
             appendLine("海拔：${formatDouble(location.altitude)}m, 精度：${formatFloat(location.accuracy)}m")
         },
         fontSize = 12.sp,

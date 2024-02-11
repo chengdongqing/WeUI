@@ -46,7 +46,7 @@ private fun createBiometricPrompt(activity: FragmentActivity): BiometricPrompt {
         override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
             super.onAuthenticationError(errorCode, errString)
             activity.finish()
-            Toast.makeText(activity, "此设备不支持", Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, "此设备不支持指纹识别", Toast.LENGTH_SHORT).show()
         }
 
         override fun onAuthenticationFailed() {

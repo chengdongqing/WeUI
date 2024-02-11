@@ -45,12 +45,10 @@ object MediaStoreUtil {
                     }
                 }
                 // 更新文件的状态，表示写入操作完成
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    val contentValues1 = ContentValues().apply {
-                        put(MediaStore.MediaColumns.IS_PENDING, 0)
-                    }
-                    context.contentResolver.update(uri, contentValues1, null, null)
+                val contentValues1 = ContentValues().apply {
+                    put(MediaStore.MediaColumns.IS_PENDING, 0)
                 }
+                context.contentResolver.update(uri, contentValues1, null, null)
                 true
             } ?: false
         } catch (e: IOException) {

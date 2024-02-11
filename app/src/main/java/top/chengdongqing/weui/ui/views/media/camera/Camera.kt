@@ -44,8 +44,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.common.util.concurrent.ListenableFuture
 import top.chengdongqing.weui.R
 import top.chengdongqing.weui.ui.components.feedback.ToastIcon
@@ -170,17 +169,23 @@ private fun ControlBar(
 @Composable
 fun RequestCameraPermission(
     navController: NavController,
+    permissions: List<String> = emptyList(),
     content: @Composable () -> Unit
 ) {
-    val permissionState = rememberPermissionState(Manifest.permission.CAMERA) { res ->
-        if (!res) {
+    val permissionState = rememberMultiplePermissionsState(buildList {
+        add(Manifest.permission.CAMERA)
+        if (permissions.isNotEmpty()) {
+            addAll(permissions)
+        }
+    }) { res ->
+        if (res.values.any { value -> !value }) {
             navController.popBackStack()
         }
     }
 
     LaunchedEffect(permissionState) {
-        if (!permissionState.status.isGranted) {
-            permissionState.launchPermissionRequest()
+        if (!permissionState.allPermissionsGranted) {
+            permissionState.launchMultiplePermissionRequest()
         }
     }
 
@@ -189,7 +194,7 @@ fun RequestCameraPermission(
             .fillMaxSize()
             .background(Color.Black)
     ) {
-        if (permissionState.status.isGranted) {
+        if (permissionState.allPermissionsGranted) {
             SetupFullscreen()
             content()
         }

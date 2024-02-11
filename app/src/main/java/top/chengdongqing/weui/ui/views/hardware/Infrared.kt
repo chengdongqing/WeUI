@@ -29,7 +29,7 @@ fun InfraredPage() {
                 irManager.transmit(frequency, pattern)
                 toast.show(WeToastOptions("已发射", ToastIcon.SUCCESS))
             } else {
-                toast.show(WeToastOptions("此设备没有红外模块", ToastIcon.FAIL))
+                toast.show(WeToastOptions("此设备不支持红外", ToastIcon.FAIL))
             }
         }
     }

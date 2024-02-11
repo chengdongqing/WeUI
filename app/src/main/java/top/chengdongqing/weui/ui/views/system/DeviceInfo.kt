@@ -87,18 +87,17 @@ private fun MutableList<Pair<String, String>>.addScreenItems(
 
 private fun MutableList<Pair<String, String>>.addHardwareItems(context: Context) {
     (context.getSystemService(Context.WIFI_SERVICE) as? WifiManager)?.let {
-        add(Pair("WiFi", formatEnableStatus(it.isWifiEnabled)))
+        add(Pair("WiFi", it.isWifiEnabled.formatEnable()))
     }
-    (context.getSystemService(Context.BLUETOOTH_SERVICE) as? BluetoothManager)?.let {
-        add(Pair("蓝牙", formatEnableStatus(it.adapter.isEnabled)))
+    (context.getSystemService(Context.BLUETOOTH_SERVICE) as? BluetoothManager)?.adapter?.let {
+        add(Pair("蓝牙", it.isEnabled.formatEnable()))
     }
     (context.getSystemService(Context.LOCATION_SERVICE) as? LocationManager)?.let {
         val isGpsEnabled = it.isProviderEnabled(LocationManager.GPS_PROVIDER)
-        add(Pair("GPS", formatEnableStatus(isGpsEnabled)))
+        add(Pair("GPS", isGpsEnabled.formatEnable()))
     }
-    (context.getSystemService(Context.NFC_SERVICE) as? NfcManager)?.let {
-        val isNfcEnabled = it.defaultAdapter?.isEnabled == true
-        add(Pair("NFC", formatEnableStatus(isNfcEnabled)))
+    (context.getSystemService(Context.NFC_SERVICE) as? NfcManager)?.defaultAdapter?.let {
+        add(Pair("NFC", it.isEnabled.formatEnable()))
     }
 }
 
@@ -143,6 +142,4 @@ private fun rememberBatteryInfo(): BatteryInfo {
     return BatteryInfo(level, isCharging)
 }
 
-private fun formatEnableStatus(value: Boolean): String {
-    return if (value) "开" else "关"
-}
+private fun Boolean.formatEnable() = this.format("开", "关")

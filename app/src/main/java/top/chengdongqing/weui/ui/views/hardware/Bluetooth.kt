@@ -63,15 +63,18 @@ fun BluetoothPage() {
                 }
             }
         )
-        val bluetoothAdapter =
-            (context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager).adapter
+        val bluetoothManager =
+            context.getSystemService(Context.BLUETOOTH_SERVICE) as? BluetoothManager
+        val bluetoothAdapter = bluetoothManager?.adapter
         val launchBluetooth = rememberBluetoothLauncher()
         val bluetoothList = rememberBluetoothDevices()
 
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             WeButton(text = "扫描蓝牙") {
                 if (permissionState.allPermissionsGranted) {
-                    if (!bluetoothAdapter.isEnabled) {
+                    if (bluetoothAdapter == null) {
+                        Toast.makeText(context, "此设备不支持蓝牙", Toast.LENGTH_SHORT).show()
+                    } else if (!bluetoothAdapter.isEnabled) {
                         launchBluetooth()
                     } else {
                         bluetoothList.clear()

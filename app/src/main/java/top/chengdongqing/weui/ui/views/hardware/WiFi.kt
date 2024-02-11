@@ -56,7 +56,7 @@ import top.chengdongqing.weui.ui.theme.LightColor
 fun WiFiPage() {
     WePage(title = "Wi-Fi", description = "无线局域网") {
         val context = LocalContext.current
-        val wifiManager = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        val wifiManager = context.getSystemService(Context.WIFI_SERVICE) as? WifiManager
         var wifiList by remember { mutableStateOf<List<WiFiInfo>>(emptyList()) }
         val permissionState = rememberMultiplePermissionsState(
             remember {
@@ -71,7 +71,9 @@ fun WiFiPage() {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             WeButton(text = "扫描Wi-Fi") {
                 if (permissionState.allPermissionsGranted) {
-                    if (wifiManager.isWifiEnabled) {
+                    if (wifiManager == null) {
+                        Toast.makeText(context, "此设备不支持Wi-Fi", Toast.LENGTH_SHORT).show()
+                    } else if (wifiManager.isWifiEnabled) {
                         wifiList = buildWiFiList(wifiManager.scanResults)
                     } else {
                         Toast.makeText(context, "Wi-Fi未开启", Toast.LENGTH_SHORT).show()
