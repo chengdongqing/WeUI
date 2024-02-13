@@ -41,10 +41,10 @@
         android:name="android.hardware.camera.autofocus"
         android:required="false" />
     <uses-feature
-        android:name="android.hardware.telephony"
+        android:name="android.hardware.microphone"
         android:required="false" />
     <uses-feature
-        android:name="android.hardware.nfc"
+        android:name="android.hardware.telephony"
         android:required="false" />
     <uses-feature
         android:name="android.hardware.fingerprint"

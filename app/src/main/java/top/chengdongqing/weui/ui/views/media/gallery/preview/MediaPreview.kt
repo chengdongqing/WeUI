@@ -1,7 +1,9 @@
 package top.chengdongqing.weui.ui.views.media.gallery.preview
 
+import android.content.ContentValues
 import android.content.Context
 import android.net.Uri
+import android.provider.MediaStore
 import android.webkit.MimeTypeMap
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -30,14 +32,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toFile
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.ui.components.feedback.ToastIcon
 import top.chengdongqing.weui.ui.components.feedback.WeToastOptions
 import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
 import top.chengdongqing.weui.ui.theme.FontColor1
-import top.chengdongqing.weui.utils.MediaStoreUtil
+import top.chengdongqing.weui.utils.MediaStoreUtils
 import top.chengdongqing.weui.utils.MediaType
 import top.chengdongqing.weui.utils.SetupFullscreen
+import java.io.FileInputStream
+import java.io.IOException
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -114,17 +121,34 @@ private fun BoxScope.MediaPreviewInfo(uris: List<Uri>, pagerState: PagerState) {
 }
 
 private suspend fun saveMediaToGallery(context: Context, uri: Uri): Boolean {
-    val isVideo = uri.isVideoType()
+    val mediaType = if (uri.isVideoType()) MediaType.VIDEO else MediaType.IMAGE
     val mimeType = uri.getMimeType() ?: return false
     val filename = uri.lastPathSegment ?: return false
 
-    return MediaStoreUtil.saveMediaToGallery(
-        context,
-        uri,
-        filename,
-        mimeType,
-        mediaType = if (isVideo) MediaType.VIDEO else MediaType.IMAGE
-    )
+    return withContext(Dispatchers.IO) {
+        try {
+            val contentValues = MediaStoreUtils.createContentValues(
+                filename, mimeType, mediaType, context
+            )
+            val contentUri = MediaStoreUtils.getContentUri(mediaType)
+            val contentResolver = context.contentResolver
+            contentResolver.insert(contentUri, contentValues)?.let { mediaUri ->
+                contentResolver.openOutputStream(mediaUri)?.use { outputStream ->
+                    FileInputStream(uri.toFile()).use { inputStream ->
+                        inputStream.copyTo(outputStream)
+                    }
+                }
+                val contentValues1 = ContentValues().apply {
+                    put(MediaStore.MediaColumns.IS_PENDING, 0)
+                }
+                contentResolver.update(mediaUri, contentValues1, null, null)
+                true
+            } ?: false
+        } catch (e: IOException) {
+            e.printStackTrace()
+            false
+        }
+    }
 }
 
 private fun Uri.isVideoType() = getMimeType()?.startsWith("video") == true

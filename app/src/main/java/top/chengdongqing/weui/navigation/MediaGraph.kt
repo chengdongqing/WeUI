@@ -50,7 +50,7 @@ fun NavGraphBuilder.addMediaGraph(navController: NavController) {
             AudioRecorderPage()
         }
         composable("video-recorder") {
-            VideoRecorderPage()
+            VideoRecorderPage(navController)
         }
         composable("paint") {
             PaintPage()

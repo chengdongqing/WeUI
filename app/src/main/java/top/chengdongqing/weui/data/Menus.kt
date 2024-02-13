@@ -14,9 +14,10 @@ val menus = listOf(
             MenuItem("Progress", "progress"),
             MenuItem("Steps", "steps"),
             MenuItem("Swiper", "swiper"),
-            MenuItem("ScrollView", "scroll-view"),
             MenuItem("Calendar", "calendar"),
-            MenuItem("Clock", "clock")
+            MenuItem("Clock", "clock"),
+            MenuItem("ScrollView", "scroll-view"),
+            MenuItem("TabsView", "tabs-view")
         )
     ),
     MenuGroup(
@@ -121,13 +122,6 @@ val menus = listOf(
         listOf(
             MenuItem("LocationPreview", "location-preview"),
             MenuItem("LocationPicker", "location-picker")
-        )
-    ),
-    MenuGroup(
-        "导航相关", R.drawable.ic_nav_nav,
-        listOf(
-            MenuItem("NavBar", "nav-bar"),
-            MenuItem("TabBar", "tab-bar")
         )
     ),
     MenuGroup(

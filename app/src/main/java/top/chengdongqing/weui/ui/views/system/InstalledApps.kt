@@ -3,6 +3,7 @@ package top.chengdongqing.weui.ui.views.system
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -10,6 +11,7 @@ import android.provider.MediaStore
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -26,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -117,12 +120,20 @@ private fun AppListItem(app: App, context: Context) {
             modifier = Modifier.weight(1f),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(
-                bitmap = app.icon,
-                contentDescription = null,
-                modifier = Modifier.size(56.dp),
-                contentScale = ContentScale.Crop
-            )
+            Box(modifier = Modifier.size(56.dp)) {
+                produceState<ImageBitmap?>(initialValue = null) {
+                    value = withContext(Dispatchers.IO) {
+                        app.icon.toBitmap().asImageBitmap()
+                    }
+                }.value?.let {
+                    Image(
+                        bitmap = it,
+                        contentDescription = null,
+                        modifier = Modifier.matchParentSize(),
+                        contentScale = ContentScale.Crop
+                    )
+                }
+            }
             Text(app.name, textAlign = TextAlign.Center)
             Text(
                 "v${app.versionName}",
@@ -175,7 +186,7 @@ fun installApk(context: Context, apkPath: String) {
     // 复制到可访问的临时文件
     val tempFile = File.createTempFile("app_", ".apk", context.externalCacheDir)
     File(apkPath).copyTo(tempFile, true)
-    // 创建公共文件访问路径
+    // 创建文件共享访问路径
     val uri = FileProvider.getUriForFile(
         context,
         "${context.packageName}.provider",
@@ -248,7 +259,7 @@ private fun rememberInstalledApps(): List<App> {
         withContext(Dispatchers.IO) {
             apps = packageManager.queryIntentActivities(intent, 0).map { resolveInfo ->
                 val name = resolveInfo.loadLabel(packageManager).toString()
-                val icon = resolveInfo.loadIcon(packageManager).toBitmap().asImageBitmap()
+                val icon = resolveInfo.loadIcon(packageManager)
                 val packageName = resolveInfo.activityInfo.packageName
                 val packageInfo = packageManager.getPackageInfo(packageName, 0)
                 val versionName = packageInfo.versionName
@@ -275,7 +286,7 @@ private fun rememberInstalledApps(): List<App> {
 
 private data class App(
     val name: String,
-    val icon: ImageBitmap,
+    val icon: Drawable,
     val packageName: String,
     val versionName: String,
     val lastModified: String,

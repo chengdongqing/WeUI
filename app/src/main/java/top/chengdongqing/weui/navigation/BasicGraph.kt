@@ -12,6 +12,7 @@ import top.chengdongqing.weui.ui.views.basic.ProgressPage
 import top.chengdongqing.weui.ui.views.basic.ScrollViewPage
 import top.chengdongqing.weui.ui.views.basic.StepsPage
 import top.chengdongqing.weui.ui.views.basic.SwiperPage
+import top.chengdongqing.weui.ui.views.basic.TabViewPage
 
 fun NavGraphBuilder.addBasicGraph() {
     navigation("scroll-view", "basic") {
@@ -30,17 +31,20 @@ fun NavGraphBuilder.addBasicGraph() {
         composable("steps") {
             StepsPage()
         }
+        composable("calendar") {
+            CalendarPage()
+        }
+        composable("clock") {
+            ClockPage()
+        }
         composable("swiper") {
             SwiperPage()
         }
         composable("scroll-view") {
             ScrollViewPage()
         }
-        composable("calendar") {
-            CalendarPage()
-        }
-        composable("clock") {
-            ClockPage()
+        composable("tab-view") {
+            TabViewPage()
         }
     }
 }

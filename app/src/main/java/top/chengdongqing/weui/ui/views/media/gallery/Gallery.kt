@@ -1,7 +1,6 @@
 package top.chengdongqing.weui.ui.views.media.gallery
 
 import android.Manifest
-import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
 import android.media.MediaMetadataRetriever
@@ -84,7 +83,7 @@ private fun MediaGrid(
         verticalArrangement = Arrangement.spacedBy(2.dp),
     ) {
         itemsIndexed(mediaItems) { index, item ->
-            MediaGridItem(item, Modifier.clickableWithoutRipple {
+            MediaItem(item, Modifier.clickableWithoutRipple {
                 navigateToPreview(index)
             })
         }
@@ -92,7 +91,7 @@ private fun MediaGrid(
 }
 
 @Composable
-private fun MediaGridItem(item: MediaItem, modifier: Modifier) {
+private fun MediaItem(item: MediaItem, modifier: Modifier) {
     Box(
         modifier
             .aspectRatio(1f)
@@ -200,6 +199,7 @@ private fun rememberMedias(): Pair<List<MediaItem>, Boolean> {
 private suspend fun queryMedias(context: Context): List<MediaItem> =
     withContext(Dispatchers.IO) {
         val mediaItems = mutableListOf<MediaItem>()
+
         val projection = arrayOf(
             MediaStore.Files.FileColumns._ID,
             MediaStore.Files.FileColumns.DISPLAY_NAME,
@@ -237,14 +237,7 @@ private suspend fun queryMedias(context: Context): List<MediaItem> =
                 cursor.getColumnIndex(MediaStore.Files.FileColumns.DATA)
 
             while (cursor.moveToNext()) {
-                val uri = ContentUris.withAppendedId(
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
-                    } else {
-                        MediaStore.Files.getContentUri("external")
-                    },
-                    cursor.getLong(idColumn)
-                )
+                val uri = MediaStore.Files.getContentUri("external", cursor.getLong(idColumn))
                 mediaItems.add(
                     MediaItem(
                         uri,

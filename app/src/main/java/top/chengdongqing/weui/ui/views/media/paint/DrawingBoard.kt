@@ -3,6 +3,7 @@ package top.chengdongqing.weui.ui.views.media.paint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -40,6 +41,15 @@ internal fun DrawingBoard(paths: MutableList<StrokeItem>, color: Color, strokeWi
                     }
                 ) { change, _ ->
                     currentOffset.value = change.position
+                }
+            }
+            .pointerInput(color, strokeWidth) {
+                detectTapGestures {
+                    Path().apply {
+                        moveTo(it.x, it.y)
+                        lineTo(it.x, it.y)
+                        paths.add(StrokeItem(this, color, strokeWidth))
+                    }
                 }
             }
     ) {

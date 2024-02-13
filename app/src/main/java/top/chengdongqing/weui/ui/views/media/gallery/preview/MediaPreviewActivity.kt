@@ -8,12 +8,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.net.toUri
 import top.chengdongqing.weui.R
+import java.io.File
 
 class MediaPreviewActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val uris = intent.extras?.getStringArray("uris")?.map { it.toUri() }
+        val uris = intent.extras?.getStringArray("uris")?.map { File(it).toUri() }
         val current = intent.extras?.getInt("current", 0)
         setContent {
             MediaPreviewPage(uris ?: emptyList(), current ?: 0)

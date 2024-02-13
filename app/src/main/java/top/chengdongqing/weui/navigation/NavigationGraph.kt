@@ -13,8 +13,6 @@ import top.chengdongqing.weui.ui.views.HomePage
 import top.chengdongqing.weui.ui.views.layers.LayersPage
 import top.chengdongqing.weui.ui.views.map.LocationPickerPage
 import top.chengdongqing.weui.ui.views.map.LocationPreviewPage
-import top.chengdongqing.weui.ui.views.navigation.NavBarPage
-import top.chengdongqing.weui.ui.views.navigation.TabBarPage
 import top.chengdongqing.weui.ui.views.qrcode.generator.QrCodeGeneratePage
 import top.chengdongqing.weui.ui.views.qrcode.scanner.QrCodeScanPage
 import top.chengdongqing.weui.ui.views.search.SearchBarPage
@@ -64,7 +62,6 @@ fun NavigationGraph() {
         addChartGraph()
         addQrCodeGraph(navController)
         addMapGraph()
-        addNavigationGraph()
         addSearchGraph()
         addLayersGraph()
     }
@@ -88,17 +85,6 @@ private fun NavGraphBuilder.addMapGraph() {
         }
         composable("location-picker") {
             LocationPickerPage()
-        }
-    }
-}
-
-private fun NavGraphBuilder.addNavigationGraph() {
-    navigation("nav-bar", "navigation") {
-        composable("nav-bar") {
-            NavBarPage()
-        }
-        composable("tab-bar") {
-            TabBarPage()
         }
     }
 }

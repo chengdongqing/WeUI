@@ -3,6 +3,7 @@ package top.chengdongqing.weui.ui.views.media.camera
 import android.Manifest
 import android.content.Context
 import android.util.Rational
+import android.view.ViewGroup
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -39,19 +40,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import com.google.common.util.concurrent.ListenableFuture
-import top.chengdongqing.weui.R
 import top.chengdongqing.weui.ui.components.feedback.ToastIcon
 import top.chengdongqing.weui.ui.components.feedback.WeToastOptions
 import top.chengdongqing.weui.ui.components.feedback.WeToastState
 import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
-import top.chengdongqing.weui.utils.MediaStoreUtil
+import top.chengdongqing.weui.utils.MediaStoreUtils
 import top.chengdongqing.weui.utils.MediaType
 import top.chengdongqing.weui.utils.SetupFullscreen
 import top.chengdongqing.weui.utils.rememberToggle
@@ -66,8 +66,13 @@ fun CameraPage(navController: NavController) {
 @Composable
 private fun Camera() {
     val context = LocalContext.current
-    val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
-    val imageCapture = remember { ImageCapture.Builder().build() }
+    val view = LocalView.current
+    val imageCapture = remember {
+        ImageCapture.Builder()
+            // 照片的方向设置为手机当前的方向
+            .setTargetRotation(view.display.rotation)
+            .build()
+    }
     var cameraSelector by remember { mutableStateOf(CameraSelector.DEFAULT_BACK_CAMERA) }
     val toast = rememberWeToast()
     val (flashMode, toggleFlashMode) = rememberToggle(
@@ -80,7 +85,7 @@ private fun Camera() {
     )
 
     Column {
-        CameraPreview(cameraProviderFuture, imageCapture, cameraSelector)
+        CameraPreview(imageCapture, cameraSelector)
         ControlBar(
             isFlashOn = flashMode == ImageCapture.FLASH_MODE_ON,
             onTakePhoto = { takePhoto(context, imageCapture, toast) },
@@ -96,27 +101,31 @@ private fun Camera() {
 
 @Composable
 private fun ColumnScope.CameraPreview(
-    cameraProviderFuture: ListenableFuture<ProcessCameraProvider>,
     imageCapture: ImageCapture,
     cameraSelector: CameraSelector
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     var cameraProvider by remember { mutableStateOf<ProcessCameraProvider?>(null) }
-    var preview by remember { mutableStateOf<Preview?>(null) }
 
     AndroidView(
         factory = { context ->
-            val previewView = PreviewView(context)
-            cameraProvider = cameraProviderFuture.get()
-            preview = Preview.Builder().build().also {
-                it.setSurfaceProvider(previewView.surfaceProvider)
+            val previewView = PreviewView(context).apply {
+                layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT
+                )
+                keepScreenOn = true
             }
+            cameraProvider = ProcessCameraProvider.getInstance(context).get()
             imageCapture.setCropAspectRatio(Rational(9, 16))
             previewView
         },
         modifier = Modifier.weight(1f)
-    ) {
+    ) { previewView ->
         try {
+            val preview = Preview.Builder().build().also { preview ->
+                preview.setSurfaceProvider(previewView.surfaceProvider)
+            }
             cameraProvider?.unbindAll()
             cameraProvider?.bindToLifecycle(lifecycleOwner, cameraSelector, preview, imageCapture)
         } catch (e: RuntimeException) {
@@ -202,12 +211,12 @@ fun RequestCameraPermission(
 }
 
 private fun takePhoto(context: Context, imageCapture: ImageCapture, toast: WeToastState) {
-    val contentUri = MediaStoreUtil.getContentUri(MediaType.IMAGE)
-    val contentValues = MediaStoreUtil.createContentValues(
+    val contentUri = MediaStoreUtils.getContentUri(MediaType.IMAGE)
+    val contentValues = MediaStoreUtils.createContentValues(
         filename = "IMG_${System.currentTimeMillis()}.jpg",
         mimeType = "image/jpeg",
         mediaType = MediaType.IMAGE,
-        appName = context.getString(R.string.app_name)
+        context
     )
     val outputFileOptions = ImageCapture.OutputFileOptions.Builder(
         context.contentResolver,
@@ -224,8 +233,8 @@ private fun takePhoto(context: Context, imageCapture: ImageCapture, toast: WeToa
             }
 
             override fun onError(e: ImageCaptureException) {
-                toast.show(WeToastOptions("拍照失败", ToastIcon.FAIL))
                 e.printStackTrace()
+                toast.show(WeToastOptions("拍照失败", ToastIcon.FAIL))
             }
         }
     )

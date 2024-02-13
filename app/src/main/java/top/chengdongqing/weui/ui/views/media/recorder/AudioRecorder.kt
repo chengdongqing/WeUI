@@ -1,12 +1,9 @@
 package top.chengdongqing.weui.ui.views.media.recorder
 
 import android.Manifest
-import android.content.ContentValues
 import android.content.Context
 import android.media.MediaRecorder
 import android.os.Build
-import android.os.Environment
-import android.provider.MediaStore
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -45,14 +42,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import top.chengdongqing.weui.R
 import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.feedback.ToastIcon
 import top.chengdongqing.weui.ui.components.feedback.WeToastOptions
 import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
 import top.chengdongqing.weui.ui.theme.FontColor1
+import top.chengdongqing.weui.utils.MediaStoreUtils
+import top.chengdongqing.weui.utils.MediaType
 import top.chengdongqing.weui.utils.formatDuration
-import java.io.File
 import java.util.Timer
 import kotlin.concurrent.timerTask
 import kotlin.time.Duration
@@ -204,34 +201,17 @@ private fun prepareRecording(recorder: MediaRecorder, context: Context) {
         setAudioEncoder(MediaRecorder.AudioEncoder.HE_AAC)
     }
 
-    // 设置文件名
-    val filename = "recording_${System.currentTimeMillis()}.mp3"
-    // 设置存储路径
-    val appName = context.getString(R.string.app_name)
-    val relativePath = "Recordings/$appName"
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-        val values = ContentValues().apply {
-            put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
-            put(MediaStore.MediaColumns.MIME_TYPE, "audio/mp3")
-            put(MediaStore.MediaColumns.RELATIVE_PATH, relativePath)
+    val contentValues = MediaStoreUtils.createContentValues(
+        filename = "RCD_${System.currentTimeMillis()}.mp3",
+        mimeType = "audio/mp3",
+        mediaType = MediaType.AUDIO,
+        context
+    )
+    val contentUri = MediaStoreUtils.getContentUri(MediaType.AUDIO)
+    context.contentResolver.insert(contentUri, contentValues)?.let { uri ->
+        context.contentResolver.openFileDescriptor(uri, "w")?.use {
+            recorder.setOutputFile(it.fileDescriptor)
+            recorder.prepare()
         }
-
-        val contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-        context.contentResolver.insert(contentUri, values)?.let { uri ->
-            context.contentResolver.openFileDescriptor(uri, "w")?.use {
-                recorder.setOutputFile(it.fileDescriptor)
-                recorder.prepare()
-            }
-        }
-    } else {
-        val directory = File(Environment.getExternalStorageDirectory(), relativePath).apply {
-            mkdirs()
-        }
-        val file = File(directory, filename).apply {
-            createNewFile()
-        }
-        recorder.setOutputFile(file)
-        recorder.prepare()
     }
 }
