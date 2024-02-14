@@ -19,7 +19,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -37,26 +36,25 @@ import top.chengdongqing.weui.R
 import top.chengdongqing.weui.extensions.clickableWithoutRipple
 import top.chengdongqing.weui.ui.components.form.WeSlider
 import top.chengdongqing.weui.ui.theme.BorderColor
-import top.chengdongqing.weui.utils.UpdateProgress
 import top.chengdongqing.weui.utils.formatDuration
+import top.chengdongqing.weui.utils.rememberPlayPercent
 import top.chengdongqing.weui.utils.rememberPlayProgress
 import kotlin.math.roundToInt
 import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
-internal fun VideoPreview(uri: Uri) {
+fun VideoPreview(uri: Uri) {
     val (player, setPlayer) = remember { mutableStateOf<MediaPlayer?>(null) }
-    val isPlaying = remember { mutableStateOf(false) }
-    val isMute = remember { mutableStateOf(false) }
+    var isPlaying by remember { mutableStateOf(false) }
+    var isMute by remember { mutableStateOf(false) }
     var duration by remember { mutableIntStateOf(0) }
-    var passed by remember { mutableIntStateOf(0) }
-    UpdateProgress(player, isPlaying.value) { passed = it }
+    val progress = rememberPlayProgress(player, isPlaying)
 
     Box(modifier = Modifier
         .fillMaxSize()
         .clickableWithoutRipple {
             player?.let {
-                isPlaying.value = !player.isPlaying
+                isPlaying = !player.isPlaying
                 if (player.isPlaying) {
                     player.pause()
                 } else {
@@ -65,37 +63,45 @@ internal fun VideoPreview(uri: Uri) {
             }
         }
     ) {
-        VideoPlayerView(
+        VideoView(
             uri,
             setPlayer = {
                 setPlayer(it)
-                isPlaying.value = true
+                isPlaying = true
             },
             setDuration = {
                 duration = it
             }
         )
         player?.let {
-            VideoControls(player, isPlaying, isMute, duration, passed)
+            ControlBar(
+                player,
+                duration,
+                progress,
+                isPlaying,
+                isMute,
+                setPlayingState = { isPlaying = it },
+                setMuteState = { isMute = it }
+            )
         }
     }
 }
 
 @Composable
-private fun VideoPlayerView(
+private fun VideoView(
     uri: Uri,
-    setPlayer: (MediaPlayer) -> Unit,
+    setPlayer: (MediaPlayer?) -> Unit,
     setDuration: (Int) -> Unit
 ) {
     AndroidView(
         factory = { context ->
             VideoView(context).apply {
                 setVideoURI(uri)
-                setOnCompletionListener { it.start() }
                 setOnPreparedListener {
                     setDuration(it.duration)
+                    it.isLooping = true
                     setPlayer(it)
-                    start()
+                    it.start()
                 }
             }
         },
@@ -104,17 +110,19 @@ private fun VideoPlayerView(
 }
 
 @Composable
-private fun BoxScope.VideoControls(
+private fun BoxScope.ControlBar(
     player: MediaPlayer,
-    isPlaying: MutableState<Boolean>,
-    isMute: MutableState<Boolean>,
     duration: Int,
-    passed: Int
+    progress: Int,
+    isPlaying: Boolean,
+    isMute: Boolean,
+    setPlayingState: (Boolean) -> Unit,
+    setMuteState: (Boolean) -> Unit
 ) {
     val context = LocalContext.current
     val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
-    if (!isPlaying.value) {
+    if (!isPlaying) {
         Icon(
             painter = painterResource(id = R.drawable.ic_play_arrow),
             contentDescription = "播放",
@@ -133,33 +141,37 @@ private fun BoxScope.VideoControls(
             .padding(horizontal = 12.dp, vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = formatDuration(passed.milliseconds), color = Color.White)
+        Text(text = formatDuration(progress.milliseconds), color = Color.White)
 
-        val progress = rememberPlayProgress(passed, duration)
+        var percent by rememberPlayPercent(progress, duration)
         WeSlider(
-            value = progress.intValue,
+            value = percent,
             modifier = Modifier
                 .weight(1f)
                 .padding(horizontal = 16.dp),
             formatter = null
         ) {
-            progress.intValue = it
+            percent = it
             player.seekTo((it.toFloat() / 100 * duration).roundToInt())
             if (!player.isPlaying) {
                 player.start()
-                isPlaying.value = true
+                setPlayingState(true)
             }
         }
 
         Text(text = formatDuration(duration.milliseconds), color = Color.White)
-        MuteControl(isMute, audioManager)
+        MuteControl(isMute, audioManager, setMuteState)
     }
 }
 
 @Composable
-private fun MuteControl(isMute: MutableState<Boolean>, audioManager: AudioManager) {
+private fun MuteControl(
+    isMute: Boolean,
+    audioManager: AudioManager,
+    setMuteState: (Boolean) -> Unit
+) {
     IconButton(onClick = {
-        if (isMute.value) {
+        if (isMute) {
             audioManager.adjustStreamVolume(
                 AudioManager.STREAM_MUSIC,
                 AudioManager.ADJUST_UNMUTE,
@@ -172,9 +184,9 @@ private fun MuteControl(isMute: MutableState<Boolean>, audioManager: AudioManage
                 0
             )
         }
-        isMute.value = !isMute.value
+        setMuteState(!isMute)
     }) {
-        if (isMute.value) {
+        if (isMute) {
             Icon(
                 imageVector = Icons.AutoMirrored.Outlined.VolumeOff,
                 contentDescription = "静音",

@@ -5,27 +5,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableIntState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 @Composable
-fun UpdateProgress(
-    player: MediaPlayer?,
-    isPlaying: Boolean,
-    onUpdate: (Int) -> Unit
-) {
-    val coroutineScope = rememberCoroutineScope()
+fun rememberPlayProgress(player: MediaPlayer?, isPlaying: Boolean): Int {
+    var progress by remember { mutableIntStateOf(0) }
 
-    DisposableEffect(isPlaying) {
+    val coroutineScope = rememberCoroutineScope()
+    DisposableEffect(isPlaying, player) {
         if (isPlaying && player != null) {
             val job = coroutineScope.launch {
                 while (isActive) {
-                    onUpdate(player.currentPosition)
+                    progress = player.currentPosition
                     delay(500)
                 }
             }
@@ -34,10 +33,12 @@ fun UpdateProgress(
             onDispose { }
         }
     }
+
+    return progress
 }
 
 @Composable
-fun rememberPlayProgress(passed: Int, duration: Int): MutableIntState {
+fun rememberPlayPercent(passed: Int, duration: Int): MutableIntState {
     val progress = remember { mutableIntStateOf(0) }
 
     LaunchedEffect(passed) {

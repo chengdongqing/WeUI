@@ -41,8 +41,8 @@ import top.chengdongqing.weui.R
 import top.chengdongqing.weui.ui.components.basic.WePage
 import top.chengdongqing.weui.ui.components.form.WeSlider
 import top.chengdongqing.weui.ui.theme.LightColor
-import top.chengdongqing.weui.utils.UpdateProgress
 import top.chengdongqing.weui.utils.formatDuration
+import top.chengdongqing.weui.utils.rememberPlayPercent
 import top.chengdongqing.weui.utils.rememberPlayProgress
 import kotlin.math.roundToInt
 import kotlin.time.Duration.Companion.milliseconds
@@ -57,7 +57,7 @@ fun AudioPlayerPage() {
 
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
-                text = formatDuration(audioState.passed.milliseconds, true),
+                text = formatDuration(audioState.progress.milliseconds, true),
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -78,7 +78,7 @@ private fun ProgressControl(audioState: AudioState) {
     val player = audioState.player
     val duration by rememberUpdatedState(audioState.duration)
 
-    WeSlider(value = audioState.progress, formatter = null) {
+    WeSlider(value = audioState.percent, formatter = null) {
         audioState.setProgress(it)
         player.seekTo((it.toFloat() / 100 * duration).roundToInt())
         if (!player.isPlaying) {
@@ -90,7 +90,7 @@ private fun ProgressControl(audioState: AudioState) {
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = formatDuration(audioState.passed.milliseconds))
+        Text(text = formatDuration(audioState.progress.milliseconds))
         Text(text = formatDuration(audioState.duration.milliseconds))
     }
 }
@@ -137,9 +137,8 @@ fun rememberAudioPlayer(audioSource: String): AudioState {
     val player = remember { MediaPlayer() }
     var isPlaying by remember { mutableStateOf(false) }
     var duration by remember { mutableIntStateOf(0) }
-    var passed by remember { mutableIntStateOf(0) }
-    var progress by rememberPlayProgress(passed, duration)
-    UpdateProgress(player, isPlaying) { passed = it }
+    val progress = rememberPlayProgress(player, isPlaying)
+    var percent by rememberPlayPercent(progress, duration)
 
     LaunchedEffect(audioSource) {
         player.apply {
@@ -183,9 +182,10 @@ fun rememberAudioPlayer(audioSource: String): AudioState {
         }
     }
 
-    return AudioState(player, isPlaying, duration, passed, progress,
+    return AudioState(
+        player, isPlaying, duration, progress, percent,
         setPlaying = { isPlaying = it },
-        setProgress = { progress = it }
+        setProgress = { percent = it }
     )
 }
 
@@ -193,8 +193,8 @@ data class AudioState(
     val player: MediaPlayer,
     val isPlaying: Boolean,
     var duration: Int,
-    var passed: Int,
     val progress: Int,
+    var percent: Int,
     val setPlaying: (Boolean) -> Unit,
     val setProgress: (Int) -> Unit
 )

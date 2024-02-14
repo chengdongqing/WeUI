@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.IntSize
 import coil.compose.AsyncImage
 
 @Composable
-internal fun ImagePreview(uri: Uri) {
+fun ImagePreview(uri: Uri) {
     val context = LocalContext.current as Activity
     var offset by remember { mutableStateOf(Offset.Zero) }
     var zoom by remember { mutableFloatStateOf(1f) }

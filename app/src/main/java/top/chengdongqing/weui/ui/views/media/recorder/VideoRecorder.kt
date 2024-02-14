@@ -53,7 +53,7 @@ import kotlinx.coroutines.launch
 import top.chengdongqing.weui.ui.views.media.camera.RequestCameraPermission
 import top.chengdongqing.weui.utils.MediaStoreUtils
 import top.chengdongqing.weui.utils.MediaType
-import top.chengdongqing.weui.utils.rememberToggle
+import top.chengdongqing.weui.utils.rememberToggleState
 
 @Composable
 fun VideoRecorderPage(navController: NavController) {
@@ -74,11 +74,11 @@ private fun VideoRecorder() {
         VideoCapture.withOutput(Recorder.Builder().build())
     }
     var cameraSelector by remember { mutableStateOf(CameraSelector.DEFAULT_BACK_CAMERA) }
-    val (isFlashOn, toggleFlash) = rememberToggle(
+    val (isFlashOn, toggleFlash) = rememberToggleState(
         defaultValue = false,
         reverseValue = true
     )
-    val (_, toggleCameraSelector) = rememberToggle(
+    val (_, toggleCameraSelector) = rememberToggleState(
         CameraSelector.DEFAULT_BACK_CAMERA,
         CameraSelector.DEFAULT_FRONT_CAMERA
     )

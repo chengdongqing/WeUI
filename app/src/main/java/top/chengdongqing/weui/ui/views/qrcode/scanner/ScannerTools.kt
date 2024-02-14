@@ -33,7 +33,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.ui.theme.PrimaryColor
-import top.chengdongqing.weui.utils.rememberToggle
+import top.chengdongqing.weui.utils.rememberToggleState
 
 @Composable
 internal fun BoxScope.ScannerTools(camera: Camera?, onPhotoSelected: (Uri) -> Unit) {
@@ -44,7 +44,7 @@ internal fun BoxScope.ScannerTools(camera: Camera?, onPhotoSelected: (Uri) -> Un
             .padding(40.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        val (isFlashlightOn, toggleFlashlight) = rememberToggle(
+        val (isFlashlightOn, toggleFlashlight) = rememberToggleState(
             defaultValue = false,
             reverseValue = true
         )

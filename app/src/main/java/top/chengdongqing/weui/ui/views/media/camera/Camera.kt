@@ -54,7 +54,7 @@ import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
 import top.chengdongqing.weui.utils.MediaStoreUtils
 import top.chengdongqing.weui.utils.MediaType
 import top.chengdongqing.weui.utils.SetupFullscreen
-import top.chengdongqing.weui.utils.rememberToggle
+import top.chengdongqing.weui.utils.rememberToggleState
 
 @Composable
 fun CameraPage(navController: NavController) {
@@ -75,11 +75,11 @@ private fun Camera() {
     }
     var cameraSelector by remember { mutableStateOf(CameraSelector.DEFAULT_BACK_CAMERA) }
     val toast = rememberWeToast()
-    val (flashMode, toggleFlashMode) = rememberToggle(
+    val (flashMode, toggleFlashMode) = rememberToggleState(
         ImageCapture.FLASH_MODE_OFF,
         ImageCapture.FLASH_MODE_ON
     )
-    val (_, toggleCameraSelector) = rememberToggle(
+    val (_, toggleCameraSelector) = rememberToggleState(
         CameraSelector.DEFAULT_BACK_CAMERA,
         CameraSelector.DEFAULT_FRONT_CAMERA
     )

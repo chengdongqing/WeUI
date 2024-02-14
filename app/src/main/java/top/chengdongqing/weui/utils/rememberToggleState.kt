@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 
 @Composable
-fun <T> rememberToggle(defaultValue: T, reverseValue: T): Pair<T, () -> T> {
+fun <T> rememberToggleState(defaultValue: T, reverseValue: T): Pair<T, () -> T> {
     val (value, setValue) = remember { mutableStateOf(defaultValue) }
 
     val toggleValue = {
