@@ -45,11 +45,11 @@ import androidx.core.graphics.drawable.toBitmap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
-import top.chengdongqing.weui.ui.components.basic.WeLoadMore
-import top.chengdongqing.weui.ui.components.basic.WePage
-import top.chengdongqing.weui.ui.components.form.ButtonSize
-import top.chengdongqing.weui.ui.components.form.ButtonType
-import top.chengdongqing.weui.ui.components.form.WeButton
+import top.chengdongqing.weui.ui.components.button.ButtonSize
+import top.chengdongqing.weui.ui.components.button.ButtonType
+import top.chengdongqing.weui.ui.components.button.WeButton
+import top.chengdongqing.weui.ui.components.loading.WeLoadMore
+import top.chengdongqing.weui.ui.components.page.WePage
 import top.chengdongqing.weui.ui.theme.FontColor
 import top.chengdongqing.weui.ui.theme.FontColor1
 import top.chengdongqing.weui.utils.formatFileSize

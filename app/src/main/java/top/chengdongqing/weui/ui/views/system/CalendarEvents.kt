@@ -29,16 +29,16 @@ import com.google.accompanist.permissions.rememberPermissionState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import top.chengdongqing.weui.ui.components.basic.KeyValueCard
-import top.chengdongqing.weui.ui.components.basic.KeyValueRow
-import top.chengdongqing.weui.ui.components.basic.WePage
-import top.chengdongqing.weui.ui.components.feedback.ToastIcon
-import top.chengdongqing.weui.ui.components.feedback.WeToastOptions
-import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
-import top.chengdongqing.weui.ui.components.form.ButtonType
-import top.chengdongqing.weui.ui.components.form.WeButton
-import top.chengdongqing.weui.ui.components.form.WeDatePicker
-import top.chengdongqing.weui.ui.components.form.WeInput
+import top.chengdongqing.weui.ui.components.button.ButtonType
+import top.chengdongqing.weui.ui.components.button.WeButton
+import top.chengdongqing.weui.ui.components.input.WeInput
+import top.chengdongqing.weui.ui.components.page.WePage
+import top.chengdongqing.weui.ui.components.pairgroup.WePairGroup
+import top.chengdongqing.weui.ui.components.pairgroup.WePairItem
+import top.chengdongqing.weui.ui.components.picker.WeDatePicker
+import top.chengdongqing.weui.ui.components.toast.ToastIcon
+import top.chengdongqing.weui.ui.components.toast.WeToastOptions
+import top.chengdongqing.weui.ui.components.toast.rememberWeToast
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.Date
@@ -137,9 +137,9 @@ fun CalendarEvents() {
         }
     }
     Spacer(modifier = Modifier.height(20.dp))
-    KeyValueCard(Modifier.heightIn(max = LocalConfiguration.current.screenHeightDp.dp)) {
+    WePairGroup(Modifier.heightIn(max = LocalConfiguration.current.screenHeightDp.dp)) {
         items(events) {
-            KeyValueRow(label = it.first, value = it.second)
+            WePairItem(label = it.first, value = it.second)
         }
     }
 }

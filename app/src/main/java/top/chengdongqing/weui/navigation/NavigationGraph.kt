@@ -15,7 +15,13 @@ import top.chengdongqing.weui.ui.views.map.LocationPickerPage
 import top.chengdongqing.weui.ui.views.map.LocationPreviewPage
 import top.chengdongqing.weui.ui.views.qrcode.generator.QrCodeGeneratePage
 import top.chengdongqing.weui.ui.views.qrcode.scanner.QrCodeScanPage
-import top.chengdongqing.weui.ui.views.search.SearchBarPage
+import top.chengdongqing.weui.ui.views.template.calendar.CalendarPage
+import top.chengdongqing.weui.ui.views.template.clock.ClockPage
+import top.chengdongqing.weui.ui.views.template.filebrowser.FileBrowserPage
+import top.chengdongqing.weui.ui.views.template.gallery.GalleryPage
+import top.chengdongqing.weui.ui.views.template.indexedlist.IndexedListPage
+import top.chengdongqing.weui.ui.views.template.paint.PaintPage
+import top.chengdongqing.weui.ui.views.template.searchbar.SearchBarPage
 
 @Composable
 fun NavigationGraph() {
@@ -62,7 +68,7 @@ fun NavigationGraph() {
         addChartGraph()
         addQrCodeGraph(navController)
         addMapGraph()
-        addSearchGraph()
+        addTemplateGraph()
         addLayersGraph()
     }
 }
@@ -89,9 +95,27 @@ private fun NavGraphBuilder.addMapGraph() {
     }
 }
 
-private fun NavGraphBuilder.addSearchGraph() {
+private fun NavGraphBuilder.addTemplateGraph() {
     composable("search-bar") {
         SearchBarPage()
+    }
+    composable("calendar") {
+        CalendarPage()
+    }
+    composable("clock") {
+        ClockPage()
+    }
+    composable("gallery") {
+        GalleryPage()
+    }
+    composable("file-browser") {
+        FileBrowserPage()
+    }
+    composable("paint") {
+        PaintPage()
+    }
+    composable("indexed-list") {
+        IndexedListPage()
     }
 }
 

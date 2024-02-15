@@ -14,8 +14,8 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import top.chengdongqing.weui.R
-import top.chengdongqing.weui.ui.components.basic.WePage
-import top.chengdongqing.weui.ui.components.form.WeButton
+import top.chengdongqing.weui.ui.components.button.WeButton
+import top.chengdongqing.weui.ui.components.page.WePage
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable

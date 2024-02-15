@@ -9,12 +9,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import top.chengdongqing.weui.ui.components.basic.WePage
-import top.chengdongqing.weui.ui.components.feedback.InformationBarType
-import top.chengdongqing.weui.ui.components.feedback.WeInformationBar
-import top.chengdongqing.weui.ui.components.form.ButtonSize
-import top.chengdongqing.weui.ui.components.form.ButtonType
-import top.chengdongqing.weui.ui.components.form.WeButton
+import top.chengdongqing.weui.ui.components.button.ButtonSize
+import top.chengdongqing.weui.ui.components.button.ButtonType
+import top.chengdongqing.weui.ui.components.button.WeButton
+import top.chengdongqing.weui.ui.components.informationbar.InformationBarType
+import top.chengdongqing.weui.ui.components.informationbar.WeInformationBar
+import top.chengdongqing.weui.ui.components.page.WePage
 
 @Composable
 fun InformationBarPage() {

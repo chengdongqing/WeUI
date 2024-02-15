@@ -21,14 +21,14 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
-import top.chengdongqing.weui.ui.components.basic.WePage
-import top.chengdongqing.weui.ui.components.feedback.ActionSheetItem
-import top.chengdongqing.weui.ui.components.feedback.WeActionSheetOptions
-import top.chengdongqing.weui.ui.components.feedback.WeToastOptions
-import top.chengdongqing.weui.ui.components.feedback.rememberWeActionSheet
-import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
-import top.chengdongqing.weui.ui.components.form.ButtonType
-import top.chengdongqing.weui.ui.components.form.WeButton
+import top.chengdongqing.weui.ui.components.actionsheet.ActionSheetItem
+import top.chengdongqing.weui.ui.components.actionsheet.WeActionSheetOptions
+import top.chengdongqing.weui.ui.components.actionsheet.rememberWeActionSheet
+import top.chengdongqing.weui.ui.components.button.ButtonType
+import top.chengdongqing.weui.ui.components.button.WeButton
+import top.chengdongqing.weui.ui.components.page.WePage
+import top.chengdongqing.weui.ui.components.toast.WeToastOptions
+import top.chengdongqing.weui.ui.components.toast.rememberWeToast
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 
 @Composable

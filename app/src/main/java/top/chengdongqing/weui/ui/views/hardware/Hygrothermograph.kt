@@ -10,11 +10,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import top.chengdongqing.weui.ui.components.basic.KeyValueCard
-import top.chengdongqing.weui.ui.components.basic.KeyValueRow
-import top.chengdongqing.weui.ui.components.basic.WePage
-import top.chengdongqing.weui.ui.components.form.ButtonType
-import top.chengdongqing.weui.ui.components.form.WeButton
+import top.chengdongqing.weui.ui.components.button.ButtonType
+import top.chengdongqing.weui.ui.components.button.WeButton
+import top.chengdongqing.weui.ui.components.page.WePage
+import top.chengdongqing.weui.ui.components.pairgroup.WePairGroup
+import top.chengdongqing.weui.ui.components.pairgroup.WePairItem
 import top.chengdongqing.weui.ui.views.hardware.sensor.rememberSensorValue
 import top.chengdongqing.weui.utils.formatFloat
 
@@ -38,13 +38,13 @@ fun HygrothermographPage() {
 
             Spacer(modifier = Modifier.height(40.dp))
 
-            KeyValueCard {
+            WePairGroup {
                 item {
-                    KeyValueRow(
+                    WePairItem(
                         label = "温度",
                         value = temperature?.let { "${formatFloat(temperature)}°C" } ?: "未知"
                     )
-                    KeyValueRow(
+                    WePairItem(
                         label = "湿度",
                         value = humidity?.let { "${formatFloat(humidity)}%" } ?: "未知")
                 }

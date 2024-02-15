@@ -2,9 +2,9 @@ package top.chengdongqing.weui.ui.views.basic
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
-import top.chengdongqing.weui.ui.components.basic.LoadMoreType
-import top.chengdongqing.weui.ui.components.basic.WeLoadMore
-import top.chengdongqing.weui.ui.components.basic.WePage
+import top.chengdongqing.weui.ui.components.loading.LoadMoreType
+import top.chengdongqing.weui.ui.components.loading.WeLoadMore
+import top.chengdongqing.weui.ui.components.page.WePage
 
 @Composable
 fun LoadMorePage() {

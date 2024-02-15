@@ -1,7 +1,7 @@
 package top.chengdongqing.weui.ui.views.media.cropper
 
 import androidx.compose.runtime.Composable
-import top.chengdongqing.weui.ui.components.basic.WePage
+import top.chengdongqing.weui.ui.components.page.WePage
 
 @Composable
 fun ImageCropperPage() {

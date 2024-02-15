@@ -22,10 +22,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import top.chengdongqing.weui.ui.components.basic.WePage
-import top.chengdongqing.weui.ui.components.form.WeButton
-import top.chengdongqing.weui.ui.components.form.WeInput
-import top.chengdongqing.weui.ui.components.form.WeTextarea
+import top.chengdongqing.weui.ui.components.button.WeButton
+import top.chengdongqing.weui.ui.components.input.WeInput
+import top.chengdongqing.weui.ui.components.input.WeTextarea
+import top.chengdongqing.weui.ui.components.page.WePage
 
 @Composable
 fun DownloaderPage() {

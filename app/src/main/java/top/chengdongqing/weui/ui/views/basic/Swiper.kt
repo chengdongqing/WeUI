@@ -12,8 +12,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import top.chengdongqing.weui.ui.components.basic.Swiper
-import top.chengdongqing.weui.ui.components.basic.WePage
+import top.chengdongqing.weui.ui.components.page.WePage
+import top.chengdongqing.weui.ui.components.swiper.WeSwiper
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -31,7 +31,7 @@ fun SwiperPage() {
         val pagerState = rememberPagerState {
             banners.size
         }
-        Swiper(
+        WeSwiper(
             pagerState,
             count = pagerState.pageCount,
             modifier = Modifier.clip(RoundedCornerShape(6.dp))

@@ -9,12 +9,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import top.chengdongqing.weui.ui.components.basic.WePage
-import top.chengdongqing.weui.ui.components.feedback.ToastIcon
-import top.chengdongqing.weui.ui.components.feedback.WeToastOptions
-import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
-import top.chengdongqing.weui.ui.components.form.ButtonType
-import top.chengdongqing.weui.ui.components.form.WeButton
+import top.chengdongqing.weui.ui.components.button.ButtonType
+import top.chengdongqing.weui.ui.components.button.WeButton
+import top.chengdongqing.weui.ui.components.page.WePage
+import top.chengdongqing.weui.ui.components.toast.ToastIcon
+import top.chengdongqing.weui.ui.components.toast.WeToastOptions
+import top.chengdongqing.weui.ui.components.toast.rememberWeToast
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 

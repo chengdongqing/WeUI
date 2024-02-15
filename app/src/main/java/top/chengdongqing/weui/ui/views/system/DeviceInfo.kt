@@ -22,9 +22,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
-import top.chengdongqing.weui.ui.components.basic.KeyValueCard
-import top.chengdongqing.weui.ui.components.basic.KeyValueRow
-import top.chengdongqing.weui.ui.components.basic.WePage
+import top.chengdongqing.weui.ui.components.page.WePage
+import top.chengdongqing.weui.ui.components.pairgroup.WePairGroup
+import top.chengdongqing.weui.ui.components.pairgroup.WePairItem
 import top.chengdongqing.weui.utils.format
 import top.chengdongqing.weui.utils.formatFloat
 
@@ -52,9 +52,9 @@ fun DeviceInfoPage() {
             }
         }
 
-        KeyValueCard {
+        WePairGroup {
             items(deviceInfoItems) {
-                KeyValueRow(it.first, it.second)
+                WePairItem(it.first, it.second)
             }
         }
     }

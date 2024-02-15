@@ -1,6 +1,5 @@
 package top.chengdongqing.weui.ui.views.media.camera
 
-import android.Manifest
 import android.content.Context
 import android.util.Rational
 import android.view.ViewGroup
@@ -18,7 +17,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -30,7 +28,6 @@ import androidx.compose.material.icons.filled.FlipCameraAndroid
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,15 +42,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import top.chengdongqing.weui.ui.components.feedback.ToastIcon
-import top.chengdongqing.weui.ui.components.feedback.WeToastOptions
-import top.chengdongqing.weui.ui.components.feedback.WeToastState
-import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
+import top.chengdongqing.weui.ui.components.toast.ToastIcon
+import top.chengdongqing.weui.ui.components.toast.WeToastOptions
+import top.chengdongqing.weui.ui.components.toast.WeToastState
+import top.chengdongqing.weui.ui.components.toast.rememberWeToast
 import top.chengdongqing.weui.utils.MediaStoreUtils
 import top.chengdongqing.weui.utils.MediaType
-import top.chengdongqing.weui.utils.SetupFullscreen
+import top.chengdongqing.weui.utils.RequestCameraPermission
 import top.chengdongqing.weui.utils.rememberToggleState
 
 @Composable
@@ -170,42 +165,6 @@ private fun ControlBar(
                 contentDescription = "切换相机",
                 tint = Color.White
             )
-        }
-    }
-}
-
-@OptIn(ExperimentalPermissionsApi::class)
-@Composable
-fun RequestCameraPermission(
-    navController: NavController,
-    permissions: List<String> = emptyList(),
-    content: @Composable () -> Unit
-) {
-    val permissionState = rememberMultiplePermissionsState(buildList {
-        add(Manifest.permission.CAMERA)
-        if (permissions.isNotEmpty()) {
-            addAll(permissions)
-        }
-    }) { res ->
-        if (res.values.any { value -> !value }) {
-            navController.popBackStack()
-        }
-    }
-
-    LaunchedEffect(permissionState) {
-        if (!permissionState.allPermissionsGranted) {
-            permissionState.launchMultiplePermissionRequest()
-        }
-    }
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black)
-    ) {
-        if (permissionState.allPermissionsGranted) {
-            SetupFullscreen()
-            content()
         }
     }
 }

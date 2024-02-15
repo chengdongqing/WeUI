@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import top.chengdongqing.weui.ui.components.basic.WePage
+import top.chengdongqing.weui.ui.components.page.WePage
 import top.chengdongqing.weui.ui.views.system.database.address.AddressList
 
 @Composable

@@ -18,21 +18,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import top.chengdongqing.weui.ui.components.basic.KeyValueCard
-import top.chengdongqing.weui.ui.components.basic.KeyValueRow
-import top.chengdongqing.weui.ui.components.basic.WePage
-import top.chengdongqing.weui.ui.components.form.ButtonType
-import top.chengdongqing.weui.ui.components.form.WeButton
+import top.chengdongqing.weui.ui.components.button.ButtonType
+import top.chengdongqing.weui.ui.components.button.WeButton
+import top.chengdongqing.weui.ui.components.page.WePage
+import top.chengdongqing.weui.ui.components.pairgroup.WePairGroup
+import top.chengdongqing.weui.ui.components.pairgroup.WePairItem
 import top.chengdongqing.weui.utils.SetupStatusBarStyle
 
 @Composable
 fun SystemStatusPage() {
     WePage(title = "SystemStatus", description = "系统状态，动态更新") {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            KeyValueCard {
+            WePairGroup {
                 item {
                     NetworkInfoRows()
-                    KeyValueRow("系统主题", if (isSystemInDarkTheme()) "深色" else "浅色")
+                    WePairItem("系统主题", if (isSystemInDarkTheme()) "深色" else "浅色")
                 }
             }
             Spacer(modifier = Modifier.height(40.dp))
@@ -45,8 +45,8 @@ fun SystemStatusPage() {
 private fun NetworkInfoRows() {
     val network = rememberNetworkObserver()
 
-    KeyValueRow("网络类型", network.type)
-    KeyValueRow("VPN", if (network.isVpnConnected) "已启用" else "未启用")
+    WePairItem("网络类型", network.type)
+    WePairItem("VPN", if (network.isVpnConnected) "已启用" else "未启用")
 }
 
 @Composable

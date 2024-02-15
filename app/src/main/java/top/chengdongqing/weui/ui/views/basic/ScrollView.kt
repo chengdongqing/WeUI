@@ -2,10 +2,10 @@ package top.chengdongqing.weui.ui.views.basic
 
 import androidx.compose.runtime.Composable
 import kotlinx.coroutines.delay
-import top.chengdongqing.weui.ui.components.basic.KeyValueCard
-import top.chengdongqing.weui.ui.components.basic.KeyValueRow
-import top.chengdongqing.weui.ui.components.basic.WePage
-import top.chengdongqing.weui.ui.components.basic.WeScrollView
+import top.chengdongqing.weui.ui.components.page.WePage
+import top.chengdongqing.weui.ui.components.pairgroup.WePairGroup
+import top.chengdongqing.weui.ui.components.pairgroup.WePairItem
+import top.chengdongqing.weui.ui.components.scrollview.WeScrollView
 
 @Composable
 fun ScrollViewPage() {
@@ -16,9 +16,9 @@ fun ScrollViewPage() {
         }, onReachBottom = {
             println("加载更多-----------")
         }) {
-            KeyValueCard {
+            WePairGroup {
                 items(30) {
-                    KeyValueRow(label = "名字", value = "值${it + 1}")
+                    WePairItem(label = "名字", value = "值${it + 1}")
                 }
             }
         }

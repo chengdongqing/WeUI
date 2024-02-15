@@ -2,8 +2,8 @@ package top.chengdongqing.weui.ui.views.feedback
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import top.chengdongqing.weui.ui.components.basic.WePage
-import top.chengdongqing.weui.ui.components.feedback.WeContextMenu
+import top.chengdongqing.weui.ui.components.contextmenu.WeContextMenu
+import top.chengdongqing.weui.ui.components.page.WePage
 
 @Composable
 fun ContextMenuPage() {

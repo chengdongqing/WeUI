@@ -7,8 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import top.chengdongqing.weui.ui.components.basic.WeLoading
-import top.chengdongqing.weui.ui.components.basic.WePage
+import top.chengdongqing.weui.ui.components.loading.WeLoading
+import top.chengdongqing.weui.ui.components.page.WePage
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 
 @Composable

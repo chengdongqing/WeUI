@@ -18,11 +18,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
-import top.chengdongqing.weui.ui.components.basic.WeCircleProgress
-import top.chengdongqing.weui.ui.components.basic.WeDashboardProgress
-import top.chengdongqing.weui.ui.components.basic.WePage
-import top.chengdongqing.weui.ui.components.basic.WeProgress
-import top.chengdongqing.weui.ui.components.form.WeButton
+import top.chengdongqing.weui.ui.components.button.WeButton
+import top.chengdongqing.weui.ui.components.page.WePage
+import top.chengdongqing.weui.ui.components.progress.WeCircleProgress
+import top.chengdongqing.weui.ui.components.progress.WeDashboardProgress
+import top.chengdongqing.weui.ui.components.progress.WeProgress
 import java.util.Timer
 import kotlin.concurrent.timerTask
 

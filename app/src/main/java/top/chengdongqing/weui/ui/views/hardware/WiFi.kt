@@ -40,11 +40,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import top.chengdongqing.weui.ui.components.basic.LoadMoreType
-import top.chengdongqing.weui.ui.components.basic.WeDivider
-import top.chengdongqing.weui.ui.components.basic.WeLoadMore
-import top.chengdongqing.weui.ui.components.basic.WePage
-import top.chengdongqing.weui.ui.components.form.WeButton
+import top.chengdongqing.weui.ui.components.button.WeButton
+import top.chengdongqing.weui.ui.components.divider.WeDivider
+import top.chengdongqing.weui.ui.components.loading.LoadMoreType
+import top.chengdongqing.weui.ui.components.loading.WeLoadMore
+import top.chengdongqing.weui.ui.components.page.WePage
 import top.chengdongqing.weui.ui.theme.BorderColor
 import top.chengdongqing.weui.ui.theme.FontColor
 import top.chengdongqing.weui.ui.theme.FontColor1

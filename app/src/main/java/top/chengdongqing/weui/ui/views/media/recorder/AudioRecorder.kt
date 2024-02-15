@@ -42,10 +42,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import top.chengdongqing.weui.ui.components.basic.WePage
-import top.chengdongqing.weui.ui.components.feedback.ToastIcon
-import top.chengdongqing.weui.ui.components.feedback.WeToastOptions
-import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
+import top.chengdongqing.weui.ui.components.page.WePage
+import top.chengdongqing.weui.ui.components.toast.ToastIcon
+import top.chengdongqing.weui.ui.components.toast.WeToastOptions
+import top.chengdongqing.weui.ui.components.toast.rememberWeToast
 import top.chengdongqing.weui.ui.theme.FontColor1
 import top.chengdongqing.weui.utils.MediaStoreUtils
 import top.chengdongqing.weui.utils.MediaType

@@ -13,11 +13,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.chengdongqing.weui.ui.components.basic.KeyValueCard
-import top.chengdongqing.weui.ui.components.basic.KeyValueRow
-import top.chengdongqing.weui.ui.components.basic.WePage
-import top.chengdongqing.weui.ui.components.form.ButtonType
-import top.chengdongqing.weui.ui.components.form.WeButton
+import top.chengdongqing.weui.ui.components.button.ButtonType
+import top.chengdongqing.weui.ui.components.button.WeButton
+import top.chengdongqing.weui.ui.components.page.WePage
+import top.chengdongqing.weui.ui.components.pairgroup.WePairGroup
+import top.chengdongqing.weui.ui.components.pairgroup.WePairItem
 import top.chengdongqing.weui.ui.views.hardware.sensor.rememberSensorValues
 import top.chengdongqing.weui.utils.formatFloat
 
@@ -43,9 +43,9 @@ fun GyroscopePage() {
             values?.let {
                 Text(text = "单位：rad/s（弧度/秒）", fontSize = 10.sp)
                 Spacer(modifier = Modifier.height(20.dp))
-                KeyValueCard {
+                WePairGroup {
                     itemsIndexed(it) { index, value ->
-                        KeyValueRow(
+                        WePairItem(
                             label = "${getAxisLabel(index)}轴",
                             value = formatFloat(value)
                         )

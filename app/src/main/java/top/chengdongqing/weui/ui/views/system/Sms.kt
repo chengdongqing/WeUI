@@ -26,15 +26,15 @@ import com.google.accompanist.permissions.rememberPermissionState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import top.chengdongqing.weui.ui.components.basic.KeyValueCard
-import top.chengdongqing.weui.ui.components.basic.KeyValueRow
-import top.chengdongqing.weui.ui.components.basic.WePage
-import top.chengdongqing.weui.ui.components.feedback.WeToastOptions
-import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
-import top.chengdongqing.weui.ui.components.form.ButtonType
-import top.chengdongqing.weui.ui.components.form.WeButton
-import top.chengdongqing.weui.ui.components.form.WeInput
-import top.chengdongqing.weui.ui.components.form.WeTextarea
+import top.chengdongqing.weui.ui.components.button.ButtonType
+import top.chengdongqing.weui.ui.components.button.WeButton
+import top.chengdongqing.weui.ui.components.input.WeInput
+import top.chengdongqing.weui.ui.components.input.WeTextarea
+import top.chengdongqing.weui.ui.components.page.WePage
+import top.chengdongqing.weui.ui.components.pairgroup.WePairGroup
+import top.chengdongqing.weui.ui.components.pairgroup.WePairItem
+import top.chengdongqing.weui.ui.components.toast.WeToastOptions
+import top.chengdongqing.weui.ui.components.toast.rememberWeToast
 
 @Composable
 fun SmsPage() {
@@ -104,9 +104,9 @@ private fun ReadSms() {
         }
     }
     Spacer(modifier = Modifier.height(20.dp))
-    KeyValueCard {
+    WePairGroup {
         items(messages) {
-            KeyValueRow(label = it.first, value = it.second)
+            WePairItem(label = it.first, value = it.second)
         }
     }
 }

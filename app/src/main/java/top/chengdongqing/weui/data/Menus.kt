@@ -14,10 +14,8 @@ val menus = listOf(
             MenuItem("Progress", "progress"),
             MenuItem("Steps", "steps"),
             MenuItem("Swiper", "swiper"),
-            MenuItem("Calendar", "calendar"),
-            MenuItem("Clock", "clock"),
             MenuItem("ScrollView", "scroll-view"),
-            MenuItem("TabsView", "tabs-view")
+            MenuItem("TabView", "tab-view")
         )
     ),
     MenuGroup(
@@ -35,8 +33,6 @@ val menus = listOf(
     MenuGroup(
         "媒体组件", R.drawable.ic_nav_media,
         listOf(
-            MenuItem("Gallery", "gallery"),
-            MenuItem("FileBrowser", "file-browser"),
             MenuItem("MediaPicker", "media-picker"),
             MenuItem("Camera", "camera"),
             MenuItem("AudioRecorder", "audio-recorder"),
@@ -45,8 +41,7 @@ val menus = listOf(
             MenuItem("VideoPlayer", "video-player"),
             MenuItem("ImageCropper", "image-cropper"),
             MenuItem("LivePlayer", "live-player"),
-            MenuItem("LivePusher", "live-pusher"),
-            MenuItem("Paint", "paint")
+            MenuItem("LivePusher", "live-pusher")
         )
     ),
     MenuGroup(
@@ -125,9 +120,15 @@ val menus = listOf(
         )
     ),
     MenuGroup(
-        "搜索相关", R.drawable.ic_nav_search,
+        "模版示例", R.drawable.ic_nav_search,
         listOf(
-            MenuItem("SearchBar", "search-bar")
+            MenuItem("Calendar", "calendar"),
+            MenuItem("Clock", "clock"),
+            MenuItem("SearchBar", "search-bar"),
+            MenuItem("Gallery", "gallery"),
+            MenuItem("FileBrowser", "file-browser"),
+            MenuItem("Paint", "paint"),
+            MenuItem("IndexedList", "indexed-list")
         )
     ),
     MenuGroup(

@@ -11,9 +11,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.dp
-import top.chengdongqing.weui.ui.components.basic.WePage
-import top.chengdongqing.weui.ui.components.form.WeButton
-import top.chengdongqing.weui.ui.views.media.gallery.preview.VideoPreview
+import top.chengdongqing.weui.ui.components.button.WeButton
+import top.chengdongqing.weui.ui.components.page.WePage
+import top.chengdongqing.weui.ui.views.template.gallery.preview.VideoPreview
 
 @Composable
 fun VideoPlayerPage() {

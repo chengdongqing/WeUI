@@ -50,9 +50,9 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import top.chengdongqing.weui.ui.views.media.camera.RequestCameraPermission
 import top.chengdongqing.weui.utils.MediaStoreUtils
 import top.chengdongqing.weui.utils.MediaType
+import top.chengdongqing.weui.utils.RequestCameraPermission
 import top.chengdongqing.weui.utils.rememberToggleState
 
 @Composable

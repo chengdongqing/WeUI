@@ -39,7 +39,7 @@ import androidx.navigation.NavHostController
 import top.chengdongqing.weui.R
 import top.chengdongqing.weui.data.menus
 import top.chengdongqing.weui.model.MenuGroup
-import top.chengdongqing.weui.ui.components.basic.WeDivider
+import top.chengdongqing.weui.ui.components.divider.WeDivider
 import top.chengdongqing.weui.ui.theme.BackgroundColor
 import top.chengdongqing.weui.ui.theme.FontColor1
 

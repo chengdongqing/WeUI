@@ -6,11 +6,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import top.chengdongqing.weui.ui.components.basic.WePage
-import top.chengdongqing.weui.ui.components.feedback.WeDialogOptions
-import top.chengdongqing.weui.ui.components.feedback.rememberWeDialog
-import top.chengdongqing.weui.ui.components.form.ButtonType
-import top.chengdongqing.weui.ui.components.form.WeButton
+import top.chengdongqing.weui.ui.components.button.ButtonType
+import top.chengdongqing.weui.ui.components.button.WeButton
+import top.chengdongqing.weui.ui.components.dialog.WeDialogOptions
+import top.chengdongqing.weui.ui.components.dialog.rememberWeDialog
+import top.chengdongqing.weui.ui.components.page.WePage
 
 @Composable
 fun DialogPage() {

@@ -4,11 +4,11 @@ import android.content.Context
 import android.hardware.ConsumerIrManager
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import top.chengdongqing.weui.ui.components.basic.WePage
-import top.chengdongqing.weui.ui.components.feedback.ToastIcon
-import top.chengdongqing.weui.ui.components.feedback.WeToastOptions
-import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
-import top.chengdongqing.weui.ui.components.form.WeButton
+import top.chengdongqing.weui.ui.components.button.WeButton
+import top.chengdongqing.weui.ui.components.page.WePage
+import top.chengdongqing.weui.ui.components.toast.ToastIcon
+import top.chengdongqing.weui.ui.components.toast.WeToastOptions
+import top.chengdongqing.weui.ui.components.toast.rememberWeToast
 
 @Composable
 fun InfraredPage() {

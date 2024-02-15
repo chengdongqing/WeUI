@@ -10,8 +10,8 @@ import androidx.biometric.BiometricPrompt
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.fragment.app.FragmentActivity
-import top.chengdongqing.weui.ui.components.basic.WePage
-import top.chengdongqing.weui.ui.components.form.WeButton
+import top.chengdongqing.weui.ui.components.button.WeButton
+import top.chengdongqing.weui.ui.components.page.WePage
 
 @Composable
 fun FingerprintPage() {

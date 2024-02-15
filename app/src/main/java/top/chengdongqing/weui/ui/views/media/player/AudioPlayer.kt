@@ -38,8 +38,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import top.chengdongqing.weui.R
-import top.chengdongqing.weui.ui.components.basic.WePage
-import top.chengdongqing.weui.ui.components.form.WeSlider
+import top.chengdongqing.weui.ui.components.page.WePage
+import top.chengdongqing.weui.ui.components.slider.WeSlider
 import top.chengdongqing.weui.ui.theme.LightColor
 import top.chengdongqing.weui.utils.formatDuration
 import top.chengdongqing.weui.utils.rememberPlayPercent

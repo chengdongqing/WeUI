@@ -4,8 +4,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import top.chengdongqing.weui.ui.views.basic.BadgePage
-import top.chengdongqing.weui.ui.views.basic.CalendarPage
-import top.chengdongqing.weui.ui.views.basic.ClockPage
 import top.chengdongqing.weui.ui.views.basic.LoadMorePage
 import top.chengdongqing.weui.ui.views.basic.LoadingPage
 import top.chengdongqing.weui.ui.views.basic.ProgressPage
@@ -15,7 +13,7 @@ import top.chengdongqing.weui.ui.views.basic.SwiperPage
 import top.chengdongqing.weui.ui.views.basic.TabViewPage
 
 fun NavGraphBuilder.addBasicGraph() {
-    navigation("scroll-view", "basic") {
+    navigation("badge", "basic") {
         composable("badge") {
             BadgePage()
         }
@@ -30,12 +28,6 @@ fun NavGraphBuilder.addBasicGraph() {
         }
         composable("steps") {
             StepsPage()
-        }
-        composable("calendar") {
-            CalendarPage()
-        }
-        composable("clock") {
-            ClockPage()
         }
         composable("swiper") {
             SwiperPage()

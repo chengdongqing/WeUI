@@ -37,15 +37,15 @@ import com.google.accompanist.permissions.rememberPermissionState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import top.chengdongqing.weui.ui.components.basic.KeyValueCard
-import top.chengdongqing.weui.ui.components.basic.KeyValueRow
-import top.chengdongqing.weui.ui.components.basic.WePage
-import top.chengdongqing.weui.ui.components.feedback.WeToastOptions
-import top.chengdongqing.weui.ui.components.feedback.rememberWeToast
-import top.chengdongqing.weui.ui.components.form.ButtonSize
-import top.chengdongqing.weui.ui.components.form.ButtonType
-import top.chengdongqing.weui.ui.components.form.WeButton
-import top.chengdongqing.weui.ui.components.form.WeInput
+import top.chengdongqing.weui.ui.components.button.ButtonSize
+import top.chengdongqing.weui.ui.components.button.ButtonType
+import top.chengdongqing.weui.ui.components.button.WeButton
+import top.chengdongqing.weui.ui.components.input.WeInput
+import top.chengdongqing.weui.ui.components.page.WePage
+import top.chengdongqing.weui.ui.components.pairgroup.WePairGroup
+import top.chengdongqing.weui.ui.components.pairgroup.WePairItem
+import top.chengdongqing.weui.ui.components.toast.WeToastOptions
+import top.chengdongqing.weui.ui.components.toast.rememberWeToast
 import java.util.Date
 
 @Composable
@@ -139,9 +139,9 @@ private fun PhoneContacts() {
         }
     }
     Spacer(modifier = Modifier.height(20.dp))
-    KeyValueCard(Modifier.heightIn(max = LocalConfiguration.current.screenHeightDp.dp / 2)) {
+    WePairGroup(Modifier.heightIn(max = LocalConfiguration.current.screenHeightDp.dp / 2)) {
         items(contacts) {
-            KeyValueRow(label = it.first, value = it.second)
+            WePairItem(label = it.first, value = it.second)
         }
     }
 }
@@ -199,9 +199,9 @@ fun PhoneCallLogs() {
         }
     }
     Spacer(modifier = Modifier.height(20.dp))
-    KeyValueCard(Modifier.heightIn(max = LocalConfiguration.current.screenHeightDp.dp / 2)) {
+    WePairGroup(Modifier.heightIn(max = LocalConfiguration.current.screenHeightDp.dp / 2)) {
         items(logs) {
-            KeyValueRow(label = it.first, value = it.second)
+            WePairItem(label = it.first, value = it.second)
         }
     }
 }

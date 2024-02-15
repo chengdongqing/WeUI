@@ -6,9 +6,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
-import top.chengdongqing.weui.ui.components.basic.WePage
-import top.chengdongqing.weui.ui.components.form.RadioOption
-import top.chengdongqing.weui.ui.components.form.WeRadioGroup
+import top.chengdongqing.weui.ui.components.page.WePage
+import top.chengdongqing.weui.ui.components.radio.RadioOption
+import top.chengdongqing.weui.ui.components.radio.WeRadioGroup
 
 @Composable
 fun RadioPage() {

@@ -6,9 +6,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
-import top.chengdongqing.weui.ui.components.basic.WePage
-import top.chengdongqing.weui.ui.components.form.CheckboxOption
-import top.chengdongqing.weui.ui.components.form.WeCheckboxGroup
+import top.chengdongqing.weui.ui.components.checkbox.CheckboxOption
+import top.chengdongqing.weui.ui.components.checkbox.WeCheckboxGroup
+import top.chengdongqing.weui.ui.components.page.WePage
 
 @Composable
 fun CheckboxPage() {
