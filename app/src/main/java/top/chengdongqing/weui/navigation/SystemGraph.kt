@@ -3,7 +3,6 @@ package top.chengdongqing.weui.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import androidx.navigation.navigation
 import top.chengdongqing.weui.ui.views.system.CalendarEventsPage
 import top.chengdongqing.weui.ui.views.system.ClipboardPage
 import top.chengdongqing.weui.ui.views.system.ContactsPage
@@ -18,43 +17,41 @@ import top.chengdongqing.weui.ui.views.system.database.DatabasePage
 import top.chengdongqing.weui.ui.views.system.database.address.AddressFormPage
 
 fun NavGraphBuilder.addSystemGraph(navController: NavController) {
-    navigation("device-info", "system") {
-        composable("device-info") {
-            DeviceInfoPage()
-        }
-        composable("system-status") {
-            SystemStatusPage()
-        }
-        composable("installed-apps") {
-            InstalledAppsPage()
-        }
-        composable("downloader") {
-            DownloaderPage()
-        }
-        composable("database") {
-            DatabasePage(navController)
-        }
-        composable("address-form?id={id}") {
-            val id = it.arguments?.getString("id")?.toInt()
-            AddressFormPage(navController, id)
-        }
-        composable("clipboard") {
-            ClipboardPage()
-        }
-        composable("contacts") {
-            ContactsPage()
-        }
-        composable("sms") {
-            SmsPage()
-        }
-        composable("keyboard") {
-            KeyboardPage()
-        }
-        composable("calendar-events") {
-            CalendarEventsPage()
-        }
-        composable("notification") {
-            NotificationPage()
-        }
+    composable("device-info") {
+        DeviceInfoPage()
+    }
+    composable("system-status") {
+        SystemStatusPage()
+    }
+    composable("installed-apps") {
+        InstalledAppsPage()
+    }
+    composable("downloader") {
+        DownloaderPage()
+    }
+    composable("database") {
+        DatabasePage(navController)
+    }
+    composable("address-form?id={id}") {
+        val id = it.arguments?.getString("id")?.toInt()
+        AddressFormPage(navController, id)
+    }
+    composable("clipboard") {
+        ClipboardPage()
+    }
+    composable("contacts") {
+        ContactsPage()
+    }
+    composable("sms") {
+        SmsPage()
+    }
+    composable("keyboard") {
+        KeyboardPage()
+    }
+    composable("calendar-events") {
+        CalendarEventsPage()
+    }
+    composable("notification") {
+        NotificationPage()
     }
 }

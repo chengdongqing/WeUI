@@ -58,7 +58,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.lifecycle.viewmodel.compose)
@@ -84,6 +83,7 @@ dependencies {
     implementation(libs.mlkit.barcode.scanning) // 二维码识别
     implementation(libs.zxing.core) // 二维码生成
     implementation(libs.lunar) // 农历计算库
+    implementation(libs.pinyin) // 汉字转拼音
     implementation(libs.retrofit) // 网络请求
     implementation(libs.retrofit.converter)
     testImplementation(libs.junit)

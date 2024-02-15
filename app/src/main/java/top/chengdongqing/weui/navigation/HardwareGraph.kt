@@ -2,7 +2,6 @@ package top.chengdongqing.weui.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import androidx.navigation.navigation
 import top.chengdongqing.weui.ui.views.hardware.AccelerometerPage
 import top.chengdongqing.weui.ui.views.hardware.BluetoothPage
 import top.chengdongqing.weui.ui.views.hardware.FingerprintPage
@@ -18,45 +17,43 @@ import top.chengdongqing.weui.ui.views.hardware.WiFiPage
 import top.chengdongqing.weui.ui.views.hardware.compass.CompassPage
 
 fun NavGraphBuilder.addHardwareGraph() {
-    navigation("screen", "hardware") {
-        composable("screen") {
-            ScreenPage()
-        }
-        composable("flashlight") {
-            FlashlightPage()
-        }
-        composable("vibration") {
-            VibrationPage()
-        }
-        composable("wifi") {
-            WiFiPage()
-        }
-        composable("bluetooth") {
-            BluetoothPage()
-        }
-        composable("nfc") {
-            NFCPage()
-        }
-        composable("gnss") {
-            GNSSPage()
-        }
-        composable("infrared") {
-            InfraredPage()
-        }
-        composable("gyroscope") {
-            GyroscopePage()
-        }
-        composable("compass") {
-            CompassPage()
-        }
-        composable("accelerometer") {
-            AccelerometerPage()
-        }
-        composable("hygrothermograph") {
-            HygrothermographPage()
-        }
-        composable("fingerprint") {
-            FingerprintPage()
-        }
+    composable("screen") {
+        ScreenPage()
+    }
+    composable("flashlight") {
+        FlashlightPage()
+    }
+    composable("vibration") {
+        VibrationPage()
+    }
+    composable("wifi") {
+        WiFiPage()
+    }
+    composable("bluetooth") {
+        BluetoothPage()
+    }
+    composable("nfc") {
+        NFCPage()
+    }
+    composable("gnss") {
+        GNSSPage()
+    }
+    composable("infrared") {
+        InfraredPage()
+    }
+    composable("gyroscope") {
+        GyroscopePage()
+    }
+    composable("compass") {
+        CompassPage()
+    }
+    composable("accelerometer") {
+        AccelerometerPage()
+    }
+    composable("hygrothermograph") {
+        HygrothermographPage()
+    }
+    composable("fingerprint") {
+        FingerprintPage()
     }
 }

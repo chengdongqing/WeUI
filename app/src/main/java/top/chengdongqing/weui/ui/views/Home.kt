@@ -5,7 +5,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,10 +34,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import top.chengdongqing.weui.R
 import top.chengdongqing.weui.data.menus
+import top.chengdongqing.weui.extensions.clickableWithoutRipple
 import top.chengdongqing.weui.model.MenuGroup
+import top.chengdongqing.weui.model.MenuItem
 import top.chengdongqing.weui.ui.components.divider.WeDivider
 import top.chengdongqing.weui.ui.theme.BackgroundColor
 import top.chengdongqing.weui.ui.theme.FontColor1
@@ -54,59 +56,71 @@ fun HomePage(navController: NavHostController) {
             .statusBarsPadding()
     ) {
         LazyColumn(Modifier.padding(horizontal = 16.dp)) {
-            item {
-                Column(
-                    Modifier
-                        .background(BackgroundColor)
-                        .padding(40.dp)
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_logo),
-                        contentDescription = "WeUI",
-                        modifier = Modifier.height(21.dp)
-                    )
-                    Spacer(modifier = Modifier.height(19.dp))
-                    Text(
-                        text = "WeUI 是一套同微信原生视觉体验一致的基础样式库，由微信官方设计团队为微信内网页和微信小程序量身设计，令用户的使用感知更加统一。",
-                        color = FontColor1,
-                        fontSize = 14.sp
-                    )
-                }
-            }
+            item { HomeHeader() }
             itemsIndexed(menus) { index, item ->
-                MenuGroup(item, index == current, navController) {
+                MenuGroup(
+                    item,
+                    expanded = index == current,
+                    navController
+                ) {
                     current = if (current == index) null else index
                 }
                 Spacer(Modifier.height(8.dp))
             }
             item {
                 Spacer(Modifier.height(60.dp))
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 40.dp)
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_footer_link),
-                        contentDescription = null,
-                        modifier = Modifier.size(84.dp, 19.dp)
-                    )
-                }
+                HomeFooter()
             }
         }
     }
 }
 
 @Composable
-fun MenuGroup(
+private fun HomeHeader() {
+    Column(
+        Modifier
+            .background(BackgroundColor)
+            .padding(40.dp)
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.ic_logo),
+            contentDescription = "WeUI",
+            modifier = Modifier.height(21.dp)
+        )
+        Spacer(modifier = Modifier.height(19.dp))
+        Text(
+            text = "WeUI 是一套同微信原生视觉体验一致的基础样式库，由微信官方设计团队为微信内网页和微信小程序量身设计，令用户的使用感知更加统一。",
+            color = FontColor1,
+            fontSize = 14.sp
+        )
+    }
+}
+
+@Composable
+private fun HomeFooter() {
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 40.dp)
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.ic_footer_link),
+            contentDescription = null,
+            modifier = Modifier.size(84.dp, 19.dp)
+        )
+    }
+}
+
+@Composable
+private fun MenuGroup(
     group: MenuGroup,
-    open: Boolean,
-    navController: NavHostController,
-    onChange: () -> Unit
+    expanded: Boolean,
+    navController: NavController,
+    onToggleExpand: () -> Unit
 ) {
     val animatedHeight by animateDpAsState(
-        targetValue = if (open && group.children != null) {
+        targetValue = if (expanded && group.children != null) {
             56.5.dp * group.children.size
         } else {
             0.dp
@@ -120,59 +134,67 @@ fun MenuGroup(
             .clip(RoundedCornerShape(4.dp))
             .background(Color.White)
     ) {
-        Row(
-            Modifier
-                .clickable(remember {
-                    MutableInteractionSource()
-                }, null) {
-                    if (group.path != null) {
-                        navController.navigate(group.path)
-                    } else {
-                        onChange()
-                    }
-                }
-                .padding(20.dp)
-                .alpha(if (open) 0.5f else 1f),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = group.title,
-                modifier = Modifier.weight(1f),
-                fontSize = 17.sp
-            )
-            Image(
-                painter = painterResource(id = group.iconId),
-                contentDescription = null,
-                modifier = Modifier.size(30.dp)
-            )
+        MenuGroupHeader(group, expanded) {
+            if (group.path != null) {
+                navController.navigate(group.path)
+            } else {
+                onToggleExpand()
+            }
         }
-
         if (group.children != null) {
             Column(Modifier.height(animatedHeight)) {
-                remember { group.children.sortedBy { it.label } }.forEachIndexed { index, item ->
-                    Row(
-                        Modifier
-                            .clickable {
-                                navController.navigate(item.route)
-                            }
-                            .padding(horizontal = 20.dp, vertical = 16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = item.label,
-                            modifier = Modifier.weight(1f),
-                            fontSize = 17.sp
-                        )
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_arrow_right),
-                            contentDescription = null
-                        )
-                    }
+                val children = remember { group.children.sortedBy { it.label } }
+                children.forEachIndexed { index, item ->
+                    MenuGroupItem(item, navController)
                     if (index < group.children.lastIndex) {
                         WeDivider(Modifier.padding(horizontal = 20.dp))
                     }
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun MenuGroupHeader(group: MenuGroup, expanded: Boolean, onClick: () -> Unit) {
+    Row(
+        Modifier
+            .alpha(if (expanded) 0.5f else 1f)
+            .clickableWithoutRipple { onClick() }
+            .padding(20.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = group.title,
+            modifier = Modifier.weight(1f),
+            fontSize = 17.sp
+        )
+        Image(
+            painter = painterResource(id = group.iconId),
+            contentDescription = null,
+            modifier = Modifier.size(30.dp)
+        )
+    }
+}
+
+@Composable
+private fun MenuGroupItem(item: MenuItem, navController: NavController) {
+    Row(
+        Modifier
+            .clickable {
+                navController.navigate(item.route)
+            }
+            .padding(horizontal = 20.dp, vertical = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = item.label,
+            modifier = Modifier.weight(1f),
+            fontSize = 17.sp
+        )
+        Icon(
+            painter = painterResource(id = R.drawable.ic_arrow_right),
+            contentDescription = null
+        )
     }
 }

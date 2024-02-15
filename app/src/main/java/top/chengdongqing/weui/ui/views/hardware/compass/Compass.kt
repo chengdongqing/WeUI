@@ -4,13 +4,11 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextMeasurer
@@ -23,14 +21,12 @@ import top.chengdongqing.weui.ui.theme.BorderColor
 import top.chengdongqing.weui.ui.theme.FontColor1
 import top.chengdongqing.weui.ui.theme.LightColor
 import top.chengdongqing.weui.ui.theme.PrimaryColor
-import top.chengdongqing.weui.ui.views.hardware.vibrate
 import top.chengdongqing.weui.utils.formatDegree
 import kotlin.math.cos
 import kotlin.math.sin
 
 @Composable
 fun Compass(degrees: Int) {
-    val context = LocalContext.current
     val textMeasurer = rememberTextMeasurer()
 
     Canvas(
@@ -45,14 +41,6 @@ fun Compass(degrees: Int) {
         drawCompassScales(center, radius, degrees, textMeasurer)
         drawNorthIndicator(radius)
         drawCurrentDegrees(radius, degrees, textMeasurer)
-    }
-
-    DisposableEffect(degrees) {
-        onDispose {
-            if (degrees % 90 == 0) {
-                vibrate(context, 15)
-            }
-        }
     }
 }
 

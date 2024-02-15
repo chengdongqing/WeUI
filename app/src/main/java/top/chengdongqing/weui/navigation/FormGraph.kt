@@ -2,7 +2,6 @@ package top.chengdongqing.weui.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import androidx.navigation.navigation
 import top.chengdongqing.weui.ui.views.form.ButtonPage
 import top.chengdongqing.weui.ui.views.form.CheckboxPage
 import top.chengdongqing.weui.ui.views.form.InputPage
@@ -12,27 +11,25 @@ import top.chengdongqing.weui.ui.views.form.SliderPage
 import top.chengdongqing.weui.ui.views.form.SwitchPage
 
 fun NavGraphBuilder.addFormGraph() {
-    navigation("button", "form") {
-        composable("button") {
-            ButtonPage()
-        }
-        composable("checkbox") {
-            CheckboxPage()
-        }
-        composable("radio") {
-            RadioPage()
-        }
-        composable("switch") {
-            SwitchPage()
-        }
-        composable("slider") {
-            SliderPage()
-        }
-        composable("picker") {
-            PickerPage()
-        }
-        composable("input") {
-            InputPage()
-        }
+    composable("button") {
+        ButtonPage()
+    }
+    composable("checkbox") {
+        CheckboxPage()
+    }
+    composable("radio") {
+        RadioPage()
+    }
+    composable("switch") {
+        SwitchPage()
+    }
+    composable("slider") {
+        SliderPage()
+    }
+    composable("picker") {
+        PickerPage()
+    }
+    composable("input") {
+        InputPage()
     }
 }

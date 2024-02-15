@@ -23,12 +23,12 @@ import java.time.ZoneId
 
 @Composable
 fun ClockPage() {
-    WePage(title = "Clock", description = "时钟") {
+    WePage(title = "Clock", description = "时钟", padding = PaddingValues(0.dp)) {
         val timeZones = remember {
             listOf(
                 TimeZoneItem("上海（中国）", "Asia/Shanghai", BorderColor),
-                TimeZoneItem("莫斯科（俄罗斯）", "Europe/Moscow", PrimaryColor),
-                TimeZoneItem("伦敦（英格兰）", "Europe/London", Color.Black),
+                TimeZoneItem("莫斯科（俄罗斯）", "Europe/Moscow", Color.Black),
+                TimeZoneItem("伦敦（英格兰）", "Europe/London", PrimaryColor),
                 TimeZoneItem("圣保罗（巴西）", "America/Sao_Paulo", Color.Yellow),
                 TimeZoneItem("洛杉矶（美国）", "America/Los_Angeles", Color.Magenta),
                 TimeZoneItem("悉尼（澳大利亚）", "Australia/Sydney", Color.Cyan)

@@ -342,16 +342,17 @@ private fun RequestPermission(content: @Composable () -> Unit) {
     }
 
     val checkPermission = {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        hasPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             Environment.isExternalStorageManager()
         } else {
             permissionState.allPermissionsGranted
         }
     }
+    LaunchedEffect(Unit) { checkPermission() }
     val openSettingsLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) {
-        hasPermission = checkPermission()
+        checkPermission()
     }
 
     if (!hasPermission) {

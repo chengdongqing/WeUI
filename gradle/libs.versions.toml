@@ -17,6 +17,7 @@ navigation-compose = "2.7.7"
 compose-bom = "2024.01.00"
 accompanist-navigation-animation = "0.31.5-beta"
 accompanist-permissions = "0.32.0"
+pinyin = "0.4.0"
 retrofit = "2.9.0"
 room = "2.6.1"
 runtime-livedata = "1.6.1"
@@ -46,6 +47,7 @@ activity-compose = { group = "androidx.activity", name = "activity-compose", ver
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation-compose" }
 accompanist-navigation-animation = { group = "com.google.accompanist", name = "accompanist-navigation-animation", version.ref = "accompanist-navigation-animation" }
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
+pinyin = { group = "com.github.houbb", name = "pinyin", version.ref = "pinyin" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-converter = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 ui = { group = "androidx.compose.ui", name = "ui" }

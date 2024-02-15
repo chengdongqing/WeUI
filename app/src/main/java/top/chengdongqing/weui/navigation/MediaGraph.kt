@@ -3,7 +3,6 @@ package top.chengdongqing.weui.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import androidx.navigation.navigation
 import top.chengdongqing.weui.ui.views.media.camera.CameraPage
 import top.chengdongqing.weui.ui.views.media.cropper.ImageCropperPage
 import top.chengdongqing.weui.ui.views.media.live.LivePlayerPage
@@ -15,33 +14,31 @@ import top.chengdongqing.weui.ui.views.media.recorder.AudioRecorderPage
 import top.chengdongqing.weui.ui.views.media.recorder.VideoRecorderPage
 
 fun NavGraphBuilder.addMediaGraph(navController: NavController) {
-    navigation("camera", "media") {
-        composable("camera") {
-            CameraPage(navController)
-        }
-        composable("image-cropper") {
-            ImageCropperPage()
-        }
-        composable("live-pusher") {
-            LivePusherPage()
-        }
-        composable("live-player") {
-            LivePlayerPage()
-        }
-        composable("media-picker") {
-            MediaPickerPage()
-        }
-        composable("audio-player") {
-            AudioPlayerPage()
-        }
-        composable("video-player") {
-            VideoPlayerPage()
-        }
-        composable("audio-recorder") {
-            AudioRecorderPage()
-        }
-        composable("video-recorder") {
-            VideoRecorderPage(navController)
-        }
+    composable("camera") {
+        CameraPage(navController)
+    }
+    composable("image-cropper") {
+        ImageCropperPage()
+    }
+    composable("live-pusher") {
+        LivePusherPage()
+    }
+    composable("live-player") {
+        LivePlayerPage()
+    }
+    composable("media-picker") {
+        MediaPickerPage()
+    }
+    composable("audio-player") {
+        AudioPlayerPage()
+    }
+    composable("video-player") {
+        VideoPlayerPage()
+    }
+    composable("audio-recorder") {
+        AudioRecorderPage()
+    }
+    composable("video-recorder") {
+        VideoRecorderPage(navController)
     }
 }

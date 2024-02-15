@@ -7,7 +7,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import top.chengdongqing.weui.ui.views.HomePage
 import top.chengdongqing.weui.ui.views.layers.LayersPage
@@ -15,13 +14,6 @@ import top.chengdongqing.weui.ui.views.map.LocationPickerPage
 import top.chengdongqing.weui.ui.views.map.LocationPreviewPage
 import top.chengdongqing.weui.ui.views.qrcode.generator.QrCodeGeneratePage
 import top.chengdongqing.weui.ui.views.qrcode.scanner.QrCodeScanPage
-import top.chengdongqing.weui.ui.views.template.calendar.CalendarPage
-import top.chengdongqing.weui.ui.views.template.clock.ClockPage
-import top.chengdongqing.weui.ui.views.template.filebrowser.FileBrowserPage
-import top.chengdongqing.weui.ui.views.template.gallery.GalleryPage
-import top.chengdongqing.weui.ui.views.template.indexedlist.IndexedListPage
-import top.chengdongqing.weui.ui.views.template.paint.PaintPage
-import top.chengdongqing.weui.ui.views.template.searchbar.SearchBarPage
 
 @Composable
 fun NavigationGraph() {
@@ -74,48 +66,20 @@ fun NavigationGraph() {
 }
 
 private fun NavGraphBuilder.addQrCodeGraph(navController: NavHostController) {
-    navigation("qrcode-generator", "qrcode") {
-        composable("qrcode-scanner") {
-            QrCodeScanPage(navController)
-        }
-        composable("qrcode-generator") {
-            QrCodeGeneratePage()
-        }
+    composable("qrcode-scanner") {
+        QrCodeScanPage(navController)
+    }
+    composable("qrcode-generator") {
+        QrCodeGeneratePage()
     }
 }
 
 private fun NavGraphBuilder.addMapGraph() {
-    navigation("location-preview", "location") {
-        composable("location-preview") {
-            LocationPreviewPage()
-        }
-        composable("location-picker") {
-            LocationPickerPage()
-        }
+    composable("location-preview") {
+        LocationPreviewPage()
     }
-}
-
-private fun NavGraphBuilder.addTemplateGraph() {
-    composable("search-bar") {
-        SearchBarPage()
-    }
-    composable("calendar") {
-        CalendarPage()
-    }
-    composable("clock") {
-        ClockPage()
-    }
-    composable("gallery") {
-        GalleryPage()
-    }
-    composable("file-browser") {
-        FileBrowserPage()
-    }
-    composable("paint") {
-        PaintPage()
-    }
-    composable("indexed-list") {
-        IndexedListPage()
+    composable("location-picker") {
+        LocationPickerPage()
     }
 }
 
