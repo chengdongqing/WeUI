@@ -36,7 +36,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import top.chengdongqing.weui.ui.components.colorpicker.ColorPicker
 import top.chengdongqing.weui.ui.theme.BackgroundColor
 
 @Composable
