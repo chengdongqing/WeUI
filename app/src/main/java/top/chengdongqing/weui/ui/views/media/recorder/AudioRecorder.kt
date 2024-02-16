@@ -3,6 +3,7 @@ package top.chengdongqing.weui.ui.views.media.recorder
 import android.Manifest
 import android.content.Context
 import android.media.MediaRecorder
+import android.net.Uri
 import android.os.Build
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -62,7 +63,7 @@ fun AudioRecorderPage() {
         val permissionState = rememberMultiplePermissionsState(
             buildList {
                 add(Manifest.permission.RECORD_AUDIO)
-                // 安卓Q及以上版本将用MediaStore不需要写权限
+                // 安卓Q及以上版本用MediaStore不需要写权限
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                     add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 }
@@ -138,6 +139,7 @@ private fun RecordIcon(isRecording: Boolean) {
 private fun RecordingHandler(isRecording: Boolean, duration: MutableState<Duration>) {
     val recorder = rememberAudioRecorder()
     val timer = remember { mutableStateOf<Timer?>(null) }
+    var mediaUri by remember { mutableStateOf<Uri?>(null) }
     val context = LocalContext.current
     val toast = rememberWeToast()
 
@@ -146,7 +148,7 @@ private fun RecordingHandler(isRecording: Boolean, duration: MutableState<Durati
             // 重置计时
             duration.value = 0.seconds
             // 准备录音
-            prepareRecording(recorder, context)
+            mediaUri = prepareRecording(recorder, context)
             // 开始录音
             recorder.start()
             // 开始计时
@@ -163,8 +165,10 @@ private fun RecordingHandler(isRecording: Boolean, duration: MutableState<Durati
             timer.value?.cancel()
             // 重置定时器
             timer.value = null
-
-            toast.show(WeToastOptions("录音已保存", ToastIcon.SUCCESS))
+            mediaUri?.let {
+                MediaStoreUtils.finishPending(it, context)
+                toast.show(WeToastOptions("录音已保存", ToastIcon.SUCCESS))
+            }
         }
     }
 }
@@ -190,7 +194,7 @@ private fun rememberAudioRecorder(): MediaRecorder {
     return recorder
 }
 
-private fun prepareRecording(recorder: MediaRecorder, context: Context) {
+private fun prepareRecording(recorder: MediaRecorder, context: Context): Uri? {
     recorder.apply {
         reset()
         // 设置音源
@@ -204,14 +208,17 @@ private fun prepareRecording(recorder: MediaRecorder, context: Context) {
     val contentValues = MediaStoreUtils.createContentValues(
         filename = "RCD_${System.currentTimeMillis()}.mp3",
         mimeType = "audio/mp3",
-        mediaType = MediaType.AUDIO,
+        mediaType = MediaType.RECORDING,
         context
     )
-    val contentUri = MediaStoreUtils.getContentUri(MediaType.AUDIO)
+    val contentUri = MediaStoreUtils.getContentUri(MediaType.RECORDING)
     context.contentResolver.insert(contentUri, contentValues)?.let { uri ->
         context.contentResolver.openFileDescriptor(uri, "w")?.use {
             recorder.setOutputFile(it.fileDescriptor)
             recorder.prepare()
+            return uri
         }
     }
+
+    return null
 }

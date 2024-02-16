@@ -1,9 +1,7 @@
 package top.chengdongqing.weui.ui.views.template.gallery.preview
 
-import android.content.ContentValues
 import android.content.Context
 import android.net.Uri
-import android.provider.MediaStore
 import android.webkit.MimeTypeMap
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -138,10 +136,7 @@ private suspend fun saveMediaToGallery(context: Context, uri: Uri): Boolean {
                         inputStream.copyTo(outputStream)
                     }
                 }
-                val contentValues1 = ContentValues().apply {
-                    put(MediaStore.MediaColumns.IS_PENDING, 0)
-                }
-                contentResolver.update(mediaUri, contentValues1, null, null)
+                MediaStoreUtils.finishPending(mediaUri, context)
                 true
             } ?: false
         } catch (e: IOException) {

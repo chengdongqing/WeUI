@@ -253,7 +253,7 @@ fun rememberCalendarState(initialDate: LocalDate = today): CalendarState {
         setCurrentMonth(value)
         val page = ChronoUnit.MONTHS.between(initialMonth, YearMonth.from(value)).toInt()
         coroutineScope.launch {
-            pagerState.animateScrollToPage(page)
+            pagerState.scrollToPage(page)
         }
     }
 

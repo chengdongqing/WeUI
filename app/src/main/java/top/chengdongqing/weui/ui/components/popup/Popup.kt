@@ -79,7 +79,7 @@ fun WePopup(
     content: @Composable () -> Unit
 ) {
     var localVisible by remember {
-        mutableStateOf(visible)
+        mutableStateOf(false)
     }
 
     LaunchedEffect(visible) {
