@@ -63,13 +63,13 @@ fun WePopup(
     title: String? = null,
     enterTransition: EnterTransition = slideInVertically(
         animationSpec = remember {
-            tween(300)
+            tween(150)
         },
         initialOffsetY = { it }
     ),
     exitTransition: ExitTransition = slideOutVertically(
         animationSpec = remember {
-            tween(300)
+            tween(150)
         },
         targetOffsetY = { it }
     ),

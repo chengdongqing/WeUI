@@ -78,7 +78,7 @@ dependencies {
     implementation(libs.androidx.camera.camera2) // 简化相机调用
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.androidx.camera.view)
-    implementation(libs.mlkit.barcode.scanning) // 二维码识别
+    implementation(libs.mlkit.barcode.scanning) // 二维码扫描
     implementation(libs.zxing.core) // 二维码生成
     implementation(libs.lunar) // 农历计算库
     implementation(libs.pinyin) // 汉字转拼音

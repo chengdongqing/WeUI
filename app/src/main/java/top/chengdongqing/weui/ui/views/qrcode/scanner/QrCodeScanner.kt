@@ -20,13 +20,14 @@ fun QrCodeScanPage(navController: NavController) {
 
     RequestCameraPermission(navController) {
         WeQrCodeScanner { res ->
+            val value = res.first().rawValue ?: ""
             dialog.show(
                 WeDialogOptions(
                     title = "扫描结果",
-                    content = res,
+                    content = value,
                     cancelText = "复制",
                     onCancel = {
-                        setClipboardData(context, res)
+                        setClipboardData(context, value)
                         toast.show(WeToastOptions("已复制", ToastIcon.SUCCESS))
                     }
                 )
