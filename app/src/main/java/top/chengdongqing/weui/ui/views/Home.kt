@@ -1,7 +1,6 @@
 package top.chengdongqing.weui.ui.views
 
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -119,16 +118,6 @@ private fun MenuGroup(
     navController: NavController,
     onToggleExpand: () -> Unit
 ) {
-    val animatedHeight by animateDpAsState(
-        targetValue = if (expanded && group.children != null) {
-            56.5.dp * group.children.size
-        } else {
-            0.dp
-        },
-        animationSpec = remember { tween(durationMillis = 300) },
-        label = "MenuGroupHeightAnimation"
-    )
-
     Column(
         Modifier
             .clip(RoundedCornerShape(4.dp))
@@ -142,12 +131,14 @@ private fun MenuGroup(
             }
         }
         if (group.children != null) {
-            Column(Modifier.height(animatedHeight)) {
-                val children = remember { group.children.sortedBy { it.label } }
-                children.forEachIndexed { index, item ->
-                    MenuGroupItem(item, navController)
-                    if (index < group.children.lastIndex) {
-                        WeDivider(Modifier.padding(horizontal = 20.dp))
+            AnimatedVisibility(visible = expanded) {
+                Column {
+                    val children = remember { group.children.sortedBy { it.label } }
+                    children.forEachIndexed { index, item ->
+                        MenuGroupItem(item, navController)
+                        if (index < group.children.lastIndex) {
+                            WeDivider(Modifier.padding(horizontal = 20.dp))
+                        }
                     }
                 }
             }

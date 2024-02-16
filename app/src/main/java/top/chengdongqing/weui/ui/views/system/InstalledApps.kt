@@ -65,7 +65,7 @@ fun InstalledAppsPage() {
         LazyColumn(verticalArrangement = Arrangement.spacedBy(20.dp)) {
             item {
                 if (apps.isNotEmpty()) {
-                    ActionsBar(context)
+                    ActionBar(context)
                 } else {
                     WeLoadMore()
                 }
@@ -79,7 +79,7 @@ fun InstalledAppsPage() {
 }
 
 @Composable
-private fun ActionsBar(context: Context) {
+private fun ActionBar(context: Context) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceAround
@@ -92,8 +92,7 @@ private fun ActionsBar(context: Context) {
         ) {
             val latitude = 37.7749
             val longitude = -122.4194
-            val locationUri = Uri.parse("geo:$latitude,$longitude")
-            val intent = Intent(Intent.ACTION_VIEW, locationUri)
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("geo:$latitude,$longitude"))
             if (intent.resolveActivity(context.packageManager) != null) {
                 context.startActivity(intent)
             } else {
