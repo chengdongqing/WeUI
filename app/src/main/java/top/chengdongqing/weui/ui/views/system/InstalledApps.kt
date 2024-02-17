@@ -90,8 +90,8 @@ private fun ActionBar(context: Context) {
             size = ButtonSize.MEDIUM,
             width = 140.dp
         ) {
-            val latitude = 37.7749
-            val longitude = -122.4194
+            val latitude = "37.7749"
+            val longitude = "-122.4194"
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse("geo:$latitude,$longitude"))
             if (intent.resolveActivity(context.packageManager) != null) {
                 context.startActivity(intent)

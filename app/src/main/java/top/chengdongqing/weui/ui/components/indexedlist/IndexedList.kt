@@ -24,12 +24,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.github.houbb.pinyin.constant.enums.PinyinStyleEnum
 import com.github.houbb.pinyin.util.PinyinHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.ui.components.divider.WeDivider
 import top.chengdongqing.weui.ui.components.loading.WeLoading
-import top.chengdongqing.weui.ui.theme.BackgroundColor
+import top.chengdongqing.weui.ui.theme.BackgroundColorLight
 
 @Composable
 fun WeIndexedList(labels: List<String>) {
@@ -64,7 +65,7 @@ private fun LazyListScope.indexGroups(groups: Map<Char, List<String>>) {
                 fontSize = 13.sp,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(BackgroundColor)
+                    .background(BackgroundColorLight)
                     .padding(horizontal = 16.dp, vertical = 8.dp)
             )
         }
@@ -94,10 +95,10 @@ private suspend fun groupByFirstLetter(labels: List<String>): Map<Char, List<Str
         labels.forEach { label ->
             val firstChar = label.first()
             val firstLetter = if (firstChar.isChinese()) {
-                PinyinHelper.toPinyin(label).first().uppercaseChar()
+                PinyinHelper.toPinyin(label, PinyinStyleEnum.FIRST_LETTER).first()
             } else {
                 firstChar
-            }
+            }.uppercaseChar()
             if (firstLetter in 'A'..'Z') {
                 groupedCities.getOrPut(firstLetter) { mutableListOf() }.add(label)
             } else {

@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,7 +30,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -41,7 +41,6 @@ import top.chengdongqing.weui.extensions.clickableWithoutRipple
 import top.chengdongqing.weui.model.MenuGroup
 import top.chengdongqing.weui.model.MenuItem
 import top.chengdongqing.weui.ui.components.divider.WeDivider
-import top.chengdongqing.weui.ui.theme.BackgroundColor
 import top.chengdongqing.weui.ui.theme.FontColor1
 
 @Composable
@@ -51,7 +50,7 @@ fun HomePage(navController: NavHostController) {
     Column(
         Modifier
             .fillMaxSize()
-            .background(BackgroundColor)
+            .background(MaterialTheme.colorScheme.background)
             .statusBarsPadding()
     ) {
         LazyColumn(Modifier.padding(horizontal = 16.dp)) {
@@ -76,11 +75,7 @@ fun HomePage(navController: NavHostController) {
 
 @Composable
 private fun HomeHeader() {
-    Column(
-        Modifier
-            .background(BackgroundColor)
-            .padding(40.dp)
-    ) {
+    Column(Modifier.padding(40.dp)) {
         Image(
             painter = painterResource(id = R.drawable.ic_logo),
             contentDescription = "WeUI",
@@ -121,7 +116,7 @@ private fun MenuGroup(
     Column(
         Modifier
             .clip(RoundedCornerShape(4.dp))
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.onBackground)
     ) {
         MenuGroupHeader(group, expanded) {
             if (group.path != null) {

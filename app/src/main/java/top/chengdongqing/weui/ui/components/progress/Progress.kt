@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.chengdongqing.weui.ui.theme.BackgroundColor
+import top.chengdongqing.weui.ui.theme.BackgroundColorLight
 import top.chengdongqing.weui.ui.theme.FontColor1
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.utils.formatFloat
@@ -39,7 +39,7 @@ fun WeProgress(
             modifier = Modifier
                 .weight(1f)
                 .height(3.dp)
-                .background(BackgroundColor)
+                .background(BackgroundColorLight)
         ) {
             Box(
                 modifier = Modifier

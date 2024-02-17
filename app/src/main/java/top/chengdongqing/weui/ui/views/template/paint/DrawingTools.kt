@@ -36,7 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import top.chengdongqing.weui.ui.theme.BackgroundColor
+import top.chengdongqing.weui.ui.theme.BackgroundColorLight
 
 @Composable
 internal fun DrawingTools(
@@ -72,7 +72,7 @@ private fun MoreColors(onColorChange: (Color) -> Unit) {
 
     Row(
         modifier = Modifier
-            .background(BackgroundColor)
+            .background(BackgroundColorLight)
             .padding(horizontal = 8.dp, vertical = 4.dp)
             .animateContentSize()
     ) {

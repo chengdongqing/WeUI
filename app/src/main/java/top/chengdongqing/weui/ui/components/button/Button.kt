@@ -23,13 +23,13 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.ui.components.loading.WeLoading
-import top.chengdongqing.weui.ui.theme.DangerColor
+import top.chengdongqing.weui.ui.theme.DangerColorLight
 import top.chengdongqing.weui.ui.theme.FontColor
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 
 enum class ButtonType(val bgColor: Color, val color: Color) {
     PRIMARY(PrimaryColor, Color.White),
-    DANGER(Color(0f, 0f, 0f, 0.05f), DangerColor),
+    DANGER(Color(0f, 0f, 0f, 0.05f), DangerColorLight),
     PLAIN(Color(0f, 0f, 0f, 0.05f), FontColor)
 }
 

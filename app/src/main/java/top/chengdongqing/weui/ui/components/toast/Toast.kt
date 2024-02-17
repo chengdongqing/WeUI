@@ -40,7 +40,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import kotlinx.coroutines.delay
 import top.chengdongqing.weui.ui.components.loading.WeLoading
-import top.chengdongqing.weui.ui.theme.BackgroundColor
+import top.chengdongqing.weui.ui.theme.BackgroundColorLight
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -112,7 +112,7 @@ fun WeToast(
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             when (icon) {
                                 ToastIcon.LOADING -> {
-                                    WeLoading(size = 43.dp, color = BackgroundColor)
+                                    WeLoading(size = 43.dp, color = BackgroundColorLight)
                                     Spacer(modifier = Modifier.height(10.dp))
                                 }
 
@@ -122,7 +122,7 @@ fun WeToast(
                                         if (icon == ToastIcon.SUCCESS) Icons.Outlined.Check else Icons.Filled.Info,
                                         contentDescription = null,
                                         modifier = Modifier.size(43.dp),
-                                        tint = BackgroundColor
+                                        tint = BackgroundColorLight
                                     )
 
                                 else -> {}
