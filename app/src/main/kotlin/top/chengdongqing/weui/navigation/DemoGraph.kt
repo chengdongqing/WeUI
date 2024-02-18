@@ -10,7 +10,7 @@ import top.chengdongqing.weui.ui.views.template.indexedlist.IndexedListPage
 import top.chengdongqing.weui.ui.views.template.paint.PaintPage
 import top.chengdongqing.weui.ui.views.template.searchbar.SearchBarPage
 
-fun NavGraphBuilder.addTemplateGraph() {
+fun NavGraphBuilder.addDemoGraph() {
     composable("search-bar") {
         SearchBarPage()
     }

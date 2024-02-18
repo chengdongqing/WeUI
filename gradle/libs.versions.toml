@@ -20,9 +20,10 @@ accompanist-permissions = "0.32.0"
 pinyin = "0.4.0"
 retrofit = "2.9.0"
 room = "2.6.1"
-runtime-livedata = "1.6.1"
 mlkit = "17.2.0"
 zxing-core = "3.4.1"
+appcompat = "1.6.1"
+material = "1.10.0"
 
 [libraries]
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist-permissions" }
@@ -33,7 +34,6 @@ androidx-camera-view = { group = "androidx.camera", name = "camera-view", versio
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
-androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "runtime-livedata" }
 lunar = { group = "cn.6tail", name = "lunar", version.ref = "lunar" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil-compose" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -59,6 +59,8 @@ material3 = { group = "androidx.compose.material3", name = "material3" }
 material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "material-icons-extended" }
 mlkit-barcode-scanning = { group = "com.google.mlkit", name = "barcode-scanning", version.ref = "mlkit" }
 zxing-core = { group = "com.google.zxing", name = "core", version.ref = "zxing-core" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }

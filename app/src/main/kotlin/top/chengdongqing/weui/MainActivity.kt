@@ -10,7 +10,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
-import top.chengdongqing.weui.navigation.NavigationGraph
+import top.chengdongqing.weui.navigation.ApplicationNavHost
 import top.chengdongqing.weui.ui.theme.WeUITheme
 
 class MainActivity : ComponentActivity() {
@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
                     LocalTextStyle provides TextStyle(platformStyle = PlatformTextStyle(false))
                 ) {
                     Box(modifier = Modifier.navigationBarsPadding()) {
-                        NavigationGraph()
+                        ApplicationNavHost()
                     }
                 }
             }

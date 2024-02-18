@@ -120,7 +120,7 @@ val menus = listOf(
         )
     ),
     MenuGroup(
-        "模版示例", R.drawable.ic_nav_search,
+        "案例", R.drawable.ic_nav_search,
         listOf(
             MenuItem("Calendar", "calendar"),
             MenuItem("Clock", "clock"),

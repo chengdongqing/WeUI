@@ -1,20 +1,19 @@
 package top.chengdongqing.weui.ui.views.system.database.address.db
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AddressDao {
-
     @Query("SELECT * FROM address")
-    fun loadAll(): LiveData<List<Address>>
+    fun loadAll(): Flow<List<Address>>
 
     @Query("select * from address where id = :id")
-    suspend fun loadById(id: Int): Address?
+    fun loadById(id: Int): Flow<Address?>
 
     @Insert
     suspend fun insert(address: Address)

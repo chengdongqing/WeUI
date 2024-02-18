@@ -18,8 +18,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.input.WeInput
@@ -29,17 +31,18 @@ import top.chengdongqing.weui.ui.components.toast.ToastIcon
 import top.chengdongqing.weui.ui.components.toast.WeToastOptions
 import top.chengdongqing.weui.ui.components.toast.rememberWeToast
 import top.chengdongqing.weui.ui.views.system.database.address.db.Address
-import top.chengdongqing.weui.ui.views.system.database.address.db.ShopDatabase
 
 @Composable
-fun AddressFormPage(navController: NavController, id: Int?) {
+fun AddressFormPage(
+    navController: NavController,
+    id: Int?,
+    addressViewModel: AddressViewModel = viewModel(factory = AddressViewModelFactory(LocalContext.current))
+) {
     WePage(
         title = "AddressForm",
         description = "${if (id == null) "新增" else "编辑"}收货地址",
         backgroundColor = Color.White
     ) {
-        val context = LocalContext.current
-        val addressDao = remember { ShopDatabase.getInstance(context).addressDao() }
         val address = remember { mutableStateMapOf<String, String>() }
         val hasAllEntered by remember {
             derivedStateOf {
@@ -49,7 +52,7 @@ fun AddressFormPage(navController: NavController, id: Int?) {
 
         LaunchedEffect(id) {
             if (id != null) {
-                addressDao.loadById(id)?.let {
+                addressViewModel.loadById(id).filterNotNull().collect {
                     address["name"] = it.name
                     address["phone"] = it.phone
                     address["addressDetail"] = it.addressDetail
@@ -97,10 +100,10 @@ fun AddressFormPage(navController: NavController, id: Int?) {
                 )
                 coroutineScope.launch {
                     if (id == null) {
-                        addressDao.insert(value)
+                        addressViewModel.insert(value)
                         toast.show(WeToastOptions("添加成功", ToastIcon.SUCCESS))
                     } else {
-                        addressDao.update(value.copy(id = id))
+                        addressViewModel.update(value.copy(id = id))
                         toast.show(WeToastOptions("修改成功", ToastIcon.SUCCESS))
                     }
                     delay(1000)

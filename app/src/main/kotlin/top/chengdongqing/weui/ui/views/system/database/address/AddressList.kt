@@ -18,8 +18,8 @@ import androidx.compose.material.icons.outlined.AddCircleOutline
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -28,6 +28,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 import top.chengdongqing.weui.ui.components.actionsheet.ActionSheetItem
@@ -42,18 +43,22 @@ import top.chengdongqing.weui.ui.components.toast.rememberWeToast
 import top.chengdongqing.weui.ui.theme.FontColor1
 import top.chengdongqing.weui.ui.theme.LinkColor
 import top.chengdongqing.weui.ui.views.system.database.address.db.Address
-import top.chengdongqing.weui.ui.views.system.database.address.db.ShopDatabase
 import top.chengdongqing.weui.ui.views.system.setClipboardData
 
 @Composable
-fun AddressList(navController: NavController) {
+fun AddressList(
+    navController: NavController,
+    addressViewModel: AddressViewModel = viewModel(
+        factory = AddressViewModelFactory(LocalContext.current)
+    )
+) {
     val context = LocalContext.current
-    val addressDao = remember { ShopDatabase.getInstance(context).addressDao() }
-    val addresses by remember { addressDao.loadAll() }.observeAsState(emptyList())
+    val addressList by addressViewModel.addressList.collectAsState(emptyList())
+
     val coroutineScope = rememberCoroutineScope()
-    val actionSheet = rememberWeActionSheet()
     val dialog = rememberWeDialog()
     val toast = rememberWeToast()
+    val actionSheet = rememberWeActionSheet()
     val actions = remember {
         listOf(
             ActionSheetItem("编辑"),
@@ -72,7 +77,7 @@ fun AddressList(navController: NavController) {
     }
 
     LazyColumn {
-        items(addresses) { item ->
+        items(addressList) { item ->
             AddressListItem(item,
                 onLongClick = {
                     actionSheet.show(WeActionSheetOptions(actions) { action ->
@@ -84,7 +89,7 @@ fun AddressList(navController: NavController) {
                             1 -> {
                                 dialog.show(WeDialogOptions(title = "确定删除该地址吗？") {
                                     coroutineScope.launch {
-                                        addressDao.delete(item)
+                                        addressViewModel.delete(item)
                                         toast.show(WeToastOptions("删除成功", ToastIcon.SUCCESS))
                                     }
                                 })

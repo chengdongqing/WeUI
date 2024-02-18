@@ -3,8 +3,6 @@ package top.chengdongqing.weui.navigation
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -16,7 +14,7 @@ import top.chengdongqing.weui.ui.views.qrcode.generator.QrCodeGeneratePage
 import top.chengdongqing.weui.ui.views.qrcode.scanner.QrCodeScanPage
 
 @Composable
-fun NavigationGraph() {
+fun ApplicationNavHost() {
     val navController = rememberNavController()
 
     NavHost(
@@ -50,6 +48,7 @@ fun NavigationGraph() {
         composable("home") {
             HomePage(navController)
         }
+
         addBasicGraph()
         addFormGraph()
         addFeedbackGraph()
@@ -58,33 +57,22 @@ fun NavigationGraph() {
         addNetworkGraph()
         addHardwareGraph()
         addChartGraph()
-        addQrCodeGraph(navController)
-        addMapGraph()
-        addTemplateGraph()
-        addLayersGraph()
-    }
-}
+        addDemoGraph()
 
-private fun NavGraphBuilder.addQrCodeGraph(navController: NavHostController) {
-    composable("qrcode-scanner") {
-        QrCodeScanPage(navController)
-    }
-    composable("qrcode-generator") {
-        QrCodeGeneratePage()
-    }
-}
-
-private fun NavGraphBuilder.addMapGraph() {
-    composable("location-preview") {
-        LocationPreviewPage()
-    }
-    composable("location-picker") {
-        LocationPickerPage()
-    }
-}
-
-private fun NavGraphBuilder.addLayersGraph() {
-    composable("layers") {
-        LayersPage()
+        composable("qrcode-scanner") {
+            QrCodeScanPage(navController)
+        }
+        composable("qrcode-generator") {
+            QrCodeGeneratePage()
+        }
+        composable("location-preview") {
+            LocationPreviewPage()
+        }
+        composable("location-picker") {
+            LocationPickerPage()
+        }
+        composable("layers") {
+            LayersPage()
+        }
     }
 }

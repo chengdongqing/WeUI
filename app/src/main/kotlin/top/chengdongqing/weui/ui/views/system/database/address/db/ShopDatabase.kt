@@ -27,7 +27,7 @@ abstract class ShopDatabase : RoomDatabase() {
                         ShopDatabase::class.java,
                         "shop_database"
                     )
-                        .fallbackToDestructiveMigration() // 如果发现版本不一致（即实体结构与数据库中的结构不符），将重新创建数据库表，这意味着原有数据会丢失
+                        //.fallbackToDestructiveMigration() // 如果发现版本不一致（即实体结构与数据库中的结构不符），将重新创建数据库表，这意味着原有数据会丢失
                         .build()
 
                     INSTANCE = instance

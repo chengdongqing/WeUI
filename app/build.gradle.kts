@@ -72,8 +72,7 @@ dependencies {
     implementation(libs.material3)
     implementation(libs.material.icons.extended) // 图标扩展
     implementation(libs.coil.compose) // 异步图片加载
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.runtime.livedata) // room支持livedataAsState
+    implementation(libs.androidx.room.runtime) // room运行时
     implementation(libs.androidx.room.ktx)  // room支持协程
     ksp(libs.androidx.room.compiler) // room支持注解
     implementation(libs.androidx.biometric) // 简化生物认证
