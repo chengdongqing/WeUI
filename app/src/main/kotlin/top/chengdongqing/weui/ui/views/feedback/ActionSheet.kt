@@ -99,10 +99,10 @@ private fun MakeCall() {
 private fun ShareToTimeline() {
     val permissionState = rememberPermissionState(Manifest.permission.CAMERA)
     val takePictureLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.TakePicturePreview()
+        contract = ActivityResultContracts.TakePicturePreview()
     ) {}
     val pickMultipleMediaLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.PickMultipleVisualMedia()
+        contract = ActivityResultContracts.PickMultipleVisualMedia()
     ) {}
 
     val actionSheet = rememberWeActionSheet()

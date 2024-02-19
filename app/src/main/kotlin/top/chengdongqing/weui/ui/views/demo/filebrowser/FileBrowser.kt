@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.ui.views.template.filebrowser
+package top.chengdongqing.weui.ui.views.demo.filebrowser
 
 import android.Manifest
 import android.content.Intent

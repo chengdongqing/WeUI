@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.ui.views.template.gallery.preview
+package top.chengdongqing.weui.ui.views.demo.gallery.preview
 
 import android.content.Context
 import android.content.Intent

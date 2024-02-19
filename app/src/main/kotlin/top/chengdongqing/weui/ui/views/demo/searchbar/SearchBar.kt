@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.ui.views.template.searchbar
+package top.chengdongqing.weui.ui.views.demo.searchbar
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf

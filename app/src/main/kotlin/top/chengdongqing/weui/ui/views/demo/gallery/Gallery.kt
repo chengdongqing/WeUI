@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.ui.views.template.gallery
+package top.chengdongqing.weui.ui.views.demo.gallery
 
 import android.Manifest
 import android.content.Context
@@ -45,7 +45,7 @@ import top.chengdongqing.weui.extensions.clickableWithoutRipple
 import top.chengdongqing.weui.ui.components.loading.WeLoadMore
 import top.chengdongqing.weui.ui.components.page.WePage
 import top.chengdongqing.weui.ui.theme.LightColor
-import top.chengdongqing.weui.ui.views.template.gallery.preview.MediaPreviewActivity
+import top.chengdongqing.weui.ui.views.demo.gallery.preview.MediaPreviewActivity
 import top.chengdongqing.weui.utils.formatDuration
 import java.util.Date
 import kotlin.time.Duration

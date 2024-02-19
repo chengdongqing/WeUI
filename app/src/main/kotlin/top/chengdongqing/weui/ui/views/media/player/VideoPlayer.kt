@@ -13,7 +13,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.page.WePage
-import top.chengdongqing.weui.ui.views.template.gallery.preview.VideoPreview
+import top.chengdongqing.weui.ui.views.demo.gallery.preview.VideoPreview
 
 @Composable
 fun VideoPlayerPage() {

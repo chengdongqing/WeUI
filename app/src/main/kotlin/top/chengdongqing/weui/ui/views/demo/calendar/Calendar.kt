@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.ui.views.template.calendar
+package top.chengdongqing.weui.ui.views.demo.calendar
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.ui.views.template.paint
+package top.chengdongqing.weui.ui.views.demo.paint
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
