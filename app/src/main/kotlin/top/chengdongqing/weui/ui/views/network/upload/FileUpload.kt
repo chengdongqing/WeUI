@@ -45,8 +45,8 @@ fun FileUploadPage(uploadViewModel: UploadViewModel = viewModel()) {
             contract = ActivityResultContracts.PickVisualMedia()
         ) { uri ->
             uri?.let {
-                uploading = true
                 coroutineScope.launch {
+                    uploading = true
                     uploadViewModel.uploadFile(context, uri)?.let {
                         imageInfo = it
                         toast.show(WeToastOptions("上传成功", ToastIcon.SUCCESS))

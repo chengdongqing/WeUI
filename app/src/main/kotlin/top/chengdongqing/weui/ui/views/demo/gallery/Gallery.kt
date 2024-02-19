@@ -1,12 +1,10 @@
 package top.chengdongqing.weui.ui.views.demo.gallery
 
 import android.Manifest
-import android.content.Context
 import android.content.Intent
 import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Build
-import android.provider.MediaStore
 import android.util.Size
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -21,12 +19,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.State
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,6 +29,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
@@ -49,25 +45,29 @@ import top.chengdongqing.weui.ui.views.demo.gallery.preview.MediaPreviewActivity
 import top.chengdongqing.weui.utils.formatDuration
 import java.util.Date
 import kotlin.time.Duration
-import kotlin.time.DurationUnit
-import kotlin.time.toDuration
 
 @Composable
-fun GalleryPage() {
+fun GalleryPage(galleryViewModel: GalleryViewModel = viewModel()) {
     WePage(title = "Gallery", description = "相册", padding = PaddingValues(0.dp)) {
         val context = LocalContext.current
-        val (mediaItems, loading) = rememberMedias()
-
-        if (loading) {
+        if (galleryViewModel.loading) {
             WeLoadMore()
         }
-        MediaGrid(mediaItems) { index ->
-            val intent = MediaPreviewActivity.newIntent(context).apply {
-                putExtra("uris", mediaItems.map { it.path }.toTypedArray())
-                putExtra("current", index)
-                addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+
+        RequestMediaPermission {
+            LaunchedEffect(Unit) {
+                delay(300)
+                galleryViewModel.refresh(context)
             }
-            context.startActivity(intent)
+
+            MediaGrid(galleryViewModel.mediaItems) { index ->
+                val intent = MediaPreviewActivity.newIntent(context).apply {
+                    putExtra("uris", galleryViewModel.mediaItems.map { it.path }.toTypedArray())
+                    putExtra("current", index)
+                    addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                }
+                context.startActivity(intent)
+            }
         }
     }
 }
@@ -78,7 +78,7 @@ private fun MediaGrid(
     navigateToPreview: (Int) -> Unit
 ) {
     LazyVerticalGrid(
-        columns = GridCells.Fixed(4),
+        columns = GridCells.Adaptive(100.dp),
         horizontalArrangement = Arrangement.spacedBy(2.dp),
         verticalArrangement = Arrangement.spacedBy(2.dp)
     ) {
@@ -98,7 +98,7 @@ private fun MediaItem(item: MediaItem, modifier: Modifier) {
             .background(Color.LightGray)
     ) {
         AsyncImage(
-            model = produceThumbnail(item),
+            model = produceThumbnail(item).value,
             contentDescription = "Gallery Item",
             contentScale = ContentScale.Crop,
             modifier = Modifier.matchParentSize()
@@ -122,14 +122,14 @@ private fun MediaItem(item: MediaItem, modifier: Modifier) {
 }
 
 @Composable
-private fun produceThumbnail(item: MediaItem): Any? {
+private fun produceThumbnail(item: MediaItem): State<Any?> {
     val context = LocalContext.current
 
-    return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q && !item.isVideo) {
+    return produceState<Any?>(initialValue = null, item.uri) {
         // 图片在低版本系统直接加载原图
-        item.uri
-    } else {
-        produceState<Any?>(initialValue = null, item.uri) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q && !item.isVideo) {
+            value = item.uri
+        } else {
             value = withContext(Dispatchers.IO) {
                 try {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -155,15 +155,14 @@ private fun produceThumbnail(item: MediaItem): Any? {
                     null
                 }
             }
-        }.value
+        }
     }
 }
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-private fun rememberMedias(): Pair<List<MediaItem>, Boolean> {
-    val context = LocalContext.current
-    val multiplePermissionsState = rememberMultiplePermissionsState(
+private fun RequestMediaPermission(content: @Composable () -> Unit) {
+    val permissionState = rememberMultiplePermissionsState(
         remember {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 listOf(
@@ -176,86 +175,16 @@ private fun rememberMedias(): Pair<List<MediaItem>, Boolean> {
         }
     )
 
-    var mediaItems by remember { mutableStateOf<List<MediaItem>>(emptyList()) }
-    var loading by remember { mutableStateOf(true) }
-
-    LaunchedEffect(Unit) {
-        snapshotFlow {
-            multiplePermissionsState.allPermissionsGranted
-        }.collect { allPermissionsGranted ->
-            if (allPermissionsGranted) {
-                delay(300)
-                mediaItems = queryMedias(context)
-                loading = false
-            } else {
-                multiplePermissionsState.launchMultiplePermissionRequest()
-            }
+    LaunchedEffect(permissionState) {
+        if (!permissionState.allPermissionsGranted) {
+            permissionState.launchMultiplePermissionRequest()
         }
     }
 
-    return Pair(mediaItems, loading)
+    if (permissionState.allPermissionsGranted) {
+        content()
+    }
 }
-
-private suspend fun queryMedias(context: Context): List<MediaItem> =
-    withContext(Dispatchers.IO) {
-        val mediaItems = mutableListOf<MediaItem>()
-
-        val projection = arrayOf(
-            MediaStore.Files.FileColumns._ID,
-            MediaStore.Files.FileColumns.DISPLAY_NAME,
-            MediaStore.Files.FileColumns.DURATION,
-            MediaStore.Files.FileColumns.SIZE,
-            MediaStore.Files.FileColumns.DATA,
-            MediaStore.Files.FileColumns.DATE_ADDED,
-            MediaStore.Files.FileColumns.MEDIA_TYPE,
-            MediaStore.Files.FileColumns.MIME_TYPE
-        )
-        context.contentResolver.query(
-            MediaStore.Files.getContentUri("external"),
-            projection,
-            MediaStore.Files.FileColumns.MEDIA_TYPE + "=? OR " + MediaStore.Files.FileColumns.MEDIA_TYPE + "=?",
-            arrayOf(
-                MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString(),
-                MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString()
-            ),
-            MediaStore.Files.FileColumns.DATE_ADDED + " DESC"
-        )?.use { cursor ->
-            val idColumn = cursor.getColumnIndex(MediaStore.Files.FileColumns._ID)
-            val nameColumn =
-                cursor.getColumnIndex(MediaStore.Files.FileColumns.DISPLAY_NAME)
-            val durationColumn =
-                cursor.getColumnIndex(MediaStore.Files.FileColumns.DURATION)
-            val sizeColumn =
-                cursor.getColumnIndex(MediaStore.Files.FileColumns.SIZE)
-            val dateColumn =
-                cursor.getColumnIndex(MediaStore.Files.FileColumns.DATE_ADDED)
-            val mediaTypeColumn =
-                cursor.getColumnIndex(MediaStore.Files.FileColumns.MEDIA_TYPE)
-            val mimeTypeColumn =
-                cursor.getColumnIndex(MediaStore.Files.FileColumns.MIME_TYPE)
-            val dataColumn =
-                cursor.getColumnIndex(MediaStore.Files.FileColumns.DATA)
-
-            while (cursor.moveToNext()) {
-                val uri = MediaStore.Files.getContentUri("external", cursor.getLong(idColumn))
-                mediaItems.add(
-                    MediaItem(
-                        uri,
-                        name = cursor.getString(nameColumn),
-                        isVideo = cursor.getInt(mediaTypeColumn) == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO,
-                        mimeType = cursor.getString(mimeTypeColumn),
-                        duration = cursor.getLong(durationColumn)
-                            .toDuration(DurationUnit.MILLISECONDS),
-                        size = cursor.getLong(sizeColumn),
-                        date = Date(cursor.getLong(dateColumn)),
-                        path = cursor.getString(dataColumn)
-                    )
-                )
-            }
-        }
-
-        mediaItems
-    }
 
 data class MediaItem(
     val uri: Uri,

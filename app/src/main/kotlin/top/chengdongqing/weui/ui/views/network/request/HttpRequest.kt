@@ -42,11 +42,11 @@ fun HttpRequestPage(viewModel: CartViewModel = viewModel()) {
                 width = 200.dp,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             ) {
-                loading = true
                 coroutineScope.launch {
-                    val res = viewModel.fetchCount().also {
-                        loading = false
-                    }
+                    loading = true
+                    val res = viewModel.fetchCount()
+                    loading = false
+
                     if (res.isSuccessful && res.body() != null) {
                         content = res.body().toString()
                     } else {

@@ -50,7 +50,11 @@ fun WePage(
                 lineHeight = 32.sp
             )
             Spacer(Modifier.height(4.dp))
-            Text(text = description, color = FontColor1, fontSize = 14.sp)
+            Text(
+                text = description,
+                color = FontColor1,
+                fontSize = 14.sp
+            )
         }
 
         Spacer(Modifier.height(30.dp))

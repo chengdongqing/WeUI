@@ -26,8 +26,8 @@ fun FileDownloadPage(downloadViewModel: DownloadViewModel = viewModel()) {
             text = if (downloading) "下载中..." else "下载图片",
             loading = downloading
         ) {
-            downloading = true
             coroutineScope.launch {
+                downloading = true
                 bitmap = downloadViewModel.downloadFile("section1.jpg")
                 downloading = false
             }
