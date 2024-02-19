@@ -77,7 +77,7 @@ val menus = listOf(
             MenuItem("HTTPRequest", "http-request"),
             MenuItem("FileUpload", "file-upload"),
             MenuItem("FileDownload", "file-download"),
-            MenuItem("Socket", "socket")
+            MenuItem("WebSocket", "web-socket")
         )
     ),
     MenuGroup(

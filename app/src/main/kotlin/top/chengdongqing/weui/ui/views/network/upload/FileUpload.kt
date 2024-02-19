@@ -58,7 +58,7 @@ fun FileUploadPage(uploadViewModel: UploadViewModel = viewModel()) {
 
         Column {
             WeButton(
-                text = if (uploading) "上传中..." else "选择图片",
+                text = if (uploading) "上传中..." else "上传图片",
                 loading = uploading,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             ) {
