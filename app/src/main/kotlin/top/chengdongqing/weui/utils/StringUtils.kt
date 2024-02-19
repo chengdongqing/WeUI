@@ -1,9 +1,11 @@
 package top.chengdongqing.weui.utils
 
+import top.chengdongqing.weui.constants.DefaultDateTimeFormatter
 import java.io.File
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 import kotlin.time.Duration
 
 fun formatFloat(value: Float, decimals: Int = 2): String {
@@ -41,10 +43,10 @@ fun formatDuration(duration: Duration, fullDuration: Boolean = false): String {
     }
 }
 
-fun formatTime(milliseconds: Long, pattern: String = "yyyy-MM-dd HH:mm:ss"): String {
+fun formatTime(milliseconds: Long, pattern: String = DefaultDateTimeFormatter): String {
     return Instant.ofEpochMilli(milliseconds).atZone(ZoneId.systemDefault())
         .toLocalDateTime()
-        .format(DateTimeFormatter.ofPattern(pattern))
+        .format(DateTimeFormatter.ofPattern(pattern, Locale.CHINA))
 }
 
 fun formatFileSize(file: File): String {

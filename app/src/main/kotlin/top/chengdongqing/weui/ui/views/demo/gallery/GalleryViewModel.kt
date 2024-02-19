@@ -10,20 +10,25 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.Date
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
 class GalleryViewModel : ViewModel() {
-    var mediaItems by mutableStateOf<List<MediaItem>>(emptyList())
-        private set
+    var mediaGroups by mutableStateOf<Map<LocalDate, List<MediaItem>>>(emptyMap())
     var loading by mutableStateOf(true)
-        private set
 
     fun refresh(context: Context) {
         viewModelScope.launch {
             loading = true
-            mediaItems = queryMediaItems(context.applicationContext)
+            mediaGroups = queryMediaItems(context.applicationContext).groupBy {
+                Instant.ofEpochSecond(it.date).atZone(ZoneId.systemDefault()).toLocalDate()
+            }.toSortedMap(compareByDescending { it })
+                .mapValues { (_, value) ->
+                    value.sortedByDescending { it.date }
+                }
             loading = false
         }
     }
@@ -79,7 +84,7 @@ class GalleryViewModel : ViewModel() {
                             duration = cursor.getLong(durationColumn)
                                 .toDuration(DurationUnit.MILLISECONDS),
                             size = cursor.getLong(sizeColumn),
-                            date = Date(cursor.getLong(dateColumn)),
+                            date = cursor.getLong(dateColumn),
                             path = cursor.getString(dataColumn)
                         )
                     )

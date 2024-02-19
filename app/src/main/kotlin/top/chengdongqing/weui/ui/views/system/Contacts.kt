@@ -37,6 +37,7 @@ import com.google.accompanist.permissions.rememberPermissionState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import top.chengdongqing.weui.constants.DefaultDateTimeFormatter
 import top.chengdongqing.weui.ui.components.button.ButtonSize
 import top.chengdongqing.weui.ui.components.button.ButtonType
 import top.chengdongqing.weui.ui.components.button.WeButton
@@ -223,7 +224,8 @@ private suspend fun loadCallLogs(context: Context): (List<Pair<String, List<Stri
 
             while (cursor.moveToNext()) {
                 val number = cursor.getString(numberIndex)
-                val date = DateFormat.format("yyyy-MM-dd HH:mm:ss", Date(cursor.getLong(dateIndex)))
+                val date =
+                    DateFormat.format(DefaultDateTimeFormatter, Date(cursor.getLong(dateIndex)))
                     .toString()
                 val type = when (cursor.getInt(typeIndex)) {
                     CallLog.Calls.OUTGOING_TYPE -> "呼出"

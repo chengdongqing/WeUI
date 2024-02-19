@@ -6,16 +6,21 @@ import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Build
 import android.util.Size
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,7 +31,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -37,36 +44,56 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import okio.IOException
+import top.chengdongqing.weui.constants.ChineseDateWeekFormatter
 import top.chengdongqing.weui.extensions.clickableWithoutRipple
 import top.chengdongqing.weui.ui.components.loading.WeLoadMore
 import top.chengdongqing.weui.ui.components.page.WePage
 import top.chengdongqing.weui.ui.theme.LightColor
 import top.chengdongqing.weui.ui.views.demo.gallery.preview.MediaPreviewActivity
 import top.chengdongqing.weui.utils.formatDuration
-import java.util.Date
+import java.time.format.DateTimeFormatter
+import kotlin.math.ceil
 import kotlin.time.Duration
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun GalleryPage(galleryViewModel: GalleryViewModel = viewModel()) {
     WePage(title = "Gallery", description = "相册", padding = PaddingValues(0.dp)) {
         val context = LocalContext.current
+
         if (galleryViewModel.loading) {
             WeLoadMore()
         }
-
         RequestMediaPermission {
             LaunchedEffect(Unit) {
                 delay(300)
                 galleryViewModel.refresh(context)
             }
 
-            MediaGrid(galleryViewModel.mediaItems) { index ->
-                val intent = MediaPreviewActivity.newIntent(context).apply {
-                    putExtra("uris", galleryViewModel.mediaItems.map { it.path }.toTypedArray())
-                    putExtra("current", index)
-                    addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            LazyColumn {
+                galleryViewModel.mediaGroups.forEach { (date, items) ->
+                    stickyHeader {
+                        Text(
+                            text = date.format(DateTimeFormatter.ofPattern(ChineseDateWeekFormatter)),
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(MaterialTheme.colorScheme.background)
+                                .padding(vertical = 8.dp, horizontal = 12.dp)
+                        )
+                    }
+                    item {
+                        MediaGrid(items) { index ->
+                            val intent = MediaPreviewActivity.newIntent(context).apply {
+                                putExtra("uris", items.map { it.path }.toTypedArray())
+                                putExtra("current", index)
+                                addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                            }
+                            context.startActivity(intent)
+                        }
+                    }
                 }
-                context.startActivity(intent)
             }
         }
     }
@@ -75,16 +102,29 @@ fun GalleryPage(galleryViewModel: GalleryViewModel = viewModel()) {
 @Composable
 private fun MediaGrid(
     mediaItems: List<MediaItem>,
-    navigateToPreview: (Int) -> Unit
+    toPreview: (Int) -> Unit
 ) {
+    val configuration = LocalConfiguration.current
+
     LazyVerticalGrid(
         columns = GridCells.Adaptive(100.dp),
         horizontalArrangement = Arrangement.spacedBy(2.dp),
-        verticalArrangement = Arrangement.spacedBy(2.dp)
+        verticalArrangement = Arrangement.spacedBy(2.dp),
+        modifier = Modifier.height(remember {
+            val spacing = 2
+            val gridSize = configuration.screenWidthDp
+            val columns = maxOf((gridSize + spacing) / (100 + spacing), 1)
+            val widthWithoutSpacing = gridSize - spacing * (columns - 1)
+            val widthPerColumn = widthWithoutSpacing / columns
+            val remaining = widthWithoutSpacing % columns
+            val totalRows = ceil(mediaItems.size.toDouble() / columns)
+            val heightPerRow = (widthPerColumn + remaining + spacing)
+            (totalRows * heightPerRow - spacing).dp
+        })
     ) {
         itemsIndexed(mediaItems) { index, item ->
             MediaItem(item, Modifier.clickableWithoutRipple {
-                navigateToPreview(index)
+                toPreview(index)
             })
         }
     }
@@ -193,6 +233,6 @@ data class MediaItem(
     val mimeType: String,
     val duration: Duration,
     val size: Long,
-    val date: Date,
+    val date: Long,
     val path: String
 )

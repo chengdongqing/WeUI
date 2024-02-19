@@ -13,6 +13,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import top.chengdongqing.weui.constants.ChineseDateFormatter
+import top.chengdongqing.weui.constants.DefaultTimeFormatter
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.input.WeInput
 import top.chengdongqing.weui.ui.components.page.WePage
@@ -43,7 +45,7 @@ private fun DatePickDemo() {
 
     WeDatePicker(visible, value, onCancel = { visible = false }) { value = it }
     WeInput(
-        value = value.format(DateTimeFormatter.ofPattern("yyyy年MM月dd日")),
+        value = value.format(DateTimeFormatter.ofPattern(ChineseDateFormatter)),
         textAlign = TextAlign.Center,
         disabled = true
     )
@@ -60,7 +62,7 @@ private fun TimePickDemo() {
 
     WeTimePicker(visible, value, onCancel = { visible = false }) { value = it }
     WeInput(
-        value = value.format(DateTimeFormatter.ofPattern("HH:mm:ss")),
+        value = value.format(DateTimeFormatter.ofPattern(DefaultTimeFormatter)),
         textAlign = TextAlign.Center,
         disabled = true
     )

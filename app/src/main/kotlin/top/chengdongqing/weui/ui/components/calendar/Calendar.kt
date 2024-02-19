@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.sp
 import com.nlf.calendar.Lunar
 import com.nlf.calendar.Solar
 import kotlinx.coroutines.launch
+import top.chengdongqing.weui.constants.ChineseDateFormatter
 import top.chengdongqing.weui.ui.components.divider.WeDivider
 import top.chengdongqing.weui.ui.theme.FontColor
 import top.chengdongqing.weui.ui.theme.FontColor1
@@ -69,7 +70,7 @@ fun WeCalendar(state: CalendarState = rememberCalendarState()) {
 @Composable
 private fun Header(currentMonth: LocalDate, setCurrentMonth: (LocalDate) -> Unit) {
     val formatter = remember {
-        DateTimeFormatter.ofPattern("yyyy 年 MM 月")
+        DateTimeFormatter.ofPattern(ChineseDateFormatter)
     }
 
     Row(
