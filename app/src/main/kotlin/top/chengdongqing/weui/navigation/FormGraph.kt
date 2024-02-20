@@ -2,34 +2,34 @@ package top.chengdongqing.weui.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import top.chengdongqing.weui.ui.views.form.ButtonPage
-import top.chengdongqing.weui.ui.views.form.CheckboxPage
-import top.chengdongqing.weui.ui.views.form.InputPage
-import top.chengdongqing.weui.ui.views.form.PickerPage
-import top.chengdongqing.weui.ui.views.form.RadioPage
-import top.chengdongqing.weui.ui.views.form.SliderPage
-import top.chengdongqing.weui.ui.views.form.SwitchPage
+import top.chengdongqing.weui.ui.screens.form.ButtonScreen
+import top.chengdongqing.weui.ui.screens.form.CheckboxScreen
+import top.chengdongqing.weui.ui.screens.form.InputScreen
+import top.chengdongqing.weui.ui.screens.form.PickerScreen
+import top.chengdongqing.weui.ui.screens.form.RadioScreen
+import top.chengdongqing.weui.ui.screens.form.SliderScreen
+import top.chengdongqing.weui.ui.screens.form.SwitchScreen
 
 fun NavGraphBuilder.addFormGraph() {
     composable("button") {
-        ButtonPage()
+        ButtonScreen()
     }
     composable("checkbox") {
-        CheckboxPage()
+        CheckboxScreen()
     }
     composable("radio") {
-        RadioPage()
+        RadioScreen()
     }
     composable("switch") {
-        SwitchPage()
+        SwitchScreen()
     }
     composable("slider") {
-        SliderPage()
+        SliderScreen()
     }
     composable("picker") {
-        PickerPage()
+        PickerScreen()
     }
     composable("input") {
-        InputPage()
+        InputScreen()
     }
 }

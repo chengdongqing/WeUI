@@ -2,38 +2,38 @@ package top.chengdongqing.weui.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import top.chengdongqing.weui.ui.views.basic.BadgePage
-import top.chengdongqing.weui.ui.views.basic.LoadMorePage
-import top.chengdongqing.weui.ui.views.basic.LoadingPage
-import top.chengdongqing.weui.ui.views.basic.ProgressPage
-import top.chengdongqing.weui.ui.views.basic.ScrollViewPage
-import top.chengdongqing.weui.ui.views.basic.StepsPage
-import top.chengdongqing.weui.ui.views.basic.SwiperPage
-import top.chengdongqing.weui.ui.views.basic.TabViewPage
+import top.chengdongqing.weui.ui.screens.basic.BadgeScreen
+import top.chengdongqing.weui.ui.screens.basic.LoadMoreScreen
+import top.chengdongqing.weui.ui.screens.basic.LoadingScreen
+import top.chengdongqing.weui.ui.screens.basic.ProgressScreen
+import top.chengdongqing.weui.ui.screens.basic.ScrollViewScreen
+import top.chengdongqing.weui.ui.screens.basic.StepsScreen
+import top.chengdongqing.weui.ui.screens.basic.SwiperScreen
+import top.chengdongqing.weui.ui.screens.basic.TabViewScreen
 
 fun NavGraphBuilder.addBasicGraph() {
     composable("badge") {
-        BadgePage()
+        BadgeScreen()
     }
     composable("loading") {
-        LoadingPage()
+        LoadingScreen()
     }
     composable("load-more") {
-        LoadMorePage()
+        LoadMoreScreen()
     }
     composable("progress") {
-        ProgressPage()
+        ProgressScreen()
     }
     composable("steps") {
-        StepsPage()
+        StepsScreen()
     }
     composable("swiper") {
-        SwiperPage()
+        SwiperScreen()
     }
     composable("scroll-view") {
-        ScrollViewPage()
+        ScrollViewScreen()
     }
     composable("tab-view") {
-        TabViewPage()
+        TabViewScreen()
     }
 }

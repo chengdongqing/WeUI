@@ -2,22 +2,22 @@ package top.chengdongqing.weui.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import top.chengdongqing.weui.ui.views.network.download.FileDownloadPage
-import top.chengdongqing.weui.ui.views.network.request.HttpRequestPage
-import top.chengdongqing.weui.ui.views.network.upload.FileUploadPage
-import top.chengdongqing.weui.ui.views.network.websocket.WebSocketPage
+import top.chengdongqing.weui.ui.screens.network.download.FileDownloadScreen
+import top.chengdongqing.weui.ui.screens.network.request.HttpRequestScreen
+import top.chengdongqing.weui.ui.screens.network.upload.FileUploadScreen
+import top.chengdongqing.weui.ui.screens.network.websocket.WebSocketScreen
 
 fun NavGraphBuilder.addNetworkGraph() {
     composable("http-request") {
-        HttpRequestPage()
+        HttpRequestScreen()
     }
     composable("file-upload") {
-        FileUploadPage()
+        FileUploadScreen()
     }
     composable("file-download") {
-        FileDownloadPage()
+        FileDownloadScreen()
     }
     composable("web-socket") {
-        WebSocketPage()
+        WebSocketScreen()
     }
 }

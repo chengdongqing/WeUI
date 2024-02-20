@@ -3,55 +3,55 @@ package top.chengdongqing.weui.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import top.chengdongqing.weui.ui.views.system.CalendarEventsPage
-import top.chengdongqing.weui.ui.views.system.ClipboardPage
-import top.chengdongqing.weui.ui.views.system.ContactsPage
-import top.chengdongqing.weui.ui.views.system.DeviceInfoPage
-import top.chengdongqing.weui.ui.views.system.DownloaderPage
-import top.chengdongqing.weui.ui.views.system.InstalledAppsPage
-import top.chengdongqing.weui.ui.views.system.KeyboardPage
-import top.chengdongqing.weui.ui.views.system.NotificationPage
-import top.chengdongqing.weui.ui.views.system.SmsPage
-import top.chengdongqing.weui.ui.views.system.SystemStatusPage
-import top.chengdongqing.weui.ui.views.system.database.DatabasePage
-import top.chengdongqing.weui.ui.views.system.database.address.AddressFormPage
+import top.chengdongqing.weui.ui.screens.system.CalendarEventsScreen
+import top.chengdongqing.weui.ui.screens.system.ClipboardScreen
+import top.chengdongqing.weui.ui.screens.system.ContactsScreen
+import top.chengdongqing.weui.ui.screens.system.DeviceInfoScreen
+import top.chengdongqing.weui.ui.screens.system.DownloaderScreen
+import top.chengdongqing.weui.ui.screens.system.InstalledAppsScreen
+import top.chengdongqing.weui.ui.screens.system.KeyboardScreen
+import top.chengdongqing.weui.ui.screens.system.NotificationScreen
+import top.chengdongqing.weui.ui.screens.system.SmsScreen
+import top.chengdongqing.weui.ui.screens.system.SystemStatusScreen
+import top.chengdongqing.weui.ui.screens.system.database.DatabaseScreen
+import top.chengdongqing.weui.ui.screens.system.database.address.AddressFormScreen
 
 fun NavGraphBuilder.addSystemGraph(navController: NavController) {
     composable("device-info") {
-        DeviceInfoPage()
+        DeviceInfoScreen()
     }
     composable("system-status") {
-        SystemStatusPage()
+        SystemStatusScreen()
     }
     composable("installed-apps") {
-        InstalledAppsPage()
+        InstalledAppsScreen()
     }
     composable("downloader") {
-        DownloaderPage()
+        DownloaderScreen()
     }
     composable("database") {
-        DatabasePage(navController)
+        DatabaseScreen(navController)
     }
     composable("address-form?id={id}") {
         val id = it.arguments?.getString("id")?.toInt()
-        AddressFormPage(navController, id)
+        AddressFormScreen(navController, id)
     }
     composable("clipboard") {
-        ClipboardPage()
+        ClipboardScreen()
     }
     composable("contacts") {
-        ContactsPage()
+        ContactsScreen()
     }
     composable("sms") {
-        SmsPage()
+        SmsScreen()
     }
     composable("keyboard") {
-        KeyboardPage()
+        KeyboardScreen()
     }
     composable("calendar-events") {
-        CalendarEventsPage()
+        CalendarEventsScreen()
     }
     composable("notification") {
-        NotificationPage()
+        NotificationScreen()
     }
 }

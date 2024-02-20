@@ -2,34 +2,34 @@ package top.chengdongqing.weui.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import top.chengdongqing.weui.ui.views.demo.calendar.CalendarPage
-import top.chengdongqing.weui.ui.views.demo.clock.ClockPage
-import top.chengdongqing.weui.ui.views.demo.filebrowser.FileBrowserPage
-import top.chengdongqing.weui.ui.views.demo.gallery.GalleryPage
-import top.chengdongqing.weui.ui.views.demo.indexedlist.IndexedListPage
-import top.chengdongqing.weui.ui.views.demo.paint.PaintPage
-import top.chengdongqing.weui.ui.views.demo.searchbar.SearchBarPage
+import top.chengdongqing.weui.ui.screens.demo.calendar.CalendarScreen
+import top.chengdongqing.weui.ui.screens.demo.clock.ClockScreen
+import top.chengdongqing.weui.ui.screens.demo.filebrowser.FileBrowserScreen
+import top.chengdongqing.weui.ui.screens.demo.gallery.GalleryScreen
+import top.chengdongqing.weui.ui.screens.demo.indexedlist.IndexedListScreen
+import top.chengdongqing.weui.ui.screens.demo.paint.PaintScreen
+import top.chengdongqing.weui.ui.screens.demo.searchbar.SearchBarScreen
 
 fun NavGraphBuilder.addDemoGraph() {
     composable("search-bar") {
-        SearchBarPage()
+        SearchBarScreen()
     }
     composable("calendar") {
-        CalendarPage()
+        CalendarScreen()
     }
     composable("clock") {
-        ClockPage()
+        ClockScreen()
     }
     composable("gallery") {
-        GalleryPage()
+        GalleryScreen()
     }
     composable("file-browser") {
-        FileBrowserPage()
+        FileBrowserScreen()
     }
     composable("paint") {
-        PaintPage()
+        PaintScreen()
     }
     composable("indexed-list") {
-        IndexedListPage()
+        IndexedListScreen()
     }
 }

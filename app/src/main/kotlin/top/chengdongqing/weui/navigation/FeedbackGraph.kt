@@ -2,30 +2,30 @@ package top.chengdongqing.weui.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import top.chengdongqing.weui.ui.views.feedback.ActionSheetPage
-import top.chengdongqing.weui.ui.views.feedback.ContextMenuPage
-import top.chengdongqing.weui.ui.views.feedback.DialogPage
-import top.chengdongqing.weui.ui.views.feedback.InformationBarPage
-import top.chengdongqing.weui.ui.views.feedback.PopupPage
-import top.chengdongqing.weui.ui.views.feedback.ToastPage
+import top.chengdongqing.weui.ui.screens.feedback.ActionSheetScreen
+import top.chengdongqing.weui.ui.screens.feedback.ContextMenuScreen
+import top.chengdongqing.weui.ui.screens.feedback.DialogScreen
+import top.chengdongqing.weui.ui.screens.feedback.InformationBarScreen
+import top.chengdongqing.weui.ui.screens.feedback.PopupScreen
+import top.chengdongqing.weui.ui.screens.feedback.ToastScreen
 
 fun NavGraphBuilder.addFeedbackGraph() {
     composable("dialog") {
-        DialogPage()
+        DialogScreen()
     }
     composable("popup") {
-        PopupPage()
+        PopupScreen()
     }
     composable("action-sheet") {
-        ActionSheetPage()
+        ActionSheetScreen()
     }
     composable("toast") {
-        ToastPage()
+        ToastScreen()
     }
     composable("information-bar") {
-        InformationBarPage()
+        InformationBarScreen()
     }
     composable("context-menu") {
-        ContextMenuPage()
+        ContextMenuScreen()
     }
 }

@@ -2,58 +2,58 @@ package top.chengdongqing.weui.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import top.chengdongqing.weui.ui.views.hardware.AccelerometerPage
-import top.chengdongqing.weui.ui.views.hardware.BluetoothPage
-import top.chengdongqing.weui.ui.views.hardware.FingerprintPage
-import top.chengdongqing.weui.ui.views.hardware.FlashlightPage
-import top.chengdongqing.weui.ui.views.hardware.GNSSPage
-import top.chengdongqing.weui.ui.views.hardware.GyroscopePage
-import top.chengdongqing.weui.ui.views.hardware.HygrothermographPage
-import top.chengdongqing.weui.ui.views.hardware.InfraredPage
-import top.chengdongqing.weui.ui.views.hardware.NFCPage
-import top.chengdongqing.weui.ui.views.hardware.ScreenPage
-import top.chengdongqing.weui.ui.views.hardware.VibrationPage
-import top.chengdongqing.weui.ui.views.hardware.WiFiPage
-import top.chengdongqing.weui.ui.views.hardware.compass.CompassPage
+import top.chengdongqing.weui.ui.screens.hardware.AccelerometerScreen
+import top.chengdongqing.weui.ui.screens.hardware.BluetoothScreen
+import top.chengdongqing.weui.ui.screens.hardware.FingerprintScreen
+import top.chengdongqing.weui.ui.screens.hardware.FlashlightScreen
+import top.chengdongqing.weui.ui.screens.hardware.GNSSScreen
+import top.chengdongqing.weui.ui.screens.hardware.GyroscopeScreen
+import top.chengdongqing.weui.ui.screens.hardware.HygrothermographScreen
+import top.chengdongqing.weui.ui.screens.hardware.InfraredScreen
+import top.chengdongqing.weui.ui.screens.hardware.NFCScreen
+import top.chengdongqing.weui.ui.screens.hardware.ScreenScreen
+import top.chengdongqing.weui.ui.screens.hardware.VibrationScreen
+import top.chengdongqing.weui.ui.screens.hardware.WiFiScreen
+import top.chengdongqing.weui.ui.screens.hardware.compass.CompassScreen
 
 fun NavGraphBuilder.addHardwareGraph() {
     composable("screen") {
-        ScreenPage()
+        ScreenScreen()
     }
     composable("flashlight") {
-        FlashlightPage()
+        FlashlightScreen()
     }
     composable("vibration") {
-        VibrationPage()
+        VibrationScreen()
     }
     composable("wifi") {
-        WiFiPage()
+        WiFiScreen()
     }
     composable("bluetooth") {
-        BluetoothPage()
+        BluetoothScreen()
     }
     composable("nfc") {
-        NFCPage()
+        NFCScreen()
     }
     composable("gnss") {
-        GNSSPage()
+        GNSSScreen()
     }
     composable("infrared") {
-        InfraredPage()
+        InfraredScreen()
     }
     composable("gyroscope") {
-        GyroscopePage()
+        GyroscopeScreen()
     }
     composable("compass") {
-        CompassPage()
+        CompassScreen()
     }
     composable("accelerometer") {
-        AccelerometerPage()
+        AccelerometerScreen()
     }
     composable("hygrothermograph") {
-        HygrothermographPage()
+        HygrothermographScreen()
     }
     composable("fingerprint") {
-        FingerprintPage()
+        FingerprintScreen()
     }
 }

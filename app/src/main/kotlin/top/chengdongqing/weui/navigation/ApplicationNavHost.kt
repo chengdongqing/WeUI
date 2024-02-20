@@ -6,12 +6,12 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import top.chengdongqing.weui.ui.views.HomePage
-import top.chengdongqing.weui.ui.views.layers.LayersPage
-import top.chengdongqing.weui.ui.views.map.LocationPickerPage
-import top.chengdongqing.weui.ui.views.map.LocationPreviewPage
-import top.chengdongqing.weui.ui.views.qrcode.generator.QrCodeGeneratePage
-import top.chengdongqing.weui.ui.views.qrcode.scanner.QrCodeScanPage
+import top.chengdongqing.weui.ui.screens.HomeScreen
+import top.chengdongqing.weui.ui.screens.layers.LayersScreen
+import top.chengdongqing.weui.ui.screens.map.LocationPickerScreen
+import top.chengdongqing.weui.ui.screens.map.LocationPreviewScreen
+import top.chengdongqing.weui.ui.screens.qrcode.generator.QrCodeGenerateScreen
+import top.chengdongqing.weui.ui.screens.qrcode.scanner.QrCodeScanScreen
 
 @Composable
 fun ApplicationNavHost() {
@@ -46,7 +46,7 @@ fun ApplicationNavHost() {
         }
     ) {
         composable("home") {
-            HomePage(navController)
+            HomeScreen(navController)
         }
 
         addBasicGraph()
@@ -60,19 +60,19 @@ fun ApplicationNavHost() {
         addDemoGraph()
 
         composable("qrcode-scanner") {
-            QrCodeScanPage(navController)
+            QrCodeScanScreen(navController)
         }
         composable("qrcode-generator") {
-            QrCodeGeneratePage()
+            QrCodeGenerateScreen()
         }
         composable("location-preview") {
-            LocationPreviewPage()
+            LocationPreviewScreen()
         }
         composable("location-picker") {
-            LocationPickerPage()
+            LocationPickerScreen()
         }
         composable("layers") {
-            LayersPage()
+            LayersScreen()
         }
     }
 }

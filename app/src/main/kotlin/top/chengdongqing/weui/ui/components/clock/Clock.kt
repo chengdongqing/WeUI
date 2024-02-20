@@ -24,7 +24,7 @@ import kotlinx.coroutines.delay
 import top.chengdongqing.weui.ui.theme.BorderColor
 import top.chengdongqing.weui.ui.theme.FontColor1
 import top.chengdongqing.weui.ui.theme.LightColor
-import top.chengdongqing.weui.ui.views.hardware.compass.polarToCartesian
+import top.chengdongqing.weui.utils.polarToCartesian
 import java.time.Instant
 import java.time.ZoneId
 import kotlin.math.cos

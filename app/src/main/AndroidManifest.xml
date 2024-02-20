@@ -80,11 +80,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.views.demo.gallery.preview.MediaPreviewActivity"
+            android:name=".ui.screens.demo.gallery.preview.MediaPreviewActivity"
             android:exported="true"
             android:theme="@style/Theme.WeUI" />
         <activity
-            android:name=".ui.views.hardware.BiometricActivity"
+            android:name=".ui.screens.hardware.BiometricActivity"
             android:exported="true"
             android:theme="@style/Theme.Floating" />
 
