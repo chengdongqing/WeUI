@@ -8,6 +8,8 @@ val BorderColor = Color(0f, 0f, 0f, 0.1f)
 val BackgroundColorLight = Color(0xffEDEDED)
 val OnBackgroundColorLight = Color.White
 val DangerColorLight = Color(0xffFA5151)
+val WarningColorLight = Color(254, 156, 1)
+val PlainColorLight = Color(199, 198, 205)
 
 val BackgroundColorDark = Color(0xff171819)
 val OnBackgroundColorDark = Color(0xff191919)

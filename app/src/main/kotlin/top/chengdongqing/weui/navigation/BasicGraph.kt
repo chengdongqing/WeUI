@@ -8,6 +8,7 @@ import top.chengdongqing.weui.ui.screens.basic.LoadingScreen
 import top.chengdongqing.weui.ui.screens.basic.ProgressScreen
 import top.chengdongqing.weui.ui.screens.basic.ScrollViewScreen
 import top.chengdongqing.weui.ui.screens.basic.StepsScreen
+import top.chengdongqing.weui.ui.screens.basic.SwipeActionScreen
 import top.chengdongqing.weui.ui.screens.basic.SwiperScreen
 import top.chengdongqing.weui.ui.screens.basic.TabViewScreen
 
@@ -35,5 +36,8 @@ fun NavGraphBuilder.addBasicGraph() {
     }
     composable("tab-view") {
         TabViewScreen()
+    }
+    composable("swipe-action") {
+        SwipeActionScreen()
     }
 }

@@ -44,7 +44,7 @@ data class ActionSheetItem(
  * @param title 标题
  * @param options 菜单列表
  * @param onCancel 取消事件
- * @param onChange 菜单选中事件
+ * @param onTap 菜单选中事件
  */
 @Composable
 fun WeActionSheet(
@@ -52,7 +52,7 @@ fun WeActionSheet(
     title: String? = null,
     options: List<ActionSheetItem>,
     onCancel: () -> Unit,
-    onChange: (index: Int) -> Unit
+    onTap: (index: Int) -> Unit
 ) {
     WePopup(visible, padding = PaddingValues(0.dp), onClose = onCancel) {
         Column {
@@ -82,7 +82,7 @@ fun WeActionSheet(
                         .then(if (!item.disabled) {
                             Modifier.clickable {
                                 onCancel()
-                                onChange(index)
+                                onTap(index)
                             }
                         } else Modifier)
                         .padding(12.dp),
@@ -147,7 +147,7 @@ fun rememberWeActionSheet(): WeActionSheetState {
             title = options.title,
             options = options.options,
             onCancel = { visible = false },
-            onChange = options.onChange
+            onTap = options.onChange
         )
     }
 

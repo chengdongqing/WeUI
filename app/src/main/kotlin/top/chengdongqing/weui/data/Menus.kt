@@ -15,7 +15,8 @@ val menus = listOf(
             MenuItem("Steps", "steps"),
             MenuItem("Swiper", "swiper"),
             MenuItem("ScrollView", "scroll-view"),
-            MenuItem("TabView", "tab-view")
+            MenuItem("TabView", "tab-view"),
+            MenuItem("SwipeAction", "swipe-action")
         )
     ),
     MenuGroup(
