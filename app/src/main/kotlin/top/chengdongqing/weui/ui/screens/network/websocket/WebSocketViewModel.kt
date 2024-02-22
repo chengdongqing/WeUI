@@ -7,6 +7,7 @@ import okhttp3.Request
 import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
+import top.chengdongqing.weui.utils.isTrue
 
 class WebSocketViewModel : ViewModel() {
     private var client: OkHttpClient? = null
@@ -36,7 +37,7 @@ class WebSocketViewModel : ViewModel() {
     }
 
     fun send(message: String): Boolean {
-        return webSocket?.send(message) == true
+        return webSocket?.send(message).isTrue()
     }
 
     fun close() {

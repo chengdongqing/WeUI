@@ -33,11 +33,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.chengdongqing.weui.extensions.clickableWithoutRipple
 import top.chengdongqing.weui.ui.theme.FontColor1
 import top.chengdongqing.weui.ui.theme.LightColor
 import top.chengdongqing.weui.ui.theme.LinkColor
 import top.chengdongqing.weui.ui.theme.PrimaryColor
+import top.chengdongqing.weui.utils.clickableWithoutRipple
 
 @Composable
 fun WeSearchBar(value: String, onChange: (value: String) -> Unit) {

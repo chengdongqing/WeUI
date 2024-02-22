@@ -42,8 +42,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import kotlinx.coroutines.delay
-import top.chengdongqing.weui.extensions.clickableWithoutRipple
 import top.chengdongqing.weui.ui.theme.BackgroundColorLight
+import top.chengdongqing.weui.utils.clickableWithoutRipple
 
 /**
  * 从底部弹出的半屏弹窗

@@ -37,11 +37,11 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import top.chengdongqing.weui.R
 import top.chengdongqing.weui.data.menus
-import top.chengdongqing.weui.extensions.clickableWithoutRipple
 import top.chengdongqing.weui.model.MenuGroup
 import top.chengdongqing.weui.model.MenuItem
 import top.chengdongqing.weui.ui.components.divider.WeDivider
 import top.chengdongqing.weui.ui.theme.FontColor1
+import top.chengdongqing.weui.utils.clickableWithoutRipple
 
 @Composable
 fun HomeScreen(navController: NavHostController) {

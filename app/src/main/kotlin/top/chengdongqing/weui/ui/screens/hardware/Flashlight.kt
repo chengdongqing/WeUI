@@ -13,6 +13,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.components.switch.WeSwitch
+import top.chengdongqing.weui.utils.isTrue
 
 @Composable
 fun FlashlightScreen() {
@@ -47,7 +48,7 @@ private fun rememberFlashAvailableCameraId(cameraManager: CameraManager): String
     return remember {
         cameraManager.cameraIdList.find {
             cameraManager.getCameraCharacteristics(it)
-                .get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true
+                .get(CameraCharacteristics.FLASH_INFO_AVAILABLE).isTrue()
         }
     }
 }

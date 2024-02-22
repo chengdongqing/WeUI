@@ -1,6 +1,6 @@
 package top.chengdongqing.weui.utils
 
-import top.chengdongqing.weui.constants.DefaultDateTimeFormatter
+import top.chengdongqing.weui.constant.DefaultDateTimeFormatter
 import java.io.File
 import java.time.Instant
 import java.time.ZoneId
@@ -62,6 +62,3 @@ fun formatFileSize(size: Long): String {
         else -> "${formatFloat(size / (1024 * 1024 * 1024f))} GB"
     }
 }
-
-fun Boolean.format(trueLabel: String = "是", falseLabel: String = "否") =
-    if (this) trueLabel else falseLabel

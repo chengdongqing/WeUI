@@ -41,6 +41,7 @@ import top.chengdongqing.weui.ui.theme.FontColor1
 import top.chengdongqing.weui.utils.MediaStoreUtils
 import top.chengdongqing.weui.utils.MediaType
 import top.chengdongqing.weui.utils.SetupFullscreen
+import top.chengdongqing.weui.utils.isTrue
 import java.io.FileInputStream
 import java.io.IOException
 
@@ -146,7 +147,7 @@ private suspend fun saveMediaToGallery(context: Context, uri: Uri): Boolean {
     }
 }
 
-private fun Uri.isVideoType() = getMimeType()?.startsWith("video") == true
+private fun Uri.isVideoType() = getMimeType()?.startsWith("video").isTrue()
 
 private fun Uri.getMimeType(): String? {
     val extension = MimeTypeMap.getFileExtensionFromUrl(this.toString())

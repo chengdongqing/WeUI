@@ -33,9 +33,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import top.chengdongqing.weui.R
-import top.chengdongqing.weui.extensions.clickableWithoutRipple
 import top.chengdongqing.weui.ui.components.slider.WeSlider
 import top.chengdongqing.weui.ui.theme.BorderColor
+import top.chengdongqing.weui.utils.clickableWithoutRipple
 import top.chengdongqing.weui.utils.formatDuration
 import top.chengdongqing.weui.utils.rememberPlayPercent
 import top.chengdongqing.weui.utils.rememberPlayProgress

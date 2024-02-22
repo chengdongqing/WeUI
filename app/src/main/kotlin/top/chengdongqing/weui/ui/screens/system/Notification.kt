@@ -16,6 +16,7 @@ import com.google.accompanist.permissions.rememberPermissionState
 import top.chengdongqing.weui.R
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.screen.WeScreen
+import top.chengdongqing.weui.utils.isTrue
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
@@ -31,7 +32,7 @@ fun NotificationScreen() {
 
     WeScreen(title = "Notification", description = "系统通知") {
         WeButton(text = "发送通知") {
-            if (permissionState?.status?.isGranted == true || permissionState == null) {
+            if (permissionState?.status?.isGranted.isTrue() || permissionState == null) {
                 createNotificationChannel(context, channelId, channelName)
                 sendNotification(context, channelId, "测试标题", "测试内容")
             } else {

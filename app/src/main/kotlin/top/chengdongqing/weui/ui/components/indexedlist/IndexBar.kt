@@ -40,8 +40,8 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import top.chengdongqing.weui.extensions.clickableWithoutRipple
 import top.chengdongqing.weui.ui.theme.PrimaryColor
+import top.chengdongqing.weui.utils.clickableWithoutRipple
 import kotlin.math.roundToInt
 
 @Composable

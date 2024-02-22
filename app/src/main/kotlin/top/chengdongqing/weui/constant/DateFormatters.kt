@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.constants
+package top.chengdongqing.weui.constant
 
 const val DefaultDateFormatter = "yyyy-MM-dd"
 const val DefaultTimeFormatter = "HH:mm:ss"

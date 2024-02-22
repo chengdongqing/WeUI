@@ -35,8 +35,23 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import top.chengdongqing.weui.enum.DragAnchors
+import top.chengdongqing.weui.ui.theme.DangerColorLight
 import top.chengdongqing.weui.ui.theme.FontColor
+import top.chengdongqing.weui.ui.theme.PlainColorLight
+import top.chengdongqing.weui.ui.theme.WarningColorLight
 import kotlin.math.roundToInt
+
+enum class SwipeActionStyle {
+    LABEL,
+    ICON
+}
+
+enum class SwipeActionType(val color: Color) {
+    PLAIN(PlainColorLight),
+    WARNING(WarningColorLight),
+    DANGER(DangerColorLight)
+}
 
 data class SwipeActionItem(
     val type: SwipeActionType? = null,

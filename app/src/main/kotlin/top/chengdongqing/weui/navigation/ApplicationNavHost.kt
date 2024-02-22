@@ -19,7 +19,7 @@ fun ApplicationNavHost() {
 
     NavHost(
         navController,
-        startDestination = "home",
+        startDestination = "drop-card",
         enterTransition = {
             slideIntoContainer(
                 AnimatedContentTransitionScope.SlideDirection.Left,

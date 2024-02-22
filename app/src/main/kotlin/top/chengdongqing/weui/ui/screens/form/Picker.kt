@@ -13,8 +13,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import top.chengdongqing.weui.constants.ChineseDateFormatter
-import top.chengdongqing.weui.constants.DefaultTimeFormatter
+import top.chengdongqing.weui.constant.ChineseDateFormatter
+import top.chengdongqing.weui.constant.DefaultTimeFormatter
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.input.WeInput
 import top.chengdongqing.weui.ui.components.picker.WeDatePicker

@@ -20,8 +20,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import kotlinx.coroutines.delay
-import top.chengdongqing.weui.extensions.clickableWithoutRipple
 import top.chengdongqing.weui.ui.components.screen.WeScreen
+import top.chengdongqing.weui.utils.clickableWithoutRipple
 
 @Composable
 fun LayersScreen() {
