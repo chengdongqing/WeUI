@@ -28,7 +28,7 @@ fun ClockScreen() {
             listOf(
                 TimeZoneItem("上海（中国）", "Asia/Shanghai", BorderColor),
                 TimeZoneItem("莫斯科（俄罗斯）", "Europe/Moscow", Color.Black),
-                TimeZoneItem("伦敦（英格兰）", "Europe/London", PrimaryColor),
+                TimeZoneItem("阿姆斯特丹（荷兰）", "Europe/Amsterdam", PrimaryColor),
                 TimeZoneItem("圣保罗（巴西）", "America/Sao_Paulo", Color.Yellow),
                 TimeZoneItem("洛杉矶（美国）", "America/Los_Angeles", Color.Magenta),
                 TimeZoneItem("悉尼（澳大利亚）", "Australia/Sydney", Color.Cyan)
@@ -38,7 +38,7 @@ fun ClockScreen() {
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(40.dp),
-            contentPadding = PaddingValues(bottom = 100.dp)
+            contentPadding = PaddingValues(bottom = 60.dp)
         ) {
             items(timeZones) {
                 WeClock(ZoneId.of(it.zoneId), it.color)

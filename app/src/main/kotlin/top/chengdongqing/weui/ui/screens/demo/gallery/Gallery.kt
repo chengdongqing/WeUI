@@ -6,17 +6,15 @@ import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Build
 import android.util.Size
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -31,7 +29,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -52,10 +49,8 @@ import top.chengdongqing.weui.ui.theme.LightColor
 import top.chengdongqing.weui.utils.clickableWithoutRipple
 import top.chengdongqing.weui.utils.formatDuration
 import java.time.format.DateTimeFormatter
-import kotlin.math.ceil
 import kotlin.time.Duration
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun GalleryScreen(galleryViewModel: GalleryViewModel = viewModel()) {
     WeScreen(title = "Gallery", description = "相册", padding = PaddingValues(0.dp)) {
@@ -70,11 +65,17 @@ fun GalleryScreen(galleryViewModel: GalleryViewModel = viewModel()) {
                 galleryViewModel.refresh(context)
             }
 
-            LazyColumn {
+            LazyVerticalGrid(
+                columns = GridCells.Adaptive(100.dp),
+                contentPadding = PaddingValues(bottom = 60.dp),
+                horizontalArrangement = Arrangement.spacedBy(2.dp),
+                verticalArrangement = Arrangement.spacedBy(2.dp)
+            ) {
                 galleryViewModel.mediaGroups.forEach { (date, items) ->
-                    stickyHeader {
+                    val title = date.format(DateTimeFormatter.ofPattern(ChineseDateWeekFormatter))
+                    item(span = { GridItemSpan(maxLineSpan) }) {
                         Text(
-                            text = date.format(DateTimeFormatter.ofPattern(ChineseDateWeekFormatter)),
+                            text = title,
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier
@@ -83,49 +84,18 @@ fun GalleryScreen(galleryViewModel: GalleryViewModel = viewModel()) {
                                 .padding(vertical = 8.dp, horizontal = 12.dp)
                         )
                     }
-                    item {
-                        MediaGrid(items) { index ->
+                    itemsIndexed(items) { index, item ->
+                        MediaItem(item, Modifier.clickableWithoutRipple {
                             val intent = MediaPreviewActivity.newIntent(context).apply {
                                 putExtra("uris", items.map { it.path }.toTypedArray())
                                 putExtra("current", index)
                                 addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
                             }
                             context.startActivity(intent)
-                        }
+                        })
                     }
                 }
             }
-        }
-    }
-}
-
-@Composable
-private fun MediaGrid(
-    mediaItems: List<MediaItem>,
-    toPreview: (Int) -> Unit
-) {
-    val configuration = LocalConfiguration.current
-
-    LazyVerticalGrid(
-        columns = GridCells.Adaptive(100.dp),
-        horizontalArrangement = Arrangement.spacedBy(2.dp),
-        verticalArrangement = Arrangement.spacedBy(2.dp),
-        modifier = Modifier.height(remember {
-            val spacing = 2
-            val gridSize = configuration.screenWidthDp
-            val columns = maxOf((gridSize + spacing) / (100 + spacing), 1)
-            val widthWithoutSpacing = gridSize - spacing * (columns - 1)
-            val widthPerColumn = widthWithoutSpacing / columns
-            val remaining = widthWithoutSpacing % columns
-            val totalRows = ceil(mediaItems.size.toDouble() / columns)
-            val heightPerRow = (widthPerColumn + remaining + spacing)
-            (totalRows * heightPerRow - spacing).dp
-        })
-    ) {
-        itemsIndexed(mediaItems) { index, item ->
-            MediaItem(item, Modifier.clickableWithoutRipple {
-                toPreview(index)
-            })
         }
     }
 }
