@@ -197,6 +197,7 @@ private fun ActionItem(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun rememberAnchoredDraggableState(
+    initialValue: DragAnchors = DragAnchors.Center,
     actionItemWidth: Dp = 80.dp,
     startActionCount: Int = 0,
     endActionCount: Int = 0
@@ -209,7 +210,7 @@ fun rememberAnchoredDraggableState(
     val state = remember {
         AnchoredDraggableState(
             // 初始状态
-            initialValue = DragAnchors.Center,
+            initialValue,
             // 设置每个锚点对应的位置（偏移量）
             anchors = DraggableAnchors {
                 DragAnchors.Start at -startActionWidthPx

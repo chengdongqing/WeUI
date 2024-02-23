@@ -71,12 +71,15 @@ fun SwipeActionScreen() {
             Spacer(modifier = Modifier.height(40.dp))
 
             val options1 = remember { options.slice(1..2) }
-            val swipeActionState = rememberAnchoredDraggableState(endActionCount = options1.size)
-            val coroutineScope = rememberCoroutineScope()
-            val (_, toggleAnchor) = rememberToggleState(
-                defaultValue = DragAnchors.Center,
-                reverseValue = DragAnchors.End
+            val (anchor, toggleAnchor) = rememberToggleState(
+                defaultValue = DragAnchors.End,
+                reverseValue = DragAnchors.Center,
             )
+            val swipeActionState = rememberAnchoredDraggableState(
+                initialValue = anchor,
+                endActionCount = options1.size
+            )
+            val coroutineScope = rememberCoroutineScope()
             WeButton(text = "切换状态", type = ButtonType.PLAIN) {
                 coroutineScope.launch {
                     swipeActionState.state.animateTo(toggleAnchor())

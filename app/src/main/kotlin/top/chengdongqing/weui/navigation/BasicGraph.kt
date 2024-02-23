@@ -8,6 +8,7 @@ import top.chengdongqing.weui.ui.screens.basic.LoadMoreScreen
 import top.chengdongqing.weui.ui.screens.basic.LoadingScreen
 import top.chengdongqing.weui.ui.screens.basic.ProgressScreen
 import top.chengdongqing.weui.ui.screens.basic.ScrollViewScreen
+import top.chengdongqing.weui.ui.screens.basic.SkeletonScreen
 import top.chengdongqing.weui.ui.screens.basic.StepsScreen
 import top.chengdongqing.weui.ui.screens.basic.SwipeActionScreen
 import top.chengdongqing.weui.ui.screens.basic.SwiperScreen
@@ -43,5 +44,8 @@ fun NavGraphBuilder.addBasicGraph() {
     }
     composable("drop-card") {
         DropCardScreen()
+    }
+    composable("skeleton") {
+        SkeletonScreen()
     }
 }

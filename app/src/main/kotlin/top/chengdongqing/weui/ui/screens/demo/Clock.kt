@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.ui.screens.demo.clock
+package top.chengdongqing.weui.ui.screens.demo
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues

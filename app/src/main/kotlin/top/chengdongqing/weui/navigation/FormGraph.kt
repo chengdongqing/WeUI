@@ -7,6 +7,7 @@ import top.chengdongqing.weui.ui.screens.form.CheckboxScreen
 import top.chengdongqing.weui.ui.screens.form.InputScreen
 import top.chengdongqing.weui.ui.screens.form.PickerScreen
 import top.chengdongqing.weui.ui.screens.form.RadioScreen
+import top.chengdongqing.weui.ui.screens.form.RateScreen
 import top.chengdongqing.weui.ui.screens.form.SliderScreen
 import top.chengdongqing.weui.ui.screens.form.SwitchScreen
 
@@ -31,5 +32,8 @@ fun NavGraphBuilder.addFormGraph() {
     }
     composable("input") {
         InputScreen()
+    }
+    composable("Rate") {
+        RateScreen()
     }
 }

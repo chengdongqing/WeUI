@@ -17,7 +17,8 @@ val menus = listOf(
             MenuItem("ScrollView", "scroll-view"),
             MenuItem("TabView", "tab-view"),
             MenuItem("SwipeAction", "swipe-action"),
-            MenuItem("DropCard", "drop-card")
+            MenuItem("DropCard", "drop-card"),
+            MenuItem("Skeleton", "skeleton")
         )
     ),
     MenuGroup(
@@ -29,7 +30,8 @@ val menus = listOf(
             MenuItem("Switch", "switch"),
             MenuItem("Slider", "slider"),
             MenuItem("Picker", "picker"),
-            MenuItem("Input", "input")
+            MenuItem("Input", "input"),
+            MenuItem("Rate", "rate")
         )
     ),
     MenuGroup(
@@ -115,14 +117,14 @@ val menus = listOf(
         )
     ),
     MenuGroup(
-        "地图组件", R.drawable.ic_nav_feedback,
+        "地图", R.drawable.ic_nav_feedback,
         listOf(
             MenuItem("LocationPreview", "location-preview"),
             MenuItem("LocationPicker", "location-picker")
         )
     ),
     MenuGroup(
-        "案例", R.drawable.ic_nav_search,
+        "扩展示例", R.drawable.ic_nav_search,
         listOf(
             MenuItem("Calendar", "calendar"),
             MenuItem("Clock", "clock"),
@@ -130,7 +132,15 @@ val menus = listOf(
             MenuItem("Gallery", "gallery"),
             MenuItem("FileBrowser", "file-browser"),
             MenuItem("Paint", "paint"),
-            MenuItem("IndexedList", "indexed-list")
+            MenuItem("IndexedList", "indexed-list"),
+            MenuItem("DragSorter", "drag-sorter"),
+            MenuItem("DividingRule", "dividing-rule"),
+            MenuItem("OrgTree", "org-tree"),
+            MenuItem("TreeView", "tree-view"),
+            MenuItem("DigitalRoller", "digital-roller"),
+            MenuItem("DigitalKeyboard", "digital-keyboard"),
+            MenuItem("CubicBezier", "cubic-bezier"),
+            MenuItem("NotificationBar", "notification-bar"),
         )
     ),
     MenuGroup(

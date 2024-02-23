@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.ui.screens.demo.searchbar
+package top.chengdongqing.weui.ui.screens.demo
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf

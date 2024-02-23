@@ -1,6 +1,7 @@
-package top.chengdongqing.weui.ui.screens.demo.calendar
+package top.chengdongqing.weui.ui.screens.demo
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
@@ -15,7 +16,7 @@ import top.chengdongqing.weui.ui.components.screen.WeScreen
 
 @Composable
 fun CalendarScreen() {
-    WeScreen(title = "Calendar", description = "日历") {
+    WeScreen(title = "Calendar", description = "日历", padding = PaddingValues(0.dp)) {
         val calendarState = rememberCalendarState()
 
         Column(horizontalAlignment = Alignment.CenterHorizontally) {

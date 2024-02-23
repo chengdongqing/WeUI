@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.ui.screens.demo.indexedlist
+package top.chengdongqing.weui.ui.screens.demo
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
