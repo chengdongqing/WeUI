@@ -114,7 +114,8 @@ private fun RecordIcon(isRecording: Boolean) {
             tint = FontColor1
         )
     } else {
-        val animatedSize by rememberInfiniteTransition("AudioRecorderStopIconTransition").animateFloat(
+        val transition = rememberInfiniteTransition(label = "")
+        val animatedSize by transition.animateFloat(
             initialValue = 30f,
             targetValue = 40f,
             animationSpec = remember {

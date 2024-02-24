@@ -42,7 +42,8 @@ internal fun BoxScope.ScannerDecoration() {
 @Composable
 private fun BoxScope.ScannerAnimation() {
     val screenHeight = LocalConfiguration.current.screenHeightDp
-    val translateY by rememberInfiniteTransition(label = "QrCodeScannerTransition").animateFloat(
+    val transition = rememberInfiniteTransition(label = "")
+    val translateY by transition.animateFloat(
         initialValue = 0.2f,
         targetValue = 0.7f,
         animationSpec = InfiniteRepeatableSpec(

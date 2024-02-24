@@ -3,9 +3,9 @@ package top.chengdongqing.weui.ui.components.radio
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 
-data class RadioOption(
+data class RadioOption<T>(
     val label: String,
-    val value: Any,
+    val value: T,
     val disabled: Boolean = false
 )
 
@@ -18,11 +18,11 @@ data class RadioOption(
  * @param onChange 选中项改变事件
  */
 @Composable
-fun WeRadioGroup(
-    options: List<RadioOption>,
-    value: Any? = null,
+fun <T> WeRadioGroup(
+    options: List<RadioOption<T>>,
+    value: T? = null,
     disabled: Boolean = false,
-    onChange: ((value: Any) -> Unit)? = null
+    onChange: ((value: T) -> Unit)? = null
 ) {
     Column {
         for (option in options) {
