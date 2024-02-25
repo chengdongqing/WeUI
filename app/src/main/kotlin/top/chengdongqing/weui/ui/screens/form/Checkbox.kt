@@ -12,7 +12,7 @@ import top.chengdongqing.weui.ui.components.screen.WeScreen
 
 @Composable
 fun CheckboxScreen() {
-    WeScreen(title = "Checkbox", description = "复选框", backgroundColor = Color.White) {
+    WeScreen(title = "Checkbox", description = "复选框", containerColor = Color.White) {
         var values by remember { mutableStateOf<List<Int>>(emptyList()) }
 
         WeCheckboxGroup(

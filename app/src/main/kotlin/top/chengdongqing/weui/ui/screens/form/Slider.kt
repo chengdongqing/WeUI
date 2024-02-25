@@ -24,7 +24,7 @@ import top.chengdongqing.weui.ui.components.slider.WeSlider
 
 @Composable
 fun SliderScreen() {
-    WeScreen(title = "Slider", description = "滑块", backgroundColor = Color.White) {
+    WeScreen(title = "Slider", description = "滑块", containerColor = Color.White) {
         var value by remember { mutableIntStateOf(0) }
         var step by remember { mutableIntStateOf(1) }
 

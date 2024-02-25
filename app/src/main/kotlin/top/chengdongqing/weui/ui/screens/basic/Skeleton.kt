@@ -35,7 +35,7 @@ fun SkeletonScreen() {
         title = "Skeleton",
         description = "骨架屏",
         padding = PaddingValues(0.dp),
-        backgroundColor = Color.White
+        containerColor = Color.White
     ) {
         var isActive by remember { mutableStateOf(false) }
         var isLightMode by remember { mutableStateOf(true) }

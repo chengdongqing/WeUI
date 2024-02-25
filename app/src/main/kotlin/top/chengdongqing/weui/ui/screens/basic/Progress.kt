@@ -28,7 +28,7 @@ import kotlin.concurrent.timerTask
 
 @Composable
 fun ProgressScreen() {
-    WeScreen(title = "Progress", description = "进度条", backgroundColor = Color.White) {
+    WeScreen(title = "Progress", description = "进度条", containerColor = Color.White) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             WeProgress(20f, null)
             WeProgress(44.57898f)

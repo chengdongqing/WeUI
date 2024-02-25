@@ -14,7 +14,7 @@ import top.chengdongqing.weui.ui.components.switch.WeSwitch
 
 @Composable
 fun SwitchScreen() {
-    WeScreen(title = "Switch", description = "开关", backgroundColor = Color.White) {
+    WeScreen(title = "Switch", description = "开关", containerColor = Color.White) {
         val checked = remember { mutableStateOf(false) }
 
         Column {

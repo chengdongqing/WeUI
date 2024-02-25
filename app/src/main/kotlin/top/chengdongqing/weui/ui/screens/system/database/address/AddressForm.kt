@@ -41,7 +41,7 @@ fun AddressFormScreen(
     WeScreen(
         title = "AddressForm",
         description = "${if (id == null) "新增" else "编辑"}收货地址",
-        backgroundColor = Color.White
+        containerColor = Color.White
     ) {
         val address = remember { mutableStateMapOf<String, String>() }
         val hasAllEntered by remember {

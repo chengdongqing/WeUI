@@ -150,7 +150,7 @@ private fun DaysGrid(pagerState: PagerState) {
             // 月份背景
             Text(
                 text = date.monthValue.toString(),
-                color = PrimaryColor.copy(alpha = 0.2f),
+                color = PrimaryColor.copy(0.2f),
                 fontSize = 160.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = FontFamily.Cursive

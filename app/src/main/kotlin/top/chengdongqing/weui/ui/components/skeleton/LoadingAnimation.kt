@@ -59,20 +59,20 @@ private data class ShimmerAnimationData(
         return if (isLightMode) {
             val color = Color.White
             listOf(
-                color.copy(alpha = 0.3f),
-                color.copy(alpha = 0.5f),
-                color.copy(alpha = 1.0f),
-                color.copy(alpha = 0.5f),
-                color.copy(alpha = 0.3f),
+                color.copy(0.3f),
+                color.copy(0.5f),
+                color.copy(1.0f),
+                color.copy(0.5f),
+                color.copy(0.3f),
             )
         } else {
             val color = Color.Black
             listOf(
-                color.copy(alpha = 0.0f),
-                color.copy(alpha = 0.3f),
-                color.copy(alpha = 0.5f),
-                color.copy(alpha = 0.3f),
-                color.copy(alpha = 0.0f),
+                color.copy(0.0f),
+                color.copy(0.3f),
+                color.copy(0.5f),
+                color.copy(0.3f),
+                color.copy(0.0f),
             )
         }
     }

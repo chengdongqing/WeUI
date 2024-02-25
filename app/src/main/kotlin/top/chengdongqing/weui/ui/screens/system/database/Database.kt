@@ -13,7 +13,7 @@ fun DatabaseScreen(navController: NavController) {
     WeScreen(
         title = "Database",
         description = "数据库（SQLite+Room）",
-        backgroundColor = Color.White,
+        containerColor = Color.White,
         padding = PaddingValues(0.dp)
     ) {
         AddressList(navController)

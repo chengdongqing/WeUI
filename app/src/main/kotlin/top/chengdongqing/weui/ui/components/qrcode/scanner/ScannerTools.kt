@@ -86,7 +86,7 @@ private fun ToolItem(
         Box(
             modifier = Modifier
                 .clip(CircleShape)
-                .background(Color.White.copy(alpha = 0.2f))
+                .background(Color.White.copy(0.2f))
                 .clickable { onClick() }
                 .padding(12.dp)
         ) {

@@ -66,7 +66,7 @@ private fun FolderLabel(label: String, isActive: Boolean, onClick: () -> Unit) {
         fontSize = 14.sp,
         modifier = Modifier
             .background(
-                if (isActive) PrimaryColor.copy(alpha = 0.1f) else BackgroundColorLight,
+                if (isActive) PrimaryColor.copy(0.1f) else BackgroundColorLight,
                 RoundedCornerShape(16.dp)
             )
             .clickableWithoutRipple { onClick() }

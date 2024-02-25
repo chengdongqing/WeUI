@@ -12,7 +12,7 @@ import top.chengdongqing.weui.ui.components.screen.WeScreen
 
 @Composable
 fun RadioScreen() {
-    WeScreen(title = "Radio", description = "单选框", backgroundColor = Color.White) {
+    WeScreen(title = "Radio", description = "单选框", containerColor = Color.White) {
         var value by remember { mutableStateOf("2") }
 
         WeRadioGroup(

@@ -26,7 +26,7 @@ import top.chengdongqing.weui.ui.theme.FontColor1
  * @param title 标题
  * @param description 描述
  * @param padding 内边距
- * @param backgroundColor 背景颜色
+ * @param containerColor 背景颜色
  * @param content 内容
  */
 @Composable
@@ -34,12 +34,12 @@ fun WeScreen(
     title: String,
     description: String,
     padding: PaddingValues = PaddingValues(16.dp),
-    backgroundColor: Color = MaterialTheme.colorScheme.background,
+    containerColor: Color = MaterialTheme.colorScheme.background,
     content: @Composable () -> Unit
 ) {
     Column(
         Modifier
-            .background(backgroundColor)
+            .background(containerColor)
             .statusBarsPadding()
     ) {
         Column(Modifier.padding(40.dp)) {

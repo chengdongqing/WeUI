@@ -20,7 +20,7 @@ fun PaintScreen() {
         title = "Paint",
         description = "画板",
         padding = PaddingValues(0.dp),
-        backgroundColor = Color.White
+        containerColor = Color.White
     ) {
         var color by remember { mutableStateOf(Color.Black) }
         var strokeWidth by remember { mutableFloatStateOf(5f) }

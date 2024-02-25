@@ -45,7 +45,7 @@ fun FileBrowserScreen(fileViewModel: FileViewModel = viewModel()) {
     WeScreen(
         title = "FileBrowser",
         description = "文件浏览器",
-        backgroundColor = Color.White
+        containerColor = Color.White
     ) {
         RequestStoragePermission {
             FileBrowser(fileViewModel, Environment.getExternalStorageDirectory().path)

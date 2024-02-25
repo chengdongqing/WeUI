@@ -88,7 +88,7 @@ object WeSwiperDefaults {
                 .width((count * 16).dp)
                 .height(3.dp)
                 .clip(RoundedCornerShape(2.dp))
-                .background(Color.White.copy(alpha = 0.2f))
+                .background(Color.White.copy(0.2f))
         ) {
             val offsetX by animateDpAsState(
                 targetValue = (current * 16).dp,

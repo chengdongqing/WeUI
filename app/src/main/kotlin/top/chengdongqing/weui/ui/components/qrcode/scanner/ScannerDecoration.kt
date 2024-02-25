@@ -64,7 +64,7 @@ private fun BoxScope.ScannerAnimation() {
                 Brush.linearGradient(
                     colors = listOf(
                         Color.Transparent,
-                        PrimaryColor.copy(alpha = 0.6f),
+                        PrimaryColor.copy(0.6f),
                         Color.Transparent
                     )
                 )
