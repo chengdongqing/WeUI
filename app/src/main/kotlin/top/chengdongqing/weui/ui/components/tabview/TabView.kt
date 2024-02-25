@@ -33,8 +33,11 @@ fun WeTabView(
 ) {
     Column {
         TabBar(pagerState, options)
-        HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) {
-            content(it)
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier.fillMaxSize()
+        ) { index ->
+            content(index)
         }
     }
 }

@@ -3,7 +3,6 @@ package top.chengdongqing.weui.ui.screens.basic
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -28,16 +27,12 @@ fun SwiperScreen() {
             )
         }
 
-        val pagerState = rememberPagerState {
-            banners.size
-        }
         WeSwiper(
-            pagerState,
-            count = pagerState.pageCount,
+            options = banners,
             modifier = Modifier.clip(RoundedCornerShape(6.dp))
-        ) {
+        ) { item ->
             AsyncImage(
-                model = banners[it],
+                model = item,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
