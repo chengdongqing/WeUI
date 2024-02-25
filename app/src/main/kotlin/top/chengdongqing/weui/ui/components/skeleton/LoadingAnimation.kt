@@ -7,6 +7,7 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Offset
@@ -27,7 +28,7 @@ fun Modifier.shimmerLoadingAnimation(
             val shimmerColors = ShimmerAnimationData(isLightMode = isLightMode).getColors()
 
             val transition = rememberInfiniteTransition(label = "")
-            val translateAnimation = transition.animateFloat(
+            val translateAnimation by transition.animateFloat(
                 initialValue = 0f,
                 targetValue = (durationMillis + widthOfShadowBrush).toFloat(),
                 animationSpec = infiniteRepeatable(
@@ -43,8 +44,8 @@ fun Modifier.shimmerLoadingAnimation(
             this.background(
                 brush = Brush.linearGradient(
                     colors = shimmerColors,
-                    start = Offset(x = translateAnimation.value - widthOfShadowBrush, y = 0.0f),
-                    end = Offset(x = translateAnimation.value, y = angleOfAxisY)
+                    start = Offset(x = translateAnimation - widthOfShadowBrush, y = 0.0f),
+                    end = Offset(x = translateAnimation, y = angleOfAxisY)
                 )
             )
         }
