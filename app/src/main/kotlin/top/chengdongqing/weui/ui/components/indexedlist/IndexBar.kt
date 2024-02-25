@@ -116,17 +116,17 @@ private fun IndexBarItem(
     setCurrent: (Pair<Char, Int>?) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val active = title == current?.first
+    val selected = title == current?.first
 
     Box(
         modifier = Modifier
             .size(20.dp)
-            .background(if (active) PrimaryColor else Color.Transparent, CircleShape),
+            .background(if (selected) PrimaryColor else Color.Transparent, CircleShape),
         contentAlignment = Alignment.Center
     ) {
         Text(
             text = title.toString(),
-            color = if (active) Color.White else Color.Black,
+            color = if (selected) Color.White else Color.Black,
             fontSize = 11.sp,
             modifier = Modifier
                 .pointerInteropFilter { motionEvent ->
