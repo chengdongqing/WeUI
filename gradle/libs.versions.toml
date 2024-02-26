@@ -1,10 +1,10 @@
 [versions]
-agp = "8.4.0-alpha09"
+agp = "8.4.0-alpha11"
 biometric = "1.2.0-alpha05"
 camerax = "1.3.1"
 coil-compose = "2.5.0"
 lunar = "1.6.3"
-material-icons-extended = "1.6.1"
+material-icons-extended = "1.6.2"
 org-jetbrains-kotlin-android = "1.9.22"
 ksp = "1.9.22-1.0.17"
 core-ktx = "1.12.0"
@@ -14,7 +14,7 @@ espresso-core = "3.5.1"
 lifecycle-runtime-ktx = "2.7.0"
 activity-compose = "1.8.2"
 navigation-compose = "2.7.7"
-compose-bom = "2024.02.00"
+compose-bom = "2024.02.01"
 accompanist-navigation-animation = "0.31.5-beta"
 accompanist-permissions = "0.32.0"
 pinyin = "0.4.0"
@@ -22,8 +22,6 @@ retrofit = "2.9.0"
 room = "2.6.1"
 mlkit = "17.2.0"
 zxing-core = "3.4.1"
-appcompat = "1.6.1"
-material = "1.10.0"
 
 [libraries]
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist-permissions" }
@@ -31,9 +29,9 @@ androidx-biometric = { group = "androidx.biometric", name = "biometric", version
 androidx-camera-camera2 = { group = "androidx.camera", name = "camera-camera2", version.ref = "camerax" }
 androidx-camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "camerax" }
 androidx-camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "camerax" }
-androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
-androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 lunar = { group = "cn.6tail", name = "lunar", version.ref = "lunar" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil-compose" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -59,8 +57,6 @@ material3 = { group = "androidx.compose.material3", name = "material3" }
 material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "material-icons-extended" }
 mlkit-barcode-scanning = { group = "com.google.mlkit", name = "barcode-scanning", version.ref = "mlkit" }
 zxing-core = { group = "com.google.zxing", name = "core", version.ref = "zxing-core" }
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }
@@ -68,4 +64,3 @@ org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.re
 com-google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
 [bundles]
-

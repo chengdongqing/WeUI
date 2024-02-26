@@ -46,7 +46,7 @@ fun WeNotificationBar(
     val offsetX = remember { mutableIntStateOf(0) }
 
     if (effect == NotificationBarEffect.SCROLL) {
-        ScrollEffect(content, containerWidth, scrollStep, offsetX)
+        ScrollingEffect(content, containerWidth, scrollStep, offsetX)
     }
 
     Row(
@@ -71,7 +71,7 @@ fun WeNotificationBar(
 }
 
 @Composable
-private fun ScrollEffect(
+private fun ScrollingEffect(
     content: String,
     containerWidth: Int,
     scrollStep: Int,

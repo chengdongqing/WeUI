@@ -27,6 +27,15 @@ android {
     }
 
     buildTypes {
+        /*debug {
+            isMinifyEnabled = true
+            isShrinkResources = true
+
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }*/
         release {
             isMinifyEnabled = true
             isShrinkResources = true
@@ -74,7 +83,7 @@ dependencies {
     implementation(libs.coil.compose) // 异步图片加载
     implementation(libs.androidx.room.runtime) // room运行时
     implementation(libs.androidx.room.ktx)  // room支持协程
-    ksp(libs.androidx.room.compiler) // room支持注解
+    ksp(libs.androidx.room.compiler) // room生成接口实现
     implementation(libs.androidx.biometric) // 简化生物认证
     implementation(libs.androidx.camera.camera2) // 简化相机调用
     implementation(libs.androidx.camera.lifecycle)

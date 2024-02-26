@@ -27,7 +27,7 @@ class UploadViewModel : ViewModel() {
         val ctx = context.applicationContext
         return withContext(Dispatchers.IO) {
             // 查询文件元数据
-            val metadata = async<Pair<String, String>?> {
+            val deferredMetadata = async<Pair<String, String>?> {
                 val projection = arrayOf(
                     MediaStore.Files.FileColumns.DISPLAY_NAME,
                     MediaStore.Files.FileColumns.SIZE,
@@ -45,16 +45,18 @@ class UploadViewModel : ViewModel() {
                     }
                 }
                 null
-            }.await()
+            }
             // 构建临时文件
-            val file = async {
+            val deferredFile = async {
                 ctx.contentResolver.openInputStream(uri)?.use { inputStream ->
                     val file = File(ctx.cacheDir, "uploadFile")
                     inputStream.copyTo(file.outputStream())
                     return@async file
                 }
                 null
-            }.await()
+            }
+            val metadata = deferredMetadata.await()
+            val file = deferredFile.await()
 
             if (metadata != null && file != null) {
                 val requestFile = file.asRequestBody(metadata.second.toMediaType())

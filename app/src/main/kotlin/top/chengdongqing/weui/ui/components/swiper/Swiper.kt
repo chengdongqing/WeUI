@@ -49,20 +49,7 @@ fun <T> WeSwiper(
     content: @Composable (PagerScope.(T) -> Unit)
 ) {
     if (autoplay) {
-        val coroutineScope = rememberCoroutineScope()
-        DisposableEffect(pagerState.currentPage) {
-            val timer = Timer()
-            timer.schedule(timerTask {
-                coroutineScope.launch {
-                    val targetPage = (pagerState.currentPage + 1) % options.size
-                    pagerState.animateScrollToPage(targetPage)
-                }
-            }, interval, interval)
-
-            onDispose {
-                timer.cancel()
-            }
-        }
+        AutoplayEffect(pagerState, interval)
     }
 
     Box {
@@ -76,6 +63,26 @@ fun <T> WeSwiper(
 
         if (indicator != null) {
             indicator(options.size, pagerState.currentPage)
+        }
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun AutoplayEffect(pagerState: PagerState, interval: Long) {
+    val coroutineScope = rememberCoroutineScope()
+
+    DisposableEffect(pagerState.currentPage) {
+        val timer = Timer()
+        timer.schedule(timerTask {
+            coroutineScope.launch {
+                val targetPage = (pagerState.currentPage + 1) % pagerState.pageCount
+                pagerState.animateScrollToPage(targetPage)
+            }
+        }, interval, interval)
+
+        onDispose {
+            timer.cancel()
         }
     }
 }
