@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
-import top.chengdongqing.weui.ui.theme.FontColor1
+import top.chengdongqing.weui.ui.theme.FontSecondaryColorLight
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.utils.clickableWithoutRipple
 
@@ -63,7 +63,7 @@ private fun TabBar(pagerState: PagerState, options: List<String>) {
             val selected = index == pagerState.currentPage
             Text(
                 text = item,
-                color = if (selected) PrimaryColor else FontColor1,
+                color = if (selected) PrimaryColor else FontSecondaryColorLight,
                 fontSize = 17.sp,
                 modifier = Modifier
                     .clickableWithoutRipple {

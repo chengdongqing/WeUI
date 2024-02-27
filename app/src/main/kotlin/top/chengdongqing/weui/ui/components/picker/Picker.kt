@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.ui.components.button.ButtonType
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.popup.WePopup
-import top.chengdongqing.weui.ui.theme.FontColor
+import top.chengdongqing.weui.ui.theme.FontColorLight
 import kotlin.math.roundToInt
 
 @Composable
@@ -167,7 +167,7 @@ private fun PickerColumn(
                     .height(itemHeight),
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = item, color = FontColor, fontSize = 17.sp)
+                Text(text = item, color = FontColorLight, fontSize = 17.sp)
             }
         }
     }

@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.R
 import top.chengdongqing.weui.ui.theme.BackgroundColorLight
-import top.chengdongqing.weui.ui.theme.FontColor1
+import top.chengdongqing.weui.ui.theme.FontSecondaryColorLight
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.utils.clickableWithoutRipple
 
@@ -62,7 +62,7 @@ internal fun NavigationBar(folders: MutableList<String>) {
 private fun FolderLabel(label: String, isActive: Boolean, onClick: () -> Unit) {
     Text(
         text = label,
-        color = if (isActive) PrimaryColor else FontColor1,
+        color = if (isActive) PrimaryColor else FontSecondaryColorLight,
         fontSize = 14.sp,
         modifier = Modifier
             .background(

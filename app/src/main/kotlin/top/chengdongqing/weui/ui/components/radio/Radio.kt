@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.R
 import top.chengdongqing.weui.ui.components.divider.WeDivider
-import top.chengdongqing.weui.ui.theme.FontColor
+import top.chengdongqing.weui.ui.theme.FontColorLight
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.utils.clickableWithoutRipple
 
@@ -38,7 +38,7 @@ fun WeRadio(label: String, checked: Boolean, disabled: Boolean, onClick: () -> U
             Text(
                 text = label,
                 modifier = Modifier.weight(1f),
-                color = FontColor,
+                color = FontColorLight,
                 fontSize = 17.sp
             )
             Icon(

@@ -42,8 +42,8 @@ import top.chengdongqing.weui.ui.components.toast.ToastOptions
 import top.chengdongqing.weui.ui.components.toast.rememberWeToast
 import top.chengdongqing.weui.ui.screens.system.database.address.db.Address
 import top.chengdongqing.weui.ui.screens.system.setClipboardData
-import top.chengdongqing.weui.ui.theme.FontColor1
-import top.chengdongqing.weui.ui.theme.LinkColor
+import top.chengdongqing.weui.ui.theme.FontLinkColor
+import top.chengdongqing.weui.ui.theme.FontSecondaryColorLight
 
 @Composable
 fun AddressList(
@@ -133,7 +133,7 @@ private fun AddressListItem(address: Address, onLongClick: () -> Unit, onClick: 
         Spacer(modifier = Modifier.height(6.dp))
         Text(
             text = address.addressDetail,
-            color = FontColor1,
+            color = FontSecondaryColorLight,
             fontSize = 14.sp,
             overflow = TextOverflow.Ellipsis
         )
@@ -156,9 +156,9 @@ private fun AddAddressButton(onClick: () -> Unit) {
             imageVector = Icons.Outlined.AddCircleOutline,
             contentDescription = null,
             modifier = Modifier.size(27.dp),
-            tint = LinkColor
+            tint = FontLinkColor
         )
         Spacer(modifier = Modifier.width(8.dp))
-        Text(text = "添加地址", color = LinkColor, fontSize = 17.sp)
+        Text(text = "添加地址", color = FontLinkColor, fontSize = 17.sp)
     }
 }

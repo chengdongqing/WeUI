@@ -24,8 +24,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.ui.components.divider.WeDivider
-import top.chengdongqing.weui.ui.theme.FontColor
-import top.chengdongqing.weui.ui.theme.LightColor
+import top.chengdongqing.weui.ui.theme.FontColorLight
+import top.chengdongqing.weui.ui.theme.FontLightColor
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.utils.clickableWithoutRipple
 
@@ -61,7 +61,11 @@ fun WeInput(
                     .height(56.dp),
                 readOnly = disabled,
                 singleLine = true,
-                textStyle = TextStyle(color = FontColor, fontSize = 16.sp, textAlign = textAlign),
+                textStyle = TextStyle(
+                    color = FontColorLight,
+                    fontSize = 16.sp,
+                    textAlign = textAlign
+                ),
                 keyboardOptions = keyboardOptions,
                 keyboardActions = keyboardActions,
                 visualTransformation = if (keyboardOptions.keyboardType == KeyboardType.Password)
@@ -84,7 +88,7 @@ fun WeInput(
                     if (localValue.isEmpty() && placeholder?.isNotEmpty() == true) {
                         Text(
                             text = placeholder,
-                            color = LightColor,
+                            color = FontLightColor,
                             fontSize = 16.sp
                         )
                     }

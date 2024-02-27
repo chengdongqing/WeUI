@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.ui.screens.hardware.sensor
+package top.chengdongqing.weui.utils
 
 import android.content.Context
 import android.hardware.Sensor
@@ -59,4 +59,13 @@ fun rememberSensorValues(type: Int, observing: Boolean): Array<Float>? {
     }
 
     return values
+}
+
+fun determineAccuracy(accuracy: Int): String? {
+    return when (accuracy) {
+        SensorManager.SENSOR_STATUS_ACCURACY_HIGH -> "高精度"
+        SensorManager.SENSOR_STATUS_ACCURACY_MEDIUM -> "中精度"
+        SensorManager.SENSOR_STATUS_ACCURACY_LOW -> "低精度"
+        else -> null
+    }
 }

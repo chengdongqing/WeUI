@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -30,7 +31,6 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -41,7 +41,6 @@ import top.chengdongqing.weui.ui.components.divider.WeDivider
 import top.chengdongqing.weui.ui.components.loading.LoadMoreType
 import top.chengdongqing.weui.ui.components.loading.WeLoadMore
 import top.chengdongqing.weui.ui.components.screen.WeScreen
-import top.chengdongqing.weui.ui.theme.FontColor1
 
 @SuppressLint("MissingPermission")
 @OptIn(ExperimentalPermissionsApi::class)
@@ -96,7 +95,7 @@ private fun BluetoothList(bluetoothList: List<BluetoothInfo>) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White, RoundedCornerShape(12.dp))
+                .background(MaterialTheme.colorScheme.onBackground, RoundedCornerShape(12.dp))
                 .padding(horizontal = 20.dp)
         ) {
             itemsIndexed(bluetoothList, key = { _, item -> item.address }) { index, device ->
@@ -114,7 +113,11 @@ private fun BluetoothList(bluetoothList: List<BluetoothInfo>) {
 @Composable
 private fun BluetoothListItem(bluetooth: BluetoothInfo) {
     Column(modifier = Modifier.padding(vertical = 16.dp)) {
-        Text(text = bluetooth.name, fontSize = 17.sp)
+        Text(
+            text = bluetooth.name,
+            color = MaterialTheme.colorScheme.onPrimary,
+            fontSize = 17.sp
+        )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = buildString {
@@ -123,7 +126,7 @@ private fun BluetoothListItem(bluetooth: BluetoothInfo) {
                 appendLine("蓝牙类型：${bluetooth.type}")
                 append("绑定状态：${bluetooth.bondState}")
             },
-            color = FontColor1,
+            color = MaterialTheme.colorScheme.onSecondary,
             fontSize = 10.sp,
             lineHeight = 14.sp
         )

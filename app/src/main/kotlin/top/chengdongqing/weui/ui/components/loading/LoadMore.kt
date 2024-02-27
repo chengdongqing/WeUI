@@ -17,8 +17,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.chengdongqing.weui.ui.theme.BorderColor
-import top.chengdongqing.weui.ui.theme.FontColor1
+import top.chengdongqing.weui.ui.theme.BorderColorLight
+import top.chengdongqing.weui.ui.theme.FontSecondaryColorLight
 
 enum class LoadMoreType {
     LOADING,
@@ -39,7 +39,7 @@ fun WeLoadMore(type: LoadMoreType = LoadMoreType.LOADING) {
             LoadMoreType.LOADING -> {
                 WeLoading()
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(text = "正在加载...", color = FontColor1, fontSize = 14.sp)
+                Text(text = "正在加载...", color = FontSecondaryColorLight, fontSize = 14.sp)
             }
 
             LoadMoreType.EMPTY_DATA -> {
@@ -47,11 +47,11 @@ fun WeLoadMore(type: LoadMoreType = LoadMoreType.LOADING) {
                     modifier = Modifier
                         .weight(1f)
                         .height(0.5.dp)
-                        .background(BorderColor)
+                        .background(BorderColorLight)
                 )
                 Text(
                     text = "暂无数据",
-                    color = FontColor1,
+                    color = FontSecondaryColorLight,
                     fontSize = 14.sp,
                     modifier = Modifier.padding(horizontal = 8.dp)
                 )
@@ -59,7 +59,7 @@ fun WeLoadMore(type: LoadMoreType = LoadMoreType.LOADING) {
                     modifier = Modifier
                         .weight(1f)
                         .height(0.5.dp)
-                        .background(BorderColor)
+                        .background(BorderColorLight)
                 )
             }
 
@@ -68,19 +68,19 @@ fun WeLoadMore(type: LoadMoreType = LoadMoreType.LOADING) {
                     modifier = Modifier
                         .weight(1f)
                         .height(0.5.dp)
-                        .background(BorderColor)
+                        .background(BorderColorLight)
                 )
                 Box(
                     modifier = Modifier
                         .padding(horizontal = 8.dp)
                         .size(4.dp)
-                        .background(BorderColor, CircleShape)
+                        .background(BorderColorLight, CircleShape)
                 )
                 Box(
                     modifier = Modifier
                         .weight(1f)
                         .height(0.5.dp)
-                        .background(BorderColor)
+                        .background(BorderColorLight)
                 )
             }
         }

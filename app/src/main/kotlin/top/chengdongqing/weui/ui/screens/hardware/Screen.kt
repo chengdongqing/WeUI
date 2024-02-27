@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -28,7 +29,7 @@ import top.chengdongqing.weui.ui.components.button.ButtonType
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.components.slider.WeSlider
-import top.chengdongqing.weui.ui.screens.hardware.sensor.rememberSensorValue
+import top.chengdongqing.weui.utils.rememberSensorValue
 
 @Composable
 fun ScreenScreen() {
@@ -50,7 +51,11 @@ fun ScreenScreen() {
                 }
             )
             Spacer(modifier = Modifier.height(20.dp))
-            Text(text = "光线强度：${lightBrightness} Lux（勒克斯）", fontSize = 10.sp)
+            Text(
+                text = "光线强度：${lightBrightness} Lux（勒克斯）",
+                color = MaterialTheme.colorScheme.onPrimary,
+                fontSize = 10.sp
+            )
             Spacer(modifier = Modifier.height(40.dp))
             KeepScreenOn(window)
             Spacer(modifier = Modifier.height(20.dp))

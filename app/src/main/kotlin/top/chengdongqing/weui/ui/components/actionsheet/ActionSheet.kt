@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.ui.components.divider.WeDivider
 import top.chengdongqing.weui.ui.components.popup.WePopup
-import top.chengdongqing.weui.ui.theme.FontColor1
+import top.chengdongqing.weui.ui.theme.FontSecondaryColorLight
 
 data class ActionSheetItem(
     val label: String,
@@ -66,7 +66,7 @@ fun WeActionSheet(
                 ) {
                     Text(
                         text = it,
-                        color = FontColor1,
+                        color = FontSecondaryColorLight,
                         fontSize = 12.sp
                     )
                 }
@@ -101,7 +101,7 @@ fun WeActionSheet(
                         )
                     }
                     item.description?.let {
-                        Text(text = it, color = FontColor1, fontSize = 12.sp)
+                        Text(text = it, color = FontSecondaryColorLight, fontSize = 12.sp)
                     }
                 }
             }

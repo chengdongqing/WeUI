@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.ui.components.notificationbar.NotificationBarEffect
 import top.chengdongqing.weui.ui.components.notificationbar.WeNotificationBar
 import top.chengdongqing.weui.ui.components.screen.WeScreen
-import top.chengdongqing.weui.ui.theme.FontColor1
+import top.chengdongqing.weui.ui.theme.FontSecondaryColorLight
 
 @Composable
 fun NotificationBarScreen() {
@@ -53,7 +53,7 @@ fun NotificationBarScreen() {
 
 @Composable
 private fun Title(title: String) {
-    Text(text = title, color = FontColor1, modifier = Modifier.padding(start = 20.dp))
+    Text(text = title, color = FontSecondaryColorLight, modifier = Modifier.padding(start = 20.dp))
     Spacer(modifier = Modifier.height(10.dp))
 }
 

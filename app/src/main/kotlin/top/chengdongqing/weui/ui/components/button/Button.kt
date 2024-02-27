@@ -3,6 +3,7 @@ package top.chengdongqing.weui.ui.components.button
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -16,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
@@ -24,13 +26,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.ui.components.loading.WeLoading
 import top.chengdongqing.weui.ui.theme.DangerColorLight
-import top.chengdongqing.weui.ui.theme.FontColor
+import top.chengdongqing.weui.ui.theme.FontColorDark
+import top.chengdongqing.weui.ui.theme.FontColorLight
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 
-enum class ButtonType(val bgColor: Color, val color: Color) {
-    PRIMARY(PrimaryColor, Color.White),
-    DANGER(Color(0f, 0f, 0f, 0.05f), DangerColorLight),
-    PLAIN(Color(0f, 0f, 0f, 0.05f), FontColor)
+enum class ButtonType {
+    PRIMARY,
+    DANGER,
+    PLAIN
 }
 
 enum class ButtonSize(
@@ -65,6 +68,7 @@ fun WeButton(
     loading: Boolean = false,
     onClick: (() -> Unit)? = null
 ) {
+    val colors = getColor(type)
     val localDisabled = disabled || loading
 
     Box(
@@ -81,22 +85,57 @@ fun WeButton(
                     onClick?.invoke()
                 }
             }
-            .background(if (!disabled) type.bgColor else Color(0xFFF7F7F7))
+            .background(colors.containerColor)
             .padding(size.padding)
+            .alpha(if (disabled) 0.7f else 1f)
             .then(modifier),
         contentAlignment = Alignment.Center
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             if (loading) {
-                WeLoading(color = type.color)
+                WeLoading(color = colors.contentColor)
                 Spacer(Modifier.width(8.dp))
             }
 
             Text(
                 text,
-                color = if (!disabled) type.color else Color(0f, 0f, 0f, 0.15f),
+                color = colors.contentColor,
                 fontSize = size.fontSize
             )
         }
     }
 }
+
+@Composable
+private fun getColor(type: ButtonType): ButtonColors {
+    return when (type) {
+        ButtonType.PRIMARY -> ButtonColors()
+        ButtonType.DANGER -> dangerColors
+        ButtonType.PLAIN -> plainColors
+    }
+}
+
+private data class ButtonColors(
+    val containerColor: Color = PrimaryColor,
+    val contentColor: Color = Color.White
+)
+
+private val dangerColors: ButtonColors
+    @Composable
+    get() {
+        return if (isSystemInDarkTheme()) {
+            ButtonColors(DangerColorLight, FontColorDark)
+        } else {
+            ButtonColors(Color.Black.copy(0.05f), DangerColorLight)
+        }
+    }
+
+private val plainColors: ButtonColors
+    @Composable
+    get() {
+        return if (isSystemInDarkTheme()) {
+            ButtonColors(Color.White.copy(0.1f), FontColorDark)
+        } else {
+            ButtonColors(Color.Black.copy(0.05f), FontColorLight)
+        }
+    }

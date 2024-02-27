@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -18,8 +19,8 @@ import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.pairgroup.WePairGroup
 import top.chengdongqing.weui.ui.components.pairgroup.WePairItem
 import top.chengdongqing.weui.ui.components.screen.WeScreen
-import top.chengdongqing.weui.ui.screens.hardware.sensor.rememberSensorValues
 import top.chengdongqing.weui.utils.formatFloat
+import top.chengdongqing.weui.utils.rememberSensorValues
 
 @Composable
 fun AccelerometerScreen() {
@@ -41,7 +42,11 @@ fun AccelerometerScreen() {
             Spacer(modifier = Modifier.height(40.dp))
 
             values?.let {
-                Text(text = "单位：m/s²（米/秒平方）", fontSize = 10.sp)
+                Text(
+                    text = "单位：m/s²（米/秒平方）",
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    fontSize = 10.sp
+                )
                 Spacer(modifier = Modifier.height(20.dp))
                 WePairGroup {
                     itemsIndexed(it) { index, value ->

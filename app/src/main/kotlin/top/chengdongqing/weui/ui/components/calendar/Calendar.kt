@@ -39,9 +39,9 @@ import com.nlf.calendar.Solar
 import kotlinx.coroutines.launch
 import top.chengdongqing.weui.constant.ChineseDateFormatter
 import top.chengdongqing.weui.ui.components.divider.WeDivider
-import top.chengdongqing.weui.ui.theme.FontColor
-import top.chengdongqing.weui.ui.theme.FontColor1
-import top.chengdongqing.weui.ui.theme.LightColor
+import top.chengdongqing.weui.ui.theme.FontColorLight
+import top.chengdongqing.weui.ui.theme.FontLightColor
+import top.chengdongqing.weui.ui.theme.FontSecondaryColorLight
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import java.time.LocalDate
 import java.time.YearMonth
@@ -80,14 +80,14 @@ private fun Header(currentMonth: LocalDate, setCurrentMonth: (LocalDate) -> Unit
             Icon(
                 imageVector = Icons.Outlined.KeyboardDoubleArrowLeft,
                 contentDescription = "上一年",
-                tint = LightColor
+                tint = FontLightColor
             )
         }
         IconButton(onClick = { setCurrentMonth(currentMonth.minusMonths(1)) }) {
             Icon(
                 imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowLeft,
                 contentDescription = "上个月",
-                tint = LightColor
+                tint = FontLightColor
             )
         }
         Text(
@@ -101,14 +101,14 @@ private fun Header(currentMonth: LocalDate, setCurrentMonth: (LocalDate) -> Unit
             Icon(
                 imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
                 contentDescription = "下个月",
-                tint = LightColor
+                tint = FontLightColor
             )
         }
         IconButton(onClick = { setCurrentMonth(currentMonth.plusYears(1)) }) {
             Icon(
                 imageVector = Icons.Outlined.KeyboardDoubleArrowRight,
                 contentDescription = "下一年",
-                tint = LightColor
+                tint = FontLightColor
             )
         }
     }
@@ -128,7 +128,7 @@ private fun WeekDaysBar() {
                     .padding(vertical = 20.dp),
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = it, color = FontColor1, fontSize = 14.sp)
+                Text(text = it, color = FontSecondaryColorLight, fontSize = 14.sp)
             }
         }
     }
@@ -215,7 +215,7 @@ private fun DayItem(
         // 公历日期
         Text(
             text = date.dayOfMonth.toString(),
-            color = if (isToday) PrimaryColor else FontColor,
+            color = if (isToday) PrimaryColor else FontColorLight,
             fontSize = 18.sp,
             fontWeight = if (!outInMonth) FontWeight.Bold else FontWeight.Normal
         )
@@ -228,7 +228,11 @@ private fun DayItem(
         } else {
             lunarDate.dayInChinese
         }
-        Text(text = lunarDay, color = if (isToday) PrimaryColor else LightColor, fontSize = 11.sp)
+        Text(
+            text = lunarDay,
+            color = if (isToday) PrimaryColor else FontLightColor,
+            fontSize = 11.sp
+        )
     }
 }
 

@@ -1,14 +1,21 @@
-package top.chengdongqing.weui.ui.screens.hardware.compass
+package top.chengdongqing.weui.ui.components.compass
 
+import android.content.Context
+import android.hardware.Sensor
+import android.hardware.SensorManager
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextMeasurer
@@ -17,16 +24,47 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.chengdongqing.weui.ui.theme.BorderColor
-import top.chengdongqing.weui.ui.theme.FontColor1
-import top.chengdongqing.weui.ui.theme.LightColor
+import androidx.lifecycle.viewmodel.compose.viewModel
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.utils.formatDegree
 import top.chengdongqing.weui.utils.polarToCartesian
 
 @Composable
-fun Compass(degrees: Int) {
+fun WeCompass(compassViewModel: CompassViewModel = viewModel()) {
+    val context = LocalContext.current
+    val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+    val accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) // 加速度计
+    val magnetometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) // 磁力计
+
+    LaunchedEffect(compassViewModel.observing) {
+        if (compassViewModel.observing) {
+            sensorManager.registerListener(
+                compassViewModel.eventListener,
+                accelerometerSensor,
+                SensorManager.SENSOR_DELAY_UI
+            )
+            sensorManager.registerListener(
+                compassViewModel.eventListener,
+                magnetometerSensor,
+                SensorManager.SENSOR_DELAY_UI
+            )
+        } else {
+            sensorManager.unregisterListener(compassViewModel.eventListener)
+        }
+    }
+    DisposableEffect(Unit) {
+        onDispose {
+            sensorManager.unregisterListener(compassViewModel.eventListener)
+        }
+    }
+
+    CompassSurface(compassViewModel.degrees)
+}
+
+@Composable
+private fun CompassSurface(degrees: Int) {
     val textMeasurer = rememberTextMeasurer()
+    val colors = getColors()
 
     Canvas(
         modifier = Modifier
@@ -36,17 +74,17 @@ fun Compass(degrees: Int) {
         val center = Offset(size.width / 2, size.height / 2)
         val radius = size.minDimension / 2
 
-        drawCompassFace(center, radius)
-        drawCompassScales(center, radius, degrees, textMeasurer)
+        drawCompassFace(center, radius, colors)
+        drawCompassScales(center, radius, degrees, textMeasurer, colors)
         drawNorthIndicator(radius)
-        drawCurrentDegrees(radius, degrees, textMeasurer)
+        drawCurrentDegrees(radius, degrees, textMeasurer, colors)
     }
 }
 
 // 绘制圆盘
-private fun DrawScope.drawCompassFace(center: Offset, radius: Float) {
+private fun DrawScope.drawCompassFace(center: Offset, radius: Float, colors: CompassColors) {
     drawCircle(
-        color = Color.White,
+        color = colors.containerColor,
         center = center,
         radius = radius
     )
@@ -57,13 +95,14 @@ private fun DrawScope.drawCompassScales(
     center: Offset,
     radius: Float,
     degrees: Int,
-    textMeasurer: TextMeasurer
+    textMeasurer: TextMeasurer,
+    colors: CompassColors
 ) {
     for (angle in 0 until 360 step 10) {
         val angleRadians = Math.toRadians(angle.toDouble() - degrees - 90)
-        drawScaleLine(center, radius, angle, angleRadians)
-        drawDegreeText(center, radius, angle, angleRadians, textMeasurer)
-        drawCardinalPoint(center, radius, angle, angleRadians, textMeasurer)
+        drawScaleLine(center, radius, angle, angleRadians, colors)
+        drawDegreeText(center, radius, angle, angleRadians, textMeasurer, colors)
+        drawCardinalPoint(center, radius, angle, angleRadians, textMeasurer, colors)
     }
 }
 
@@ -72,7 +111,8 @@ private fun DrawScope.drawScaleLine(
     center: Offset,
     radius: Float,
     angle: Int,
-    angleRadians: Double
+    angleRadians: Double,
+    colors: CompassColors
 ) {
     val localRadius = radius - 8.dp.toPx()
     val startRadius = if (angle % 45 == 0) {
@@ -84,7 +124,7 @@ private fun DrawScope.drawScaleLine(
     val (endX, endY) = polarToCartesian(center, localRadius, angleRadians)
 
     drawLine(
-        color = if (angle % 45 == 0) LightColor else BorderColor,
+        color = if (angle % 45 == 0) colors.scalePrimaryColor else colors.scaleSecondaryColor,
         start = Offset(startX, startY),
         end = Offset(endX, endY),
         strokeWidth = 1.dp.toPx()
@@ -97,23 +137,21 @@ private fun DrawScope.drawDegreeText(
     radius: Float,
     angle: Int,
     angleRadians: Double,
-    textMeasurer: TextMeasurer
+    textMeasurer: TextMeasurer,
+    colors: CompassColors
 ) {
     if (angle % 30 == 0) {
         val degreeText = AnnotatedString(
             angle.toString(),
-            SpanStyle(
-                fontSize = 12.sp,
-                color = if (angle % 90 == 0) FontColor1 else BorderColor
-            )
+            SpanStyle(fontSize = 12.sp)
         )
         val textRadius = radius - 8.dp.toPx() - 26.dp.toPx()
         val (degreeX, degreeY) = polarToCartesian(center, textRadius, angleRadians)
         val textLayoutResult = textMeasurer.measure(degreeText)
         drawText(
-            textMeasurer,
-            degreeText,
-            Offset(
+            textLayoutResult,
+            color = if (angle % 90 == 0) colors.scalePrimaryColor else colors.scaleSecondaryColor,
+            topLeft = Offset(
                 degreeX - textLayoutResult.size.width / 2,
                 degreeY - textLayoutResult.size.height / 2
             )
@@ -127,7 +165,8 @@ private fun DrawScope.drawCardinalPoint(
     radius: Float,
     angle: Int,
     angleRadians: Double,
-    textMeasurer: TextMeasurer
+    textMeasurer: TextMeasurer,
+    colors: CompassColors
 ) {
     if (angle % 90 == 0) {
         val cardinalPoint = getCardinalPoint(angle)
@@ -139,9 +178,9 @@ private fun DrawScope.drawCardinalPoint(
         )
         val textLayoutResult = textMeasurer.measure(text)
         drawText(
-            textMeasurer,
-            text,
-            Offset(
+            textLayoutResult,
+            color = colors.fontColor,
+            topLeft = Offset(
                 textX - textLayoutResult.size.width / 2,
                 textY - textLayoutResult.size.height / 2
             )
@@ -161,16 +200,23 @@ private fun DrawScope.drawNorthIndicator(radius: Float) {
 }
 
 // 绘制当前度数
-private fun DrawScope.drawCurrentDegrees(radius: Float, degrees: Int, textMeasurer: TextMeasurer) {
+private fun DrawScope.drawCurrentDegrees(
+    radius: Float,
+    degrees: Int,
+    textMeasurer: TextMeasurer,
+    colors: CompassColors
+) {
     val degreeText = AnnotatedString(
         formatDegree(degrees.toFloat()),
         SpanStyle(fontSize = 40.sp, fontWeight = FontWeight.Bold)
     )
-    val degreesLayoutResult = textMeasurer.measure(degreeText)
+    val textLayoutResult = textMeasurer.measure(degreeText)
     drawText(
-        textMeasurer, degreeText, Offset(
-            radius - degreesLayoutResult.size.width / 2,
-            radius - degreesLayoutResult.size.height / 2
+        textLayoutResult,
+        color = colors.fontColor,
+        topLeft = Offset(
+            radius - textLayoutResult.size.width / 2,
+            radius - textLayoutResult.size.height / 2
         )
     )
 }
@@ -184,4 +230,21 @@ private fun getCardinalPoint(angle: Int): String {
         270 -> "西"
         else -> ""
     }
+}
+
+private data class CompassColors(
+    val containerColor: Color,
+    val fontColor: Color,
+    val scalePrimaryColor: Color,
+    val scaleSecondaryColor: Color
+)
+
+@Composable
+private fun getColors(): CompassColors {
+    return CompassColors(
+        containerColor = MaterialTheme.colorScheme.onBackground,
+        fontColor = MaterialTheme.colorScheme.onPrimary,
+        scalePrimaryColor = MaterialTheme.colorScheme.onSecondary,
+        scaleSecondaryColor = MaterialTheme.colorScheme.outline
+    )
 }

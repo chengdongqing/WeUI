@@ -15,8 +15,8 @@ import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.pairgroup.WePairGroup
 import top.chengdongqing.weui.ui.components.pairgroup.WePairItem
 import top.chengdongqing.weui.ui.components.screen.WeScreen
-import top.chengdongqing.weui.ui.screens.hardware.sensor.rememberSensorValue
 import top.chengdongqing.weui.utils.formatFloat
+import top.chengdongqing.weui.utils.rememberSensorValue
 
 @Composable
 fun HygrothermographScreen() {

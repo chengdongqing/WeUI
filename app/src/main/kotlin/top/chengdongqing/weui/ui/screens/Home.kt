@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,6 +31,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,7 +43,10 @@ import top.chengdongqing.weui.data.menus
 import top.chengdongqing.weui.model.MenuGroup
 import top.chengdongqing.weui.model.MenuItem
 import top.chengdongqing.weui.ui.components.divider.WeDivider
-import top.chengdongqing.weui.ui.theme.FontColor1
+import top.chengdongqing.weui.ui.theme.FontColorDark
+import top.chengdongqing.weui.ui.theme.FontColorLight
+import top.chengdongqing.weui.ui.theme.FontSecondaryColorDark
+import top.chengdongqing.weui.ui.theme.FontSecondaryColorLight
 import top.chengdongqing.weui.utils.clickableWithoutRipple
 
 @Composable
@@ -79,12 +85,15 @@ private fun HomeHeader() {
         Image(
             painter = painterResource(id = R.drawable.ic_logo),
             contentDescription = "WeUI",
+            colorFilter = if (defaultColors.iconColor != Color.Unspecified) ColorFilter.tint(
+                defaultColors.iconColor
+            ) else null,
             modifier = Modifier.height(21.dp)
         )
         Spacer(modifier = Modifier.height(19.dp))
         Text(
             text = "WeUI 是一套同微信原生视觉体验一致的基础样式库，由微信官方设计团队为微信内网页和微信小程序量身设计，令用户的使用感知更加统一。",
-            color = FontColor1,
+            color = defaultColors.headerColor,
             fontSize = 14.sp
         )
     }
@@ -101,6 +110,9 @@ private fun HomeFooter() {
         Image(
             painter = painterResource(id = R.drawable.ic_footer_link),
             contentDescription = null,
+            colorFilter = if (defaultColors.iconColor != Color.Unspecified) ColorFilter.tint(
+                defaultColors.iconColor
+            ) else null,
             modifier = Modifier.size(84.dp, 19.dp)
         )
     }
@@ -152,12 +164,16 @@ private fun MenuGroupHeader(group: MenuGroup, expanded: Boolean, onClick: () -> 
     ) {
         Text(
             text = group.title,
-            modifier = Modifier.weight(1f),
-            fontSize = 17.sp
+            color = defaultColors.fontColor,
+            fontSize = 17.sp,
+            modifier = Modifier.weight(1f)
         )
         Image(
             painter = painterResource(id = group.iconId),
             contentDescription = null,
+            colorFilter = if (defaultColors.iconColor != Color.Unspecified) ColorFilter.tint(
+                defaultColors.iconColor
+            ) else null,
             modifier = Modifier.size(30.dp)
         )
     }
@@ -175,12 +191,36 @@ private fun MenuGroupItem(item: MenuItem, navController: NavController) {
     ) {
         Text(
             text = item.label,
-            modifier = Modifier.weight(1f),
-            fontSize = 17.sp
+            color = defaultColors.fontColor,
+            fontSize = 17.sp,
+            modifier = Modifier.weight(1f)
         )
         Icon(
             painter = painterResource(id = R.drawable.ic_arrow_right),
-            contentDescription = null
+            contentDescription = null,
+            tint = defaultColors.arrowColor
         )
     }
 }
+
+private data class HomeColors(
+    val iconColor: Color = Color.Unspecified,
+    val headerColor: Color = FontSecondaryColorLight,
+    val fontColor: Color = FontColorLight,
+    val arrowColor: Color = FontSecondaryColorLight
+)
+
+private val defaultColors: HomeColors
+    @Composable
+    get() {
+        return if (isSystemInDarkTheme()) {
+            HomeColors(
+                iconColor = FontColorDark,
+                headerColor = FontSecondaryColorDark,
+                fontColor = FontColorDark,
+                arrowColor = FontColorDark
+            )
+        } else {
+            HomeColors()
+        }
+    }

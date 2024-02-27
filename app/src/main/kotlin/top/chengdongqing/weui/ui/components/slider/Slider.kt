@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -33,8 +34,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.chengdongqing.weui.ui.theme.BorderColor
-import top.chengdongqing.weui.ui.theme.FontColor1
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 
 /**
@@ -115,7 +114,7 @@ fun WeSlider(
                 Modifier
                     .fillMaxWidth()
                     .height(2.dp)
-                    .background(BorderColor),
+                    .background(MaterialTheme.colorScheme.outline),
                 contentAlignment = Alignment.CenterStart
             ) {
                 // 高亮线段
@@ -131,7 +130,7 @@ fun WeSlider(
                 Modifier
                     .size(28.dp)
                     .offset(offsetX - 14.dp)
-                    .shadow(14.dp, CircleShape, spotColor = BorderColor)
+                    .shadow(14.dp, CircleShape, spotColor = MaterialTheme.colorScheme.outline)
                     .background(Color.White, CircleShape)
             )
         }
@@ -141,7 +140,7 @@ fun WeSlider(
             Text(
                 text = it(value),
                 modifier = Modifier.widthIn(40.dp),
-                color = FontColor1,
+                color = MaterialTheme.colorScheme.onSecondary,
                 fontSize = 14.sp,
                 textAlign = TextAlign.End
             )

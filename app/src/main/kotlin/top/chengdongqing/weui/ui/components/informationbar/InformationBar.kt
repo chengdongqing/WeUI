@@ -24,8 +24,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.chengdongqing.weui.ui.theme.FontColor1
-import top.chengdongqing.weui.ui.theme.LinkColor
+import top.chengdongqing.weui.ui.theme.FontLinkColor
+import top.chengdongqing.weui.ui.theme.FontSecondaryColorLight
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.utils.clickableWithoutRipple
 
@@ -40,17 +40,17 @@ enum class InformationBarType(
     WARN_WEAK(
         backgroundColor = Color(0x1AFA5151),
         iconColor = Color(0xFFFA5151),
-        textColor = FontColor1,
-        closeIconColor = FontColor1
+        textColor = FontSecondaryColorLight,
+        closeIconColor = FontSecondaryColorLight
     ),
     INFO(backgroundColor = Color(0f, 0f, 0f, 0.3f)),
     TIPS_STRONG(backgroundColor = Color(0xFFFA9D3B)),
     TIPS_WEAK(
         backgroundColor = Color.White,
-        iconColor = FontColor1,
-        textColor = FontColor1,
-        linkColor = LinkColor,
-        closeIconColor = FontColor1
+        iconColor = FontSecondaryColorLight,
+        textColor = FontSecondaryColorLight,
+        linkColor = FontLinkColor,
+        closeIconColor = FontSecondaryColorLight
     ),
     SUCCESS(backgroundColor = PrimaryColor)
 }

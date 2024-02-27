@@ -35,7 +35,7 @@ val menus = listOf(
         )
     ),
     MenuGroup(
-        "媒体组件", R.drawable.ic_nav_media,
+        "媒体组件", R.drawable.ic_nav_search,
         listOf(
             MenuItem("MediaPicker", "media-picker"),
             MenuItem("Camera", "camera"),

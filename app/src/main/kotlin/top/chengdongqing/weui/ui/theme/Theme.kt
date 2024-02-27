@@ -14,18 +14,22 @@ import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
     primary = PrimaryColor,
+    onPrimary = FontColorDark,
+    onSecondary = FontSecondaryColorDark,
     background = BackgroundColorDark,
     onBackground = OnBackgroundColorDark,
     error = DangerColorDark,
-    outline = BorderColor
+    outline = BorderColorDark
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = PrimaryColor,
+    onPrimary = FontColorLight,
+    onSecondary = FontSecondaryColorLight,
     background = BackgroundColorLight,
     onBackground = OnBackgroundColorLight,
     error = DangerColorLight,
-    outline = BorderColor
+    outline = BorderColorLight
 )
 
 @Composable

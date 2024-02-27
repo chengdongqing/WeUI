@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import top.chengdongqing.weui.ui.components.loading.WeLoading
-import top.chengdongqing.weui.ui.theme.FontColor1
+import top.chengdongqing.weui.ui.theme.FontSecondaryColorLight
 
 private const val threshold = 250f
 
@@ -91,7 +91,7 @@ fun WeScrollView(
         ) {
             WeLoading(isRotating = isRefreshing)
             Spacer(modifier = Modifier.width(8.dp))
-            Text(tips, color = FontColor1, fontSize = 14.sp)
+            Text(tips, color = FontSecondaryColorLight, fontSize = 14.sp)
         }
 
         val offsetDp = with(LocalDensity.current) {

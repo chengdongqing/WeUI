@@ -37,7 +37,7 @@ import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.ui.components.toast.ToastIcon
 import top.chengdongqing.weui.ui.components.toast.ToastOptions
 import top.chengdongqing.weui.ui.components.toast.rememberWeToast
-import top.chengdongqing.weui.ui.theme.FontColor1
+import top.chengdongqing.weui.ui.theme.FontSecondaryColorLight
 import top.chengdongqing.weui.utils.MediaStoreUtils
 import top.chengdongqing.weui.utils.MediaType
 import top.chengdongqing.weui.utils.SetupFullscreen
@@ -107,7 +107,7 @@ private fun BoxScope.MediaPreviewInfo(uris: List<Uri>, pagerState: PagerState) {
                     }
                 }
             },
-            colors = IconButtonDefaults.iconButtonColors(containerColor = FontColor1)
+            colors = IconButtonDefaults.iconButtonColors(containerColor = FontSecondaryColorLight)
         ) {
             Icon(
                 imageVector = Icons.Outlined.Download,

@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import top.chengdongqing.weui.ui.components.divider.WeDivider
-import top.chengdongqing.weui.ui.theme.FontColor
+import top.chengdongqing.weui.ui.theme.FontColorLight
 import kotlin.math.roundToInt
 
 @Composable
@@ -83,7 +83,7 @@ private fun ListItem(content: String) {
         Text(
             text = content,
             modifier = Modifier.weight(1f),
-            color = FontColor,
+            color = FontColorLight,
             fontSize = 14.sp,
             fontWeight = FontWeight.Bold
         )

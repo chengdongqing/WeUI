@@ -37,8 +37,8 @@ import top.chengdongqing.weui.ui.components.popup.WePopup
 import top.chengdongqing.weui.ui.components.toast.ToastIcon
 import top.chengdongqing.weui.ui.components.toast.ToastOptions
 import top.chengdongqing.weui.ui.components.toast.rememberWeToast
-import top.chengdongqing.weui.ui.theme.FontColor
-import top.chengdongqing.weui.ui.theme.FontColor1
+import top.chengdongqing.weui.ui.theme.FontColorLight
+import top.chengdongqing.weui.ui.theme.FontSecondaryColorLight
 import top.chengdongqing.weui.utils.calculateFileSize
 import top.chengdongqing.weui.utils.deleteFile
 import top.chengdongqing.weui.utils.format
@@ -122,7 +122,7 @@ internal fun FileListItem(
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = file.name,
-                color = FontColor,
+                color = FontColorLight,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 overflow = TextOverflow.Ellipsis,
@@ -140,7 +140,7 @@ internal fun FileListItem(
                             append(file.size)
                         }
                     },
-                    color = FontColor1,
+                    color = FontSecondaryColorLight,
                     fontSize = 14.sp
                 )
             }

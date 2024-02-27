@@ -40,7 +40,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import top.chengdongqing.weui.R
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.components.slider.WeSlider
-import top.chengdongqing.weui.ui.theme.LightColor
+import top.chengdongqing.weui.ui.theme.FontLightColor
 import top.chengdongqing.weui.utils.formatDuration
 import top.chengdongqing.weui.utils.rememberPlayPercent
 import top.chengdongqing.weui.utils.rememberPlayProgress
@@ -118,7 +118,7 @@ private fun PlayControl(isPlaying: Boolean, setPlaying: (Boolean) -> Unit, playe
                 contentDescription = "暂停",
                 modifier = Modifier
                     .size(44.dp),
-                tint = LightColor
+                tint = FontLightColor
             )
         } else {
             Icon(
@@ -126,7 +126,7 @@ private fun PlayControl(isPlaying: Boolean, setPlaying: (Boolean) -> Unit, playe
                 contentDescription = "播放",
                 modifier = Modifier
                     .size(66.dp),
-                tint = LightColor
+                tint = FontLightColor
             )
         }
     }

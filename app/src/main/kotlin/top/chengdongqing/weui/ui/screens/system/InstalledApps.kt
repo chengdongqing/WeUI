@@ -50,8 +50,8 @@ import top.chengdongqing.weui.ui.components.button.ButtonType
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.loading.WeLoadMore
 import top.chengdongqing.weui.ui.components.screen.WeScreen
-import top.chengdongqing.weui.ui.theme.FontColor
-import top.chengdongqing.weui.ui.theme.FontColor1
+import top.chengdongqing.weui.ui.theme.FontColorLight
+import top.chengdongqing.weui.ui.theme.FontSecondaryColorLight
 import top.chengdongqing.weui.utils.formatFileSize
 import top.chengdongqing.weui.utils.formatTime
 import java.io.File
@@ -136,7 +136,7 @@ private fun AppListItem(app: App, context: Context) {
             Text(app.name, textAlign = TextAlign.Center)
             Text(
                 "v${app.versionName}",
-                color = FontColor1,
+                color = FontSecondaryColorLight,
                 fontSize = 12.sp,
                 textAlign = TextAlign.Center
             )
@@ -147,7 +147,7 @@ private fun AppListItem(app: App, context: Context) {
                 appendLine("包名: ${app.packageName}")
                 appendLine("最后更新: ${app.lastModified}")
                 append("APK大小: ${app.apkSize}")
-            }, color = FontColor, fontSize = 14.sp)
+            }, color = FontColorLight, fontSize = 14.sp)
             Spacer(modifier = Modifier.height(10.dp))
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(10.dp),

@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import top.chengdongqing.weui.R
 import top.chengdongqing.weui.ui.components.slider.WeSlider
-import top.chengdongqing.weui.ui.theme.BorderColor
+import top.chengdongqing.weui.ui.theme.BorderColorLight
 import top.chengdongqing.weui.utils.clickableWithoutRipple
 import top.chengdongqing.weui.utils.formatDuration
 import top.chengdongqing.weui.utils.rememberPlayPercent
@@ -137,7 +137,7 @@ private fun BoxScope.ControlBar(
     Row(
         modifier = Modifier
             .align(Alignment.BottomCenter)
-            .background(BorderColor)
+            .background(BorderColorLight)
             .padding(horizontal = 12.dp, vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {

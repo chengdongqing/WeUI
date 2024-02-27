@@ -47,7 +47,7 @@ import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.components.toast.ToastIcon
 import top.chengdongqing.weui.ui.components.toast.ToastOptions
 import top.chengdongqing.weui.ui.components.toast.rememberWeToast
-import top.chengdongqing.weui.ui.theme.FontColor1
+import top.chengdongqing.weui.ui.theme.FontSecondaryColorLight
 import top.chengdongqing.weui.utils.MediaStoreUtils
 import top.chengdongqing.weui.utils.MediaType
 import top.chengdongqing.weui.utils.formatDuration
@@ -111,7 +111,7 @@ private fun RecordIcon(isRecording: Boolean) {
             imageVector = Icons.Filled.Mic,
             contentDescription = "开始录音",
             modifier = Modifier.size(50.dp),
-            tint = FontColor1
+            tint = FontSecondaryColorLight
         )
     } else {
         val transition = rememberInfiniteTransition(label = "")

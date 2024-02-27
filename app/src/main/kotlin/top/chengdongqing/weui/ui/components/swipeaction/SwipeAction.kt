@@ -37,9 +37,9 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.enum.DragAnchors
 import top.chengdongqing.weui.ui.theme.DangerColorLight
-import top.chengdongqing.weui.ui.theme.FontColor
-import top.chengdongqing.weui.ui.theme.PlainColorLight
-import top.chengdongqing.weui.ui.theme.WarningColorLight
+import top.chengdongqing.weui.ui.theme.FontColorLight
+import top.chengdongqing.weui.ui.theme.PlainColor
+import top.chengdongqing.weui.ui.theme.WarningColor
 import kotlin.math.roundToInt
 
 enum class SwipeActionStyle {
@@ -48,8 +48,8 @@ enum class SwipeActionStyle {
 }
 
 enum class SwipeActionType(val color: Color) {
-    PLAIN(PlainColorLight),
-    WARNING(WarningColorLight),
+    PLAIN(PlainColor),
+    WARNING(WarningColor),
     DANGER(DangerColorLight)
 }
 
@@ -186,7 +186,7 @@ private fun ActionItem(
                 Icon(
                     imageVector = item.icon,
                     contentDescription = item.label,
-                    tint = FontColor,
+                    tint = FontColorLight,
                     modifier = Modifier.size(20.dp)
                 )
             }

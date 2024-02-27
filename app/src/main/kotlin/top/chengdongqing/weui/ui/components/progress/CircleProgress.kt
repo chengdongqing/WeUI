@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.chengdongqing.weui.ui.theme.FontColor
+import top.chengdongqing.weui.ui.theme.FontColorLight
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.utils.formatFloat
 
@@ -64,7 +64,7 @@ fun WeCircleProgress(
         formatter?.also {
             val text = AnnotatedString(
                 it(localPercent),
-                SpanStyle(fontSize = fontSize, color = FontColor)
+                SpanStyle(fontSize = fontSize, color = FontColorLight)
             )
             val textLayoutResult = textMeasurer.measure(text)
             drawText(

@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.chengdongqing.weui.ui.theme.FontColor
+import top.chengdongqing.weui.ui.theme.FontColorLight
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.utils.formatFloat
 
@@ -64,7 +64,7 @@ fun WeDashboardProgress(
         formatter?.also {
             Text(
                 text = it(localPercent),
-                color = FontColor,
+                color = FontColorLight,
                 fontSize = fontSize
             )
         }

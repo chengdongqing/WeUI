@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.dp
-import top.chengdongqing.weui.ui.theme.BorderColor
+import top.chengdongqing.weui.ui.theme.BorderColorLight
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 
 @Composable
@@ -59,7 +59,7 @@ private fun StepItem(
         contentAlignment = if (isVertical) Alignment.TopStart else Alignment.TopCenter,
         modifier = Modifier
             .drawBehind {
-                val color = if (isActive) PrimaryColor else BorderColor
+                val color = if (isActive) PrimaryColor else BorderColorLight
                 val offset = 12.dp.toPx()
                 // 绘制小圆点
                 drawCircle(
@@ -72,7 +72,7 @@ private fun StepItem(
                 if (isVertical) {
                     if (!isLast) {
                         drawLine(
-                            color = if (isLastActive) BorderColor else color,
+                            color = if (isLastActive) BorderColorLight else color,
                             start = Offset(offset, offset * 2),
                             end = Offset(offset, size.height),
                             strokeWidth = 1.dp.toPx()
@@ -89,7 +89,7 @@ private fun StepItem(
                     }
                     if (!isLast) {
                         drawLine(
-                            color = if (isLastActive) BorderColor else color,
+                            color = if (isLastActive) BorderColorLight else color,
                             start = Offset(size.width / 2 + offset, offset),
                             end = Offset(size.width, offset),
                             strokeWidth = 1.dp.toPx()

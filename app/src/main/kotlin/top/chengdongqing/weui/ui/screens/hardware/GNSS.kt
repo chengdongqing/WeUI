@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -36,7 +37,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -112,6 +112,7 @@ private fun LocationBar(location: Location, satelliteCount: Int) {
             appendLine("坐标：$latitude, $longitude")
             appendLine("海拔：${formatDouble(location.altitude)}m, 精度：${formatFloat(location.accuracy)}m")
         },
+        color = MaterialTheme.colorScheme.onPrimary,
         fontSize = 12.sp,
         textAlign = TextAlign.Center
     )
@@ -122,17 +123,21 @@ private fun LocationBar(location: Location, satelliteCount: Int) {
 private fun SatelliteTable(groups: Map<String, List<SatelliteInfo>>) {
     LazyColumn(
         modifier = Modifier
-            .background(Color.White, RoundedCornerShape(8.dp))
+            .background(MaterialTheme.colorScheme.onBackground, RoundedCornerShape(8.dp))
             .padding(vertical = 20.dp)
     ) {
         groups.forEach { (type, list) ->
             stickyHeader(key = type) {
-                Column(modifier = Modifier.background(Color.White)) {
+                Column(modifier = Modifier.background(MaterialTheme.colorScheme.onBackground)) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Center
                     ) {
-                        Text(text = type, fontSize = 12.sp)
+                        Text(
+                            text = type,
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            fontSize = 12.sp
+                        )
                     }
                     Spacer(modifier = Modifier.height(4.dp))
                     SatelliteTableRow(
@@ -172,6 +177,7 @@ private fun SatelliteTableRow(columns: List<String>) {
         columns.forEach {
             Text(
                 text = it,
+                color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 10.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.weight(1f)

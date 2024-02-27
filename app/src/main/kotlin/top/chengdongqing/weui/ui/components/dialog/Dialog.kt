@@ -29,10 +29,10 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import top.chengdongqing.weui.ui.components.divider.WeDivider
-import top.chengdongqing.weui.ui.theme.BorderColor
-import top.chengdongqing.weui.ui.theme.FontColor
-import top.chengdongqing.weui.ui.theme.FontColor1
-import top.chengdongqing.weui.ui.theme.LinkColor
+import top.chengdongqing.weui.ui.theme.BorderColorLight
+import top.chengdongqing.weui.ui.theme.FontColorLight
+import top.chengdongqing.weui.ui.theme.FontLinkColor
+import top.chengdongqing.weui.ui.theme.FontSecondaryColorLight
 
 /**
  * 对话框
@@ -53,7 +53,7 @@ fun WeDialog(
     content: String? = null,
     okText: String = "确定",
     cancelText: String = "取消",
-    okColor: Color = LinkColor,
+    okColor: Color = FontLinkColor,
     onOk: () -> Unit,
     onCancel: (() -> Unit)? = null
 ) {
@@ -86,7 +86,7 @@ fun WeDialog(
                                 start = 24.dp,
                                 end = 24.dp
                             ),
-                        color = FontColor,
+                        color = FontColorLight,
                         fontSize = 17.sp,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center
@@ -97,7 +97,7 @@ fun WeDialog(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 24.dp),
-                            color = FontColor1,
+                            color = FontSecondaryColorLight,
                             fontSize = 17.sp,
                             textAlign = TextAlign.Center
                         )
@@ -119,7 +119,7 @@ fun WeDialog(
                             ) {
                                 Text(
                                     text = cancelText,
-                                    color = FontColor,
+                                    color = FontColorLight,
                                     fontSize = 17.sp,
                                     fontWeight = FontWeight.Bold
                                 )
@@ -127,7 +127,7 @@ fun WeDialog(
                             Box(
                                 modifier = Modifier
                                     .size(0.5.dp, 56.dp)
-                                    .background(BorderColor)
+                                    .background(BorderColorLight)
                             )
                         }
                         Box(
@@ -208,7 +208,7 @@ data class DialogOptions(
     val content: String? = null,
     val okText: String = "确定",
     val cancelText: String = "取消",
-    val okColor: Color = LinkColor,
+    val okColor: Color = FontLinkColor,
     val closeOnAction: Boolean = true,
     val onCancel: (() -> Unit)? = {},
     val onOk: (() -> Unit)? = null

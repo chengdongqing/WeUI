@@ -22,9 +22,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
-import top.chengdongqing.weui.ui.theme.BorderColor
-import top.chengdongqing.weui.ui.theme.FontColor1
-import top.chengdongqing.weui.ui.theme.LightColor
+import top.chengdongqing.weui.ui.theme.BorderColorLight
+import top.chengdongqing.weui.ui.theme.FontLightColor
+import top.chengdongqing.weui.ui.theme.FontSecondaryColorLight
 import top.chengdongqing.weui.utils.polarToCartesian
 import java.time.Instant
 import java.time.ZoneId
@@ -34,7 +34,7 @@ import kotlin.math.sin
 @Composable
 fun WeClock(
     zoneId: ZoneId = ZoneId.systemDefault(),
-    borderColor: Color = BorderColor,
+    borderColor: Color = BorderColorLight,
     scale: Float = 1f
 ) {
     val (currentTime, setCurrentTime) = remember {
@@ -89,7 +89,7 @@ private fun DrawScope.drawClockScales(radius: Float, center: Offset, textMeasure
         }
         // 绘制刻度
         drawLine(
-            color = if (i % 5 == 0) FontColor1 else LightColor,
+            color = if (i % 5 == 0) FontSecondaryColorLight else FontLightColor,
             start = Offset(
                 x = center.x + cos(Math.toRadians(angle.toDouble())).toFloat() * startRadius,
                 y = center.y + sin(Math.toRadians(angle.toDouble())).toFloat() * startRadius
@@ -111,7 +111,8 @@ private fun DrawScope.drawClockScales(radius: Float, center: Offset, textMeasure
             val textRadius = radius - 40.dp.toPx()
             val (degreeX, degreeY) = polarToCartesian(center, textRadius, angleRadians)
             drawText(
-                textMeasurer, text, Offset(
+                textLayoutResult,
+                topLeft = Offset(
                     x = degreeX - textLayoutResult.size.width / 2,
                     y = degreeY - textLayoutResult.size.height / 2
                 )

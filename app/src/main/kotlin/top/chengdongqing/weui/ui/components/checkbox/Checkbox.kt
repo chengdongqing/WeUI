@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.R
 import top.chengdongqing.weui.ui.components.divider.WeDivider
-import top.chengdongqing.weui.ui.theme.FontColor
+import top.chengdongqing.weui.ui.theme.FontColorLight
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.utils.clickableWithoutRipple
 
@@ -67,7 +67,7 @@ fun WeCheckbox(
         }
         Spacer(Modifier.width(16.dp))
         Column {
-            Text(text = label, color = FontColor, fontSize = 17.sp)
+            Text(text = label, color = FontColorLight, fontSize = 17.sp)
             WeDivider(Modifier.offset(y = 16.dp))
         }
     }

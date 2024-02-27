@@ -33,9 +33,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.chengdongqing.weui.ui.theme.FontColor1
-import top.chengdongqing.weui.ui.theme.LightColor
-import top.chengdongqing.weui.ui.theme.LinkColor
+import top.chengdongqing.weui.ui.theme.FontLightColor
+import top.chengdongqing.weui.ui.theme.FontLinkColor
+import top.chengdongqing.weui.ui.theme.FontSecondaryColorLight
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.utils.clickableWithoutRipple
 
@@ -89,7 +89,7 @@ fun WeSearchBar(value: String, onChange: (value: String) -> Unit) {
                                 modifier = Modifier
                                     .padding(start = 8.dp, end = 4.dp)
                                     .size(20.dp),
-                                tint = FontColor1
+                                tint = FontSecondaryColorLight
                             )
                             Box(
                                 modifier = Modifier.fillMaxSize(),
@@ -98,7 +98,7 @@ fun WeSearchBar(value: String, onChange: (value: String) -> Unit) {
                                 if (value.isEmpty()) {
                                     Text(
                                         text = "搜索",
-                                        color = LightColor,
+                                        color = FontLightColor,
                                         fontSize = 16.sp
                                     )
                                 }
@@ -122,16 +122,16 @@ fun WeSearchBar(value: String, onChange: (value: String) -> Unit) {
                         modifier = Modifier
                             .padding(end = 4.dp)
                             .size(20.dp),
-                        tint = FontColor1
+                        tint = FontSecondaryColorLight
                     )
-                    Text(text = "搜索", color = FontColor1, fontSize = 16.sp)
+                    Text(text = "搜索", color = FontSecondaryColorLight, fontSize = 16.sp)
                 }
             }
         }
         if (focused) {
             Text(
                 text = "取消",
-                color = LinkColor,
+                color = FontLinkColor,
                 modifier = Modifier
                     .clickableWithoutRipple {
                         focused = false

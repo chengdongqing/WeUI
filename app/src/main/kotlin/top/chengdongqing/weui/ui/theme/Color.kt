@@ -2,21 +2,25 @@ package top.chengdongqing.weui.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+// 主色
 val PrimaryColor = Color(0xff07C160)
-val BorderColor = Color(0f, 0f, 0f, 0.1f)
 
+// 元素颜色
+val BorderColorLight = Color(0f, 0f, 0f, 0.1f)
+val BorderColorDark = Color.White.copy(0.1f)
 val BackgroundColorLight = Color(0xffEDEDED)
+val BackgroundColorDark = Color(0xff111111)
 val OnBackgroundColorLight = Color.White
-val DangerColorLight = Color(0xffFA5151)
-val WarningColorLight = Color(254, 156, 1)
-val PlainColorLight = Color(199, 198, 205)
-
-val BackgroundColorDark = Color(0xff171819)
 val OnBackgroundColorDark = Color(0xff191919)
+val DangerColorLight = Color(0xffFA5151)
 val DangerColorDark = Color(0xff9A0404)
+val WarningColor = Color(254, 156, 1)
+val PlainColor = Color(199, 198, 205)
 
-
-val FontColor = Color(0f, 0f, 0f, 0.9f)
-val FontColor1 = Color(0f, 0f, 0f, 0.55f)
-val LightColor = Color(0f, 0f, 0f, 0.4f)
-val LinkColor = Color(0xFF576B95)
+// 文字颜色
+val FontColorLight = Color(0f, 0f, 0f, 0.9f)
+val FontColorDark = Color.White.copy(0.8f)
+val FontSecondaryColorLight = Color(0f, 0f, 0f, 0.55f)
+val FontSecondaryColorDark = Color.White.copy(0.5f)
+val FontLightColor = Color(0f, 0f, 0f, 0.4f)
+val FontLinkColor = Color(0xFF576B95)

@@ -17,8 +17,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.ui.components.divider.WeDivider
-import top.chengdongqing.weui.ui.theme.FontColor
-import top.chengdongqing.weui.ui.theme.LightColor
+import top.chengdongqing.weui.ui.theme.FontColorLight
+import top.chengdongqing.weui.ui.theme.FontLightColor
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 
 @Composable
@@ -59,7 +59,7 @@ fun WeTextarea(
                 },
                 modifier = Modifier.weight(1f),
                 readOnly = disabled,
-                textStyle = TextStyle(color = FontColor, fontSize = 16.sp),
+                textStyle = TextStyle(color = FontColorLight, fontSize = 16.sp),
                 minLines = 3,
                 cursorBrush = SolidColor(PrimaryColor)
             ) { innerTextField ->
@@ -69,7 +69,7 @@ fun WeTextarea(
                     if (localValue.isEmpty() && placeholder?.isNotEmpty() == true) {
                         Text(
                             text = placeholder,
-                            color = LightColor,
+                            color = FontLightColor,
                             fontSize = 16.sp
                         )
                     }
@@ -77,7 +77,7 @@ fun WeTextarea(
                     max?.let {
                         Text(
                             text = "${localValue.length}/$it",
-                            color = LightColor,
+                            color = FontLightColor,
                             fontSize = 14.sp,
                             modifier = Modifier.align(Alignment.BottomEnd)
                         )

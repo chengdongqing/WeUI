@@ -26,6 +26,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,7 +35,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -45,10 +45,6 @@ import top.chengdongqing.weui.ui.components.divider.WeDivider
 import top.chengdongqing.weui.ui.components.loading.LoadMoreType
 import top.chengdongqing.weui.ui.components.loading.WeLoadMore
 import top.chengdongqing.weui.ui.components.screen.WeScreen
-import top.chengdongqing.weui.ui.theme.BorderColor
-import top.chengdongqing.weui.ui.theme.FontColor
-import top.chengdongqing.weui.ui.theme.FontColor1
-import top.chengdongqing.weui.ui.theme.LightColor
 
 @SuppressLint("MissingPermission")
 @OptIn(ExperimentalPermissionsApi::class)
@@ -95,7 +91,7 @@ private fun WiFiList(wifiList: List<WiFiInfo>) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White, RoundedCornerShape(12.dp))
+                .background(MaterialTheme.colorScheme.onBackground, RoundedCornerShape(12.dp))
                 .padding(horizontal = 12.dp)
         ) {
             itemsIndexed(wifiList) { index, wifi ->
@@ -120,14 +116,14 @@ private fun WiFiListItem(wifi: WiFiInfo) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(text = wifi.name)
+            Text(text = wifi.name, color = MaterialTheme.colorScheme.onPrimary)
             Spacer(modifier = Modifier.width(4.dp))
             Text(
                 text = wifi.band,
-                color = FontColor1,
+                color = MaterialTheme.colorScheme.onSecondary,
                 fontSize = 10.sp,
                 modifier = Modifier
-                    .border(0.5.dp, BorderColor, RoundedCornerShape(3.dp))
+                    .border(0.5.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(3.dp))
                     .padding(horizontal = 3.dp)
             )
         }
@@ -137,13 +133,13 @@ private fun WiFiListItem(wifi: WiFiInfo) {
                     imageVector = Icons.Filled.Lock,
                     contentDescription = "加密",
                     modifier = Modifier.size(20.dp),
-                    tint = LightColor
+                    tint = MaterialTheme.colorScheme.onSecondary
                 )
             }
             Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = wifi.level,
-                color = FontColor,
+                color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 14.sp
             )
         }

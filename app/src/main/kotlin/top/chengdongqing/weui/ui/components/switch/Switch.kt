@@ -7,14 +7,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import top.chengdongqing.weui.ui.theme.BorderColor
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.utils.clickableWithoutRipple
 
@@ -45,15 +46,12 @@ fun WeSwitch(
             .clip(RoundedCornerShape(16.dp))
             .background(
                 if (checked) {
-                    if (!disabled) {
-                        PrimaryColor
-                    } else {
-                        Color(7, 193, 96, 50)
-                    }
+                    PrimaryColor
                 } else {
-                    BorderColor
+                    MaterialTheme.colorScheme.outline
                 }
             )
+            .alpha(if (disabled) 0.7f else 1f)
             .clickableWithoutRipple(!disabled) {
                 onChange?.invoke(!checked)
             }
