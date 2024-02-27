@@ -22,12 +22,12 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import top.chengdongqing.weui.ui.components.actionsheet.ActionSheetItem
-import top.chengdongqing.weui.ui.components.actionsheet.WeActionSheetOptions
+import top.chengdongqing.weui.ui.components.actionsheet.ActionSheetOptions
 import top.chengdongqing.weui.ui.components.actionsheet.rememberWeActionSheet
 import top.chengdongqing.weui.ui.components.button.ButtonType
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.screen.WeScreen
-import top.chengdongqing.weui.ui.components.toast.WeToastOptions
+import top.chengdongqing.weui.ui.components.toast.ToastOptions
 import top.chengdongqing.weui.ui.components.toast.rememberWeToast
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 
@@ -58,8 +58,8 @@ private fun RequestPay() {
     }
 
     WeButton(text = "立即支付", type = ButtonType.PLAIN) {
-        actionSheet.show(WeActionSheetOptions(options, "请选择支付方式") {
-            toast.show(WeToastOptions("点击了第${it + 1}个"))
+        actionSheet.show(ActionSheetOptions(options, "请选择支付方式") {
+            toast.show(ToastOptions("点击了第${it + 1}个"))
         })
     }
 }
@@ -88,8 +88,8 @@ private fun MakeCall() {
     }
 
     WeButton(text = "开始通话", type = ButtonType.PLAIN) {
-        actionSheet.show(WeActionSheetOptions(options) {
-            toast.show(WeToastOptions("开始${options[it].label}"))
+        actionSheet.show(ActionSheetOptions(options) {
+            toast.show(ToastOptions("开始${options[it].label}"))
         })
     }
 }
@@ -114,7 +114,7 @@ private fun ShareToTimeline() {
     }
 
     WeButton(text = "发朋友圈") {
-        actionSheet.show(WeActionSheetOptions(options) {
+        actionSheet.show(ActionSheetOptions(options) {
             when (it) {
                 0 -> {
                     if (permissionState.status.isGranted) {

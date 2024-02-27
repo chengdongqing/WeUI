@@ -45,7 +45,7 @@ import top.chengdongqing.weui.ui.components.input.WeInput
 import top.chengdongqing.weui.ui.components.pairgroup.WePairGroup
 import top.chengdongqing.weui.ui.components.pairgroup.WePairItem
 import top.chengdongqing.weui.ui.components.screen.WeScreen
-import top.chengdongqing.weui.ui.components.toast.WeToastOptions
+import top.chengdongqing.weui.ui.components.toast.ToastOptions
 import top.chengdongqing.weui.ui.components.toast.rememberWeToast
 import java.util.Date
 
@@ -92,7 +92,7 @@ private fun PhoneCall() {
         ) {
             if (callPermissionState.status.isGranted) {
                 if (number.isEmpty()) {
-                    toast.show(WeToastOptions("请输入号码"))
+                    toast.show(ToastOptions("请输入号码"))
                 } else {
                     val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:${number}"))
                     context.startActivity(intent)
@@ -108,7 +108,7 @@ private fun PhoneCall() {
             size = ButtonSize.MEDIUM
         ) {
             if (number.isEmpty()) {
-                toast.show(WeToastOptions("请输入号码"))
+                toast.show(ToastOptions("请输入号码"))
             } else {
                 val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:${number}"))
                 context.startActivity(intent)

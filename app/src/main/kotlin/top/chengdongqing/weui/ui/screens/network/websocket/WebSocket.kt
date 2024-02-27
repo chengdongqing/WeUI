@@ -24,7 +24,7 @@ import top.chengdongqing.weui.ui.components.pairgroup.WePairGroup
 import top.chengdongqing.weui.ui.components.pairgroup.WePairItem
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.components.toast.ToastIcon
-import top.chengdongqing.weui.ui.components.toast.WeToastOptions
+import top.chengdongqing.weui.ui.components.toast.ToastOptions
 import top.chengdongqing.weui.ui.components.toast.rememberWeToast
 
 @Composable
@@ -60,11 +60,11 @@ private fun UnconnectedScreen(
     ) {
         connecting = true
         socketViewModel.open("wss://echo.websocket.org", onFailure = {
-            toast.show(WeToastOptions("连接失败", ToastIcon.FAIL))
+            toast.show(ToastOptions("连接失败", ToastIcon.FAIL))
             connecting = false
             setConnectState(false)
         }) {
-            toast.show(WeToastOptions("连接成功", ToastIcon.SUCCESS))
+            toast.show(ToastOptions("连接成功", ToastIcon.SUCCESS))
             setConnectState(true)
         }
     }
@@ -88,7 +88,7 @@ private fun ConnectedScreen(
                 keyboardController?.hide()
                 text = ""
             } else {
-                toast.show(WeToastOptions("请输入内容", ToastIcon.FAIL))
+                toast.show(ToastOptions("请输入内容", ToastIcon.FAIL))
             }
         }
         Spacer(modifier = Modifier.height(20.dp))

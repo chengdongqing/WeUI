@@ -45,7 +45,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.components.toast.ToastIcon
-import top.chengdongqing.weui.ui.components.toast.WeToastOptions
+import top.chengdongqing.weui.ui.components.toast.ToastOptions
 import top.chengdongqing.weui.ui.components.toast.rememberWeToast
 import top.chengdongqing.weui.ui.theme.FontColor1
 import top.chengdongqing.weui.utils.MediaStoreUtils
@@ -168,7 +168,7 @@ private fun RecordingHandler(isRecording: Boolean, duration: MutableState<Durati
             timer.value = null
             mediaUri?.let {
                 MediaStoreUtils.finishPending(it, context)
-                toast.show(WeToastOptions("录音已保存", ToastIcon.SUCCESS))
+                toast.show(ToastOptions("录音已保存", ToastIcon.SUCCESS))
             }
         }
     }

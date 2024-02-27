@@ -43,8 +43,8 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import top.chengdongqing.weui.ui.components.toast.ToastIcon
-import top.chengdongqing.weui.ui.components.toast.WeToastOptions
-import top.chengdongqing.weui.ui.components.toast.WeToastState
+import top.chengdongqing.weui.ui.components.toast.ToastOptions
+import top.chengdongqing.weui.ui.components.toast.ToastState
 import top.chengdongqing.weui.ui.components.toast.rememberWeToast
 import top.chengdongqing.weui.utils.MediaStoreUtils
 import top.chengdongqing.weui.utils.MediaType
@@ -169,7 +169,7 @@ private fun ControlBar(
     }
 }
 
-private fun takePhoto(context: Context, imageCapture: ImageCapture, toast: WeToastState) {
+private fun takePhoto(context: Context, imageCapture: ImageCapture, toast: ToastState) {
     val contentUri = MediaStoreUtils.getContentUri(MediaType.IMAGE)
     val contentValues = MediaStoreUtils.createContentValues(
         filename = "IMG_${System.currentTimeMillis()}.jpg",
@@ -188,12 +188,12 @@ private fun takePhoto(context: Context, imageCapture: ImageCapture, toast: WeToa
         ContextCompat.getMainExecutor(context),
         object : ImageCapture.OnImageSavedCallback {
             override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                toast.show(WeToastOptions("照片已保存", ToastIcon.SUCCESS))
+                toast.show(ToastOptions("照片已保存", ToastIcon.SUCCESS))
             }
 
             override fun onError(e: ImageCaptureException) {
                 e.printStackTrace()
-                toast.show(WeToastOptions("拍照失败", ToastIcon.FAIL))
+                toast.show(ToastOptions("拍照失败", ToastIcon.FAIL))
             }
         }
     )

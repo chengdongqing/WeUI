@@ -28,7 +28,7 @@ import top.chengdongqing.weui.ui.components.input.WeInput
 import top.chengdongqing.weui.ui.components.input.WeTextarea
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.components.toast.ToastIcon
-import top.chengdongqing.weui.ui.components.toast.WeToastOptions
+import top.chengdongqing.weui.ui.components.toast.ToastOptions
 import top.chengdongqing.weui.ui.components.toast.rememberWeToast
 import top.chengdongqing.weui.ui.screens.system.database.address.db.Address
 
@@ -101,10 +101,10 @@ fun AddressFormScreen(
                 coroutineScope.launch {
                     if (id == null) {
                         addressViewModel.insert(value)
-                        toast.show(WeToastOptions("添加成功", ToastIcon.SUCCESS))
+                        toast.show(ToastOptions("添加成功", ToastIcon.SUCCESS))
                     } else {
                         addressViewModel.update(value.copy(id = id))
-                        toast.show(WeToastOptions("修改成功", ToastIcon.SUCCESS))
+                        toast.show(ToastOptions("修改成功", ToastIcon.SUCCESS))
                     }
                     delay(1000)
                     navController.popBackStack()

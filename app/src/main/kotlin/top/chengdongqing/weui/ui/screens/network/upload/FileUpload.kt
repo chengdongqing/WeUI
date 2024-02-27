@@ -29,7 +29,7 @@ import kotlinx.coroutines.launch
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.components.toast.ToastIcon
-import top.chengdongqing.weui.ui.components.toast.WeToastOptions
+import top.chengdongqing.weui.ui.components.toast.ToastOptions
 import top.chengdongqing.weui.ui.components.toast.rememberWeToast
 
 @Composable
@@ -49,8 +49,8 @@ fun FileUploadScreen(uploadViewModel: UploadViewModel = viewModel()) {
                     uploading = true
                     uploadViewModel.uploadFile(context, uri)?.let {
                         imageInfo = it
-                        toast.show(WeToastOptions("上传成功", ToastIcon.SUCCESS))
-                    } ?: toast.show(WeToastOptions("上传失败", ToastIcon.FAIL))
+                        toast.show(ToastOptions("上传成功", ToastIcon.SUCCESS))
+                    } ?: toast.show(ToastOptions("上传失败", ToastIcon.FAIL))
                     uploading = false
                 }
             }

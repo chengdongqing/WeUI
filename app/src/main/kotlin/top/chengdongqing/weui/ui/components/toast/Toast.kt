@@ -148,12 +148,12 @@ fun WeToast(
 }
 
 @Composable
-fun rememberWeToast(): WeToastState {
+fun rememberWeToast(): ToastState {
     var visible by remember {
         mutableStateOf(false)
     }
     var localOptions by remember {
-        mutableStateOf<WeToastOptions?>(null)
+        mutableStateOf<ToastOptions?>(null)
     }
 
     localOptions?.let { options ->
@@ -167,7 +167,7 @@ fun rememberWeToast(): WeToastState {
         }
     }
 
-    return WeToastState(
+    return ToastState(
         visible,
         show = {
             localOptions = it
@@ -179,13 +179,13 @@ fun rememberWeToast(): WeToastState {
     )
 }
 
-class WeToastState(
+class ToastState(
     val visible: Boolean,
-    val show: (WeToastOptions) -> Unit,
+    val show: (ToastOptions) -> Unit,
     val hide: () -> Unit
 )
 
-data class WeToastOptions(
+data class ToastOptions(
     val title: String,
     val icon: ToastIcon = ToastIcon.NONE,
     val duration: Duration = 1500.milliseconds

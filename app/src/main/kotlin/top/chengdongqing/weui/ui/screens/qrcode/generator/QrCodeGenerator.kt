@@ -19,7 +19,7 @@ import top.chengdongqing.weui.ui.components.input.WeTextarea
 import top.chengdongqing.weui.ui.components.qrcode.generator.WeQrCodeGenerator
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.components.toast.ToastIcon
-import top.chengdongqing.weui.ui.components.toast.WeToastOptions
+import top.chengdongqing.weui.ui.components.toast.ToastOptions
 import top.chengdongqing.weui.ui.components.toast.rememberWeToast
 import kotlin.math.roundToInt
 
@@ -40,7 +40,7 @@ fun QrCodeGenerateScreen() {
                 if (content.isNotEmpty()) {
                     finalContent = content
                 } else {
-                    toast.show(WeToastOptions("请输入内容", ToastIcon.FAIL))
+                    toast.show(ToastOptions("请输入内容", ToastIcon.FAIL))
                 }
             }
             Spacer(modifier = Modifier.height(60.dp))

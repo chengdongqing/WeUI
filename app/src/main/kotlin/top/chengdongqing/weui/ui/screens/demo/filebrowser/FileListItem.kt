@@ -28,14 +28,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.R
 import top.chengdongqing.weui.ui.components.actionsheet.ActionSheetItem
-import top.chengdongqing.weui.ui.components.actionsheet.WeActionSheetOptions
+import top.chengdongqing.weui.ui.components.actionsheet.ActionSheetOptions
 import top.chengdongqing.weui.ui.components.actionsheet.rememberWeActionSheet
-import top.chengdongqing.weui.ui.components.dialog.WeDialogOptions
+import top.chengdongqing.weui.ui.components.dialog.DialogOptions
 import top.chengdongqing.weui.ui.components.dialog.rememberWeDialog
 import top.chengdongqing.weui.ui.components.pairgroup.WePairItem
 import top.chengdongqing.weui.ui.components.popup.WePopup
 import top.chengdongqing.weui.ui.components.toast.ToastIcon
-import top.chengdongqing.weui.ui.components.toast.WeToastOptions
+import top.chengdongqing.weui.ui.components.toast.ToastOptions
 import top.chengdongqing.weui.ui.components.toast.rememberWeToast
 import top.chengdongqing.weui.ui.theme.FontColor
 import top.chengdongqing.weui.ui.theme.FontColor1
@@ -73,16 +73,16 @@ internal fun FileListItem(
         modifier = Modifier
             .pointerInput(Unit) {
                 detectTapGestures(onLongPress = {
-                    actionSheet.show(WeActionSheetOptions(menus) {
+                    actionSheet.show(ActionSheetOptions(menus) {
                         when (it) {
                             0 -> {
                                 setVisible(true)
                             }
 
                             1 -> {
-                                dialog.show(WeDialogOptions(title = "确定删除吗？") {
+                                dialog.show(DialogOptions(title = "确定删除吗？") {
                                     if (!deleteFile(File(file.path))) {
-                                        toast.show(WeToastOptions("删除失败", ToastIcon.FAIL))
+                                        toast.show(ToastOptions("删除失败", ToastIcon.FAIL))
                                     } else {
                                         onDeleted()
                                     }

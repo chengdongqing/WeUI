@@ -35,7 +35,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.ui.components.toast.ToastIcon
-import top.chengdongqing.weui.ui.components.toast.WeToastOptions
+import top.chengdongqing.weui.ui.components.toast.ToastOptions
 import top.chengdongqing.weui.ui.components.toast.rememberWeToast
 import top.chengdongqing.weui.ui.theme.FontColor1
 import top.chengdongqing.weui.utils.MediaStoreUtils
@@ -101,9 +101,9 @@ private fun BoxScope.MediaPreviewInfo(uris: List<Uri>, pagerState: PagerState) {
             onClick = {
                 coroutineScope.launch {
                     if (saveMediaToGallery(context, uri)) {
-                        toast.show(WeToastOptions("已保存到相册", icon = ToastIcon.SUCCESS))
+                        toast.show(ToastOptions("已保存到相册", icon = ToastIcon.SUCCESS))
                     } else {
-                        toast.show(WeToastOptions("保存到相册失败", icon = ToastIcon.FAIL))
+                        toast.show(ToastOptions("保存到相册失败", icon = ToastIcon.FAIL))
                     }
                 }
             },

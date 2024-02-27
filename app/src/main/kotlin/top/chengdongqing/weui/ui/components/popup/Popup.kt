@@ -78,13 +78,11 @@ fun WePopup(
     onClose: () -> Unit,
     content: @Composable () -> Unit
 ) {
-    var localVisible by remember {
-        mutableStateOf(false)
-    }
+    var localVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(visible) {
         if (!visible) {
-            delay(350)
+            delay(150)
         }
         localVisible = visible
     }

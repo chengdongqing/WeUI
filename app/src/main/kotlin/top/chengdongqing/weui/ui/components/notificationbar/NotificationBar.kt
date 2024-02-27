@@ -25,6 +25,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.isActive
 import top.chengdongqing.weui.ui.theme.DangerColorLight
 
 enum class NotificationBarEffect {
@@ -85,7 +86,7 @@ private fun ScrollingEffect(
     LaunchedEffect(containerWidth, contentWidth, scrollStep) {
         offsetX.intValue = containerWidth
 
-        while (contentWidth > containerWidth) {
+        while (isActive && contentWidth > containerWidth) {
             withFrameNanos {
                 if (offsetX.intValue >= -contentWidth) {
                     offsetX.intValue -= scrollStep

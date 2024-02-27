@@ -21,6 +21,7 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import top.chengdongqing.weui.ui.theme.BorderColor
 import top.chengdongqing.weui.ui.theme.FontColor1
 import top.chengdongqing.weui.ui.theme.LightColor
@@ -40,7 +41,7 @@ fun WeClock(
         mutableLongStateOf(System.currentTimeMillis())
     }
     LaunchedEffect(Unit) {
-        while (true) {
+        while (isActive) {
             delay(1000)
             setCurrentTime(System.currentTimeMillis())
         }

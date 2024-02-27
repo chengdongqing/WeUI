@@ -37,7 +37,7 @@ import top.chengdongqing.weui.ui.components.pairgroup.WePairItem
 import top.chengdongqing.weui.ui.components.picker.WeDatePicker
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.components.toast.ToastIcon
-import top.chengdongqing.weui.ui.components.toast.WeToastOptions
+import top.chengdongqing.weui.ui.components.toast.ToastOptions
 import top.chengdongqing.weui.ui.components.toast.rememberWeToast
 import java.time.LocalDate
 import java.time.ZoneId
@@ -106,9 +106,9 @@ fun AddCalendarEvent() {
                     put(CalendarContract.Events.CALENDAR_ID, 1)
                 }
                 context.contentResolver.insert(CalendarContract.Events.CONTENT_URI, values)
-                toast.show(WeToastOptions("已添加", icon = ToastIcon.SUCCESS))
+                toast.show(ToastOptions("已添加", icon = ToastIcon.SUCCESS))
             } else {
-                toast.show(WeToastOptions("请正确输入", ToastIcon.FAIL))
+                toast.show(ToastOptions("请正确输入", ToastIcon.FAIL))
             }
         } else {
             calendarPermissionState.launchPermissionRequest()

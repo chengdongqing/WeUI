@@ -133,12 +133,12 @@ fun WeActionSheet(
 }
 
 @Composable
-fun rememberWeActionSheet(): WeActionSheetState {
+fun rememberWeActionSheet(): ActionSheetState {
     var visible by remember {
         mutableStateOf(false)
     }
     var localOptions by remember {
-        mutableStateOf<WeActionSheetOptions?>(null)
+        mutableStateOf<ActionSheetOptions?>(null)
     }
 
     localOptions?.let { options ->
@@ -151,7 +151,7 @@ fun rememberWeActionSheet(): WeActionSheetState {
         )
     }
 
-    return WeActionSheetState(
+    return ActionSheetState(
         visible,
         show = {
             localOptions = it
@@ -163,13 +163,13 @@ fun rememberWeActionSheet(): WeActionSheetState {
     )
 }
 
-class WeActionSheetState(
+class ActionSheetState(
     val visible: Boolean,
-    val show: (WeActionSheetOptions) -> Unit,
+    val show: (ActionSheetOptions) -> Unit,
     val hide: () -> Unit
 )
 
-data class WeActionSheetOptions(
+data class ActionSheetOptions(
     val options: List<ActionSheetItem>,
     val title: String? = null,
     val onChange: (index: Int) -> Unit

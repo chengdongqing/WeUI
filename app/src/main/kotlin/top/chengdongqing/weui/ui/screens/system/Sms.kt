@@ -33,7 +33,7 @@ import top.chengdongqing.weui.ui.components.input.WeTextarea
 import top.chengdongqing.weui.ui.components.pairgroup.WePairGroup
 import top.chengdongqing.weui.ui.components.pairgroup.WePairItem
 import top.chengdongqing.weui.ui.components.screen.WeScreen
-import top.chengdongqing.weui.ui.components.toast.WeToastOptions
+import top.chengdongqing.weui.ui.components.toast.ToastOptions
 import top.chengdongqing.weui.ui.components.toast.rememberWeToast
 
 @Composable
@@ -70,7 +70,7 @@ private fun WriteSms() {
     WeButton(text = "发送短信", type = ButtonType.PLAIN) {
         if (smsPermissionState.status.isGranted) {
             if (number.isEmpty() || content.isEmpty()) {
-                toast.show(WeToastOptions("请正确输入"))
+                toast.show(ToastOptions("请正确输入"))
             } else {
                 val intent = Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:$number")).apply {
                     putExtra("sms_body", content)

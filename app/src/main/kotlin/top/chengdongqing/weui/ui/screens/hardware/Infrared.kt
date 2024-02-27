@@ -7,7 +7,7 @@ import androidx.compose.ui.platform.LocalContext
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.components.toast.ToastIcon
-import top.chengdongqing.weui.ui.components.toast.WeToastOptions
+import top.chengdongqing.weui.ui.components.toast.ToastOptions
 import top.chengdongqing.weui.ui.components.toast.rememberWeToast
 
 @Composable
@@ -27,9 +27,9 @@ fun InfraredScreen() {
                 val frequency = 38000
 
                 irManager.transmit(frequency, pattern)
-                toast.show(WeToastOptions("已发射", ToastIcon.SUCCESS))
+                toast.show(ToastOptions("已发射", ToastIcon.SUCCESS))
             } else {
-                toast.show(WeToastOptions("此设备不支持红外", ToastIcon.FAIL))
+                toast.show(ToastOptions("此设备不支持红外", ToastIcon.FAIL))
             }
         }
     }

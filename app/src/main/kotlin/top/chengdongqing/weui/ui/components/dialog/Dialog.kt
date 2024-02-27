@@ -152,12 +152,12 @@ fun WeDialog(
 }
 
 @Composable
-fun rememberWeDialog(): WeDialogState {
+fun rememberWeDialog(): DialogState {
     var visible by remember {
         mutableStateOf(false)
     }
     var localOptions by remember {
-        mutableStateOf<WeDialogOptions?>(null)
+        mutableStateOf<DialogOptions?>(null)
     }
 
     localOptions?.let { options ->
@@ -185,7 +185,7 @@ fun rememberWeDialog(): WeDialogState {
         )
     }
 
-    return WeDialogState(
+    return DialogState(
         visible,
         show = {
             localOptions = it
@@ -197,13 +197,13 @@ fun rememberWeDialog(): WeDialogState {
     )
 }
 
-class WeDialogState(
+class DialogState(
     val visible: Boolean,
-    val show: (WeDialogOptions) -> Unit,
+    val show: (DialogOptions) -> Unit,
     val hide: () -> Unit
 )
 
-data class WeDialogOptions(
+data class DialogOptions(
     val title: String,
     val content: String? = null,
     val okText: String = "确定",

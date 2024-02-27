@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.components.toast.ToastIcon
-import top.chengdongqing.weui.ui.components.toast.WeToastOptions
+import top.chengdongqing.weui.ui.components.toast.ToastOptions
 import top.chengdongqing.weui.ui.components.toast.rememberWeToast
 
 @Composable
@@ -50,7 +50,7 @@ fun HttpRequestScreen(viewModel: CartViewModel = viewModel()) {
                     if (res.isSuccessful && res.body() != null) {
                         content = res.body().toString()
                     } else {
-                        toast.show(WeToastOptions("请求失败", ToastIcon.FAIL))
+                        toast.show(ToastOptions("请求失败", ToastIcon.FAIL))
                     }
                 }
             }
