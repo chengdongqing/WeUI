@@ -9,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.StarOutline
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -57,7 +58,7 @@ fun SwipeActionScreen() {
                 startOptions = options.slice(0..1),
                 endOptions = options
             ) {
-                Text(text = "文字按钮（左右滑动）")
+                Text(text = "文字按钮（左右滑动）", color = MaterialTheme.colorScheme.onPrimary)
             }
             Spacer(modifier = Modifier.height(40.dp))
             WeSwipeAction(
@@ -66,7 +67,7 @@ fun SwipeActionScreen() {
                 style = SwipeActionStyle.ICON,
                 height = 70.dp
             ) {
-                Text(text = "图标按钮（左右滑动）")
+                Text(text = "图标按钮（左右滑动）", color = MaterialTheme.colorScheme.onPrimary)
             }
             Spacer(modifier = Modifier.height(40.dp))
 
@@ -91,7 +92,7 @@ fun SwipeActionScreen() {
                 endOptions = options1,
                 swipeActionState = swipeActionState
             ) {
-                Text(text = "变量控制")
+                Text(text = "变量控制", color = MaterialTheme.colorScheme.onPrimary)
             }
         }
     }

@@ -15,6 +15,7 @@ import top.chengdongqing.weui.ui.components.notificationbar.NotificationBarEffec
 import top.chengdongqing.weui.ui.components.notificationbar.WeNotificationBar
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.theme.FontSecondaryColorLight
+import top.chengdongqing.weui.ui.theme.WeUITheme
 
 @Composable
 fun NotificationBarScreen() {
@@ -60,5 +61,7 @@ private fun Title(title: String) {
 @Preview
 @Composable
 private fun PreviewNotificationBar() {
-    NotificationBarScreen()
+    WeUITheme {
+        NotificationBarScreen()
+    }
 }

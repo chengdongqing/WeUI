@@ -15,7 +15,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import top.chengdongqing.weui.ui.components.button.WeButton
@@ -28,17 +27,13 @@ import kotlin.concurrent.timerTask
 
 @Composable
 fun ProgressScreen() {
-    WeScreen(title = "Progress", description = "进度条", containerColor = Color.White) {
+    WeScreen(title = "Progress", description = "进度条") {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             WeProgress(20f, null)
             WeProgress(44.57898f)
 
-            var value by remember {
-                mutableFloatStateOf(0f)
-            }
-            var loading by remember {
-                mutableStateOf(false)
-            }
+            var value by remember { mutableFloatStateOf(0f) }
+            var loading by remember { mutableStateOf(false) }
             val coroutineScope = rememberCoroutineScope()
 
             WeProgress(value)

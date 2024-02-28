@@ -15,73 +15,58 @@ import androidx.compose.ui.unit.dp
 
 object WeSkeleton {
     @Composable
-    fun Circle(
-        isActive: Boolean = false,
-        isLightMode: Boolean = true
-    ) {
+    fun Circle(isActive: Boolean = false) {
         Box(
             modifier = Modifier
                 .size(100.dp)
                 .clip(CircleShape)
                 .background(color = Color.LightGray)
-                .shimmerLoadingAnimation(isActive, isLightMode)
+                .shimmerLoadingAnimation(isActive)
         )
     }
 
     @Composable
-    fun Square(
-        isActive: Boolean = false,
-        isLightMode: Boolean = true
-    ) {
+    fun Square(isActive: Boolean = false) {
         Box(
             modifier = Modifier
                 .size(100.dp)
                 .clip(shape = RoundedCornerShape(24.dp))
                 .background(color = Color.LightGray)
-                .shimmerLoadingAnimation(isActive, isLightMode)
+                .shimmerLoadingAnimation(isActive)
         )
     }
 
     @Composable
-    fun Rectangle(
-        isActive: Boolean = false,
-        isLightMode: Boolean = true
-    ) {
+    fun Rectangle(isActive: Boolean = false) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(200.dp)
                 .clip(shape = RoundedCornerShape(24.dp))
                 .background(color = Color.LightGray)
-                .shimmerLoadingAnimation(isActive, isLightMode)
+                .shimmerLoadingAnimation(isActive)
         )
     }
 
     @Composable
-    fun RectangleLineLong(
-        isActive: Boolean = false,
-        isLightMode: Boolean = true
-    ) {
+    fun RectangleLineLong(isActive: Boolean = false) {
         Box(
             modifier = Modifier
                 .size(width = 200.dp, height = 30.dp)
                 .clip(shape = RoundedCornerShape(8.dp))
                 .background(color = Color.LightGray)
-                .shimmerLoadingAnimation(isActive, isLightMode)
+                .shimmerLoadingAnimation(isActive)
         )
     }
 
     @Composable
-    fun RectangleLineShort(
-        isActive: Boolean = false,
-        isLightMode: Boolean = true
-    ) {
+    fun RectangleLineShort(isActive: Boolean = false) {
         Box(
             modifier = Modifier
                 .size(width = 100.dp, height = 30.dp)
                 .clip(shape = RoundedCornerShape(8.dp))
                 .background(color = Color.LightGray)
-                .shimmerLoadingAnimation(isActive, isLightMode)
+                .shimmerLoadingAnimation(isActive)
         )
     }
 }

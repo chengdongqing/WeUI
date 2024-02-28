@@ -45,7 +45,6 @@ import top.chengdongqing.weui.constant.ChineseDateWeekFormatter
 import top.chengdongqing.weui.ui.components.loading.WeLoadMore
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.screens.demo.gallery.preview.MediaPreviewActivity
-import top.chengdongqing.weui.ui.theme.FontLightColor
 import top.chengdongqing.weui.utils.clickableWithoutRipple
 import top.chengdongqing.weui.utils.formatDuration
 import java.time.format.DateTimeFormatter
@@ -76,6 +75,7 @@ fun GalleryScreen(galleryViewModel: GalleryViewModel = viewModel()) {
                     item(span = { GridItemSpan(maxLineSpan) }) {
                         Text(
                             text = title,
+                            color = MaterialTheme.colorScheme.onPrimary,
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier
@@ -118,7 +118,7 @@ private fun MediaItem(item: MediaItem, modifier: Modifier) {
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(6.dp)
-                    .background(FontLightColor, RoundedCornerShape(16.dp))
+                    .background(MaterialTheme.colorScheme.outline, RoundedCornerShape(16.dp))
                     .padding(vertical = 3.dp, horizontal = 6.dp)
             ) {
                 Text(

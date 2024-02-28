@@ -2,6 +2,7 @@ package top.chengdongqing.weui.ui.components.clock
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableLongStateOf
@@ -22,9 +23,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
-import top.chengdongqing.weui.ui.theme.BorderColorLight
-import top.chengdongqing.weui.ui.theme.FontLightColor
-import top.chengdongqing.weui.ui.theme.FontSecondaryColorLight
 import top.chengdongqing.weui.utils.polarToCartesian
 import java.time.Instant
 import java.time.ZoneId
@@ -34,12 +32,10 @@ import kotlin.math.sin
 @Composable
 fun WeClock(
     zoneId: ZoneId = ZoneId.systemDefault(),
-    borderColor: Color = BorderColorLight,
+    borderColor: Color = MaterialTheme.colorScheme.outline,
     scale: Float = 1f
 ) {
-    val (currentTime, setCurrentTime) = remember {
-        mutableLongStateOf(System.currentTimeMillis())
-    }
+    val (currentTime, setCurrentTime) = remember { mutableLongStateOf(System.currentTimeMillis()) }
     LaunchedEffect(Unit) {
         while (isActive) {
             delay(1000)
@@ -48,6 +44,8 @@ fun WeClock(
     }
 
     val textMeasurer = rememberTextMeasurer()
+    val colors = getColors()
+
     Canvas(
         modifier = Modifier
             .size(300.dp)
@@ -57,17 +55,17 @@ fun WeClock(
         val radius = canvasSize / 2
         val center = Offset(x = radius, y = radius)
 
-        drawClockFace(radius, borderColor)
-        drawClockScales(radius, center, textMeasurer)
-        drawClockIndicators(radius, center, currentTime, zoneId)
-        drawIndicatorsLock()
+        drawClockFace(radius, borderColor, colors)
+        drawClockScales(radius, center, textMeasurer, colors)
+        drawClockIndicators(radius, center, currentTime, zoneId, colors)
+        drawIndicatorsLock(colors)
     }
 }
 
 // 绘制圆盘和边框
-private fun DrawScope.drawClockFace(radius: Float, borderColor: Color) {
+private fun DrawScope.drawClockFace(radius: Float, borderColor: Color, colors: ClockColors) {
     // 绘制圆盘
-    drawCircle(Color.White)
+    drawCircle(colors.containerColor)
     // 绘制边框
     val borderWidth = 6.dp.toPx()
     drawCircle(
@@ -78,7 +76,12 @@ private fun DrawScope.drawClockFace(radius: Float, borderColor: Color) {
 }
 
 // 绘制刻度和数字
-private fun DrawScope.drawClockScales(radius: Float, center: Offset, textMeasurer: TextMeasurer) {
+private fun DrawScope.drawClockScales(
+    radius: Float,
+    center: Offset,
+    textMeasurer: TextMeasurer,
+    colors: ClockColors
+) {
     val localRadius = radius - 10.dp.toPx()
     for (i in 0 until 60) {
         val angle = (i * 6).toFloat()
@@ -89,7 +92,7 @@ private fun DrawScope.drawClockScales(radius: Float, center: Offset, textMeasure
         }
         // 绘制刻度
         drawLine(
-            color = if (i % 5 == 0) FontSecondaryColorLight else FontLightColor,
+            color = if (i % 5 == 0) colors.scalePrimaryColor else colors.scaleSecondaryColor,
             start = Offset(
                 x = center.x + cos(Math.toRadians(angle.toDouble())).toFloat() * startRadius,
                 y = center.y + sin(Math.toRadians(angle.toDouble())).toFloat() * startRadius
@@ -112,6 +115,7 @@ private fun DrawScope.drawClockScales(radius: Float, center: Offset, textMeasure
             val (degreeX, degreeY) = polarToCartesian(center, textRadius, angleRadians)
             drawText(
                 textLayoutResult,
+                color = colors.fontColor,
                 topLeft = Offset(
                     x = degreeX - textLayoutResult.size.width / 2,
                     y = degreeY - textLayoutResult.size.height / 2
@@ -126,7 +130,8 @@ private fun DrawScope.drawClockIndicators(
     radius: Float,
     center: Offset,
     currentTime: Long,
-    zoneId: ZoneId
+    zoneId: ZoneId,
+    colors: ClockColors
 ) {
     val time = Instant.ofEpochMilli(currentTime).atZone(zoneId).toLocalTime()
     val hours = time.hour % 12
@@ -139,7 +144,7 @@ private fun DrawScope.drawClockIndicators(
 
     // 绘制时针
     drawLine(
-        color = Color.Black,
+        color = colors.fontColor,
         start = center,
         end = Offset(
             x = center.x + cos(Math.toRadians(hourAngle.toDouble())).toFloat() * radius / 2,
@@ -150,11 +155,11 @@ private fun DrawScope.drawClockIndicators(
     )
     // 绘制分针
     drawLine(
-        color = Color.Black,
+        color = colors.fontColor,
         start = center,
         end = Offset(
-            x = center.x + cos(Math.toRadians(minuteAngle.toDouble())).toFloat() * radius / 1.5f,
-            y = center.y + sin(Math.toRadians(minuteAngle.toDouble())).toFloat() * radius / 1.5f
+            x = center.x + cos(Math.toRadians(minuteAngle.toDouble())).toFloat() * radius / 1.6f,
+            y = center.y + sin(Math.toRadians(minuteAngle.toDouble())).toFloat() * radius / 1.6f
         ),
         strokeWidth = 6f,
         cap = StrokeCap.Round
@@ -172,7 +177,24 @@ private fun DrawScope.drawClockIndicators(
 }
 
 // 绘制指针锁
-private fun DrawScope.drawIndicatorsLock() {
-    drawCircle(Color.Black, 5.dp.toPx())
-    drawCircle(Color.White, 3.dp.toPx())
+private fun DrawScope.drawIndicatorsLock(colors: ClockColors) {
+    drawCircle(colors.fontColor, 5.dp.toPx())
+    drawCircle(colors.containerColor, 3.dp.toPx())
+}
+
+private class ClockColors(
+    val containerColor: Color,
+    val fontColor: Color,
+    val scalePrimaryColor: Color,
+    val scaleSecondaryColor: Color
+)
+
+@Composable
+private fun getColors(): ClockColors {
+    return ClockColors(
+        containerColor = MaterialTheme.colorScheme.onBackground,
+        fontColor = MaterialTheme.colorScheme.onPrimary,
+        scalePrimaryColor = MaterialTheme.colorScheme.onSecondary,
+        scaleSecondaryColor = MaterialTheme.colorScheme.outline
+    )
 }

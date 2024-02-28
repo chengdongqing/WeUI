@@ -7,6 +7,7 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -35,7 +37,6 @@ import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.ui.components.button.ButtonType
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.popup.WePopup
-import top.chengdongqing.weui.ui.theme.FontColorLight
 import kotlin.math.roundToInt
 
 @Composable
@@ -59,12 +60,14 @@ fun WePicker(
         onClose = onCancel
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            val indicatorColor = if (isSystemInDarkTheme()) Color(0xff202020) else Color(0xFFF7F7F7)
+
             Box(modifier = Modifier
                 .height(280.dp)
                 .drawBehind {
                     // 指示栏
                     drawRoundRect(
-                        Color(0xFFF7F7F7),
+                        color = indicatorColor,
                         topLeft = Offset(0f, size.height / 2 - 56.dp.toPx() / 2),
                         size = Size(size.width, 56.dp.toPx()),
                         cornerRadius = CornerRadius(6.dp.toPx())
@@ -85,35 +88,7 @@ fun WePicker(
                     }
                 }
                 // 遮罩
-                Column {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f)
-                            .background(
-                                Brush.verticalGradient(
-                                    colors = listOf(
-                                        Color(255, 255, 255, (255 * 0.95).roundToInt()),
-                                        Color(255, 255, 255, (255 * 0.6).roundToInt())
-                                    )
-                                )
-                            )
-                    )
-                    Box(modifier = Modifier.height(56.dp))
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f)
-                            .background(
-                                Brush.verticalGradient(
-                                    colors = listOf(
-                                        Color(255, 255, 255, (255 * 0.6).roundToInt()),
-                                        Color(255, 255, 255, (255 * 0.95).roundToInt())
-                                    )
-                                )
-                            )
-                    )
-                }
+                PickerMask()
             }
             Spacer(modifier = Modifier.height(56.dp))
             Row {
@@ -167,8 +142,55 @@ private fun PickerColumn(
                     .height(itemHeight),
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = item, color = FontColorLight, fontSize = 17.sp)
+                Text(text = item, color = MaterialTheme.colorScheme.onPrimary, fontSize = 17.sp)
             }
         }
+    }
+}
+
+@Composable
+private fun PickerMask() {
+    Column {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+                .background(
+                    Brush.verticalGradient(
+                        colors = if (isSystemInDarkTheme()) {
+                            listOf(
+                                Color(25, 25, 25, (25 * 0.95).roundToInt()),
+                                Color(25, 25, 25, (25 * 0.6).roundToInt())
+                            )
+                        } else {
+                            listOf(
+                                Color(255, 255, 255, (255 * 0.95).roundToInt()),
+                                Color(255, 255, 255, (255 * 0.6).roundToInt())
+                            )
+                        }
+                    )
+                )
+        )
+        Box(modifier = Modifier.height(56.dp))
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+                .background(
+                    Brush.verticalGradient(
+                        colors = if (isSystemInDarkTheme()) {
+                            listOf(
+                                Color(25, 25, 25, (25 * 0.6).roundToInt()),
+                                Color(25, 25, 25, (25 * 0.95).roundToInt())
+                            )
+                        } else {
+                            listOf(
+                                Color(255, 255, 255, (255 * 0.6).roundToInt()),
+                                Color(255, 255, 255, (255 * 0.95).roundToInt())
+                            )
+                        }
+                    )
+                )
+        )
     }
 }

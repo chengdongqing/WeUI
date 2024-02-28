@@ -3,13 +3,12 @@ package top.chengdongqing.weui.ui.components.calendar
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -20,6 +19,7 @@ import androidx.compose.material.icons.outlined.KeyboardDoubleArrowLeft
 import androidx.compose.material.icons.outlined.KeyboardDoubleArrowRight
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -39,9 +39,6 @@ import com.nlf.calendar.Solar
 import kotlinx.coroutines.launch
 import top.chengdongqing.weui.constant.ChineseDateFormatter
 import top.chengdongqing.weui.ui.components.divider.WeDivider
-import top.chengdongqing.weui.ui.theme.FontColorLight
-import top.chengdongqing.weui.ui.theme.FontLightColor
-import top.chengdongqing.weui.ui.theme.FontSecondaryColorLight
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import java.time.LocalDate
 import java.time.YearMonth
@@ -80,18 +77,19 @@ private fun Header(currentMonth: LocalDate, setCurrentMonth: (LocalDate) -> Unit
             Icon(
                 imageVector = Icons.Outlined.KeyboardDoubleArrowLeft,
                 contentDescription = "上一年",
-                tint = FontLightColor
+                tint = MaterialTheme.colorScheme.onSecondary
             )
         }
         IconButton(onClick = { setCurrentMonth(currentMonth.minusMonths(1)) }) {
             Icon(
                 imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowLeft,
                 contentDescription = "上个月",
-                tint = FontLightColor
+                tint = MaterialTheme.colorScheme.onSecondary
             )
         }
         Text(
             text = currentMonth.format(formatter),
+            color = MaterialTheme.colorScheme.onPrimary,
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.weight(1f),
@@ -101,14 +99,14 @@ private fun Header(currentMonth: LocalDate, setCurrentMonth: (LocalDate) -> Unit
             Icon(
                 imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
                 contentDescription = "下个月",
-                tint = FontLightColor
+                tint = MaterialTheme.colorScheme.onSecondary
             )
         }
         IconButton(onClick = { setCurrentMonth(currentMonth.plusYears(1)) }) {
             Icon(
                 imageVector = Icons.Outlined.KeyboardDoubleArrowRight,
                 contentDescription = "下一年",
-                tint = FontLightColor
+                tint = MaterialTheme.colorScheme.onSecondary
             )
         }
     }
@@ -128,13 +126,17 @@ private fun WeekDaysBar() {
                     .padding(vertical = 20.dp),
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = it, color = FontSecondaryColorLight, fontSize = 14.sp)
+                Text(
+                    text = it,
+                    color = MaterialTheme.colorScheme.onSecondary,
+                    fontSize = 14.sp
+                )
             }
         }
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalLayoutApi::class)
 @Composable
 private fun DaysGrid(pagerState: PagerState) {
     HorizontalPager(state = pagerState) { page ->
@@ -156,14 +158,16 @@ private fun DaysGrid(pagerState: PagerState) {
                 fontFamily = FontFamily.Cursive
             )
             // 日期网格
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(7),
-                contentPadding = PaddingValues(vertical = 10.dp)
+            FlowRow(
+                maxItemsInEachRow = 7,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 10.dp)
             ) {
-                items(7 * 6) { index ->
+                repeat(7 * 6) { index ->
                     Box(
                         modifier = Modifier
-                            .fillMaxWidth()
+                            .weight(1f)
                             .aspectRatio(1f),
                         contentAlignment = Alignment.Center
                     ) {
@@ -215,7 +219,7 @@ private fun DayItem(
         // 公历日期
         Text(
             text = date.dayOfMonth.toString(),
-            color = if (isToday) PrimaryColor else FontColorLight,
+            color = if (isToday) PrimaryColor else MaterialTheme.colorScheme.onPrimary,
             fontSize = 18.sp,
             fontWeight = if (!outInMonth) FontWeight.Bold else FontWeight.Normal
         )
@@ -230,7 +234,7 @@ private fun DayItem(
         }
         Text(
             text = lunarDay,
-            color = if (isToday) PrimaryColor else FontLightColor,
+            color = if (isToday) PrimaryColor else MaterialTheme.colorScheme.onSecondary,
             fontSize = 11.sp
         )
     }

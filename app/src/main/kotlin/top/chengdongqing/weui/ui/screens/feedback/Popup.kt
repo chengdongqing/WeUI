@@ -3,6 +3,7 @@ package top.chengdongqing.weui.ui.screens.feedback
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,7 +27,7 @@ fun PopupScreen() {
         WePopup(visible, swipeable = swipeable, onClose = {
             visible = false
         }, title = "标题") {
-            Text(text = "内容")
+            Text(text = "内容", color = MaterialTheme.colorScheme.onPrimary)
             Spacer(modifier = Modifier.height(200.dp))
         }
         Column(horizontalAlignment = Alignment.CenterHorizontally) {

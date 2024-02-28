@@ -7,12 +7,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.ui.components.button.ButtonType
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.calendar.WeCalendar
 import top.chengdongqing.weui.ui.components.calendar.rememberCalendarState
 import top.chengdongqing.weui.ui.components.screen.WeScreen
+import top.chengdongqing.weui.ui.theme.WeUITheme
 
 @Composable
 fun CalendarScreen() {
@@ -26,5 +28,13 @@ fun CalendarScreen() {
                 calendarState.toToday()
             }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewCalendar() {
+    WeUITheme {
+        CalendarScreen()
     }
 }

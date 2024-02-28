@@ -24,6 +24,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -47,7 +48,6 @@ import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.components.toast.ToastIcon
 import top.chengdongqing.weui.ui.components.toast.ToastOptions
 import top.chengdongqing.weui.ui.components.toast.rememberWeToast
-import top.chengdongqing.weui.ui.theme.FontSecondaryColorLight
 import top.chengdongqing.weui.utils.MediaStoreUtils
 import top.chengdongqing.weui.utils.MediaType
 import top.chengdongqing.weui.utils.formatDuration
@@ -76,6 +76,7 @@ fun AudioRecorderScreen() {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
                 text = formatDuration(duration.value, true),
+                color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -87,7 +88,7 @@ fun AudioRecorderScreen() {
                 Box(
                     modifier = Modifier
                         .clip(CircleShape)
-                        .background(Color.White)
+                        .background(MaterialTheme.colorScheme.onBackground)
                         .clickable {
                             if (permissionState.allPermissionsGranted) {
                                 isRecording = !isRecording
@@ -111,7 +112,7 @@ private fun RecordIcon(isRecording: Boolean) {
             imageVector = Icons.Filled.Mic,
             contentDescription = "开始录音",
             modifier = Modifier.size(50.dp),
-            tint = FontSecondaryColorLight
+            tint = MaterialTheme.colorScheme.onSecondary
         )
     } else {
         val transition = rememberInfiniteTransition(label = "")

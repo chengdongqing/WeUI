@@ -1,23 +1,25 @@
 package top.chengdongqing.weui.ui.components.qrcode.generator
 
 import android.graphics.Bitmap
-import android.graphics.Color
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.produceState
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.toArgb
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.qrcode.QRCodeWriter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import android.graphics.Color as AndroidColor
 
 @Composable
-fun WeQrCodeGenerator(content: String, size: Int, color: Int = Color.BLACK) {
+fun WeQrCodeGenerator(content: String, size: Int, color: Color = Color.Black) {
     val bitmap = produceState<ImageBitmap?>(initialValue = null, key1 = content, key2 = size) {
         value = withContext(Dispatchers.IO) {
-            generateQrCode(content, size, color).asImageBitmap()
+            generateQrCode(content, size, color.toArgb()).asImageBitmap()
         }
     }
 
@@ -33,7 +35,7 @@ private fun generateQrCode(content: String, size: Int, color: Int): Bitmap {
         if (bitMatrix.get(pos % size, pos / size)) {
             color
         } else {
-            Color.TRANSPARENT
+            AndroidColor.TRANSPARENT
         }
     }
     return Bitmap.createBitmap(pixels, size, size, Bitmap.Config.ARGB_8888)

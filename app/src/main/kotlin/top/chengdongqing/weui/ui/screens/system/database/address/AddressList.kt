@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AddCircleOutline
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -43,7 +44,6 @@ import top.chengdongqing.weui.ui.components.toast.rememberWeToast
 import top.chengdongqing.weui.ui.screens.system.database.address.db.Address
 import top.chengdongqing.weui.ui.screens.system.setClipboardData
 import top.chengdongqing.weui.ui.theme.FontLinkColor
-import top.chengdongqing.weui.ui.theme.FontSecondaryColorLight
 
 @Composable
 fun AddressList(
@@ -129,11 +129,15 @@ private fun AddressListItem(address: Address, onLongClick: () -> Unit, onClick: 
             )
             .padding(vertical = 14.dp, horizontal = 26.dp)
     ) {
-        Text(text = "${address.name}  ${address.phone}", fontSize = 17.sp)
+        Text(
+            text = "${address.name}  ${address.phone}",
+            color = MaterialTheme.colorScheme.onPrimary,
+            fontSize = 17.sp
+        )
         Spacer(modifier = Modifier.height(6.dp))
         Text(
             text = address.addressDetail,
-            color = FontSecondaryColorLight,
+            color = MaterialTheme.colorScheme.onSecondary,
             fontSize = 14.sp,
             overflow = TextOverflow.Ellipsis
         )

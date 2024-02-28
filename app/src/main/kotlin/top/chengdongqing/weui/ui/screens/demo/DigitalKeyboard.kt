@@ -19,6 +19,7 @@ import top.chengdongqing.weui.ui.components.digitalkeyboard.WeDigitalKeyboard
 import top.chengdongqing.weui.ui.components.input.WeInput
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.theme.DangerColorLight
+import top.chengdongqing.weui.ui.theme.WeUITheme
 import top.chengdongqing.weui.utils.clickableWithoutRipple
 
 @Composable
@@ -82,5 +83,7 @@ fun DigitalKeyboardScreen() {
 @Preview
 @Composable
 private fun PreviewDigitalKeyboard() {
-    DigitalKeyboardScreen()
+    WeUITheme {
+        DigitalKeyboardScreen()
+    }
 }

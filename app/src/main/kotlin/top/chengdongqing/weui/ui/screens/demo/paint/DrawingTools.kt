@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -43,12 +42,11 @@ internal fun DrawingTools(
     color: Color,
     onColorChange: (Color) -> Unit,
     onWidthChange: (Float) -> Unit,
-    onRollback: () -> Unit,
+    onBack: () -> Unit,
     onClear: () -> Unit
 ) {
     Column(
         modifier = Modifier
-            .offset(y = (-40).dp)
             .zIndex(1f)
             .padding(12.dp)
     ) {
@@ -58,8 +56,8 @@ internal fun DrawingTools(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            PaintBrushes(color, onWidthChange)
-            MoreTools(onRollback, onClear)
+            MoreBrushes(color, onWidthChange)
+            MoreTools(onBack, onClear)
         }
     }
 }
@@ -122,19 +120,19 @@ private fun MoreTools(onRollback: () -> Unit, onClear: () -> Unit) {
 }
 
 @Composable
-private fun PaintBrushes(color: Color, onChange: (Float) -> Unit) {
+private fun MoreBrushes(color: Color, onChange: (Float) -> Unit) {
     var visible by remember { mutableStateOf(false) }
     val strokes = remember { (1..50 step 5).toList() }
 
     Column {
         FloatingActionButton(
             onClick = { visible = !visible },
-            modifier = Modifier.padding(vertical = 8.dp)
+            modifier = Modifier.padding(vertical = 8.dp),
+            contentColor = color
         ) {
             Icon(
                 imageVector = Icons.Default.Brush,
                 contentDescription = "切换画笔",
-                tint = color
             )
         }
         AnimatedVisibility(visible) {

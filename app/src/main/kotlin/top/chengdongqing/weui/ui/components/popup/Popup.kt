@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -33,7 +34,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
@@ -42,7 +42,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import kotlinx.coroutines.delay
-import top.chengdongqing.weui.ui.theme.BackgroundColorLight
 import top.chengdongqing.weui.utils.clickableWithoutRipple
 
 /**
@@ -126,7 +125,7 @@ fun WePopup(
                             )
                             .fillMaxWidth()
                             .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
-                            .background(Color.White)
+                            .background(MaterialTheme.colorScheme.onBackground)
                             .clickableWithoutRipple { }
                             .padding(padding)
                             .onSizeChanged {
@@ -161,7 +160,7 @@ fun WePopup(
                                         modifier = Modifier
                                             .size(40.dp, 4.dp)
                                             .background(
-                                                BackgroundColorLight,
+                                                MaterialTheme.colorScheme.outline,
                                                 RoundedCornerShape(2.dp)
                                             )
                                     )
@@ -177,6 +176,7 @@ fun WePopup(
                                 ) {
                                     Text(
                                         text = it,
+                                        color = MaterialTheme.colorScheme.onPrimary,
                                         fontSize = 17.sp,
                                         fontWeight = FontWeight.Bold
                                     )

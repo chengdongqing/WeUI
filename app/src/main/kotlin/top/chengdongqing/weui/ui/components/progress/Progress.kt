@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -17,8 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.chengdongqing.weui.ui.theme.BackgroundColorLight
-import top.chengdongqing.weui.ui.theme.FontSecondaryColorLight
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.utils.formatFloat
 
@@ -39,7 +38,7 @@ fun WeProgress(
             modifier = Modifier
                 .weight(1f)
                 .height(3.dp)
-                .background(BackgroundColorLight)
+                .background(MaterialTheme.colorScheme.outline)
         ) {
             Box(
                 modifier = Modifier
@@ -58,7 +57,7 @@ fun WeProgress(
             Text(
                 text = it(localPercent),
                 modifier = Modifier.widthIn(40.dp),
-                color = FontSecondaryColorLight,
+                color = MaterialTheme.colorScheme.onSecondary,
                 fontSize = 14.sp,
                 textAlign = TextAlign.End
             )

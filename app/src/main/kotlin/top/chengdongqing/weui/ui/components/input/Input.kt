@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,8 +25,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.ui.components.divider.WeDivider
-import top.chengdongqing.weui.ui.theme.FontColorLight
-import top.chengdongqing.weui.ui.theme.FontLightColor
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.utils.clickableWithoutRipple
 
@@ -48,7 +47,12 @@ fun WeInput(
     Column {
         Row(modifier = modifier.height(56.dp), verticalAlignment = Alignment.CenterVertically) {
             if (label?.isNotEmpty() == true) {
-                Text(text = label, fontSize = 16.sp, modifier = Modifier.width(labelWidth))
+                Text(
+                    text = label,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    fontSize = 16.sp,
+                    modifier = Modifier.width(labelWidth)
+                )
                 Spacer(modifier = Modifier.width(16.dp))
             }
             BasicTextField(
@@ -62,7 +66,7 @@ fun WeInput(
                 readOnly = disabled,
                 singleLine = true,
                 textStyle = TextStyle(
-                    color = FontColorLight,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     fontSize = 16.sp,
                     textAlign = textAlign
                 ),
@@ -88,7 +92,7 @@ fun WeInput(
                     if (localValue.isEmpty() && placeholder?.isNotEmpty() == true) {
                         Text(
                             text = placeholder,
-                            color = FontLightColor,
+                            color = MaterialTheme.colorScheme.onSecondary,
                             fontSize = 16.sp
                         )
                     }

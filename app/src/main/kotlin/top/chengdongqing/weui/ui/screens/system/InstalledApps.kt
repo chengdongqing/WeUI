@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -50,8 +51,6 @@ import top.chengdongqing.weui.ui.components.button.ButtonType
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.loading.WeLoadMore
 import top.chengdongqing.weui.ui.components.screen.WeScreen
-import top.chengdongqing.weui.ui.theme.FontColorLight
-import top.chengdongqing.weui.ui.theme.FontSecondaryColorLight
 import top.chengdongqing.weui.utils.formatFileSize
 import top.chengdongqing.weui.utils.formatTime
 import java.io.File
@@ -72,7 +71,7 @@ fun InstalledAppsScreen() {
                 Spacer(modifier = Modifier.height(20.dp))
             }
             items(apps) { app ->
-                AppListItem(app, context)
+                AppItem(app, context)
             }
         }
     }
@@ -113,7 +112,7 @@ private fun ActionBar(context: Context) {
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun AppListItem(app: App, context: Context) {
+private fun AppItem(app: App, context: Context) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Column(
             modifier = Modifier.weight(1f),
@@ -133,21 +132,29 @@ private fun AppListItem(app: App, context: Context) {
                     )
                 }
             }
-            Text(app.name, textAlign = TextAlign.Center)
+            Text(
+                app.name,
+                color = MaterialTheme.colorScheme.onPrimary,
+                textAlign = TextAlign.Center
+            )
             Text(
                 "v${app.versionName}",
-                color = FontSecondaryColorLight,
+                color = MaterialTheme.colorScheme.onSecondary,
                 fontSize = 12.sp,
                 textAlign = TextAlign.Center
             )
         }
         Spacer(modifier = Modifier.width(20.dp))
         Column(modifier = Modifier.weight(2f)) {
-            Text(buildString {
-                appendLine("包名: ${app.packageName}")
-                appendLine("最后更新: ${app.lastModified}")
-                append("APK大小: ${app.apkSize}")
-            }, color = FontColorLight, fontSize = 14.sp)
+            Text(
+                buildString {
+                    appendLine("包名: ${app.packageName}")
+                    appendLine("最后更新: ${app.lastModified}")
+                    append("APK大小: ${app.apkSize}")
+                },
+                color = MaterialTheme.colorScheme.onPrimary,
+                fontSize = 14.sp
+            )
             Spacer(modifier = Modifier.height(10.dp))
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(10.dp),

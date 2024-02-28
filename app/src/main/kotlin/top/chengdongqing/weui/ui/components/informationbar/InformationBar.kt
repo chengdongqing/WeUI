@@ -24,6 +24,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import top.chengdongqing.weui.ui.theme.BorderColorDark
 import top.chengdongqing.weui.ui.theme.FontLinkColor
 import top.chengdongqing.weui.ui.theme.FontSecondaryColorLight
 import top.chengdongqing.weui.ui.theme.PrimaryColor
@@ -40,8 +41,8 @@ enum class InformationBarType(
     WARN_WEAK(
         backgroundColor = Color(0x1AFA5151),
         iconColor = Color(0xFFFA5151),
-        textColor = FontSecondaryColorLight,
-        closeIconColor = FontSecondaryColorLight
+        textColor = BorderColorDark,
+        closeIconColor = BorderColorDark
     ),
     INFO(backgroundColor = Color(0f, 0f, 0f, 0.3f)),
     TIPS_STRONG(backgroundColor = Color(0xFFFA9D3B)),

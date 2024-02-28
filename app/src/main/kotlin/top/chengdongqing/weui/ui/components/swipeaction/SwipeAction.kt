@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -37,7 +38,6 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.enum.DragAnchors
 import top.chengdongqing.weui.ui.theme.DangerColorLight
-import top.chengdongqing.weui.ui.theme.FontColorLight
 import top.chengdongqing.weui.ui.theme.PlainColor
 import top.chengdongqing.weui.ui.theme.WarningColor
 import kotlin.math.roundToInt
@@ -97,7 +97,7 @@ fun WeSwipeAction(
                     )
                 }
                 .background(
-                    Color.White,
+                    color = MaterialTheme.colorScheme.onBackground,
                     if (!isLabelStyle) RoundedCornerShape(8.dp) else RectangleShape
                 )
                 .padding(horizontal = 16.dp)
@@ -173,20 +173,20 @@ private fun ActionItem(
         contentAlignment = Alignment.Center
     ) {
         if (isLabelStyle || item.icon == null) {
-            Text(text = item.label, color = Color.White)
+            Text(text = item.label, color = MaterialTheme.colorScheme.onPrimary)
         } else {
             Box(
                 modifier = Modifier
                     .size(45.dp)
                     .clip(CircleShape)
-                    .background(Color.White)
+                    .background(MaterialTheme.colorScheme.onBackground)
                     .clickable(onClick = onClick),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = item.icon,
                     contentDescription = item.label,
-                    tint = FontColorLight,
+                    tint = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier.size(20.dp)
                 )
             }

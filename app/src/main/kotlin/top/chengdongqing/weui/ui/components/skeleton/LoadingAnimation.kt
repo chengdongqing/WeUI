@@ -7,6 +7,7 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -16,7 +17,6 @@ import androidx.compose.ui.graphics.Color
 
 fun Modifier.shimmerLoadingAnimation(
     isActive: Boolean = false,
-    isLightMode: Boolean = true,
     widthOfShadowBrush: Int = 500,
     angleOfAxisY: Float = 270f,
     durationMillis: Int = 1500
@@ -25,7 +25,9 @@ fun Modifier.shimmerLoadingAnimation(
         return this
     } else {
         return composed {
-            val shimmerColors = ShimmerAnimationData(isLightMode = isLightMode).getColors()
+            val shimmerColors = ShimmerAnimationData(
+                isLightMode = !isSystemInDarkTheme()
+            ).getColors()
 
             val transition = rememberInfiniteTransition(label = "")
             val translateAnimation by transition.animateFloat(

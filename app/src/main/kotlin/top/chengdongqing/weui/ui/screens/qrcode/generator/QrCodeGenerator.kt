@@ -3,6 +3,7 @@ package top.chengdongqing.weui.ui.screens.qrcode.generator
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -45,7 +46,11 @@ fun QrCodeGenerateScreen() {
             }
             Spacer(modifier = Modifier.height(60.dp))
             if (finalContent.isNotEmpty()) {
-                WeQrCodeGenerator(content = finalContent, size)
+                WeQrCodeGenerator(
+                    content = finalContent,
+                    size = size,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
             }
         }
     }

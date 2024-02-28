@@ -2,7 +2,6 @@ package top.chengdongqing.weui.ui.screens.system.database
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import top.chengdongqing.weui.ui.components.screen.WeScreen
@@ -13,7 +12,6 @@ fun DatabaseScreen(navController: NavController) {
     WeScreen(
         title = "Database",
         description = "数据库（SQLite+Room）",
-        containerColor = Color.White,
         padding = PaddingValues(0.dp)
     ) {
         AddressList(navController)

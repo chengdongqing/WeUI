@@ -16,6 +16,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -27,33 +28,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.chengdongqing.weui.ui.theme.FontLightColor
 import top.chengdongqing.weui.ui.theme.FontLinkColor
-import top.chengdongqing.weui.ui.theme.FontSecondaryColorLight
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.utils.clickableWithoutRipple
 
 @Composable
 fun WeSearchBar(value: String, onChange: (value: String) -> Unit) {
-    var focused by remember {
-        mutableStateOf(false)
-    }
-    val focusRequester = remember {
-        FocusRequester()
-    }
+    var focused by remember { mutableStateOf(false) }
+    val focusRequester = remember { FocusRequester() }
+
     // 输入框自动聚焦
     LaunchedEffect(focused) {
         if (focused) {
             focusRequester.requestFocus()
         }
     }
-
     // 返回时先取消聚焦
     BackHandler(focused) {
         focused = false
@@ -68,14 +62,17 @@ fun WeSearchBar(value: String, onChange: (value: String) -> Unit) {
             modifier = Modifier
                 .weight(1f)
                 .fillMaxHeight()
-                .background(Color.White, RoundedCornerShape(4.dp))
+                .background(MaterialTheme.colorScheme.onBackground, RoundedCornerShape(4.dp))
         ) {
             if (focused) {
                 BasicTextField(
                     value,
                     onValueChange = onChange,
                     modifier = Modifier.focusRequester(focusRequester),
-                    textStyle = TextStyle(fontSize = 16.sp, color = Color(0f, 0f, 0f, 0.9f)),
+                    textStyle = TextStyle(
+                        fontSize = 16.sp,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    ),
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                     cursorBrush = SolidColor(PrimaryColor),
                     decorationBox = { innerTextField ->
@@ -89,7 +86,7 @@ fun WeSearchBar(value: String, onChange: (value: String) -> Unit) {
                                 modifier = Modifier
                                     .padding(start = 8.dp, end = 4.dp)
                                     .size(20.dp),
-                                tint = FontSecondaryColorLight
+                                tint = MaterialTheme.colorScheme.onSecondary
                             )
                             Box(
                                 modifier = Modifier.fillMaxSize(),
@@ -98,7 +95,7 @@ fun WeSearchBar(value: String, onChange: (value: String) -> Unit) {
                                 if (value.isEmpty()) {
                                     Text(
                                         text = "搜索",
-                                        color = FontLightColor,
+                                        color = MaterialTheme.colorScheme.onSecondary,
                                         fontSize = 16.sp
                                     )
                                 }
@@ -122,9 +119,13 @@ fun WeSearchBar(value: String, onChange: (value: String) -> Unit) {
                         modifier = Modifier
                             .padding(end = 4.dp)
                             .size(20.dp),
-                        tint = FontSecondaryColorLight
+                        tint = MaterialTheme.colorScheme.onSecondary
                     )
-                    Text(text = "搜索", color = FontSecondaryColorLight, fontSize = 16.sp)
+                    Text(
+                        text = "搜索",
+                        color = MaterialTheme.colorScheme.onSecondary,
+                        fontSize = 16.sp
+                    )
                 }
             }
         }

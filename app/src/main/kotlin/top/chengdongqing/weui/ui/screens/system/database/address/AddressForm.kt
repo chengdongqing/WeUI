@@ -14,7 +14,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -40,8 +39,7 @@ fun AddressFormScreen(
 ) {
     WeScreen(
         title = "AddressForm",
-        description = "${if (id == null) "新增" else "编辑"}收货地址",
-        containerColor = Color.White
+        description = "${if (id == null) "新增" else "编辑"}收货地址"
     ) {
         val address = remember { mutableStateMapOf<String, String>() }
         val hasAllEntered by remember {

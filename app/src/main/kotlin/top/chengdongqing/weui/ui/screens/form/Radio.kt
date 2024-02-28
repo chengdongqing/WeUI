@@ -5,14 +5,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.Color
 import top.chengdongqing.weui.ui.components.radio.RadioOption
 import top.chengdongqing.weui.ui.components.radio.WeRadioGroup
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 
 @Composable
 fun RadioScreen() {
-    WeScreen(title = "Radio", description = "单选框", containerColor = Color.White) {
+    WeScreen(title = "Radio", description = "单选框") {
         var value by remember { mutableStateOf("2") }
 
         WeRadioGroup(

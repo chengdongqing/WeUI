@@ -9,6 +9,7 @@ import androidx.compose.material.icons.automirrored.filled.StarHalf
 import androidx.compose.material.icons.filled.StarOutline
 import androidx.compose.material.icons.filled.StarRate
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -83,7 +84,7 @@ private fun StarItem(
         tint = if (isActive) {
             Color(0xffFF6700)
         } else {
-            Color(0f, 0f, 0f, 0.06f)
+            MaterialTheme.colorScheme.outline
         },
         modifier = modifier
     )

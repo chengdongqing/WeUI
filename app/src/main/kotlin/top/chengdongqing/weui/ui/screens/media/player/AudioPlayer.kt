@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Pause
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -29,7 +30,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -40,7 +40,6 @@ import androidx.lifecycle.LifecycleEventObserver
 import top.chengdongqing.weui.R
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.components.slider.WeSlider
-import top.chengdongqing.weui.ui.theme.FontLightColor
 import top.chengdongqing.weui.utils.formatDuration
 import top.chengdongqing.weui.utils.rememberPlayPercent
 import top.chengdongqing.weui.utils.rememberPlayProgress
@@ -58,6 +57,7 @@ fun AudioPlayerScreen() {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
                 text = formatDuration(audioState.progress.milliseconds, true),
+                color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -90,8 +90,14 @@ private fun ProgressControl(audioState: AudioState) {
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = formatDuration(audioState.progress.milliseconds))
-        Text(text = formatDuration(audioState.duration.milliseconds))
+        Text(
+            text = formatDuration(audioState.progress.milliseconds),
+            color = MaterialTheme.colorScheme.onSecondary
+        )
+        Text(
+            text = formatDuration(audioState.duration.milliseconds),
+            color = MaterialTheme.colorScheme.onSecondary
+        )
     }
 }
 
@@ -101,7 +107,7 @@ private fun PlayControl(isPlaying: Boolean, setPlaying: (Boolean) -> Unit, playe
         modifier = Modifier
             .size(66.dp)
             .clip(CircleShape)
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.onBackground)
             .clickable {
                 setPlaying(!player.isPlaying)
                 if (player.isPlaying) {
@@ -118,7 +124,7 @@ private fun PlayControl(isPlaying: Boolean, setPlaying: (Boolean) -> Unit, playe
                 contentDescription = "暂停",
                 modifier = Modifier
                     .size(44.dp),
-                tint = FontLightColor
+                tint = MaterialTheme.colorScheme.onSecondary
             )
         } else {
             Icon(
@@ -126,7 +132,7 @@ private fun PlayControl(isPlaying: Boolean, setPlaying: (Boolean) -> Unit, playe
                 contentDescription = "播放",
                 modifier = Modifier
                     .size(66.dp),
-                tint = FontLightColor
+                tint = MaterialTheme.colorScheme.onSecondary
             )
         }
     }

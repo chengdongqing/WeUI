@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,7 +18,6 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.ui.components.divider.WeDivider
-import top.chengdongqing.weui.ui.theme.BackgroundColorLight
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 
 @Composable
@@ -41,7 +41,7 @@ fun WeDigitalKeyboard(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(BackgroundColorLight)
+                    .background(MaterialTheme.colorScheme.background)
                     .padding(8.dp)
                     .onSizeChanged {
                         widthPerItem = density.run { (it.width.toDp() - 8.dp * 3) / 4 }

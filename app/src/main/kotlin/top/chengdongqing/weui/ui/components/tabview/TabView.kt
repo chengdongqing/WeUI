@@ -8,6 +8,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerScope
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
@@ -18,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
-import top.chengdongqing.weui.ui.theme.FontSecondaryColorLight
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.utils.clickableWithoutRipple
 
@@ -63,7 +63,7 @@ private fun TabBar(pagerState: PagerState, options: List<String>) {
             val selected = index == pagerState.currentPage
             Text(
                 text = item,
-                color = if (selected) PrimaryColor else FontSecondaryColorLight,
+                color = if (selected) PrimaryColor else MaterialTheme.colorScheme.onSecondary,
                 fontSize = 17.sp,
                 modifier = Modifier
                     .clickableWithoutRipple {

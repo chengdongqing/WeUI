@@ -4,11 +4,11 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.AnnotatedString
@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.chengdongqing.weui.ui.theme.FontColorLight
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.utils.formatFloat
 
@@ -39,6 +38,8 @@ fun WeCircleProgress(
         label = "CircleProgressAnimation"
     )
     val textMeasurer = rememberTextMeasurer()
+    val borderColor = MaterialTheme.colorScheme.outline
+    val fontColor = MaterialTheme.colorScheme.onPrimary
 
     Canvas(
         modifier = Modifier
@@ -47,7 +48,7 @@ fun WeCircleProgress(
     ) {
         val radius = this.size.width / 2
         drawCircle(
-            color = Color(0f, 0f, 0f, 0.06f),
+            color = borderColor,
             radius = radius,
             style = Stroke(width = strokeWidth.toPx())
         )
@@ -64,7 +65,7 @@ fun WeCircleProgress(
         formatter?.also {
             val text = AnnotatedString(
                 it(localPercent),
-                SpanStyle(fontSize = fontSize, color = FontColorLight)
+                SpanStyle(fontSize = fontSize, color = fontColor)
             )
             val textLayoutResult = textMeasurer.measure(text)
             drawText(

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,10 +30,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import top.chengdongqing.weui.ui.components.divider.WeDivider
-import top.chengdongqing.weui.ui.theme.BorderColorLight
-import top.chengdongqing.weui.ui.theme.FontColorLight
 import top.chengdongqing.weui.ui.theme.FontLinkColor
-import top.chengdongqing.weui.ui.theme.FontSecondaryColorLight
 
 /**
  * 对话框
@@ -70,7 +68,7 @@ fun WeDialog(
                 modifier = Modifier
                     .clip(RoundedCornerShape(12.dp))
                     .fillMaxWidth(0.8f)
-                    .background(Color.White)
+                    .background(MaterialTheme.colorScheme.onBackground)
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -86,7 +84,7 @@ fun WeDialog(
                                 start = 24.dp,
                                 end = 24.dp
                             ),
-                        color = FontColorLight,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         fontSize = 17.sp,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center
@@ -97,7 +95,7 @@ fun WeDialog(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 24.dp),
-                            color = FontSecondaryColorLight,
+                            color = MaterialTheme.colorScheme.onSecondary,
                             fontSize = 17.sp,
                             textAlign = TextAlign.Center
                         )
@@ -119,7 +117,7 @@ fun WeDialog(
                             ) {
                                 Text(
                                     text = cancelText,
-                                    color = FontColorLight,
+                                    color = MaterialTheme.colorScheme.onPrimary,
                                     fontSize = 17.sp,
                                     fontWeight = FontWeight.Bold
                                 )
@@ -127,7 +125,7 @@ fun WeDialog(
                             Box(
                                 modifier = Modifier
                                     .size(0.5.dp, 56.dp)
-                                    .background(BorderColorLight)
+                                    .background(MaterialTheme.colorScheme.outline)
                             )
                         }
                         Box(
@@ -153,12 +151,8 @@ fun WeDialog(
 
 @Composable
 fun rememberWeDialog(): DialogState {
-    var visible by remember {
-        mutableStateOf(false)
-    }
-    var localOptions by remember {
-        mutableStateOf<DialogOptions?>(null)
-    }
+    var visible by remember { mutableStateOf(false) }
+    var localOptions by remember { mutableStateOf<DialogOptions?>(null) }
 
     localOptions?.let { options ->
         WeDialog(
