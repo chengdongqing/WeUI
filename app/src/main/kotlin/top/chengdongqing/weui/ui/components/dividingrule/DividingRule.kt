@@ -3,7 +3,6 @@ package top.chengdongqing.weui.ui.components.dividingrule
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -11,6 +10,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -207,11 +207,8 @@ data class DividingRuleColors(
 object DividingRuleDefaults {
     val colors: DividingRuleColors
         @Composable
-        get() {
-            return if (isSystemInDarkTheme()) {
-                DividingRuleColors(containerColor = Color.Black, contentColor = Color.White)
-            } else {
-                DividingRuleColors(containerColor = Color.White, contentColor = Color.Black)
-            }
-        }
+        get() = DividingRuleColors(
+            containerColor = MaterialTheme.colorScheme.onBackground,
+            contentColor = MaterialTheme.colorScheme.onPrimary
+        )
 }
