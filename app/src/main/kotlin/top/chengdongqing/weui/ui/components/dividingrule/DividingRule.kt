@@ -12,55 +12,89 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 
-enum class RuleDirection {
-    HORIZONTAL,
-    VERTICAL
-}
-
 @Composable
 fun WeDividingRule(
-    start: Int = 0,
-    end: Int = 100,
-    step: Int = 10,
-    direction: RuleDirection = RuleDirection.HORIZONTAL,
-    colors: DividingRuleColors = defaultColors
+    range: IntProgression = 0..100 step 2,
+    colors: DividingRuleColors = DividingRuleDefaults.colors,
+    onChange: (Float) -> Unit
 ) {
+    val density = LocalDensity.current
+    var halfWidth by remember { mutableStateOf(0.dp) }
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(80.dp)
             .background(colors.containerColor)
+            .onSizeChanged {
+                halfWidth = density.run { (it.width / 2).toDp() }
+            }
     ) {
-        Rule(start, end, step, colors.contentColor)
-        Indicator(colors.indicatorColor)
+        Rule(range, colors.contentColor, halfWidth, onChange)
+        Indicator(colors.indicatorColor, halfWidth)
     }
 }
 
 @Composable
-private fun Rule(start: Int, end: Int, step: Int, color: Color) {
+private fun Rule(
+    range: IntProgression,
+    color: Color,
+    horizontalPadding: Dp,
+    onChange: (Float) -> Unit
+) {
     val textMeasurer = rememberTextMeasurer()
-    val count = (end - start) / step
+    val scrollState = rememberScrollState()
 
-    Box(modifier = Modifier.horizontalScroll(rememberScrollState())) {
+    val start = range.first
+    val end = range.last
+    val step = range.step
+    val count = (end - start) / step
+    val widthDp = (80 * count).dp
+    val density = LocalDensity.current
+
+    LaunchedEffect(scrollState, widthDp) {
+        val widthPx = density.run { widthDp.toPx() }
+        val scaleCount = count * 10
+        val valuePerScale = (end - start) / scaleCount
+        val widthPerScale = widthPx / scaleCount
+
+        snapshotFlow {
+            scrollState.value
+        }.collect { offset ->
+            val value = start + offset / widthPerScale * valuePerScale
+            onChange(value)
+        }
+    }
+
+    Box(modifier = Modifier.horizontalScroll(scrollState)) {
         Canvas(
             modifier = Modifier
-                .width((80 * count + 50 * 2).dp)
+                .padding(horizontal = horizontalPadding)
+                .width(widthDp)
                 .height(80.dp)
-                .padding(horizontal = 50.dp)
         ) {
             repeat(count) { index ->
                 drawRuleUnit(
@@ -113,7 +147,7 @@ private fun DrawScope.drawRuleUnit(
         color,
         Offset(
             x = -(textLayoutResult.size.width / 2f) + offsetX,
-            y = 40.dp.toPx()
+            y = 42.dp.toPx()
         )
     )
 }
@@ -142,14 +176,14 @@ private fun DrawScope.drawRuleClosureScale(
         color,
         Offset(
             x = -(textLayoutResult.size.width / 2f) + offsetX,
-            y = 40.dp.toPx()
+            y = 42.dp.toPx()
         )
     )
 }
 
 @Composable
-private fun Indicator(color: Color) {
-    Canvas(modifier = Modifier.offset(x = (50 - 12 / 2).dp, y = (-30).dp)) {
+private fun Indicator(color: Color, offsetX: Dp) {
+    Canvas(modifier = Modifier.offset(x = offsetX - (12 / 2).dp, y = (-12).dp)) {
         val path = Path().apply {
             val size = 12.dp.toPx()
             moveTo(0f, 0f)
@@ -165,17 +199,19 @@ private fun Indicator(color: Color) {
 }
 
 data class DividingRuleColors(
-    val containerColor: Color = Color.White,
-    val contentColor: Color = Color.Black,
+    val containerColor: Color,
+    val contentColor: Color,
     val indicatorColor: Color = PrimaryColor
 )
 
-private val defaultColors: DividingRuleColors
-    @Composable
-    get() {
-        return if (isSystemInDarkTheme()) {
-            DividingRuleColors(containerColor = Color.Black, contentColor = Color.White)
-        } else {
-            DividingRuleColors()
+object DividingRuleDefaults {
+    val colors: DividingRuleColors
+        @Composable
+        get() {
+            return if (isSystemInDarkTheme()) {
+                DividingRuleColors(containerColor = Color.Black, contentColor = Color.White)
+            } else {
+                DividingRuleColors(containerColor = Color.White, contentColor = Color.Black)
+            }
         }
-    }
+}
