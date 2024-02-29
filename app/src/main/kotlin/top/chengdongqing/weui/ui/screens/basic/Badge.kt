@@ -4,15 +4,16 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.ui.components.badge.WeBadge
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.screen.WeScreen
+import top.chengdongqing.weui.ui.theme.PrimaryColor
 
 @Composable
 fun BadgeScreen() {
@@ -37,7 +38,7 @@ fun BadgeScreen() {
         WeBadge(
             "8",
             size = 20.dp,
-            color = Color(0xFFFF6700),
+            color = PrimaryColor,
             alignment = Alignment.BottomStart
         ) {
             WeButton(text = "按钮")
@@ -56,7 +57,7 @@ fun BadgeScreen() {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceAround
         ) {
-            Text(text = "Java开发工程师")
+            Text(text = "Android开发工程师", color = MaterialTheme.colorScheme.onPrimary)
             WeBadge("New", 20.dp, alignment = Alignment.Center)
         }
     }

@@ -37,8 +37,8 @@ fun ActionSheetScreen() {
         description = "弹出式菜单",
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        RequestPay()
         MakeCall()
+        RequestPay()
         ShareToTimeline()
     }
 }
@@ -56,7 +56,7 @@ private fun RequestPay() {
         )
     }
 
-    WeButton(text = "立即支付", type = ButtonType.PLAIN) {
+    WeButton(text = "立即支付", type = ButtonType.DANGER) {
         actionSheet.show(ActionSheetOptions(options, "请选择支付方式") {
             toast.show(ToastOptions("点击了第${it + 1}个"))
         })

@@ -18,6 +18,7 @@ import top.chengdongqing.weui.ui.screens.demo.cropper.ImageCropperScreen
 import top.chengdongqing.weui.ui.screens.demo.filebrowser.FileBrowserScreen
 import top.chengdongqing.weui.ui.screens.demo.gallery.GalleryScreen
 import top.chengdongqing.weui.ui.screens.demo.paint.PaintScreen
+import top.chengdongqing.weui.ui.screens.demo.videochannel.VideoChannelScreen
 
 fun NavGraphBuilder.addDemoGraph() {
     composable("search-bar") {
@@ -67,5 +68,8 @@ fun NavGraphBuilder.addDemoGraph() {
     }
     composable("image-cropper") {
         ImageCropperScreen()
+    }
+    composable("video-channel") {
+        VideoChannelScreen()
     }
 }
