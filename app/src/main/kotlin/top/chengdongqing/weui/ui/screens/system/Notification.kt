@@ -21,16 +21,16 @@ import top.chengdongqing.weui.utils.isTrue
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun NotificationScreen() {
-    val context = LocalContext.current
-    val permissionState = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
-    } else {
-        null
-    }
-    val channelId = "test_channel_id"
-    val channelName = "Test Channel Name"
-
     WeScreen(title = "Notification", description = "系统通知") {
+        val context = LocalContext.current
+        val permissionState = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            null
+        }
+        val channelId = "test_channel_id"
+        val channelName = "Test Channel Name"
+
         WeButton(text = "发送通知") {
             if (permissionState?.status?.isGranted.isTrue() || permissionState == null) {
                 createNotificationChannel(context, channelId, channelName)

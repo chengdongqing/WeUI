@@ -57,7 +57,11 @@ import java.io.File
 
 @Composable
 fun InstalledAppsScreen() {
-    WeScreen(title = "InstalledApps", description = "已安装的应用") {
+    WeScreen(
+        title = "InstalledApps",
+        description = "已安装的应用",
+        scrollEnabled = false
+    ) {
         val context = LocalContext.current
         val apps = rememberInstalledApps()
 

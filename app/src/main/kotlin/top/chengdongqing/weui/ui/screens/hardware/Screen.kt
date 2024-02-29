@@ -6,7 +6,7 @@ import android.hardware.Sensor
 import android.provider.Settings
 import android.view.Window
 import android.view.WindowManager
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -20,7 +20,6 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -39,10 +38,7 @@ fun ScreenScreen() {
         var screenBrightness by rememberScreenBrightness(window)
         val lightBrightness = rememberSensorValue(Sensor.TYPE_LIGHT, true)
 
-        Column(
-            modifier = Modifier.padding(horizontal = 12.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+        Box(modifier = Modifier.padding(horizontal = 12.dp)) {
             WeSlider(
                 value = (screenBrightness * 100).toInt(),
                 onChange = {
@@ -50,17 +46,17 @@ fun ScreenScreen() {
                     setScreenBrightness(window, screenBrightness)
                 }
             )
-            Spacer(modifier = Modifier.height(20.dp))
-            Text(
-                text = "光线强度：${lightBrightness} Lux（勒克斯）",
-                color = MaterialTheme.colorScheme.onPrimary,
-                fontSize = 10.sp
-            )
-            Spacer(modifier = Modifier.height(40.dp))
-            KeepScreenOn(window)
-            Spacer(modifier = Modifier.height(20.dp))
-            DisabledScreenshot(window)
         }
+        Spacer(modifier = Modifier.height(20.dp))
+        Text(
+            text = "光线强度：${lightBrightness} Lux（勒克斯）",
+            color = MaterialTheme.colorScheme.onPrimary,
+            fontSize = 10.sp
+        )
+        Spacer(modifier = Modifier.height(40.dp))
+        KeepScreenOn(window)
+        Spacer(modifier = Modifier.height(20.dp))
+        DisabledScreenshot(window)
     }
 }
 

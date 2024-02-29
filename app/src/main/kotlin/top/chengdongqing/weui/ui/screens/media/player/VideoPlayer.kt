@@ -17,10 +17,18 @@ import top.chengdongqing.weui.ui.screens.demo.gallery.preview.VideoPreview
 
 @Composable
 fun VideoPlayerScreen() {
-    WeScreen(title = "VideoPlayer", description = "视频播放", padding = PaddingValues(0.dp)) {
+    WeScreen(
+        title = "VideoPlayer",
+        description = "视频播放",
+        padding = PaddingValues(0.dp)
+    ) {
         var uri by remember { mutableStateOf<Uri?>(null) }
 
-        uri?.let { VideoPreview(it) } ?: VideoPicker { uri = it }
+        uri?.let {
+            VideoPreview(it)
+        } ?: VideoPicker {
+            uri = it
+        }
     }
 }
 

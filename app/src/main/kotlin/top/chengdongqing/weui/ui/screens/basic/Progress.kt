@@ -1,7 +1,6 @@
 package top.chengdongqing.weui.ui.screens.basic
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,42 +27,40 @@ import kotlin.concurrent.timerTask
 @Composable
 fun ProgressScreen() {
     WeScreen(title = "Progress", description = "进度条") {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            WeProgress(20f, null)
-            WeProgress(44.57898f)
+        WeProgress(20f, null)
+        WeProgress(44.57898f)
 
-            var value by remember { mutableFloatStateOf(0f) }
-            var loading by remember { mutableStateOf(false) }
-            val coroutineScope = rememberCoroutineScope()
+        var value by remember { mutableFloatStateOf(0f) }
+        var loading by remember { mutableStateOf(false) }
+        val coroutineScope = rememberCoroutineScope()
 
-            WeProgress(value)
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceAround
-            ) {
-                WeCircleProgress(value)
-                WeDashboardProgress(value)
-            }
-            Spacer(modifier = Modifier.height(60.dp))
-            WeButton(
-                text = if (!loading) "上传" else "上传中...",
-                loading = loading
-            ) {
-                value = 0f
-                loading = true
+        WeProgress(value)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceAround
+        ) {
+            WeCircleProgress(value)
+            WeDashboardProgress(value)
+        }
+        Spacer(modifier = Modifier.height(60.dp))
+        WeButton(
+            text = if (!loading) "上传" else "上传中...",
+            loading = loading
+        ) {
+            value = 0f
+            loading = true
 
-                coroutineScope.launch {
-                    val timer = Timer()
-                    timer.schedule(timerTask {
-                        if (value < 100) {
-                            value += 2
-                        } else {
-                            timer.cancel()
-                            loading = false
-                        }
-                    }, 0L, 50L)
-                }
+            coroutineScope.launch {
+                val timer = Timer()
+                timer.schedule(timerTask {
+                    if (value < 100) {
+                        value += 2
+                    } else {
+                        timer.cancel()
+                        loading = false
+                    }
+                }, 0L, 50L)
             }
         }
     }

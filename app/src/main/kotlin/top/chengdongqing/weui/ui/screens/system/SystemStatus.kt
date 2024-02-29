@@ -5,7 +5,6 @@ import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
@@ -14,7 +13,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -27,17 +25,15 @@ import top.chengdongqing.weui.utils.SetupStatusBarStyle
 
 @Composable
 fun SystemStatusScreen() {
-    WeScreen(title = "SystemStatus", description = "系统状态，动态更新") {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            WePairGroup {
-                item {
-                    NetworkInfoRows()
-                    WePairItem("系统主题", if (isSystemInDarkTheme()) "深色" else "浅色")
-                }
+    WeScreen(title = "SystemStatus", description = "系统状态，动态更新", scrollEnabled = false) {
+        WePairGroup {
+            item {
+                NetworkInfoRows()
+                WePairItem("系统主题", if (isSystemInDarkTheme()) "深色" else "浅色")
             }
-            Spacer(modifier = Modifier.height(40.dp))
-            StatusBarAction()
         }
+        Spacer(modifier = Modifier.height(40.dp))
+        StatusBarAction()
     }
 }
 

@@ -31,7 +31,7 @@ fun WeRadio(label: String, checked: Boolean, disabled: Boolean, onClick: () -> U
                 .clickableWithoutRipple(!disabled) {
                     onClick()
                 }
-                .padding(16.dp)
+                .padding(vertical = 16.dp)
                 .alpha(if (disabled) 0.1f else 1f),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -48,6 +48,6 @@ fun WeRadio(label: String, checked: Boolean, disabled: Boolean, onClick: () -> U
                 tint = if (checked) PrimaryColor else Color.Transparent
             )
         }
-        WeDivider(Modifier.padding(horizontal = 16.dp))
+        WeDivider()
     }
 }

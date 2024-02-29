@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,14 +26,16 @@ import top.chengdongqing.weui.ui.theme.WeUITheme
 
 @Composable
 fun SkeletonScreen() {
-    WeScreen(title = "Skeleton", description = "骨架屏") {
+    WeScreen(
+        title = "Skeleton",
+        description = "骨架屏",
+        containerColor = MaterialTheme.colorScheme.surface
+    ) {
         var isActive by remember { mutableStateOf(false) }
 
-        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-            Controls(isActive) { isActive = !it }
-            Spacer(modifier = Modifier.height(60.dp))
-            Content(isActive)
-        }
+        Controls(isActive) { isActive = !it }
+        Spacer(modifier = Modifier.height(60.dp))
+        Content(isActive)
     }
 }
 

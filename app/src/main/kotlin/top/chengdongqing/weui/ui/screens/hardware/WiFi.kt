@@ -12,7 +12,6 @@ import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -50,7 +49,7 @@ import top.chengdongqing.weui.ui.components.screen.WeScreen
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun WiFiScreen() {
-    WeScreen(title = "Wi-Fi", description = "无线局域网") {
+    WeScreen(title = "Wi-Fi", description = "无线局域网", scrollEnabled = false) {
         val context = LocalContext.current
         val wifiManager = context.getSystemService(Context.WIFI_SERVICE) as? WifiManager
         var wifiList by remember { mutableStateOf<List<WiFiInfo>>(emptyList()) }
@@ -64,24 +63,22 @@ fun WiFiScreen() {
             }
         )
 
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            WeButton(text = "扫描Wi-Fi") {
-                if (permissionState.allPermissionsGranted) {
-                    if (wifiManager == null) {
-                        Toast.makeText(context, "此设备不支持Wi-Fi", Toast.LENGTH_SHORT).show()
-                    } else if (wifiManager.isWifiEnabled) {
-                        wifiList = buildWiFiList(wifiManager.scanResults)
-                    } else {
-                        Toast.makeText(context, "Wi-Fi未开启", Toast.LENGTH_SHORT).show()
-                        context.startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
-                    }
+        WeButton(text = "扫描Wi-Fi") {
+            if (permissionState.allPermissionsGranted) {
+                if (wifiManager == null) {
+                    Toast.makeText(context, "此设备不支持Wi-Fi", Toast.LENGTH_SHORT).show()
+                } else if (wifiManager.isWifiEnabled) {
+                    wifiList = buildWiFiList(wifiManager.scanResults)
                 } else {
-                    permissionState.launchMultiplePermissionRequest()
+                    Toast.makeText(context, "Wi-Fi未开启", Toast.LENGTH_SHORT).show()
+                    context.startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
                 }
+            } else {
+                permissionState.launchMultiplePermissionRequest()
             }
-            Spacer(modifier = Modifier.height(40.dp))
-            WiFiList(wifiList)
         }
+        Spacer(modifier = Modifier.height(40.dp))
+        WiFiList(wifiList)
     }
 }
 

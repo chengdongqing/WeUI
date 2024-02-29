@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.items
@@ -15,7 +14,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
@@ -38,18 +36,16 @@ import top.chengdongqing.weui.ui.components.toast.rememberWeToast
 
 @Composable
 fun SmsScreen() {
-    WeScreen(title = "SMS", description = "短信") {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            WriteSms()
-            Spacer(modifier = Modifier.height(20.dp))
-            ReadSms()
-        }
+    WeScreen(title = "SMS", description = "短信", scrollEnabled = false) {
+        WritingSms()
+        Spacer(modifier = Modifier.height(20.dp))
+        ReadingSms()
     }
 }
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-private fun WriteSms() {
+private fun WritingSms() {
     val context = LocalContext.current
     val smsPermissionState = rememberPermissionState(Manifest.permission.SEND_SMS)
     var number by remember { mutableStateOf("") }
@@ -85,7 +81,7 @@ private fun WriteSms() {
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-private fun ReadSms() {
+private fun ReadingSms() {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     val readSmsPermissionState = rememberPermissionState(Manifest.permission.READ_SMS)

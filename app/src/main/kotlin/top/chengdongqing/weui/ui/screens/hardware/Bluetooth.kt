@@ -29,7 +29,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -46,7 +45,7 @@ import top.chengdongqing.weui.ui.components.screen.WeScreen
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun BluetoothScreen() {
-    WeScreen(title = "Bluetooth", description = "蓝牙") {
+    WeScreen(title = "Bluetooth", description = "蓝牙", scrollEnabled = false) {
         val context = LocalContext.current
         val permissionState = rememberMultiplePermissionsState(
             remember {
@@ -68,24 +67,22 @@ fun BluetoothScreen() {
         val launchBluetooth = rememberBluetoothLauncher()
         val bluetoothList = rememberBluetoothDevices()
 
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            WeButton(text = "扫描蓝牙") {
-                if (permissionState.allPermissionsGranted) {
-                    if (bluetoothAdapter == null) {
-                        Toast.makeText(context, "此设备不支持蓝牙", Toast.LENGTH_SHORT).show()
-                    } else if (!bluetoothAdapter.isEnabled) {
-                        launchBluetooth()
-                    } else {
-                        bluetoothList.clear()
-                        bluetoothAdapter.startDiscovery()
-                    }
+        WeButton(text = "扫描蓝牙") {
+            if (permissionState.allPermissionsGranted) {
+                if (bluetoothAdapter == null) {
+                    Toast.makeText(context, "此设备不支持蓝牙", Toast.LENGTH_SHORT).show()
+                } else if (!bluetoothAdapter.isEnabled) {
+                    launchBluetooth()
                 } else {
-                    permissionState.launchMultiplePermissionRequest()
+                    bluetoothList.clear()
+                    bluetoothAdapter.startDiscovery()
                 }
+            } else {
+                permissionState.launchMultiplePermissionRequest()
             }
-            Spacer(modifier = Modifier.height(40.dp))
-            BluetoothList(bluetoothList)
         }
+        Spacer(modifier = Modifier.height(40.dp))
+        BluetoothList(bluetoothList)
     }
 }
 

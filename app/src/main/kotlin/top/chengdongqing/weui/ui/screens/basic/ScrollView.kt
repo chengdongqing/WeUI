@@ -18,7 +18,7 @@ import top.chengdongqing.weui.ui.components.screen.WeScreen
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScrollViewScreen() {
-    WeScreen(title = "ScrollView", description = "可滚动视图") {
+    WeScreen(title = "ScrollView", description = "可滚动视图", scrollEnabled = false) {
         val refreshState = rememberPullToRefreshState()
 
         LazyColumn(

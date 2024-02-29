@@ -21,11 +21,10 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
 
 @Composable
-fun WeDigitalRoller(value: Float, decimals: Int = 2) {
+fun WeDigitalRoller(value: Float, decimals: Int = 2, animationDuration: Int = 800) {
     val formatter = DecimalFormat("#,##0" + if (decimals > 0) "." + "0".repeat(decimals) else "")
     val formattedValue = formatter.format(value)
     val parts = formattedValue.split('.')
@@ -36,7 +35,10 @@ fun WeDigitalRoller(value: Float, decimals: Int = 2) {
         // 整数部分
         integerPart.forEach { char ->
             if (char.isDigit()) {
-                RollerItem(end = char.toString().toInt())
+                RollerItem(
+                    end = char.toString().toInt(),
+                    animationDuration = animationDuration
+                )
             } else {
                 DigitalItem(char.toString())
             }
@@ -46,7 +48,10 @@ fun WeDigitalRoller(value: Float, decimals: Int = 2) {
         if (decimals > 0) {
             DigitalItem(".")
             decimalPart.forEach { digit ->
-                RollerItem(end = digit.toString().toInt())
+                RollerItem(
+                    end = digit.toString().toInt(),
+                    animationDuration = animationDuration
+                )
             }
         }
     }
@@ -55,7 +60,8 @@ fun WeDigitalRoller(value: Float, decimals: Int = 2) {
 @Composable
 private fun RollerItem(
     end: Int,
-    start: Int = if (end < 9) end + 1 else end - 1
+    start: Int = if (end < 9) end + 1 else end - 1,
+    animationDuration: Int
 ) {
     val density = LocalDensity.current
     val heightPerItem = remember { density.run { 35.dp.toPx().roundToInt() } }
@@ -63,10 +69,9 @@ private fun RollerItem(
 
     // 滚动到目标位置
     LaunchedEffect(end) {
-        delay(1000)
         scrollState.animateScrollTo(
             value = end * heightPerItem,
-            animationSpec = tween(800, easing = LinearEasing)
+            animationSpec = tween(animationDuration, easing = LinearEasing)
         )
     }
 

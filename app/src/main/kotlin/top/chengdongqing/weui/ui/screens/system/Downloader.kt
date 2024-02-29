@@ -9,7 +9,6 @@ import android.content.IntentFilter
 import android.net.Uri
 import android.os.Environment
 import android.widget.Toast
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
@@ -17,7 +16,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -34,17 +32,15 @@ fun DownloaderScreen() {
         var name by remember { mutableStateOf("su7.jpg") }
         var url by remember { mutableStateOf("https://s1.xiaomiev.com/activity-outer-assets/web/home/section1.jpg") }
 
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            WeInput(value = name, label = "文件名称", placeholder = "请输入") {
-                name = it
-            }
-            WeTextarea(value = url, label = "下载地址", placeholder = "请输入") {
-                url = it
-            }
-            Spacer(modifier = Modifier.height(20.dp))
-            WeButton(text = "下载") {
-                download(context, name, url)
-            }
+        WeInput(value = name, label = "文件名称", placeholder = "请输入") {
+            name = it
+        }
+        WeTextarea(value = url, label = "下载地址", placeholder = "请输入") {
+            url = it
+        }
+        Spacer(modifier = Modifier.height(20.dp))
+        WeButton(text = "下载") {
+            download(context, name, url)
         }
     }
 }

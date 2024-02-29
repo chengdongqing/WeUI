@@ -2,7 +2,6 @@ package top.chengdongqing.weui.ui.screens.network.request
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -35,42 +34,40 @@ fun HttpRequestScreen(viewModel: CartViewModel = viewModel()) {
         var content by remember { mutableStateOf<String?>(null) }
         var loading by remember { mutableStateOf(false) }
 
-        Column {
-            WeButton(
-                "查询购物车数量",
-                loading = loading,
-                width = 200.dp,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            ) {
-                coroutineScope.launch {
-                    loading = true
-                    val res = viewModel.fetchCount()
-                    loading = false
+        WeButton(
+            "查询购物车数量",
+            loading = loading,
+            width = 200.dp,
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        ) {
+            coroutineScope.launch {
+                loading = true
+                val res = viewModel.fetchCount()
+                loading = false
 
-                    if (res.isSuccessful && res.body() != null) {
-                        content = res.body().toString()
-                    } else {
-                        toast.show(ToastOptions("请求失败", ToastIcon.FAIL))
-                    }
+                if (res.isSuccessful && res.body() != null) {
+                    content = res.body().toString()
+                } else {
+                    toast.show(ToastOptions("请求失败", ToastIcon.FAIL))
                 }
             }
+        }
 
-            content?.let {
-                Spacer(modifier = Modifier.height(40.dp))
-                Box(
-                    modifier = Modifier
-                        .background(
-                            MaterialTheme.colorScheme.onBackground,
-                            RoundedCornerShape(6.dp)
-                        )
-                        .padding(20.dp)
-                ) {
-                    Text(
-                        text = it,
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        fontSize = 12.sp
+        content?.let {
+            Spacer(modifier = Modifier.height(40.dp))
+            Box(
+                modifier = Modifier
+                    .background(
+                        MaterialTheme.colorScheme.onBackground,
+                        RoundedCornerShape(6.dp)
                     )
-                }
+                    .padding(20.dp)
+            ) {
+                Text(
+                    text = it,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    fontSize = 12.sp
+                )
             }
         }
     }

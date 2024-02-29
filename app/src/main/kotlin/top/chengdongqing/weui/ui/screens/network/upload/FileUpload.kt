@@ -5,7 +5,6 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -56,38 +55,36 @@ fun FileUploadScreen(uploadViewModel: UploadViewModel = viewModel()) {
             }
         }
 
-        Column {
-            WeButton(
-                text = if (uploading) "上传中..." else "上传图片",
-                loading = uploading,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            ) {
-                pickMediaLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-            }
+        WeButton(
+            text = if (uploading) "上传中..." else "上传图片",
+            loading = uploading,
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        ) {
+            pickMediaLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        }
 
-            imageInfo?.let { image ->
-                Spacer(modifier = Modifier.height(40.dp))
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(
-                            MaterialTheme.colorScheme.onBackground,
-                            RoundedCornerShape(6.dp)
-                        )
-                        .padding(20.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = buildString {
-                            appendLine("name: ${image.name}")
-                            appendLine("size: ${image.size}")
-                            appendLine("type: ${image.type}")
-                            append("url: ${image.url}")
-                        },
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        fontSize = 12.sp
+        imageInfo?.let { image ->
+            Spacer(modifier = Modifier.height(40.dp))
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        MaterialTheme.colorScheme.onBackground,
+                        RoundedCornerShape(6.dp)
                     )
-                }
+                    .padding(20.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = buildString {
+                        appendLine("name: ${image.name}")
+                        appendLine("size: ${image.size}")
+                        appendLine("type: ${image.type}")
+                        append("url: ${image.url}")
+                    },
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    fontSize = 12.sp
+                )
             }
         }
     }

@@ -2,7 +2,6 @@ package top.chengdongqing.weui.ui.screens.system
 
 import android.graphics.Rect
 import android.view.ViewTreeObserver
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
@@ -12,7 +11,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -40,20 +38,18 @@ fun KeyboardScreen() {
             focusRequester.requestFocus()
         }
 
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            WeInput(
-                value = null,
-                placeholder = "键盘高度: ${formatFloat(keyboardHeight.value)}(dp)",
-                modifier = Modifier.focusRequester(focusRequester)
-            )
-            Spacer(modifier = Modifier.height(40.dp))
-            WeButton(text = "弹出键盘") {
-                keyboardController?.show()
-            }
-            Spacer(modifier = Modifier.height(20.dp))
-            WeButton(text = "收起键盘", type = ButtonType.PLAIN) {
-                keyboardController?.hide()
-            }
+        WeInput(
+            value = null,
+            placeholder = "键盘高度: ${formatFloat(keyboardHeight.value)}(dp)",
+            modifier = Modifier.focusRequester(focusRequester)
+        )
+        Spacer(modifier = Modifier.height(40.dp))
+        WeButton(text = "弹出键盘") {
+            keyboardController?.show()
+        }
+        Spacer(modifier = Modifier.height(20.dp))
+        WeButton(text = "收起键盘", type = ButtonType.PLAIN) {
+            keyboardController?.hide()
         }
     }
 }

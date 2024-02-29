@@ -31,14 +31,13 @@ fun LayersScreen() {
         title = "WeUI页面层级",
         description = "用于规范WeUI页面元素所属层级、层级顺序及组合规范。"
     ) {
+        val width = LocalConfiguration.current.screenWidthDp.dp / 2
         var expand by remember { mutableStateOf(false) }
 
         LaunchedEffect(Unit) {
             delay(500)
             expand = true
         }
-
-        val width = LocalConfiguration.current.screenWidthDp.dp / 2
 
         Box(
             modifier = Modifier

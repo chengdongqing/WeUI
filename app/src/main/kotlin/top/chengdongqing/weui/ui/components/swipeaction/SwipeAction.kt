@@ -173,7 +173,7 @@ private fun ActionItem(
         contentAlignment = Alignment.Center
     ) {
         if (isLabelStyle || item.icon == null) {
-            Text(text = item.label, color = MaterialTheme.colorScheme.onPrimary)
+            Text(text = item.label, color = Color.White)
         } else {
             Box(
                 modifier = Modifier

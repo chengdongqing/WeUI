@@ -1,5 +1,6 @@
 package top.chengdongqing.weui.ui.screens.demo
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -19,7 +20,12 @@ import top.chengdongqing.weui.ui.theme.WeUITheme
 
 @Composable
 fun NotificationBarScreen() {
-    WeScreen(title = "NotificationBar", description = "通知栏", padding = PaddingValues(0.dp)) {
+    WeScreen(
+        title = "NotificationBar",
+        description = "通知栏",
+        padding = PaddingValues(0.dp),
+        verticalArrangement = Arrangement.spacedBy(40.dp)
+    ) {
         val content = remember {
             """
                 Jetpack Compose 是推荐用于构建原生 Android 界面的新工具包。
@@ -30,19 +36,22 @@ fun NotificationBarScreen() {
         Column {
             Title("滚动效果")
             WeNotificationBar(content)
-            Spacer(modifier = Modifier.height(30.dp))
+        }
+        Column {
             Title("控制速度")
             WeNotificationBar(
                 content,
                 scrollStep = 8
             )
-            Spacer(modifier = Modifier.height(30.dp))
+        }
+        Column {
             Title("单行展示")
             WeNotificationBar(
                 content,
                 effect = NotificationBarEffect.ELLIPSIS
             )
-            Spacer(modifier = Modifier.height(30.dp))
+        }
+        Column {
             Title("多行展示")
             WeNotificationBar(
                 content,

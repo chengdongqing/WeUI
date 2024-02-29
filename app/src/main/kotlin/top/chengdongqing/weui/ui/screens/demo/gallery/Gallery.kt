@@ -52,7 +52,12 @@ import kotlin.time.Duration
 
 @Composable
 fun GalleryScreen(galleryViewModel: GalleryViewModel = viewModel()) {
-    WeScreen(title = "Gallery", description = "相册", padding = PaddingValues(0.dp)) {
+    WeScreen(
+        title = "Gallery",
+        description = "相册",
+        padding = PaddingValues(0.dp),
+        scrollEnabled = false
+    ) {
         val context = LocalContext.current
 
         if (galleryViewModel.loading) {

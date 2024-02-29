@@ -1,6 +1,5 @@
 package top.chengdongqing.weui.ui.screens.form
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
@@ -16,14 +15,12 @@ fun SwitchScreen() {
     WeScreen(title = "Switch", description = "开关") {
         val checked = remember { mutableStateOf(false) }
 
-        Column {
-            WeSwitch(checked = checked.value) {
-                checked.value = it
-            }
-            Spacer(Modifier.height(16.dp))
-            WeSwitch(checked = checked.value, disabled = true) {
-                checked.value = it
-            }
+        WeSwitch(checked = checked.value) {
+            checked.value = it
+        }
+        Spacer(Modifier.height(16.dp))
+        WeSwitch(checked = checked.value, disabled = true) {
+            checked.value = it
         }
     }
 }

@@ -12,7 +12,8 @@ fun IndexedListScreen() {
     WeScreen(
         title = "IndexedList",
         description = "索引列表",
-        padding = PaddingValues(0.dp)
+        padding = PaddingValues(0.dp),
+        scrollEnabled = false
     ) {
         WeIndexedList(cities)
     }

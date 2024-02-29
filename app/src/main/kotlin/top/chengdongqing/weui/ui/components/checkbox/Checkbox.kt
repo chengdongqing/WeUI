@@ -42,7 +42,7 @@ fun WeCheckbox(
             .clickableWithoutRipple(!disabled) {
                 onChange?.invoke(!checked)
             }
-            .padding(16.dp)
+            .padding(vertical = 16.dp)
             .alpha(if (disabled) 0.1f else 1f),
         verticalAlignment = Alignment.CenterVertically
     ) {

@@ -5,9 +5,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.launch
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Call
@@ -34,14 +32,14 @@ import top.chengdongqing.weui.ui.theme.PrimaryColor
 
 @Composable
 fun ActionSheetScreen() {
-    WeScreen(title = "ActionSheet", description = "弹出式菜单") {
-        Column {
-            RequestPay()
-            Spacer(modifier = Modifier.height(20.dp))
-            MakeCall()
-            Spacer(modifier = Modifier.height(20.dp))
-            ShareToTimeline()
-        }
+    WeScreen(
+        title = "ActionSheet",
+        description = "弹出式菜单",
+        verticalArrangement = Arrangement.spacedBy(20.dp)
+    ) {
+        RequestPay()
+        MakeCall()
+        ShareToTimeline()
     }
 }
 

@@ -14,7 +14,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -73,33 +72,31 @@ fun AudioRecorderScreen() {
         val duration = remember { mutableStateOf(0.seconds) }
         RecordingHandler(isRecording, duration)
 
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(
-                text = formatDuration(duration.value, true),
-                color = MaterialTheme.colorScheme.onPrimary,
-                fontSize = 30.sp,
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(modifier = Modifier.height(60.dp))
+        Text(
+            text = formatDuration(duration.value, true),
+            color = MaterialTheme.colorScheme.onPrimary,
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(60.dp))
+        Box(
+            modifier = Modifier.size(84.dp),
+            contentAlignment = Alignment.Center
+        ) {
             Box(
-                modifier = Modifier.size(84.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Box(
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.onBackground)
-                        .clickable {
-                            if (permissionState.allPermissionsGranted) {
-                                isRecording = !isRecording
-                            } else {
-                                permissionState.launchMultiplePermissionRequest()
-                            }
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.onBackground)
+                    .clickable {
+                        if (permissionState.allPermissionsGranted) {
+                            isRecording = !isRecording
+                        } else {
+                            permissionState.launchMultiplePermissionRequest()
                         }
-                        .padding(12.dp)
-                ) {
-                    RecordIcon(isRecording)
-                }
+                    }
+                    .padding(12.dp)
+            ) {
+                RecordIcon(isRecording)
             }
         }
     }

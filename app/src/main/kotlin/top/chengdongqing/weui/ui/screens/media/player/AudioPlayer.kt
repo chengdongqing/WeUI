@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -54,22 +53,20 @@ fun AudioPlayerScreen() {
     WeScreen(title = "AudioPlayer", description = "音频播放", PaddingValues(24.dp)) {
         val audioState = rememberAudioPlayer(audioSource)
 
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(
-                text = formatDuration(audioState.progress.milliseconds, true),
-                color = MaterialTheme.colorScheme.onPrimary,
-                fontSize = 30.sp,
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(modifier = Modifier.height(40.dp))
-            ProgressControl(audioState)
-            Spacer(modifier = Modifier.height(60.dp))
-            PlayControl(
-                audioState.isPlaying,
-                audioState.setPlaying,
-                audioState.player
-            )
-        }
+        Text(
+            text = formatDuration(audioState.progress.milliseconds, true),
+            color = MaterialTheme.colorScheme.onPrimary,
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(40.dp))
+        ProgressControl(audioState)
+        Spacer(modifier = Modifier.height(60.dp))
+        PlayControl(
+            audioState.isPlaying,
+            audioState.setPlaying,
+            audioState.player
+        )
     }
 }
 

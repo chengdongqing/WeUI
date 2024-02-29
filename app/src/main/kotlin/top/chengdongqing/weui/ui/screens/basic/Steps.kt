@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,103 +25,98 @@ import top.chengdongqing.weui.ui.components.steps.WeSteps
 @Composable
 fun StepsScreen() {
     WeScreen(title = "Steps", description = "步骤条") {
-        Column(
-            modifier = Modifier.verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            var step by remember { mutableIntStateOf(0) }
+        var step by remember { mutableIntStateOf(0) }
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceAround
-            ) {
-                WeSteps(
-                    value = step,
-                    options = listOf(
-                        {
-                            Column {
-                                Text(text = "步骤一", color = MaterialTheme.colorScheme.onPrimary)
-                                Text(
-                                    text = "描述内容详情",
-                                    color = MaterialTheme.colorScheme.secondary,
-                                    fontSize = 14.sp
-                                )
-                            }
-                        },
-                        {
-                            Column(modifier = Modifier.height(120.dp)) {
-                                Text(text = "步骤二", color = MaterialTheme.colorScheme.onPrimary)
-                                Text(
-                                    text = "描述内容详情",
-                                    color = MaterialTheme.colorScheme.onSecondary,
-                                    fontSize = 14.sp
-                                )
-                            }
-                        },
-                        {
-                            Column {
-                                Text(text = "步骤三", color = MaterialTheme.colorScheme.onPrimary)
-                                Text(
-                                    text = "描述内容详情",
-                                    color = MaterialTheme.colorScheme.secondary,
-                                    fontSize = 14.sp
-                                )
-                            }
-                        },
-                        {
-                            Column {
-                                Text(text = "步骤四", color = MaterialTheme.colorScheme.onPrimary)
-                            }
-                        }
-                    )
-                )
-                WeSteps(
-                    value = step,
-                    options = listOf(null, null, null, null)
-                )
-            }
-            Column {
-                WeSteps(
-                    value = step,
-                    options = listOf(
-                        {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceAround
+        ) {
+            WeSteps(
+                value = step,
+                options = listOf(
+                    {
+                        Column {
                             Text(text = "步骤一", color = MaterialTheme.colorScheme.onPrimary)
-                        },
-                        {
-                            Text(text = "步骤二", color = MaterialTheme.colorScheme.onPrimary)
-                        },
-                        {
-                            Column(
-                                modifier = Modifier.width(180.dp),
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Text(text = "步骤三", color = MaterialTheme.colorScheme.onPrimary)
-                                Text(
-                                    text = "描述内容详情",
-                                    color = MaterialTheme.colorScheme.onSecondary,
-                                    fontSize = 14.sp
-                                )
-                            }
+                            Text(
+                                text = "描述内容详情",
+                                color = MaterialTheme.colorScheme.secondary,
+                                fontSize = 14.sp
+                            )
                         }
-                    ),
-                    isVertical = false
-                )
-                Spacer(modifier = Modifier.height(20.dp))
-                WeSteps(
-                    value = step,
-                    options = listOf(null, null, null, null),
-                    isVertical = false
-                )
-                Spacer(modifier = Modifier.height(40.dp))
-                WeButton(
-                    text = "更新状态",
-                    modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
-                ) {
-                    if (step < 3) {
-                        step++
-                    } else {
-                        step = 0
+                    },
+                    {
+                        Column(modifier = Modifier.height(120.dp)) {
+                            Text(text = "步骤二", color = MaterialTheme.colorScheme.onPrimary)
+                            Text(
+                                text = "描述内容详情",
+                                color = MaterialTheme.colorScheme.onSecondary,
+                                fontSize = 14.sp
+                            )
+                        }
+                    },
+                    {
+                        Column {
+                            Text(text = "步骤三", color = MaterialTheme.colorScheme.onPrimary)
+                            Text(
+                                text = "描述内容详情",
+                                color = MaterialTheme.colorScheme.secondary,
+                                fontSize = 14.sp
+                            )
+                        }
+                    },
+                    {
+                        Column {
+                            Text(text = "步骤四", color = MaterialTheme.colorScheme.onPrimary)
+                        }
                     }
+                )
+            )
+            WeSteps(
+                value = step,
+                options = listOf(null, null, null, null)
+            )
+        }
+        Column {
+            WeSteps(
+                value = step,
+                options = listOf(
+                    {
+                        Text(text = "步骤一", color = MaterialTheme.colorScheme.onPrimary)
+                    },
+                    {
+                        Text(text = "步骤二", color = MaterialTheme.colorScheme.onPrimary)
+                    },
+                    {
+                        Column(
+                            modifier = Modifier.width(180.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(text = "步骤三", color = MaterialTheme.colorScheme.onPrimary)
+                            Text(
+                                text = "描述内容详情",
+                                color = MaterialTheme.colorScheme.onSecondary,
+                                fontSize = 14.sp
+                            )
+                        }
+                    }
+                ),
+                isVertical = false
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+            WeSteps(
+                value = step,
+                options = listOf(null, null, null, null),
+                isVertical = false
+            )
+            Spacer(modifier = Modifier.height(40.dp))
+            WeButton(
+                text = "更新状态",
+                modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
+            ) {
+                if (step < 3) {
+                    step++
+                } else {
+                    step = 0
                 }
             }
         }

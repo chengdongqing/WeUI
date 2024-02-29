@@ -1,6 +1,5 @@
 package top.chengdongqing.weui.ui.screens.network.websocket
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -11,7 +10,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
@@ -29,7 +27,7 @@ import top.chengdongqing.weui.ui.components.toast.rememberWeToast
 
 @Composable
 fun WebSocketScreen(socketViewModel: WebSocketViewModel = viewModel()) {
-    WeScreen(title = "WebSocket", description = "双向通信") {
+    WeScreen(title = "WebSocket", description = "双向通信", scrollEnabled = false) {
         var connected by remember { mutableStateOf(false) }
 
         DisposableEffect(Unit) {
@@ -79,30 +77,28 @@ private fun ConnectedScreen(
     var text by remember { mutableStateOf("") }
     val toast = rememberWeToast()
 
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        WeTextarea(value = text, placeholder = "请输入内容") { text = it }
-        Spacer(modifier = Modifier.height(20.dp))
-        WeButton(text = "发送") {
-            if (text.isNotBlank()) {
-                socketViewModel.send(text)
-                keyboardController?.hide()
-                text = ""
-            } else {
-                toast.show(ToastOptions("请输入内容", ToastIcon.FAIL))
-            }
+    WeTextarea(value = text, placeholder = "请输入内容") { text = it }
+    Spacer(modifier = Modifier.height(20.dp))
+    WeButton(text = "发送") {
+        if (text.isNotBlank()) {
+            socketViewModel.send(text)
+            keyboardController?.hide()
+            text = ""
+        } else {
+            toast.show(ToastOptions("请输入内容", ToastIcon.FAIL))
         }
-        Spacer(modifier = Modifier.height(20.dp))
-        WeButton(text = "断开连接", type = ButtonType.DANGER) {
-            socketViewModel.close()
-            setConnectState(false)
-        }
-        Spacer(modifier = Modifier.height(40.dp))
-        Text(text = "收到的消息", fontSize = 12.sp)
-        Spacer(modifier = Modifier.height(10.dp))
-        WePairGroup {
-            itemsIndexed(socketViewModel.messages) { index, item ->
-                WePairItem(label = "${index + 1}", value = item)
-            }
+    }
+    Spacer(modifier = Modifier.height(20.dp))
+    WeButton(text = "断开连接", type = ButtonType.DANGER) {
+        socketViewModel.close()
+        setConnectState(false)
+    }
+    Spacer(modifier = Modifier.height(40.dp))
+    Text(text = "收到的消息", fontSize = 12.sp)
+    Spacer(modifier = Modifier.height(10.dp))
+    WePairGroup {
+        itemsIndexed(socketViewModel.messages) { index, item ->
+            WePairItem(label = "${index + 1}", value = item)
         }
     }
 }

@@ -7,7 +7,11 @@ import top.chengdongqing.weui.ui.components.screen.WeScreen
 
 @Composable
 fun ContextMenuScreen() {
-    WeScreen(title = "ContextMenu", description = "上下文菜单") {
+    WeScreen(
+        title = "ContextMenu",
+        description = "上下文菜单",
+        scrollEnabled = false
+    ) {
         val menus = remember {
             listOf("菜单1", "菜单2", "菜单3", "菜单4")
         }

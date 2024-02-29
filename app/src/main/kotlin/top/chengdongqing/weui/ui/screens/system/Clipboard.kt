@@ -3,7 +3,6 @@ package top.chengdongqing.weui.ui.screens.system
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
@@ -11,7 +10,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -33,31 +31,29 @@ fun ClipboardScreen() {
         val dialog = rememberWeDialog()
         val toast = rememberWeToast()
 
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            WeTextarea(content, placeholder = "请输入内容", max = 200, topBorder = true) {
-                content = it
+        WeTextarea(content, placeholder = "请输入内容", max = 200, topBorder = true) {
+            content = it
+        }
+        Spacer(modifier = Modifier.height(20.dp))
+        WeButton(text = "设置剪贴板内容") {
+            if (content.isEmpty()) {
+                toast.show(ToastOptions("内容不能为空", ToastIcon.FAIL))
+            } else {
+                setClipboardData(context, content)
+                toast.show(ToastOptions("已复制", ToastIcon.SUCCESS))
             }
-            Spacer(modifier = Modifier.height(20.dp))
-            WeButton(text = "设置剪贴板内容") {
-                if (content.isEmpty()) {
-                    toast.show(ToastOptions("内容不能为空", ToastIcon.FAIL))
-                } else {
-                    setClipboardData(context, content)
-                    toast.show(ToastOptions("已复制", ToastIcon.SUCCESS))
-                }
-            }
-            Spacer(modifier = Modifier.height(20.dp))
-            WeButton(text = "读取剪贴板内容", type = ButtonType.PLAIN) {
-                getClipboardData(context)?.let {
-                    dialog.show(
-                        DialogOptions(
-                            title = "剪贴板内容",
-                            content = it,
-                            onCancel = null
-                        )
+        }
+        Spacer(modifier = Modifier.height(20.dp))
+        WeButton(text = "读取剪贴板内容", type = ButtonType.PLAIN) {
+            getClipboardData(context)?.let {
+                dialog.show(
+                    DialogOptions(
+                        title = "剪贴板内容",
+                        content = it,
+                        onCancel = null
                     )
-                } ?: toast.show(ToastOptions("获取失败", ToastIcon.FAIL))
-            }
+                )
+            } ?: toast.show(ToastOptions("获取失败", ToastIcon.FAIL))
         }
     }
 }

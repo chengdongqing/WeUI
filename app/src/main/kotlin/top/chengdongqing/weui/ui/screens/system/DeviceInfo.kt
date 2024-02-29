@@ -30,7 +30,7 @@ import top.chengdongqing.weui.utils.formatFloat
 
 @Composable
 fun DeviceInfoScreen() {
-    WeScreen(title = "DeviceInfo", description = "设备信息") {
+    WeScreen(title = "DeviceInfo", description = "设备信息", scrollEnabled = false) {
         val context = LocalContext.current
         val density = LocalDensity.current
         val configuration = LocalConfiguration.current

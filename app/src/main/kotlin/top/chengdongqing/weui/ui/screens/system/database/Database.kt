@@ -12,7 +12,8 @@ fun DatabaseScreen(navController: NavController) {
     WeScreen(
         title = "Database",
         description = "数据库（SQLite+Room）",
-        padding = PaddingValues(0.dp)
+        padding = PaddingValues(0.dp),
+        scrollEnabled = false
     ) {
         AddressList(navController)
     }

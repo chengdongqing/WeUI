@@ -35,7 +35,6 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
@@ -55,7 +54,7 @@ import top.chengdongqing.weui.utils.formatFloat
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun GNSSScreen() {
-    WeScreen(title = "GNSS", description = "全球导航卫星系统") {
+    WeScreen(title = "GNSS", description = "全球导航卫星系统", scrollEnabled = false) {
         val context = LocalContext.current
         val permissionState = rememberPermissionState(Manifest.permission.ACCESS_FINE_LOCATION)
         val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -72,31 +71,29 @@ fun GNSSScreen() {
             }
         }
 
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            if (!observing) {
-                WeButton(text = "开始扫描") {
-                    if (permissionState.status.isGranted) {
-                        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                            Toast.makeText(context, "位置服务未开启", Toast.LENGTH_SHORT).show()
-                            context.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
-                        } else {
-                            setObserving(true)
-                        }
+        if (!observing) {
+            WeButton(text = "开始扫描") {
+                if (permissionState.status.isGranted) {
+                    if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                        Toast.makeText(context, "位置服务未开启", Toast.LENGTH_SHORT).show()
+                        context.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
                     } else {
-                        permissionState.launchPermissionRequest()
+                        setObserving(true)
                     }
-                }
-            } else {
-                WeButton(text = "停止扫描", type = ButtonType.PLAIN) {
-                    setObserving(false)
+                } else {
+                    permissionState.launchPermissionRequest()
                 }
             }
+        } else {
+            WeButton(text = "停止扫描", type = ButtonType.PLAIN) {
+                setObserving(false)
+            }
+        }
 
-            location?.let {
-                LocationBar(it, satelliteList.size)
-                Spacer(modifier = Modifier.height(20.dp))
-                SatelliteTable(groupedList)
-            }
+        location?.let {
+            LocationBar(it, satelliteList.size)
+            Spacer(modifier = Modifier.height(20.dp))
+            SatelliteTable(groupedList)
         }
     }
 }

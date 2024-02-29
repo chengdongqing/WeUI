@@ -1,6 +1,5 @@
 package top.chengdongqing.weui.ui.screens.form
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardOptions
@@ -21,31 +20,29 @@ fun InputScreen() {
     WeScreen(title = "Input", description = "输入框") {
         val value = remember { mutableStateMapOf<String, String>() }
 
-        Column {
-            WeInput(
-                value = value["account"],
-                label = "账号",
-                placeholder = "请输入"
-            ) {
-                value["account"] = it
-            }
-            WeInput(
-                value = value["password"],
-                label = "密码",
-                placeholder = "请输入",
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
-            ) {
-                value["password"] = it
-            }
-            WeInput("WeUI", label = "微信号", disabled = true)
-            WeTextarea(value["desc"] ?: "", placeholder = "请描述你所经历的事情", max = 200) {
-                value["desc"] = it
-            }
-            Spacer(modifier = Modifier.height(20.dp))
-            WeButton(
-                text = "确定",
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            )
+        WeInput(
+            value = value["account"],
+            label = "账号",
+            placeholder = "请输入"
+        ) {
+            value["account"] = it
         }
+        WeInput(
+            value = value["password"],
+            label = "密码",
+            placeholder = "请输入",
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+        ) {
+            value["password"] = it
+        }
+        WeInput("WeUI", label = "微信号", disabled = true)
+        WeTextarea(value["desc"] ?: "", placeholder = "请描述你所经历的事情", max = 200) {
+            value["desc"] = it
+        }
+        Spacer(modifier = Modifier.height(20.dp))
+        WeButton(
+            text = "确定",
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        )
     }
 }

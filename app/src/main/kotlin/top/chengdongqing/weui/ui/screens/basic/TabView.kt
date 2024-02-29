@@ -23,7 +23,8 @@ fun TabViewScreen() {
     WeScreen(
         title = "TabView",
         description = "选项卡视图",
-        padding = PaddingValues(0.dp)
+        padding = PaddingValues(0.dp),
+        scrollEnabled = false
     ) {
         val options = remember {
             List(10) { "Tab ${it + 1}" }
@@ -31,8 +32,7 @@ fun TabViewScreen() {
 
         WeTabView(options) { index ->
             Box(
-                modifier = Modifier
-                    .fillMaxSize(),
+                modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
                 Text(

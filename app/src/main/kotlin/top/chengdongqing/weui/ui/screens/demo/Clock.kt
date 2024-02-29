@@ -1,11 +1,10 @@
 package top.chengdongqing.weui.ui.screens.demo
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,8 +22,13 @@ import java.time.ZoneId
 
 @Composable
 fun ClockScreen() {
-    WeScreen(title = "Clock", description = "时钟", padding = PaddingValues(0.dp)) {
-        val timeZones = remember {
+    WeScreen(
+        title = "Clock",
+        description = "时钟",
+        padding = PaddingValues(bottom = 100.dp),
+        verticalArrangement = Arrangement.spacedBy(40.dp)
+    ) {
+        val timeZoneList = remember {
             listOf(
                 TimeZoneItem("上海（中国）", "Asia/Shanghai", BorderColorLight),
                 TimeZoneItem("莫斯科（俄罗斯）", "Europe/Moscow", Color.Black),
@@ -35,16 +39,13 @@ fun ClockScreen() {
             )
         }
 
-        LazyColumn(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(40.dp),
-            contentPadding = PaddingValues(bottom = 60.dp)
-        ) {
-            items(timeZones) {
-                WeClock(ZoneId.of(it.zoneId), it.color)
+        repeat(timeZoneList.size) { index ->
+            val item = timeZoneList[index]
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                WeClock(ZoneId.of(item.zoneId), item.color)
                 Spacer(modifier = Modifier.height(20.dp))
                 Text(
-                    text = it.name,
+                    text = item.name,
                     color = MaterialTheme.colorScheme.onSecondary,
                     fontSize = 14.sp
                 )

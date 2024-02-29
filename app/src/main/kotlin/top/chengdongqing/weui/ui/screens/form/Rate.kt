@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -26,36 +25,30 @@ import top.chengdongqing.weui.ui.theme.WeUITheme
 
 @Composable
 fun RateScreen() {
-    WeScreen(title = "Rate", description = "评分") {
+    WeScreen(
+        title = "Rate",
+        description = "评分",
+        verticalArrangement = Arrangement.spacedBy(20.dp)
+    ) {
         var value by remember { mutableFloatStateOf(4f) }
 
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(20.dp)) {
-            item {
-                DemoItem("基本用法") {
-                    WeRate(value) {
-                        value = it
-                    }
-                }
+        DemoItem("基本用法") {
+            WeRate(value) {
+                value = it
             }
-            item {
-                DemoItem("设置数量") {
-                    WeRate(value, count = 8) {
-                        value = it
-                    }
-                }
+        }
+        DemoItem("设置数量") {
+            WeRate(value, count = 8) {
+                value = it
             }
-            item {
-                DemoItem("支持半星") {
-                    WeRate(value, allowHalf = true) {
-                        value = it
-                    }
-                }
+        }
+        DemoItem("支持半星") {
+            WeRate(value, allowHalf = true) {
+                value = it
             }
-            item {
-                DemoItem("不可修改") {
-                    WeRate(value)
-                }
-            }
+        }
+        DemoItem("不可修改") {
+            WeRate(value)
         }
     }
 }

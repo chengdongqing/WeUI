@@ -2,6 +2,7 @@ package top.chengdongqing.weui.ui.screens.basic
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.animateTo
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -32,7 +33,11 @@ import top.chengdongqing.weui.utils.rememberToggleState
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SwipeActionScreen() {
-    WeScreen(title = "SwipeAction", description = "滑动操作") {
+    WeScreen(
+        title = "SwipeAction",
+        description = "滑动操作",
+        verticalArrangement = Arrangement.spacedBy(40.dp)
+    ) {
         val options = remember {
             listOf(
                 SwipeActionItem(
@@ -53,34 +58,32 @@ fun SwipeActionScreen() {
             )
         }
 
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            WeSwipeAction(
-                startOptions = options.slice(0..1),
-                endOptions = options
-            ) {
-                Text(text = "文字按钮（左右滑动）", color = MaterialTheme.colorScheme.onPrimary)
-            }
-            Spacer(modifier = Modifier.height(40.dp))
-            WeSwipeAction(
-                startOptions = options,
-                endOptions = options,
-                style = SwipeActionStyle.ICON,
-                height = 70.dp
-            ) {
-                Text(text = "图标按钮（左右滑动）", color = MaterialTheme.colorScheme.onPrimary)
-            }
-            Spacer(modifier = Modifier.height(40.dp))
+        WeSwipeAction(
+            startOptions = options.slice(0..1),
+            endOptions = options
+        ) {
+            Text(text = "文字按钮（左右滑动）", color = MaterialTheme.colorScheme.onPrimary)
+        }
+        WeSwipeAction(
+            startOptions = options,
+            endOptions = options,
+            style = SwipeActionStyle.ICON,
+            height = 70.dp
+        ) {
+            Text(text = "图标按钮（左右滑动）", color = MaterialTheme.colorScheme.onPrimary)
+        }
 
-            val options1 = remember { options.slice(1..2) }
-            val (anchor, toggleAnchor) = rememberToggleState(
-                defaultValue = DragAnchors.End,
-                reverseValue = DragAnchors.Center,
-            )
-            val swipeActionState = rememberAnchoredDraggableState(
-                initialValue = anchor,
-                endActionCount = options1.size
-            )
-            val coroutineScope = rememberCoroutineScope()
+        val options1 = remember { options.slice(1..2) }
+        val (anchor, toggleAnchor) = rememberToggleState(
+            defaultValue = DragAnchors.End,
+            reverseValue = DragAnchors.Center,
+        )
+        val swipeActionState = rememberAnchoredDraggableState(
+            initialValue = anchor,
+            endActionCount = options1.size
+        )
+        val coroutineScope = rememberCoroutineScope()
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
             WeButton(text = "切换状态", type = ButtonType.PLAIN) {
                 coroutineScope.launch {
                     swipeActionState.state.animateTo(toggleAnchor())

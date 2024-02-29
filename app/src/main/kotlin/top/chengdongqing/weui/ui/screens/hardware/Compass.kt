@@ -1,13 +1,11 @@
 package top.chengdongqing.weui.ui.screens.hardware
 
 import android.hardware.Sensor
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,32 +31,30 @@ fun CompassScreen(compassViewModel: CompassViewModel = viewModel()) {
     WeScreen(title = "Compass", description = "罗盘（指南针），基于磁力计与加速度计") {
         val pressure = rememberSensorValue(Sensor.TYPE_PRESSURE, compassViewModel.observing)
 
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            WeCompass(compassViewModel)
-            Spacer(modifier = Modifier.height(20.dp))
-            compassViewModel.accuracy?.let {
-                Text(
-                    text = "精度：${determineAccuracy(it)}",
-                    color = FontSecondaryColorLight,
-                    fontSize = 10.sp
-                )
+        WeCompass(compassViewModel)
+        Spacer(modifier = Modifier.height(20.dp))
+        compassViewModel.accuracy?.let {
+            Text(
+                text = "精度：${determineAccuracy(it)}",
+                color = FontSecondaryColorLight,
+                fontSize = 10.sp
+            )
+        }
+        pressure?.let {
+            Text(
+                text = "气压：${formatFloat(pressure)}hPa（百帕斯卡）",
+                color = MaterialTheme.colorScheme.onPrimary,
+                fontSize = 10.sp
+            )
+        }
+        Spacer(modifier = Modifier.height(40.dp))
+        if (!compassViewModel.observing) {
+            WeButton(text = "开始监听") {
+                compassViewModel.observing = true
             }
-            pressure?.let {
-                Text(
-                    text = "气压：${formatFloat(pressure)}hPa（百帕斯卡）",
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    fontSize = 10.sp
-                )
-            }
-            Spacer(modifier = Modifier.height(40.dp))
-            if (!compassViewModel.observing) {
-                WeButton(text = "开始监听") {
-                    compassViewModel.observing = true
-                }
-            } else {
-                WeButton(text = "取消监听", type = ButtonType.PLAIN) {
-                    compassViewModel.observing = false
-                }
+        } else {
+            WeButton(text = "取消监听", type = ButtonType.PLAIN) {
+                compassViewModel.observing = false
             }
         }
     }
