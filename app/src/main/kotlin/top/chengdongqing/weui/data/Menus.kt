@@ -43,7 +43,6 @@ val menus = listOf(
             MenuItem("VideoRecorder", "video-recorder"),
             MenuItem("AudioPlayer", "audio-player"),
             MenuItem("VideoPlayer", "video-player"),
-            MenuItem("ImageCropper", "image-cropper"),
             MenuItem("LivePlayer", "live-player"),
             MenuItem("LivePusher", "live-pusher")
         )
@@ -141,6 +140,7 @@ val menus = listOf(
             MenuItem("DigitalKeyboard", "digital-keyboard"),
             MenuItem("CubicBezier", "cubic-bezier"),
             MenuItem("NotificationBar", "notification-bar"),
+            MenuItem("ImageCropper", "image-cropper")
         )
     ),
     MenuGroup(

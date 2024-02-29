@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.ui.screens.media.cropper
+package top.chengdongqing.weui.ui.screens.demo.cropper
 
 import androidx.compose.runtime.Composable
 import top.chengdongqing.weui.ui.components.screen.WeScreen
