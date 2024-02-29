@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,7 +27,6 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.isActive
-import top.chengdongqing.weui.ui.theme.DangerColorLight
 
 enum class NotificationBarEffect {
     ELLIPSIS,
@@ -39,8 +39,7 @@ fun WeNotificationBar(
     content: String,
     effect: NotificationBarEffect = NotificationBarEffect.SCROLL,
     scrollStep: Int = 2,
-    containerColor: Color = Color(0xffFFFBE6),
-    contentColor: Color = DangerColorLight,
+    colors: NotificationBarColors = NotificationBarDefaults.colors,
     padding: PaddingValues = PaddingValues(horizontal = 20.dp, vertical = 12.dp)
 ) {
     var containerWidth by remember { mutableIntStateOf(0) }
@@ -53,7 +52,7 @@ fun WeNotificationBar(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(containerColor)
+            .background(colors.containerColor)
             .padding(padding)
             .onSizeChanged {
                 containerWidth = it.width
@@ -62,7 +61,7 @@ fun WeNotificationBar(
     ) {
         Text(
             text = content,
-            color = contentColor,
+            color = colors.contentColor,
             fontSize = 13.sp,
             maxLines = if (effect == NotificationBarEffect.WRAP) Int.MAX_VALUE else 1,
             softWrap = effect == NotificationBarEffect.WRAP,
@@ -96,4 +95,18 @@ private fun ScrollingEffect(
             }
         }
     }
+}
+
+data class NotificationBarColors(
+    val containerColor: Color,
+    val contentColor: Color
+)
+
+object NotificationBarDefaults {
+    val colors: NotificationBarColors
+        @Composable
+        get() = NotificationBarColors(
+            containerColor = MaterialTheme.colorScheme.errorContainer,
+            contentColor = MaterialTheme.colorScheme.error
+        )
 }

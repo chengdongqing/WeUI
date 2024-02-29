@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -16,8 +17,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.R
-import top.chengdongqing.weui.ui.theme.BackgroundColorLight
-import top.chengdongqing.weui.ui.theme.FontSecondaryColorLight
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.utils.clickableWithoutRipple
 
@@ -62,12 +61,20 @@ internal fun NavigationBar(folders: MutableList<String>) {
 private fun FolderLabel(label: String, isActive: Boolean, onClick: () -> Unit) {
     Text(
         text = label,
-        color = if (isActive) PrimaryColor else FontSecondaryColorLight,
+        color = if (isActive) {
+            PrimaryColor
+        } else {
+            MaterialTheme.colorScheme.onSecondary
+        },
         fontSize = 14.sp,
         modifier = Modifier
             .background(
-                if (isActive) PrimaryColor.copy(0.1f) else BackgroundColorLight,
-                RoundedCornerShape(16.dp)
+                color = if (isActive) {
+                    PrimaryColor.copy(0.1f)
+                } else {
+                    MaterialTheme.colorScheme.onSurface
+                },
+                shape = RoundedCornerShape(16.dp)
             )
             .clickableWithoutRipple { onClick() }
             .padding(vertical = 4.dp, horizontal = 12.dp)
@@ -79,6 +86,7 @@ private fun FolderArrowIcon() {
     Icon(
         painterResource(id = R.drawable.ic_arrow_right),
         contentDescription = null,
+        tint = MaterialTheme.colorScheme.onSecondary,
         modifier = Modifier
             .padding(horizontal = 8.dp, vertical = 6.dp)
             .size(16.dp)

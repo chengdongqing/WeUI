@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -37,8 +38,6 @@ import top.chengdongqing.weui.ui.components.popup.WePopup
 import top.chengdongqing.weui.ui.components.toast.ToastIcon
 import top.chengdongqing.weui.ui.components.toast.ToastOptions
 import top.chengdongqing.weui.ui.components.toast.rememberWeToast
-import top.chengdongqing.weui.ui.theme.FontColorLight
-import top.chengdongqing.weui.ui.theme.FontSecondaryColorLight
 import top.chengdongqing.weui.utils.calculateFileSize
 import top.chengdongqing.weui.utils.deleteFile
 import top.chengdongqing.weui.utils.format
@@ -122,7 +121,7 @@ internal fun FileListItem(
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = file.name,
-                color = FontColorLight,
+                color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 overflow = TextOverflow.Ellipsis,
@@ -140,7 +139,7 @@ internal fun FileListItem(
                             append(file.size)
                         }
                     },
-                    color = FontSecondaryColorLight,
+                    color = MaterialTheme.colorScheme.onSecondary,
                     fontSize = 14.sp
                 )
             }
@@ -148,7 +147,8 @@ internal fun FileListItem(
         Spacer(modifier = Modifier.width(20.dp))
         Icon(
             painterResource(id = R.drawable.ic_arrow_right),
-            contentDescription = "下一级"
+            contentDescription = "下一级",
+            tint = MaterialTheme.colorScheme.secondary
         )
     }
 }

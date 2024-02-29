@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -25,7 +26,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
@@ -45,7 +45,7 @@ fun FileBrowserScreen(fileViewModel: FileViewModel = viewModel()) {
     WeScreen(
         title = "FileBrowser",
         description = "文件浏览器",
-        containerColor = Color.White
+        containerColor = MaterialTheme.colorScheme.surface
     ) {
         RequestStoragePermission {
             FileBrowser(fileViewModel, Environment.getExternalStorageDirectory().path)

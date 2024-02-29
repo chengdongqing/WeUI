@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -126,7 +127,7 @@ private fun IndexBarItem(
     ) {
         Text(
             text = title.toString(),
-            color = if (selected) Color.White else Color.Black,
+            color = if (selected) Color.White else MaterialTheme.colorScheme.onPrimary,
             fontSize = 11.sp,
             modifier = Modifier
                 .pointerInteropFilter { motionEvent ->
@@ -154,6 +155,8 @@ private fun IndexBarItem(
 
 @Composable
 private fun BoxScope.DrawIndicator(title: Char, index: Int, dpHeightPerIndex: Dp) {
+    val color = MaterialTheme.colorScheme.background
+
     Box(
         modifier = Modifier
             .size(60.dp)
@@ -178,8 +181,8 @@ private fun BoxScope.DrawIndicator(title: Char, index: Int, dpHeightPerIndex: Dp
                     )
                     close()
                 }
-                drawPath(circlePath, Color.LightGray)
-                drawPath(trianglePath, Color.LightGray)
+                drawPath(circlePath, color)
+                drawPath(trianglePath, color)
             },
         contentAlignment = Alignment.Center
     ) {

@@ -153,7 +153,7 @@ private fun AppItem(app: App, context: Context) {
                     append("APK大小: ${app.apkSize}")
                 },
                 color = MaterialTheme.colorScheme.onPrimary,
-                fontSize = 14.sp
+                fontSize = 12.sp
             )
             Spacer(modifier = Modifier.height(10.dp))
             FlowRow(

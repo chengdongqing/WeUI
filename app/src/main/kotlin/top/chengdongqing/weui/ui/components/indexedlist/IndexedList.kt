@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,7 +22,6 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.houbb.pinyin.constant.enums.PinyinStyleEnum
@@ -30,7 +30,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.ui.components.divider.WeDivider
 import top.chengdongqing.weui.ui.components.loading.WeLoading
-import top.chengdongqing.weui.ui.theme.BackgroundColorLight
 
 @Composable
 fun WeIndexedList(labels: List<String>) {
@@ -62,21 +61,23 @@ private fun LazyListScope.indexGroups(groups: Map<Char, List<String>>) {
         stickyHeader {
             Text(
                 text = letter.toString(),
+                color = MaterialTheme.colorScheme.onSecondary,
                 fontSize = 13.sp,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(BackgroundColorLight)
+                    .background(MaterialTheme.colorScheme.background)
                     .padding(horizontal = 16.dp, vertical = 8.dp)
             )
         }
         itemsIndexed(list) { index, item ->
-            Column(modifier = Modifier.background(Color.White)) {
+            Column(modifier = Modifier.background(MaterialTheme.colorScheme.onBackground)) {
                 Text(
                     text = item,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     fontSize = 15.sp,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(Color.White)
+                        .background(MaterialTheme.colorScheme.onBackground)
                         .clickable { }
                         .padding(horizontal = 16.dp, vertical = 16.dp)
                 )
