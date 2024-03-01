@@ -1,7 +1,7 @@
 package top.chengdongqing.weui.ui.components.charts
 
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationSpec
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,10 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -27,9 +24,9 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.launch
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.utils.formatFloat
-import top.chengdongqing.weui.utils.rememberLastState
 
 data class BarChartData(
     val value: Float,
@@ -51,24 +48,16 @@ fun WeBarChart(
     // 数据最大值
     val maxValue = remember(data) { data.maxOfOrNull { it.value } ?: 1f }
 
-    val lastData = rememberLastState(data)
-    var values by remember(data) {
-        mutableStateOf<List<Float>>(MutableList(data.size) { index ->
-            if (lastData != data) lastData.getOrNull(index)?.value ?: 0f else 0f
-        })
-    }
-
+    val animatedBars = remember(data.size) { data.map { Animatable(0f) } }
     LaunchedEffect(data) {
-        values = data.map { it.value }
-    }
-
-    // 数据对应柱高
-    val animatedHeights = values.map { value ->
-        animateFloatAsState(
-            targetValue = value,
-            animationSpec = animationSpec,
-            label = "BarChartAnimation"
-        ).value
+        animatedBars.forEachIndexed { index, item ->
+            launch {
+                item.animateTo(
+                    targetValue = data[index].value / maxValue,
+                    animationSpec = animationSpec
+                )
+            }
+        }
     }
 
     Canvas(
@@ -95,48 +84,24 @@ fun WeBarChart(
             textMeasurer
         )
         // 绘制柱状图
-        drawBars(
-            values = data.map { it.value },
-            barWidth,
-            barSpace,
-            barColor = color,
-            textMeasurer,
-            formatter,
-            animatedHeights,
-            maxValue
-        )
-    }
-}
-
-private fun DrawScope.drawBars(
-    values: List<Float>,
-    barWidth: Float,
-    spaceWidth: Float,
-    barColor: Color,
-    textMeasurer: TextMeasurer,
-    valueFormatter: (Float) -> String,
-    animatedHeights: List<Float>,
-    maxValue: Float
-) {
-    repeat(values.size) { index ->
-        val barHeight = animatedHeights[index] / maxValue * size.height
-        val offsetX = index * (barWidth + spaceWidth) + spaceWidth / 2
-        val offsetY = size.height - barHeight
-
-        // 绘制柱子
-        drawRect(barColor, Offset(offsetX, offsetY), Size(barWidth, barHeight))
-
-        // 绘制数值
-        if (barWidth >= 10.dp.toPx()) {
-            drawValueLabel(
-                value = values[index],
-                offsetX,
-                offsetY,
-                barWidth,
-                textMeasurer,
-                valueFormatter,
-                barColor
-            )
+        animatedBars.forEachIndexed { index, item ->
+            val barHeight = item.value * size.height
+            val offsetX = index * (barWidth + barSpace) + barSpace / 2
+            val offsetY = size.height - barHeight
+            // 绘制柱子
+            drawRect(color, Offset(offsetX, offsetY), Size(barWidth, barHeight))
+            // 绘制数值
+            if (barWidth >= 10.dp.toPx()) {
+                drawValueLabel(
+                    value = data[index].value,
+                    offsetX,
+                    offsetY,
+                    barWidth,
+                    textMeasurer,
+                    formatter,
+                    color
+                )
+            }
         }
     }
 }

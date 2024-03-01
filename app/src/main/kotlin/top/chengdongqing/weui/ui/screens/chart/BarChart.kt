@@ -45,7 +45,7 @@ fun BarChartScreen() {
         }
         Spacer(modifier = Modifier.height(40.dp))
         WeButton(text = "更新数据") {
-            data = buildData(if (data.size == 6) 6 else 6)
+            data = buildData(6)
         }
         WeButton(text = "修改颜色", type = ButtonType.DANGER) {
             color = if (color == PrimaryColor.copy(0.8f)) {
