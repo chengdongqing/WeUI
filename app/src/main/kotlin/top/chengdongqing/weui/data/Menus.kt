@@ -1,8 +1,20 @@
 package top.chengdongqing.weui.data
 
+import androidx.annotation.DrawableRes
 import top.chengdongqing.weui.R
-import top.chengdongqing.weui.model.MenuGroup
-import top.chengdongqing.weui.model.MenuItem
+
+data class MenuItem(
+    val label: String,
+    val route: String
+)
+
+data class MenuGroup(
+    val title: String,
+    @DrawableRes
+    val iconId: Int,
+    val children: List<MenuItem>? = null,
+    val path: String? = null
+)
 
 val menus = listOf(
     MenuGroup(

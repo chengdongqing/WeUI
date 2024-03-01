@@ -24,7 +24,7 @@ import top.chengdongqing.weui.ui.components.radio.RadioOption
 import top.chengdongqing.weui.ui.components.radio.WeRadioGroup
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.theme.WeUITheme
-import kotlin.random.Random
+import top.chengdongqing.weui.utils.randomFloatInRange
 
 @Composable
 fun DigitalRollerScreen() {
@@ -50,9 +50,7 @@ fun DigitalRollerScreen() {
         WeDigitalRoller(value, decimals, duration)
         Spacer(modifier = Modifier.height(40.dp))
         WeButton(text = "更新数值") {
-            val integer = Random.nextInt(1, 10000)
-            val decimal = Random.nextInt(10, 99)
-            value = "$integer.$decimal".toFloat()
+            value = randomFloatInRange(1f, 10000f)
         }
         Spacer(modifier = Modifier.height(40.dp))
         RadioCard(title = "动画时长", options = durationOptions, value = duration) {

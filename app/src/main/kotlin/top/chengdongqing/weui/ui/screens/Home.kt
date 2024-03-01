@@ -39,9 +39,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import top.chengdongqing.weui.R
+import top.chengdongqing.weui.data.MenuGroup
+import top.chengdongqing.weui.data.MenuItem
 import top.chengdongqing.weui.data.menus
-import top.chengdongqing.weui.model.MenuGroup
-import top.chengdongqing.weui.model.MenuItem
 import top.chengdongqing.weui.ui.components.divider.WeDivider
 import top.chengdongqing.weui.ui.theme.FontColorDark
 import top.chengdongqing.weui.utils.clickableWithoutRipple
