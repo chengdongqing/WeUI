@@ -15,14 +15,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.ui.components.button.ButtonType
 import top.chengdongqing.weui.ui.components.button.WeButton
-import top.chengdongqing.weui.ui.components.charts.BarChartData
+import top.chengdongqing.weui.ui.components.charts.ChartData
 import top.chengdongqing.weui.ui.components.charts.WeBarChart
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.ui.theme.WarningColor
 import top.chengdongqing.weui.ui.theme.WeUITheme
 import top.chengdongqing.weui.utils.formatFloat
-import top.chengdongqing.weui.utils.randomFloatInRange
+import top.chengdongqing.weui.utils.randomFloat
 
 @Composable
 fun BarChartScreen() {
@@ -32,12 +32,12 @@ fun BarChartScreen() {
         containerColor = MaterialTheme.colorScheme.surface,
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        var data by remember { mutableStateOf(buildData(6)) }
+        var dataSource by remember { mutableStateOf(buildData(6)) }
         var color by remember { mutableStateOf(PrimaryColor.copy(0.8f)) }
         var maxBarWidth by remember { mutableIntStateOf(20) }
 
         WeBarChart(
-            data,
+            dataSource,
             color = color,
             barWidthRange = 2..maxBarWidth,
         ) {
@@ -45,9 +45,9 @@ fun BarChartScreen() {
         }
         Spacer(modifier = Modifier.height(40.dp))
         WeButton(text = "更新数据") {
-            data = buildData(6)
+            dataSource = buildData()
         }
-        WeButton(text = "修改颜色", type = ButtonType.DANGER) {
+        WeButton(text = "切换颜色", type = ButtonType.DANGER) {
             color = if (color == PrimaryColor.copy(0.8f)) {
                 WarningColor.copy(0.8f)
             } else {
@@ -60,10 +60,10 @@ fun BarChartScreen() {
     }
 }
 
-private fun buildData(size: Int): List<BarChartData> {
+private fun buildData(size: Int = 6): List<ChartData> {
     return MutableList(size) { index ->
-        val value = randomFloatInRange(0f, 10000f)
-        BarChartData(value, "${index + 1}月")
+        val value = randomFloat(0f, 10000f)
+        ChartData(value, "${index + 1}月")
     }
 }
 

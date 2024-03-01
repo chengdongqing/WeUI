@@ -2,6 +2,7 @@ package top.chengdongqing.weui.ui.components.charts
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,14 +29,9 @@ import kotlinx.coroutines.launch
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.utils.formatFloat
 
-data class BarChartData(
-    val value: Float,
-    val label: String
-)
-
 @Composable
 fun WeBarChart(
-    data: List<BarChartData>,
+    dataSource: List<ChartData>,
     height: Dp = 300.dp,
     barWidthRange: IntRange = 2..20,
     color: Color = PrimaryColor.copy(0.8f),
@@ -46,14 +42,16 @@ fun WeBarChart(
     // 刻度颜色
     val labelColor = MaterialTheme.colorScheme.onSecondary
     // 数据最大值
-    val maxValue = remember(data) { data.maxOfOrNull { it.value } ?: 1f }
+    val maxValue = remember(dataSource) { dataSource.maxOfOrNull { it.value } ?: 1f }
+    // 每个数据项的动画实例
+    val animatedHeights = remember(dataSource.size) { dataSource.map { Animatable(0f) } }
 
-    val animatedBars = remember(data.size) { data.map { Animatable(0f) } }
-    LaunchedEffect(data) {
-        animatedBars.forEachIndexed { index, item ->
+    // 数据变化后执行动画
+    LaunchedEffect(dataSource) {
+        animatedHeights.forEachIndexed { index, item ->
             launch {
                 item.animateTo(
-                    targetValue = data[index].value / maxValue,
+                    targetValue = dataSource[index].value / maxValue,
                     animationSpec = animationSpec
                 )
             }
@@ -67,16 +65,16 @@ fun WeBarChart(
             .height(height)
     ) {
         // 柱宽
-        val barWidth = (size.width / (data.size * 2f)).coerceIn(
+        val barWidth = (size.width / (dataSource.size * 2f)).coerceIn(
             barWidthRange.first.dp.toPx(),
             barWidthRange.last.dp.toPx()
         )
         // 柱间距
-        val barSpace = (size.width - barWidth * data.size) / data.size
+        val barSpace = (size.width - barWidth * dataSource.size) / dataSource.size
 
         // 绘制X轴
         drawXAxis(
-            labels = data.map { it.label },
+            labels = dataSource.map { it.label },
             barWidth,
             barSpace,
             axisColor = color,
@@ -84,24 +82,48 @@ fun WeBarChart(
             textMeasurer
         )
         // 绘制柱状图
-        animatedBars.forEachIndexed { index, item ->
-            val barHeight = item.value * size.height
-            val offsetX = index * (barWidth + barSpace) + barSpace / 2
-            val offsetY = size.height - barHeight
-            // 绘制柱子
-            drawRect(color, Offset(offsetX, offsetY), Size(barWidth, barHeight))
-            // 绘制数值
-            if (barWidth >= 10.dp.toPx()) {
-                drawValueLabel(
-                    value = data[index].value,
-                    offsetX,
-                    offsetY,
-                    barWidth,
-                    textMeasurer,
-                    formatter,
-                    color
-                )
-            }
+        drawBars(
+            animatedHeights,
+            dataSource,
+            barWidth,
+            barSpace,
+            barColor = color,
+            textMeasurer,
+            formatter
+        )
+    }
+}
+
+private fun DrawScope.drawBars(
+    animatedHeights: List<Animatable<Float, AnimationVector1D>>,
+    dataSource: List<ChartData>,
+    barWidth: Float,
+    barSpace: Float,
+    barColor: Color,
+    textMeasurer: TextMeasurer,
+    formatter: (Float) -> String
+) {
+    animatedHeights.forEachIndexed { index, item ->
+        val barHeight = item.value * size.height
+        val offsetX = index * (barWidth + barSpace) + barSpace / 2
+        val offsetY = size.height - barHeight
+        // 绘制柱子
+        drawRect(
+            color = dataSource[index].color ?: barColor,
+            topLeft = Offset(offsetX, offsetY),
+            size = Size(barWidth, barHeight)
+        )
+        // 绘制数值
+        if (barWidth >= 10.dp.toPx()) {
+            drawValueLabel(
+                value = dataSource[index].value,
+                offsetX,
+                offsetY,
+                barWidth,
+                textMeasurer,
+                formatter,
+                barColor
+            )
         }
     }
 }
