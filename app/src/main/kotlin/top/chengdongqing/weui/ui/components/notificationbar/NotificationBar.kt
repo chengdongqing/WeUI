@@ -39,7 +39,7 @@ fun WeNotificationBar(
     content: String,
     effect: NotificationBarEffect = NotificationBarEffect.SCROLL,
     scrollStep: Int = 2,
-    colors: NotificationBarColors = NotificationBarDefaults.colors,
+    colors: NotificationBarColors = MaterialTheme.notificationBarColorScheme,
     padding: PaddingValues = PaddingValues(horizontal = 20.dp, vertical = 12.dp)
 ) {
     var containerWidth by remember { mutableIntStateOf(0) }
@@ -102,11 +102,9 @@ data class NotificationBarColors(
     val contentColor: Color
 )
 
-object NotificationBarDefaults {
-    val colors: NotificationBarColors
-        @Composable
-        get() = NotificationBarColors(
-            containerColor = MaterialTheme.colorScheme.errorContainer,
-            contentColor = MaterialTheme.colorScheme.error
-        )
-}
+val MaterialTheme.notificationBarColorScheme: NotificationBarColors
+    @Composable
+    get() = NotificationBarColors(
+        containerColor = colorScheme.errorContainer,
+        contentColor = colorScheme.error
+    )

@@ -64,7 +64,7 @@ fun WeCompass(compassViewModel: CompassViewModel = viewModel()) {
 @Composable
 private fun CompassSurface(degrees: Int) {
     val textMeasurer = rememberTextMeasurer()
-    val colors = getColors()
+    val colors = MaterialTheme.compassColorScheme
 
     Canvas(
         modifier = Modifier
@@ -239,12 +239,11 @@ private data class CompassColors(
     val scaleSecondaryColor: Color
 )
 
-@Composable
-private fun getColors(): CompassColors {
-    return CompassColors(
-        containerColor = MaterialTheme.colorScheme.onBackground,
-        fontColor = MaterialTheme.colorScheme.onPrimary,
-        scalePrimaryColor = MaterialTheme.colorScheme.onSecondary,
-        scaleSecondaryColor = MaterialTheme.colorScheme.outline
+private val MaterialTheme.compassColorScheme: CompassColors
+    @Composable
+    get() = CompassColors(
+        containerColor = colorScheme.onBackground,
+        fontColor = colorScheme.onPrimary,
+        scalePrimaryColor = colorScheme.onSecondary,
+        scaleSecondaryColor = colorScheme.outline
     )
-}

@@ -1,7 +1,6 @@
 package top.chengdongqing.weui.ui.components.screen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -22,10 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.chengdongqing.weui.ui.theme.FontColorDark
-import top.chengdongqing.weui.ui.theme.FontColorLight
-import top.chengdongqing.weui.ui.theme.FontSecondaryColorDark
-import top.chengdongqing.weui.ui.theme.FontSecondaryColorLight
 
 /**
  * 页面组件
@@ -66,14 +61,14 @@ fun WeScreen(
         Column(Modifier.padding(40.dp)) {
             Text(
                 text = title,
-                color = defaultColors.titleColor,
+                color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 20.sp,
                 lineHeight = 32.sp
             )
             Spacer(Modifier.height(4.dp))
             Text(
                 text = description,
-                color = defaultColors.descriptionColor,
+                color = MaterialTheme.colorScheme.onSecondary,
                 fontSize = 14.sp
             )
         }
@@ -89,21 +84,3 @@ fun WeScreen(
         }
     }
 }
-
-private data class ScreenColors(
-    val titleColor: Color = FontColorLight,
-    val descriptionColor: Color = FontSecondaryColorLight
-)
-
-private val defaultColors: ScreenColors
-    @Composable
-    get() {
-        return if (isSystemInDarkTheme()) {
-            ScreenColors(
-                titleColor = FontColorDark,
-                descriptionColor = FontSecondaryColorDark
-            )
-        } else {
-            ScreenColors()
-        }
-    }

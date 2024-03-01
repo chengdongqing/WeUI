@@ -44,9 +44,6 @@ import top.chengdongqing.weui.model.MenuGroup
 import top.chengdongqing.weui.model.MenuItem
 import top.chengdongqing.weui.ui.components.divider.WeDivider
 import top.chengdongqing.weui.ui.theme.FontColorDark
-import top.chengdongqing.weui.ui.theme.FontColorLight
-import top.chengdongqing.weui.ui.theme.FontSecondaryColorDark
-import top.chengdongqing.weui.ui.theme.FontSecondaryColorLight
 import top.chengdongqing.weui.utils.clickableWithoutRipple
 
 @Composable
@@ -85,15 +82,15 @@ private fun HomeHeader() {
         Image(
             painter = painterResource(id = R.drawable.ic_logo),
             contentDescription = "WeUI",
-            colorFilter = if (defaultColors.iconColor != Color.Unspecified) ColorFilter.tint(
-                defaultColors.iconColor
+            colorFilter = if (MaterialTheme.homeColorScheme.iconColor != Color.Unspecified) ColorFilter.tint(
+                MaterialTheme.homeColorScheme.iconColor
             ) else null,
             modifier = Modifier.height(21.dp)
         )
         Spacer(modifier = Modifier.height(19.dp))
         Text(
             text = "WeUI 是一套同微信原生视觉体验一致的基础样式库，由微信官方设计团队为微信内网页和微信小程序量身设计，令用户的使用感知更加统一。",
-            color = defaultColors.headerColor,
+            color = MaterialTheme.homeColorScheme.headerColor,
             fontSize = 14.sp
         )
     }
@@ -110,8 +107,8 @@ private fun HomeFooter() {
         Image(
             painter = painterResource(id = R.drawable.ic_footer_link),
             contentDescription = null,
-            colorFilter = if (defaultColors.iconColor != Color.Unspecified) ColorFilter.tint(
-                defaultColors.iconColor
+            colorFilter = if (MaterialTheme.homeColorScheme.iconColor != Color.Unspecified) ColorFilter.tint(
+                MaterialTheme.homeColorScheme.iconColor
             ) else null,
             modifier = Modifier.size(84.dp, 19.dp)
         )
@@ -164,15 +161,15 @@ private fun MenuGroupHeader(group: MenuGroup, expanded: Boolean, onClick: () -> 
     ) {
         Text(
             text = group.title,
-            color = defaultColors.fontColor,
+            color = MaterialTheme.homeColorScheme.fontColor,
             fontSize = 17.sp,
             modifier = Modifier.weight(1f)
         )
         Image(
             painter = painterResource(id = group.iconId),
             contentDescription = null,
-            colorFilter = if (defaultColors.iconColor != Color.Unspecified) ColorFilter.tint(
-                defaultColors.iconColor
+            colorFilter = if (MaterialTheme.homeColorScheme.iconColor != Color.Unspecified) ColorFilter.tint(
+                MaterialTheme.homeColorScheme.iconColor
             ) else null,
             modifier = Modifier.size(30.dp)
         )
@@ -191,36 +188,30 @@ private fun MenuGroupItem(item: MenuItem, navController: NavController) {
     ) {
         Text(
             text = item.label,
-            color = defaultColors.fontColor,
+            color = MaterialTheme.homeColorScheme.fontColor,
             fontSize = 17.sp,
             modifier = Modifier.weight(1f)
         )
         Icon(
             painter = painterResource(id = R.drawable.ic_arrow_right),
             contentDescription = null,
-            tint = defaultColors.arrowColor
+            tint = MaterialTheme.homeColorScheme.arrowColor
         )
     }
 }
 
 private data class HomeColors(
-    val iconColor: Color = Color.Unspecified,
-    val headerColor: Color = FontSecondaryColorLight,
-    val fontColor: Color = FontColorLight,
-    val arrowColor: Color = FontSecondaryColorLight
+    val iconColor: Color,
+    val headerColor: Color,
+    val fontColor: Color,
+    val arrowColor: Color
 )
 
-private val defaultColors: HomeColors
+private val MaterialTheme.homeColorScheme: HomeColors
     @Composable
-    get() {
-        return if (isSystemInDarkTheme()) {
-            HomeColors(
-                iconColor = FontColorDark,
-                headerColor = FontSecondaryColorDark,
-                fontColor = FontColorDark,
-                arrowColor = FontColorDark
-            )
-        } else {
-            HomeColors()
-        }
-    }
+    get() = HomeColors(
+        iconColor = if (isSystemInDarkTheme()) FontColorDark else Color.Unspecified,
+        headerColor = colorScheme.onSecondary,
+        fontColor = colorScheme.onPrimary,
+        arrowColor = colorScheme.onSecondary
+    )

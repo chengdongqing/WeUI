@@ -68,7 +68,7 @@ fun WeButton(
     loading: Boolean = false,
     onClick: (() -> Unit)? = null
 ) {
-    val colors = getColor(type)
+    val colors = buttonColorSchemeOf(type)
     val localDisabled = disabled || loading
 
     Box(
@@ -76,9 +76,7 @@ fun WeButton(
             .width(if (size != ButtonSize.SMALL) width else Dp.Unspecified)
             .clip(RoundedCornerShape(size.borderRadius))
             .clickable(
-                interactionSource = remember {
-                    MutableInteractionSource()
-                },
+                interactionSource = remember { MutableInteractionSource() },
                 indication = if (!localDisabled) rememberRipple() else null
             ) {
                 if (!localDisabled) {
@@ -106,36 +104,28 @@ fun WeButton(
     }
 }
 
-@Composable
-private fun getColor(type: ButtonType): ButtonColors {
-    return when (type) {
-        ButtonType.PRIMARY -> ButtonColors()
-        ButtonType.DANGER -> dangerColors
-        ButtonType.PLAIN -> plainColors
-    }
-}
-
 private data class ButtonColors(
-    val containerColor: Color = PrimaryColor,
-    val contentColor: Color = Color.White
+    val containerColor: Color,
+    val contentColor: Color
 )
 
-private val dangerColors: ButtonColors
-    @Composable
-    get() {
-        return if (isSystemInDarkTheme()) {
+@Composable
+private fun buttonColorSchemeOf(type: ButtonType): ButtonColors {
+    return when (type) {
+        ButtonType.PRIMARY -> {
+            ButtonColors(PrimaryColor, Color.White)
+        }
+
+        ButtonType.DANGER -> if (isSystemInDarkTheme()) {
             ButtonColors(DangerColorLight, FontColorDark)
         } else {
             ButtonColors(Color.Black.copy(0.05f), DangerColorLight)
         }
-    }
 
-private val plainColors: ButtonColors
-    @Composable
-    get() {
-        return if (isSystemInDarkTheme()) {
+        ButtonType.PLAIN -> if (isSystemInDarkTheme()) {
             ButtonColors(Color.White.copy(0.1f), FontColorDark)
         } else {
             ButtonColors(Color.Black.copy(0.05f), FontColorLight)
         }
     }
+}

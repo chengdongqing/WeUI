@@ -38,7 +38,7 @@ import top.chengdongqing.weui.ui.theme.PrimaryColor
 @Composable
 fun WeDividingRule(
     range: IntProgression = 0..100 step 2,
-    colors: DividingRuleColors = DividingRuleDefaults.colors,
+    colors: DividingRuleColors = MaterialTheme.dividingRuleColorScheme,
     onChange: (Float) -> Unit
 ) {
     val density = LocalDensity.current
@@ -201,14 +201,13 @@ private fun Indicator(color: Color, offsetX: Dp) {
 data class DividingRuleColors(
     val containerColor: Color,
     val contentColor: Color,
-    val indicatorColor: Color = PrimaryColor
+    val indicatorColor: Color
 )
 
-object DividingRuleDefaults {
-    val colors: DividingRuleColors
-        @Composable
-        get() = DividingRuleColors(
-            containerColor = MaterialTheme.colorScheme.onBackground,
-            contentColor = MaterialTheme.colorScheme.onPrimary
-        )
-}
+val MaterialTheme.dividingRuleColorScheme: DividingRuleColors
+    @Composable
+    get() = DividingRuleColors(
+        containerColor = colorScheme.onBackground,
+        contentColor = colorScheme.onPrimary,
+        indicatorColor = PrimaryColor
+    )

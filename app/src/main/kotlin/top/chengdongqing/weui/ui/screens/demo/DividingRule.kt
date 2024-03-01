@@ -22,8 +22,8 @@ import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.ui.components.button.ButtonType
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.dividingrule.DividingRuleColors
-import top.chengdongqing.weui.ui.components.dividingrule.DividingRuleDefaults
 import top.chengdongqing.weui.ui.components.dividingrule.WeDividingRule
+import top.chengdongqing.weui.ui.components.dividingrule.dividingRuleColorScheme
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.theme.DangerColorLight
 import top.chengdongqing.weui.ui.theme.PrimaryColor
@@ -38,7 +38,7 @@ fun DividingRuleScreen() {
         padding = PaddingValues(0.dp)
     ) {
         var value by remember { mutableFloatStateOf(0f) }
-        val defaultColors = DividingRuleDefaults.colors
+        val defaultColors = MaterialTheme.dividingRuleColorScheme
         var colors by remember { mutableStateOf(defaultColors) }
         var range by remember { mutableStateOf(0..100 step 10) }
 

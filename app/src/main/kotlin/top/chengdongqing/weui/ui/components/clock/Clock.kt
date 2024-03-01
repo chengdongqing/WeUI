@@ -44,7 +44,7 @@ fun WeClock(
     }
 
     val textMeasurer = rememberTextMeasurer()
-    val colors = getColors()
+    val colors = MaterialTheme.clockColorScheme
 
     Canvas(
         modifier = Modifier
@@ -189,12 +189,11 @@ private class ClockColors(
     val scaleSecondaryColor: Color
 )
 
-@Composable
-private fun getColors(): ClockColors {
-    return ClockColors(
-        containerColor = MaterialTheme.colorScheme.onBackground,
-        fontColor = MaterialTheme.colorScheme.onPrimary,
-        scalePrimaryColor = MaterialTheme.colorScheme.onSecondary,
-        scaleSecondaryColor = MaterialTheme.colorScheme.outline
+private val MaterialTheme.clockColorScheme: ClockColors
+    @Composable
+    get() = ClockColors(
+        containerColor = colorScheme.onBackground,
+        fontColor = colorScheme.onPrimary,
+        scalePrimaryColor = colorScheme.onSecondary,
+        scaleSecondaryColor = colorScheme.outline
     )
-}
