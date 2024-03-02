@@ -14,7 +14,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.text.TextMeasurer
@@ -30,25 +29,21 @@ import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.utils.formatFloat
 
 @Composable
-fun WeBarChart(
+fun WeLineChart(
     dataSource: List<ChartData>,
     height: Dp = 300.dp,
-    barWidthRange: IntRange = 2..20,
     color: Color = PrimaryColor.copy(0.8f),
     animationSpec: AnimationSpec<Float> = tween(durationMillis = 800),
     formatter: (Float) -> String = { formatFloat(it) }
 ) {
     val textMeasurer = rememberTextMeasurer()
-    // 刻度颜色
     val labelColor = MaterialTheme.colorScheme.onSecondary
-    // 数据最大值
+    val containerColor = MaterialTheme.colorScheme.onBackground
     val maxValue = remember(dataSource) { dataSource.maxOfOrNull { it.value } ?: 1f }
-    // 每个数据项的动画实例
-    val animatedHeights = remember(dataSource.size) { dataSource.map { Animatable(0f) } }
+    val animatedValues = remember(dataSource.size) { dataSource.map { Animatable(0f) } }
 
-    // 数据变化后执行动画
     LaunchedEffect(dataSource) {
-        animatedHeights.forEachIndexed { index, item ->
+        animatedValues.forEachIndexed { index, item ->
             launch {
                 item.animateTo(
                     targetValue = dataSource[index].value / maxValue,
@@ -64,67 +59,81 @@ fun WeBarChart(
             .padding(top = 20.dp)
             .height(height)
     ) {
-        // 柱宽
-        val barWidth = (size.width / (dataSource.size * 2f)).coerceIn(
-            barWidthRange.first.dp.toPx(),
-            barWidthRange.last.dp.toPx()
-        )
-        // 柱间距
-        val barSpace = (size.width - barWidth * dataSource.size) / dataSource.size
-
         // 绘制X轴
         drawXAxis(
             labels = dataSource.map { it.label },
-            barWidth,
-            barSpace,
+            size.width / dataSource.size,
+            0f,
             axisColor = color,
             labelColor,
             textMeasurer
         )
-        // 绘制柱状图
-        drawBars(
-            animatedHeights,
+        // 绘制折线图
+        drawLines(
+            animatedValues,
             dataSource,
-            barWidth,
-            barSpace,
-            barColor = color,
+            lineColor = color,
+            containerColor = containerColor,
             textMeasurer,
             formatter
         )
     }
 }
 
-private fun DrawScope.drawBars(
-    animatedHeights: List<Animatable<Float, AnimationVector1D>>,
+private fun DrawScope.drawLines(
+    animatedValues: List<Animatable<Float, AnimationVector1D>>,
     dataSource: List<ChartData>,
-    barWidth: Float,
-    barSpace: Float,
-    barColor: Color,
+    lineColor: Color,
+    containerColor: Color,
     textMeasurer: TextMeasurer,
     formatter: (Float) -> String
 ) {
-    animatedHeights.forEachIndexed { index, item ->
-        val barHeight = item.value * size.height
-        val offsetX = index * (barWidth + barSpace) + barSpace / 2
-        val offsetY = size.height - barHeight
-        // 绘制柱子
-        drawRect(
-            color = dataSource[index].color ?: barColor,
-            topLeft = Offset(offsetX, offsetY),
-            size = Size(barWidth, barHeight)
-        )
-        // 绘制数值
-        if (barWidth >= 10.dp.toPx()) {
+    val pointWidth = 1.5.dp.toPx()
+    val pointSpace = (size.width - pointWidth * dataSource.size) / dataSource.size
+
+    animatedValues.draw(pointWidth, pointSpace, size.height) { currentPoint, previousPoint, index ->
+        // 绘制数值标签
+        if (pointSpace >= 10.dp.toPx()) {
             drawValueLabel(
                 value = dataSource[index].value,
-                offsetX,
-                offsetY,
-                barWidth,
+                currentPoint.x,
+                currentPoint.y,
                 textMeasurer,
                 formatter,
-                barColor
+                lineColor
             )
         }
+        // 连接数据点
+        previousPoint?.let {
+            drawLine(
+                color = lineColor,
+                start = it,
+                end = currentPoint,
+                strokeWidth = pointWidth
+            )
+        }
+    }
+
+    // 绘制数据点
+    animatedValues.draw(pointWidth, pointSpace, size.height) { currentPoint, _, _ ->
+        drawCircle(color = lineColor, radius = 3.dp.toPx(), center = currentPoint)
+        drawCircle(color = containerColor, radius = 1.5.dp.toPx(), center = currentPoint)
+    }
+}
+
+private fun List<Animatable<Float, AnimationVector1D>>.draw(
+    pointWidth: Float,
+    pointSpace: Float,
+    height: Float,
+    block: (currentPoint: Offset, previousPoint: Offset?, index: Int) -> Unit
+) {
+    var previousPoint: Offset? = null
+    this.forEachIndexed { index, item ->
+        val x = index * (pointWidth + pointSpace) + pointSpace / 2
+        val y = height - (item.value * height)
+        val currentPoint = Offset(x, y)
+        block(currentPoint, previousPoint, index)
+        previousPoint = currentPoint
     }
 }
 
@@ -132,7 +141,6 @@ private fun DrawScope.drawValueLabel(
     value: Float,
     offsetX: Float,
     offsetY: Float,
-    barWidth: Float,
     textMeasurer: TextMeasurer,
     valueFormatter: (Float) -> String,
     textColor: Color
@@ -146,56 +154,8 @@ private fun DrawScope.drawValueLabel(
         textLayoutResult,
         textColor,
         Offset(
-            offsetX + barWidth / 2 - textLayoutResult.size.width / 2,
+            offsetX - textLayoutResult.size.width / 2,
             offsetY - textLayoutResult.size.height - 5.dp.toPx()
         )
     )
-}
-
-internal fun DrawScope.drawXAxis(
-    labels: List<String>,
-    barWidth: Float,
-    spaceWidth: Float,
-    axisColor: Color,
-    labelColor: Color,
-    textMeasurer: TextMeasurer
-) {
-    // 绘制X轴
-    drawLine(
-        axisColor,
-        Offset(x = 0f, size.height),
-        Offset(x = size.width, size.height),
-        strokeWidth = 1.5.dp.toPx()
-    )
-
-    // 最后一个刻度的结束位置，初始化为负值表示还未开始绘制
-    var lastLabelEndX = -Float.MAX_VALUE
-    // 刻度之间的最小间隔
-    val labelPadding = 4.dp.toPx()
-
-    labels.forEachIndexed { index, label ->
-        val textLayoutResult = textMeasurer.measure(
-            label,
-            TextStyle(fontSize = 10.sp, fontWeight = FontWeight.Bold)
-        )
-
-        // 计算当前刻度的起始和结束位置
-        val labelStartX = index * (barWidth + spaceWidth) + spaceWidth / 2 +
-                barWidth / 2 - textLayoutResult.size.width / 2
-        val labelEndX = labelStartX + textLayoutResult.size.width
-
-        // 仅当当前刻度不与上一个刻度重叠时才绘制
-        if (labelStartX >= lastLabelEndX + labelPadding) {
-            drawText(
-                textLayoutResult,
-                labelColor,
-                topLeft = Offset(
-                    x = labelStartX,
-                    y = size.height + 10.dp.toPx()
-                )
-            )
-            // 更新最后一个刻度的结束位置
-            lastLabelEndX = labelEndX
-        }
-    }
 }
