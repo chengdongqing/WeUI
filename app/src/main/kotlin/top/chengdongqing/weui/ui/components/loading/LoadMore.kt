@@ -26,9 +26,9 @@ enum class LoadMoreType {
 }
 
 @Composable
-fun WeLoadMore(type: LoadMoreType = LoadMoreType.LOADING) {
+fun WeLoadMore(modifier: Modifier = Modifier, type: LoadMoreType = LoadMoreType.LOADING) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 20.dp),
         horizontalArrangement = Arrangement.Center,

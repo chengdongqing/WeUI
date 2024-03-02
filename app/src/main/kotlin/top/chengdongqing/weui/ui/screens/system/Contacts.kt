@@ -10,9 +10,9 @@ import android.text.format.DateFormat
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
@@ -23,7 +23,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -38,8 +37,11 @@ import top.chengdongqing.weui.ui.components.button.ButtonSize
 import top.chengdongqing.weui.ui.components.button.ButtonType
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.input.WeInput
+import top.chengdongqing.weui.ui.components.loading.LoadMoreType
+import top.chengdongqing.weui.ui.components.loading.WeLoadMore
 import top.chengdongqing.weui.ui.components.pairgroup.WePairGroup
 import top.chengdongqing.weui.ui.components.pairgroup.WePairItem
+import top.chengdongqing.weui.ui.components.popup.WePopup
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.components.toast.ToastOptions
 import top.chengdongqing.weui.ui.components.toast.rememberWeToast
@@ -47,11 +49,14 @@ import java.util.Date
 
 @Composable
 fun ContactsScreen() {
-    WeScreen(title = "Contacts", description = "拨号与通讯录") {
+    WeScreen(
+        title = "Contacts",
+        description = "拨号与通讯录",
+        verticalArrangement = Arrangement.spacedBy(20.dp)
+    ) {
         PhoneCall()
         Spacer(modifier = Modifier.height(20.dp))
         PhoneContactList()
-        Spacer(modifier = Modifier.height(20.dp))
         PhoneCallLogList()
     }
 }
@@ -71,7 +76,6 @@ private fun PhoneCall() {
     ) {
         number = it
     }
-    Spacer(modifier = Modifier.height(20.dp))
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceAround
@@ -116,24 +120,35 @@ private fun PhoneContactList() {
     val contactsPermissionState = rememberPermissionState(Manifest.permission.READ_CONTACTS)
     var loading by remember { mutableStateOf(false) }
     var contacts by remember { mutableStateOf<List<Pair<String, String>>>(emptyList()) }
+    var visible by remember { mutableStateOf(false) }
 
     WeButton(text = "读取通讯录", loading = loading) {
         if (contactsPermissionState.status.isGranted) {
-            loading = true
             coroutineScope.launch {
+                loading = true
                 contacts = loadContacts(context).map {
                     it.first to it.second.joinToString("\n")
                 }
                 loading = false
+                visible = true
             }
         } else {
             contactsPermissionState.launchPermissionRequest()
         }
     }
-    Spacer(modifier = Modifier.height(20.dp))
-    WePairGroup(Modifier.heightIn(max = LocalConfiguration.current.screenHeightDp.dp / 2)) {
-        items(contacts) {
-            WePairItem(label = it.first, value = it.second)
+    WePopup(visible, title = "通讯录", swipeable = true, onClose = { visible = false }) {
+        WePairGroup(Modifier.fillMaxHeight(0.5f)) {
+            items(contacts) {
+                WePairItem(label = it.first, value = it.second)
+            }
+            if (contacts.isEmpty()) {
+                item {
+                    WeLoadMore(
+                        type = LoadMoreType.EMPTY_DATA,
+                        modifier = Modifier.height(300.dp)
+                    )
+                }
+            }
         }
     }
 }
@@ -176,24 +191,35 @@ fun PhoneCallLogList() {
     val callLogPermissionState = rememberPermissionState(Manifest.permission.READ_CALL_LOG)
     var loading by remember { mutableStateOf(false) }
     var logs by remember { mutableStateOf<List<Pair<String, String>>>(emptyList()) }
+    var visible by remember { mutableStateOf(false) }
 
     WeButton(text = "读取通话记录", type = ButtonType.PLAIN, loading = loading) {
         if (callLogPermissionState.status.isGranted) {
-            loading = true
             coroutineScope.launch {
+                loading = true
                 logs = loadCallLogs(context).map {
                     it.first to it.second.joinToString("\n")
                 }
                 loading = false
+                visible = true
             }
         } else {
             callLogPermissionState.launchPermissionRequest()
         }
     }
-    Spacer(modifier = Modifier.height(20.dp))
-    WePairGroup(Modifier.heightIn(max = LocalConfiguration.current.screenHeightDp.dp / 2)) {
-        items(logs) {
-            WePairItem(label = it.first, value = it.second)
+    WePopup(visible, title = "通话记录", swipeable = true, onClose = { visible = false }) {
+        WePairGroup(Modifier.fillMaxHeight(0.5f)) {
+            items(logs) {
+                WePairItem(label = it.first, value = it.second)
+            }
+            if (logs.isEmpty()) {
+                item {
+                    WeLoadMore(
+                        type = LoadMoreType.EMPTY_DATA,
+                        modifier = Modifier.height(300.dp)
+                    )
+                }
+            }
         }
     }
 }

@@ -45,7 +45,7 @@ import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
-private const val startIndex = 100
+private const val startIndex = 1000
 private val today = LocalDate.now()
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -246,7 +246,7 @@ fun rememberCalendarState(initialDate: LocalDate = today): CalendarState {
     val (currentMonth, setCurrentMonth) = remember {
         mutableStateOf(initialDate)
     }
-    val pagerState = rememberPagerState(initialPage = startIndex) { 200 }
+    val pagerState = rememberPagerState(initialPage = startIndex) { 2000 }
     val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(pagerState.currentPage) {

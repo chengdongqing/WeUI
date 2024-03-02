@@ -3,6 +3,7 @@ package top.chengdongqing.weui.ui.screens.demo
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -16,7 +17,12 @@ import top.chengdongqing.weui.ui.theme.WeUITheme
 
 @Composable
 fun CalendarScreen() {
-    WeScreen(title = "Calendar", description = "日历", padding = PaddingValues(0.dp)) {
+    WeScreen(
+        title = "Calendar",
+        description = "日历",
+        padding = PaddingValues(0.dp),
+        containerColor = MaterialTheme.colorScheme.surface
+    ) {
         val calendarState = rememberCalendarState()
 
         WeCalendar(calendarState)

@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
@@ -28,15 +29,18 @@ import top.chengdongqing.weui.ui.components.button.ButtonType
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.input.WeInput
 import top.chengdongqing.weui.ui.components.input.WeTextarea
+import top.chengdongqing.weui.ui.components.loading.LoadMoreType
+import top.chengdongqing.weui.ui.components.loading.WeLoadMore
 import top.chengdongqing.weui.ui.components.pairgroup.WePairGroup
 import top.chengdongqing.weui.ui.components.pairgroup.WePairItem
+import top.chengdongqing.weui.ui.components.popup.WePopup
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.components.toast.ToastOptions
 import top.chengdongqing.weui.ui.components.toast.rememberWeToast
 
 @Composable
 fun SmsScreen() {
-    WeScreen(title = "SMS", description = "短信", scrollEnabled = false) {
+    WeScreen(title = "SMS", description = "短信") {
         WritingSms()
         Spacer(modifier = Modifier.height(20.dp))
         ReadingSms()
@@ -63,7 +67,7 @@ private fun WritingSms() {
         content = it
     }
     Spacer(modifier = Modifier.height(20.dp))
-    WeButton(text = "发送短信", type = ButtonType.PLAIN) {
+    WeButton(text = "发送短信") {
         if (smsPermissionState.status.isGranted) {
             if (number.isEmpty() || content.isEmpty()) {
                 toast.show(ToastOptions("请正确输入"))
@@ -87,22 +91,33 @@ private fun ReadingSms() {
     val readSmsPermissionState = rememberPermissionState(Manifest.permission.READ_SMS)
     var loading by remember { mutableStateOf(false) }
     var messages by remember { mutableStateOf<List<Pair<String, String>>>(emptyList()) }
+    var visible by remember { mutableStateOf(false) }
 
-    WeButton(text = "读取短信", loading = loading) {
+    WeButton(text = "读取短信", type = ButtonType.PLAIN, loading = loading) {
         if (readSmsPermissionState.status.isGranted) {
-            loading = true
             coroutineScope.launch {
+                loading = true
                 messages = loadSmsMessages(context)
                 loading = false
+                visible = true
             }
         } else {
             readSmsPermissionState.launchPermissionRequest()
         }
     }
-    Spacer(modifier = Modifier.height(20.dp))
-    WePairGroup {
-        items(messages) {
-            WePairItem(label = it.first, value = it.second)
+    WePopup(visible, title = "短信", swipeable = true, onClose = { visible = false }) {
+        WePairGroup(Modifier.fillMaxHeight(0.5f)) {
+            items(messages) {
+                WePairItem(label = it.first, value = it.second)
+            }
+            if (messages.isEmpty()) {
+                item {
+                    WeLoadMore(
+                        type = LoadMoreType.EMPTY_DATA,
+                        modifier = Modifier.height(300.dp)
+                    )
+                }
+            }
         }
     }
 }

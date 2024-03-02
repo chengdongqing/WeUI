@@ -6,8 +6,8 @@ import android.content.Context
 import android.provider.CalendarContract
 import android.text.format.DateFormat
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -16,7 +16,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -28,9 +27,12 @@ import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.ui.components.button.ButtonType
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.input.WeInput
+import top.chengdongqing.weui.ui.components.loading.LoadMoreType
+import top.chengdongqing.weui.ui.components.loading.WeLoadMore
 import top.chengdongqing.weui.ui.components.pairgroup.WePairGroup
 import top.chengdongqing.weui.ui.components.pairgroup.WePairItem
 import top.chengdongqing.weui.ui.components.picker.WeDatePicker
+import top.chengdongqing.weui.ui.components.popup.WePopup
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.components.toast.ToastIcon
 import top.chengdongqing.weui.ui.components.toast.ToastOptions
@@ -83,7 +85,7 @@ fun AddCalendarEvent() {
     )
     Spacer(modifier = Modifier.height(20.dp))
 
-    WeButton(text = "添加日历事件", type = ButtonType.PLAIN) {
+    WeButton(text = "添加日历事件") {
         if (calendarPermissionState.status.isGranted) {
             if (title.isNotEmpty() && date != null) {
                 val values = ContentValues().apply {
@@ -115,22 +117,33 @@ fun CalendarEvents() {
     val calendarPermissionState = rememberPermissionState(Manifest.permission.READ_CALENDAR)
     var loading by remember { mutableStateOf(false) }
     var events by remember { mutableStateOf<List<Pair<String, String>>>(emptyList()) }
+    var visible by remember { mutableStateOf(false) }
 
-    WeButton(text = "读取日历事件", loading = loading) {
+    WeButton(text = "读取日历事件", type = ButtonType.PLAIN, loading = loading) {
         if (calendarPermissionState.status.isGranted) {
-            loading = true
             coroutineScope.launch {
+                loading = true
                 events = loadCalendarEvents(context)
                 loading = false
+                visible = true
             }
         } else {
             calendarPermissionState.launchPermissionRequest()
         }
     }
-    Spacer(modifier = Modifier.height(20.dp))
-    WePairGroup(Modifier.heightIn(max = LocalConfiguration.current.screenHeightDp.dp)) {
-        items(events) {
-            WePairItem(label = it.first, value = it.second)
+    WePopup(visible, title = "日历事件", swipeable = true, onClose = { visible = false }) {
+        WePairGroup(Modifier.fillMaxHeight(0.5f)) {
+            items(events) {
+                WePairItem(label = it.first, value = it.second)
+            }
+            if (events.isEmpty()) {
+                item {
+                    WeLoadMore(
+                        type = LoadMoreType.EMPTY_DATA,
+                        modifier = Modifier.height(300.dp)
+                    )
+                }
+            }
         }
     }
 }
