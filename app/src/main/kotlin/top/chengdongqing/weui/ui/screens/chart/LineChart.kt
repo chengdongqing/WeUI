@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.ui.components.button.ButtonType
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.charts.ChartData
+import top.chengdongqing.weui.ui.components.charts.LineChartData
 import top.chengdongqing.weui.ui.components.charts.WeLineChart
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.theme.PrimaryColor
@@ -31,24 +32,57 @@ fun LineChartScreen() {
         containerColor = MaterialTheme.colorScheme.surface,
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        var dataSource by remember { mutableStateOf(buildData(6)) }
-        var color by remember { mutableStateOf(PrimaryColor.copy(0.8f)) }
+        var dataSource by remember {
+            mutableStateOf(
+                listOf(
+                    LineChartData(
+                        buildData(6),
+                        PrimaryColor.copy(0.8f)
+                    )
+                )
+            )
+        }
 
         WeLineChart(
-            dataSource,
-            color = color,
+            dataSources = dataSource
         ) {
             "¥" + formatFloat(it)
         }
         Spacer(modifier = Modifier.height(40.dp))
         WeButton(text = "更新数据") {
-            dataSource = buildData()
+            dataSource = buildList {
+                add(
+                    LineChartData(
+                        buildData(),
+                        PrimaryColor.copy(0.8f)
+                    )
+                )
+                if (dataSource.size == 2) {
+                    add(
+                        LineChartData(
+                            buildData(),
+                            WarningColor.copy(0.8f)
+                        )
+                    )
+                }
+            }
         }
-        WeButton(text = "切换颜色", type = ButtonType.DANGER) {
-            color = if (color == PrimaryColor.copy(0.8f)) {
-                WarningColor.copy(0.8f)
-            } else {
-                PrimaryColor.copy(0.8f)
+        WeButton(text = "切换数量", type = ButtonType.PLAIN) {
+            dataSource = buildList {
+                add(
+                    LineChartData(
+                        buildData(),
+                        PrimaryColor.copy(0.8f)
+                    )
+                )
+                if (dataSource.size == 1) {
+                    add(
+                        LineChartData(
+                            buildData(),
+                            WarningColor.copy(0.8f)
+                        )
+                    )
+                }
             }
         }
     }

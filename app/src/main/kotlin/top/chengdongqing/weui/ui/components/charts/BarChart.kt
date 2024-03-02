@@ -32,6 +32,7 @@ import top.chengdongqing.weui.utils.formatFloat
 @Composable
 fun WeBarChart(
     dataSource: List<ChartData>,
+    modifier: Modifier = Modifier,
     height: Dp = 300.dp,
     barWidthRange: IntRange = 2..20,
     color: Color = PrimaryColor.copy(0.8f),
@@ -59,7 +60,7 @@ fun WeBarChart(
     }
 
     Canvas(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(top = 20.dp)
             .height(height)

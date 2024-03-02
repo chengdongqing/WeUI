@@ -28,9 +28,11 @@ import kotlinx.coroutines.launch
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.utils.formatFloat
 
+data class LineChartData(val points: List<ChartData>, val color: Color)
+
 @Composable
 fun WeLineChart(
-    dataSource: List<ChartData>,
+    dataSources: List<LineChartData>,
     height: Dp = 300.dp,
     color: Color = PrimaryColor.copy(0.8f),
     animationSpec: AnimationSpec<Float> = tween(durationMillis = 800),
@@ -39,16 +41,29 @@ fun WeLineChart(
     val textMeasurer = rememberTextMeasurer()
     val labelColor = MaterialTheme.colorScheme.onSecondary
     val containerColor = MaterialTheme.colorScheme.onBackground
-    val maxValue = remember(dataSource) { dataSource.maxOfOrNull { it.value } ?: 1f }
-    val animatedValues = remember(dataSource.size) { dataSource.map { Animatable(0f) } }
 
-    LaunchedEffect(dataSource) {
-        animatedValues.forEachIndexed { index, item ->
-            launch {
-                item.animateTo(
-                    targetValue = dataSource[index].value / maxValue,
-                    animationSpec = animationSpec
-                )
+    // 计算所有数据源中的最大值
+    val maxValue = remember(dataSources) {
+        dataSources.flatMap { it.points }.maxOfOrNull { it.value } ?: 1f
+    }
+
+    // 为每个数据点创建动画实例
+    val animatedValuesList = remember(dataSources.size) {
+        dataSources.map { dataSource ->
+            dataSource.points.map { Animatable(0f) }
+        }
+    }
+
+    // 数据变化后执行动画
+    LaunchedEffect(dataSources) {
+        animatedValuesList.forEachIndexed { dataSourceIndex, animatedValues ->
+            animatedValues.forEachIndexed { index, item ->
+                launch {
+                    item.animateTo(
+                        targetValue = dataSources[dataSourceIndex].points[index].value / maxValue,
+                        animationSpec = animationSpec
+                    )
+                }
             }
         }
     }
@@ -59,24 +74,30 @@ fun WeLineChart(
             .padding(top = 20.dp)
             .height(height)
     ) {
+        // 使用第一个数据源的标签
+        val labels = dataSources.firstOrNull()?.points?.map { it.label } ?: emptyList()
+
         // 绘制X轴
         drawXAxis(
-            labels = dataSource.map { it.label },
-            size.width / dataSource.size,
+            labels = labels,
+            size.width / labels.size,
             0f,
             axisColor = color,
             labelColor,
             textMeasurer
         )
-        // 绘制折线图
-        drawLines(
-            animatedValues,
-            dataSource,
-            lineColor = color,
-            containerColor = containerColor,
-            textMeasurer,
-            formatter
-        )
+
+        // 为每个数据源绘制折线和数据点
+        dataSources.forEachIndexed { index, dataSource ->
+            drawLines(
+                animatedValuesList[index],
+                dataSource.points,
+                lineColor = dataSource.color,
+                containerColor = containerColor,
+                textMeasurer,
+                formatter
+            )
+        }
     }
 }
 
