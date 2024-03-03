@@ -12,6 +12,7 @@ import top.chengdongqing.weui.ui.screens.basic.StepsScreen
 import top.chengdongqing.weui.ui.screens.basic.SwipeActionScreen
 import top.chengdongqing.weui.ui.screens.basic.SwiperScreen
 import top.chengdongqing.weui.ui.screens.basic.TabViewScreen
+import top.chengdongqing.weui.ui.screens.demo.TreeScreen
 
 fun NavGraphBuilder.addBasicGraph() {
     composable("badge") {
@@ -43,5 +44,8 @@ fun NavGraphBuilder.addBasicGraph() {
     }
     composable("skeleton") {
         SkeletonScreen()
+    }
+    composable("tree") {
+        TreeScreen()
     }
 }

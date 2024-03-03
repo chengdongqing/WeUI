@@ -29,7 +29,8 @@ val menus = listOf(
             MenuItem("ScrollView", "scroll-view"),
             MenuItem("TabView", "tab-view"),
             MenuItem("SwipeAction", "swipe-action"),
-            MenuItem("Skeleton", "skeleton")
+            MenuItem("Skeleton", "skeleton"),
+            MenuItem("Tree", "tree")
         )
     ),
     MenuGroup(
@@ -147,7 +148,6 @@ val menus = listOf(
             MenuItem("DragSorter", "drag-sorter"),
             MenuItem("DividingRule", "dividing-rule"),
             MenuItem("OrgTree", "org-tree"),
-            MenuItem("TreeView", "tree-view"),
             MenuItem("DigitalRoller", "digital-roller"),
             MenuItem("DigitalKeyboard", "digital-keyboard"),
             MenuItem("CubicBezier", "cubic-bezier"),

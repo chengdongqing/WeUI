@@ -185,7 +185,7 @@ private fun BoxScope.ShoppingBag(align: Alignment, onPositioned: (Offset) -> Uni
     Box(
         modifier = Modifier
             .offset(y = (-LocalConfiguration.current.screenHeightDp * 0.3).dp)
-            .padding(horizontal = 16.dp, vertical = 32.dp)
+            .padding(horizontal = 16.dp)
             .size(46.dp)
             .align(align)
             .onGloballyPositioned {

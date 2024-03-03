@@ -119,8 +119,11 @@ private fun <T> CardItem(
                                 if (abs(animatedOffset.targetValue.x) < abs(targetOffset) / 4) {
                                     animatedOffset.animateTo(Offset(0f, 0f), tween(400))
                                 } else {
-                                    val endValue =
-                                        if (animatedOffset.targetValue.x > 0) targetOffset.toFloat() else -targetOffset.toFloat()
+                                    val endValue = if (animatedOffset.targetValue.x > 0) {
+                                        targetOffset.toFloat()
+                                    } else {
+                                        -targetOffset.toFloat()
+                                    }
                                     animatedOffset.animateTo(
                                         Offset(endValue, animatedOffset.value.y),
                                         tween(200)
