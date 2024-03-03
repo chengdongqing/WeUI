@@ -3,7 +3,6 @@ package top.chengdongqing.weui.navigation
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import top.chengdongqing.weui.ui.screens.basic.BadgeScreen
-import top.chengdongqing.weui.ui.screens.basic.DropCardScreen
 import top.chengdongqing.weui.ui.screens.basic.LoadMoreScreen
 import top.chengdongqing.weui.ui.screens.basic.LoadingScreen
 import top.chengdongqing.weui.ui.screens.basic.ProgressScreen
@@ -41,9 +40,6 @@ fun NavGraphBuilder.addBasicGraph() {
     }
     composable("swipe-action") {
         SwipeActionScreen()
-    }
-    composable("drop-card") {
-        DropCardScreen()
     }
     composable("skeleton") {
         SkeletonScreen()

@@ -2,6 +2,7 @@ package top.chengdongqing.weui.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import top.chengdongqing.weui.ui.screens.basic.DropCardScreen
 import top.chengdongqing.weui.ui.screens.demo.CalendarScreen
 import top.chengdongqing.weui.ui.screens.demo.ClockScreen
 import top.chengdongqing.weui.ui.screens.demo.CubicBezierScreen
@@ -29,6 +30,9 @@ fun NavGraphBuilder.addDemoGraph() {
     }
     composable("clock") {
         ClockScreen()
+    }
+    composable("drop-card") {
+        DropCardScreen()
     }
     composable("gallery") {
         GalleryScreen()

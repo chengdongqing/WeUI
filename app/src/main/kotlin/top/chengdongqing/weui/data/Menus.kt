@@ -29,7 +29,6 @@ val menus = listOf(
             MenuItem("ScrollView", "scroll-view"),
             MenuItem("TabView", "tab-view"),
             MenuItem("SwipeAction", "swipe-action"),
-            MenuItem("DropCard", "drop-card"),
             MenuItem("Skeleton", "skeleton")
         )
     ),
@@ -139,6 +138,7 @@ val menus = listOf(
         listOf(
             MenuItem("Calendar", "calendar"),
             MenuItem("Clock", "clock"),
+            MenuItem("DropCard", "drop-card"),
             MenuItem("SearchBar", "search-bar"),
             MenuItem("Gallery", "gallery"),
             MenuItem("FileBrowser", "file-browser"),
