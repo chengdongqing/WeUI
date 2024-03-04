@@ -12,7 +12,7 @@ import top.chengdongqing.weui.ui.screens.basic.StepsScreen
 import top.chengdongqing.weui.ui.screens.basic.SwipeActionScreen
 import top.chengdongqing.weui.ui.screens.basic.SwiperScreen
 import top.chengdongqing.weui.ui.screens.basic.TabViewScreen
-import top.chengdongqing.weui.ui.screens.demo.TreeScreen
+import top.chengdongqing.weui.ui.screens.basic.TreeScreen
 
 fun NavGraphBuilder.addBasicGraph() {
     composable("badge") {

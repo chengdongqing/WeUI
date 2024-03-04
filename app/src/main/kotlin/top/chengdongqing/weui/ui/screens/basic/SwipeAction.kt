@@ -19,10 +19,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
-import top.chengdongqing.weui.enum.DragAnchors
 import top.chengdongqing.weui.ui.components.button.ButtonType
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.screen.WeScreen
+import top.chengdongqing.weui.ui.components.swipeaction.DragAnchors
 import top.chengdongqing.weui.ui.components.swipeaction.SwipeActionItem
 import top.chengdongqing.weui.ui.components.swipeaction.SwipeActionStyle
 import top.chengdongqing.weui.ui.components.swipeaction.SwipeActionType

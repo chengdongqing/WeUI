@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import top.chengdongqing.weui.ui.screens.HomeScreen
+import top.chengdongqing.weui.ui.screens.home.HomeScreen
 import top.chengdongqing.weui.ui.screens.layers.LayersScreen
 import top.chengdongqing.weui.ui.screens.map.LocationPickerScreen
 import top.chengdongqing.weui.ui.screens.map.LocationPreviewScreen

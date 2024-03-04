@@ -10,13 +10,13 @@ import top.chengdongqing.weui.ui.screens.demo.DigitalKeyboardScreen
 import top.chengdongqing.weui.ui.screens.demo.DigitalRollerScreen
 import top.chengdongqing.weui.ui.screens.demo.DividingRuleScreen
 import top.chengdongqing.weui.ui.screens.demo.DragSorterScreen
-import top.chengdongqing.weui.ui.screens.demo.IndexedListScreen
 import top.chengdongqing.weui.ui.screens.demo.NotificationBarScreen
-import top.chengdongqing.weui.ui.screens.demo.OrgTreeScreen
 import top.chengdongqing.weui.ui.screens.demo.SearchBarScreen
 import top.chengdongqing.weui.ui.screens.demo.cropper.ImageCropperScreen
 import top.chengdongqing.weui.ui.screens.demo.filebrowser.FileBrowserScreen
 import top.chengdongqing.weui.ui.screens.demo.gallery.GalleryScreen
+import top.chengdongqing.weui.ui.screens.demo.indexedlist.IndexedListScreen
+import top.chengdongqing.weui.ui.screens.demo.orgtree.OrgTreeScreen
 import top.chengdongqing.weui.ui.screens.demo.paint.PaintScreen
 import top.chengdongqing.weui.ui.screens.demo.videochannel.VideoChannelScreen
 

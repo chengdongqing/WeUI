@@ -1,14 +1,14 @@
-package top.chengdongqing.weui.data
+package top.chengdongqing.weui.ui.screens.home
 
 import androidx.annotation.DrawableRes
 import top.chengdongqing.weui.R
 
-data class MenuItem(
+internal data class MenuItem(
     val label: String,
     val route: String
 )
 
-data class MenuGroup(
+internal data class MenuGroup(
     val title: String,
     @DrawableRes
     val iconId: Int,
@@ -16,7 +16,7 @@ data class MenuGroup(
     val path: String? = null
 )
 
-val menus = listOf(
+internal val menus = listOf(
     MenuGroup(
         "基础组件", R.drawable.ic_nav_layout,
         listOf(

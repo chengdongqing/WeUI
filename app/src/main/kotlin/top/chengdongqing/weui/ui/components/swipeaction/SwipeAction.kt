@@ -36,7 +36,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import top.chengdongqing.weui.enum.DragAnchors
 import top.chengdongqing.weui.ui.theme.DangerColorLight
 import top.chengdongqing.weui.ui.theme.PlainColor
 import top.chengdongqing.weui.ui.theme.WarningColor
@@ -239,3 +238,9 @@ data class SwipeActionState(
     val actionItemWidthPx: Float,
     val actionItemWidth: Dp
 )
+
+enum class DragAnchors {
+    Start,
+    Center,
+    End
+}

@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.ui.screens.demo
+package top.chengdongqing.weui.ui.screens.basic
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size

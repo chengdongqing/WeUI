@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.data
+package top.chengdongqing.weui.ui.screens.demo.indexedlist
 
 val cities = listOf(
     "北京", "天津", "上海", "重庆", "哈尔滨", "长春", "沈阳", "呼和浩特", "石家庄", "乌鲁木齐",
