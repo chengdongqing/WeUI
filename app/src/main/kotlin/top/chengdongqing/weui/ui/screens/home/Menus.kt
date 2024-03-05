@@ -153,7 +153,8 @@ internal val menus = listOf(
             MenuItem("CubicBezier", "cubic-bezier"),
             MenuItem("NotificationBar", "notification-bar"),
             MenuItem("ImageCrop", "image-crop"),
-            MenuItem("VideoChannel", "video-channel")
+            MenuItem("VideoChannel", "video-channel"),
+            MenuItem("SolarSystem", "solar-system")
         )
     ),
     MenuGroup("层级规范", R.drawable.ic_nav_zindex, path = "layers")

@@ -12,6 +12,7 @@ import top.chengdongqing.weui.ui.screens.demo.DividingRuleScreen
 import top.chengdongqing.weui.ui.screens.demo.DragSorterScreen
 import top.chengdongqing.weui.ui.screens.demo.NotificationBarScreen
 import top.chengdongqing.weui.ui.screens.demo.SearchBarScreen
+import top.chengdongqing.weui.ui.screens.demo.SolarSystemScreen
 import top.chengdongqing.weui.ui.screens.demo.filebrowser.FileBrowserScreen
 import top.chengdongqing.weui.ui.screens.demo.gallery.GalleryScreen
 import top.chengdongqing.weui.ui.screens.demo.imagecrop.ImageCropScreen
@@ -71,5 +72,8 @@ fun NavGraphBuilder.addDemoGraph() {
     }
     composable("video-channel") {
         VideoChannelScreen()
+    }
+    composable("solar-system") {
+        SolarSystemScreen()
     }
 }

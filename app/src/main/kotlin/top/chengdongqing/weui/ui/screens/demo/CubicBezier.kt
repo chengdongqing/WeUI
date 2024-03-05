@@ -213,6 +213,12 @@ private fun AnimateToCart(
     content: @Composable () -> Unit
 ) {
     val animationProgress = remember { Animatable(0f) }
+    val currentOffset by remember {
+        derivedStateOf {
+            val path = calculateBezierPath(startOffset, endOffset, animationProgress.value)
+            IntOffset(path.x.roundToInt(), path.y.roundToInt())
+        }
+    }
 
     LaunchedEffect(startOffset, endOffset) {
         animationProgress.animateTo(
@@ -220,13 +226,6 @@ private fun AnimateToCart(
             animationSpec = tween(durationMillis = 1000)
         )
         onFinish()
-    }
-
-    val currentOffset by remember {
-        derivedStateOf {
-            val path = calculateBezierPath(startOffset, endOffset, animationProgress.value)
-            IntOffset(path.x.roundToInt(), path.y.roundToInt())
-        }
     }
 
     Box(
