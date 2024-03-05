@@ -10,7 +10,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -28,6 +27,7 @@ import top.chengdongqing.weui.ui.theme.WarningColor
 import top.chengdongqing.weui.ui.theme.WeUITheme
 import top.chengdongqing.weui.utils.formatFloat
 import top.chengdongqing.weui.utils.randomFloat
+import top.chengdongqing.weui.utils.rememberToggleState
 
 @Composable
 fun BarChartScreen() {
@@ -38,8 +38,14 @@ fun BarChartScreen() {
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         var dataSource by remember { mutableStateOf(buildData()) }
-        var color by remember { mutableStateOf(PrimaryColor.copy(0.8f)) }
-        var maxBarWidth by remember { mutableIntStateOf(20) }
+        val (color, toggleColor) = rememberToggleState(
+            defaultValue = PrimaryColor.copy(0.8f),
+            reverseValue = WarningColor.copy(0.8f)
+        )
+        val (maxBarWidth, toggleMaxBarWidth) = rememberToggleState(
+            defaultValue = 20,
+            reverseValue = 30
+        )
         var scrollable by remember { mutableStateOf(false) }
 
         Box(
@@ -67,18 +73,14 @@ fun BarChartScreen() {
             dataSource = buildData(if (scrollable) 24 else 6)
         }
         WeButton(text = "切换颜色", type = ButtonType.DANGER) {
-            color = if (color == PrimaryColor.copy(0.8f)) {
-                WarningColor.copy(0.8f)
-            } else {
-                PrimaryColor.copy(0.8f)
-            }
+            toggleColor()
         }
         WeButton(text = "切换横向滚动", type = ButtonType.PLAIN) {
             dataSource = buildData(if (scrollable) 6 else 24)
             scrollable = !scrollable
         }
-        WeButton(text = "修改最大柱宽", type = ButtonType.PLAIN) {
-            maxBarWidth = if (maxBarWidth == 20) 30 else 20
+        WeButton(text = "切换最大柱宽", type = ButtonType.PLAIN) {
+            toggleMaxBarWidth()
         }
     }
 }

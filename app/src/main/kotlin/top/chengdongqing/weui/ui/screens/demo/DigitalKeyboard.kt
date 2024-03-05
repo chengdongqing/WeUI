@@ -19,6 +19,7 @@ import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.theme.DangerColorLight
 import top.chengdongqing.weui.ui.theme.WeUITheme
 import top.chengdongqing.weui.utils.clickableWithoutRipple
+import top.chengdongqing.weui.utils.rememberToggleState
 
 @Composable
 fun DigitalKeyboardScreen() {
@@ -26,7 +27,13 @@ fun DigitalKeyboardScreen() {
         var value by remember { mutableStateOf("") }
         var visible by remember { mutableStateOf(true) }
         var allowDecimal by remember { mutableStateOf(true) }
-        var confirmButtonOptions by remember { mutableStateOf(DigitalKeyboardConfirmOptions()) }
+        val (confirmButtonOptions, toggleConfirmButtonOptions) = rememberToggleState(
+            defaultValue = DigitalKeyboardConfirmOptions(),
+            reverseValue = DigitalKeyboardConfirmOptions(
+                color = DangerColorLight,
+                text = "转账"
+            )
+        )
 
         WeInput(
             value = value,
@@ -49,15 +56,7 @@ fun DigitalKeyboardScreen() {
             }
             Spacer(modifier = Modifier.height(20.dp))
             WeButton(text = "切换样式") {
-                confirmButtonOptions =
-                    if (confirmButtonOptions == DigitalKeyboardConfirmOptions()) {
-                        DigitalKeyboardConfirmOptions(
-                            color = DangerColorLight,
-                            text = "转账"
-                        )
-                    } else {
-                        DigitalKeyboardConfirmOptions()
-                    }
+                toggleConfirmButtonOptions()
             }
         }
 

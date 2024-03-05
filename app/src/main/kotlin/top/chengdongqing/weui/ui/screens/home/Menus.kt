@@ -154,7 +154,8 @@ internal val menus = listOf(
             MenuItem("NotificationBar", "notification-bar"),
             MenuItem("ImageCrop", "image-crop"),
             MenuItem("VideoChannel", "video-channel"),
-            MenuItem("SolarSystem", "solar-system")
+            MenuItem("SolarSystem", "solar-system"),
+            MenuItem("PanoramicImage", "panoramic-image")
         )
     ),
     MenuGroup("层级规范", R.drawable.ic_nav_zindex, path = "layers")

@@ -17,6 +17,7 @@ import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.theme.WeUITheme
 import top.chengdongqing.weui.utils.formatFloat
 import top.chengdongqing.weui.utils.randomInt
+import top.chengdongqing.weui.utils.rememberToggleState
 
 @Composable
 fun PieChartScreen() {
@@ -27,7 +28,10 @@ fun PieChartScreen() {
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         var dataSource by remember { mutableStateOf(buildData()) }
-        var ringWidth by remember { mutableStateOf(0.dp) }
+        val (ringWidth, toggleRingWidth) = rememberToggleState(
+            defaultValue = 0.dp,
+            reverseValue = 30.dp
+        )
 
         WePieChart(dataSource, ringWidth) {
             formatFloat(it) + "个"
@@ -36,7 +40,7 @@ fun PieChartScreen() {
             dataSource = buildData()
         }
         WeButton(text = "切换类型", type = ButtonType.PLAIN) {
-            ringWidth = if (ringWidth == 0.dp) 30.dp else 0.dp
+            toggleRingWidth()
         }
     }
 }

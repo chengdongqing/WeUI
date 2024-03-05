@@ -21,6 +21,7 @@ import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
+import kotlinx.coroutines.isActive
 import top.chengdongqing.weui.R
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.theme.WeUITheme
@@ -72,7 +73,7 @@ private fun rememberAnimatedTime(): MutableLongState {
     val time = remember { mutableLongStateOf(0L) }
 
     LaunchedEffect(Unit) {
-        while (true) {
+        while (isActive) {
             withFrameMillis {
                 time.longValue = System.currentTimeMillis()
             }
@@ -125,7 +126,7 @@ private fun DrawScope.drawCelestialBody(
 
 @Preview
 @Composable
-private fun PreviewSolarSystemScreen() {
+private fun PreviewSolarSystem() {
     WeUITheme {
         SolarSystemScreen()
     }

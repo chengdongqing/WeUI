@@ -11,7 +11,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -29,6 +28,7 @@ import top.chengdongqing.weui.ui.theme.DangerColorLight
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.ui.theme.WeUITheme
 import top.chengdongqing.weui.utils.formatFloat
+import top.chengdongqing.weui.utils.rememberToggleState
 
 @Composable
 fun DividingRuleScreen() {
@@ -38,9 +38,18 @@ fun DividingRuleScreen() {
         padding = PaddingValues(0.dp)
     ) {
         var value by remember { mutableFloatStateOf(0f) }
-        val defaultColors = MaterialTheme.dividingRuleColorScheme
-        var colors by remember { mutableStateOf(defaultColors) }
-        var range by remember { mutableStateOf(0..100 step 10) }
+        val (colors, toggleColors) = rememberToggleState(
+            defaultValue = MaterialTheme.dividingRuleColorScheme,
+            reverseValue = DividingRuleColors(
+                containerColor = PrimaryColor.copy(0.5f),
+                contentColor = Color.White,
+                indicatorColor = DangerColorLight
+            )
+        )
+        val (range, toggleRange) = rememberToggleState(
+            defaultValue = 0..100 step 10,
+            reverseValue = 150..1500 step 150
+        )
 
         Box(
             contentAlignment = Alignment.CenterStart,
@@ -58,23 +67,11 @@ fun DividingRuleScreen() {
         }
         Spacer(modifier = Modifier.height(60.dp))
         WeButton(text = "切换样式") {
-            colors = if (colors == defaultColors) {
-                DividingRuleColors(
-                    containerColor = PrimaryColor.copy(0.5f),
-                    contentColor = Color.White,
-                    indicatorColor = DangerColorLight
-                )
-            } else {
-                defaultColors
-            }
+            toggleColors()
         }
         Spacer(modifier = Modifier.height(20.dp))
-        WeButton(text = "修改可选值", type = ButtonType.PLAIN) {
-            range = if (range == 0..100 step 10) {
-                150..1500 step 150
-            } else {
-                0..100 step 10
-            }
+        WeButton(text = "切换可选值", type = ButtonType.PLAIN) {
+            toggleRange()
         }
     }
 }
