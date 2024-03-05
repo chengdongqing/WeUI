@@ -41,9 +41,11 @@ fun DropCardScreen() {
                 .fillMaxHeight(0.8f),
             onDrop = { item ->
                 coroutineScope.launch {
-                    items.remove(item)
-                    delay(100)
-                    items.add(item)
+                    items.apply {
+                        remove(item)
+                        delay(100)
+                        add(item)
+                    }
                 }
             }
         ) { item ->

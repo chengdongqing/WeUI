@@ -21,7 +21,7 @@ import top.chengdongqing.weui.utils.rememberToggleState
 fun PanoramicImageScreen() {
     WeScreen(
         title = "PanoramicImage",
-        description = "全景图片，无缝衔接",
+        description = "全景图片，无缝衔接滚动",
         padding = PaddingValues(0.dp)
     ) {
         val image = ImageBitmap.imageResource(id = R.drawable.panoramic_yosemite_park)

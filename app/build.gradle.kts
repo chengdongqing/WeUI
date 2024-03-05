@@ -94,6 +94,7 @@ dependencies {
     implementation(libs.pinyin) // 汉字转拼音
     implementation(libs.retrofit) // 网络请求
     implementation(libs.retrofit.converter)
+    implementation(libs.reorderable) // 拖拽排序
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
