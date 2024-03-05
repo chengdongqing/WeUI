@@ -43,11 +43,7 @@ data class OrgNode(val label: String, val children: List<OrgNode> = emptyList())
 @Composable
 fun WeOrgTree(dataSource: List<OrgNode>, isTopLevel: Boolean = true) {
     val space = 20.dp
-    val lineColor = if (isSystemInDarkTheme()) {
-        MaterialTheme.colorScheme.outline
-    } else {
-        Color.Black
-    }
+    val lineColor = MaterialTheme.orgTreeColorScheme.lineColor
     val layoutCoordinates = remember { mutableMapOf<Int, Pair<Float, Float>>() }
 
     Row(
@@ -152,11 +148,7 @@ private fun Modifier.setStyle(expended: Boolean): Modifier {
         this
             .border(
                 width = 0.8.dp,
-                color = if (isSystemInDarkTheme()) {
-                    MaterialTheme.colorScheme.outline
-                } else {
-                    MaterialTheme.colorScheme.onPrimary
-                },
+                color = MaterialTheme.orgTreeColorScheme.borderColor,
                 shape = RoundedCornerShape(2.dp)
             )
             .background(MaterialTheme.colorScheme.onBackground)
@@ -219,3 +211,23 @@ private fun Modifier.drawHorizontalLine(
             }
     }
 }
+
+private data class OrgTreeColors(
+    val lineColor: Color,
+    val borderColor: Color
+)
+
+private val MaterialTheme.orgTreeColorScheme: OrgTreeColors
+    @Composable
+    get() = OrgTreeColors(
+        lineColor = if (isSystemInDarkTheme()) {
+            colorScheme.outline
+        } else {
+            Color.Black
+        },
+        borderColor = if (isSystemInDarkTheme()) {
+            colorScheme.outline
+        } else {
+            colorScheme.onPrimary
+        }
+    )

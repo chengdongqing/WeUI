@@ -182,7 +182,7 @@ private fun DrawScope.drawIndicatorsLock(colors: ClockColors) {
     drawCircle(colors.containerColor, 3.dp.toPx())
 }
 
-private class ClockColors(
+private data class ClockColors(
     val containerColor: Color,
     val fontColor: Color,
     val scalePrimaryColor: Color,

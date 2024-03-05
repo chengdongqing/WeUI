@@ -1,6 +1,7 @@
 package top.chengdongqing.weui.ui.screens.layers
 
-import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateDp
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -32,18 +33,19 @@ fun LayersScreen() {
         description = "用于规范WeUI页面元素所属层级、层级顺序及组合规范。"
     ) {
         val width = LocalConfiguration.current.screenWidthDp.dp / 2
-        var expand by remember { mutableStateOf(false) }
+        var expanded by remember { mutableStateOf(false) }
+        val transition = updateTransition(targetState = expanded, label = "expanded")
 
         LaunchedEffect(Unit) {
             delay(500)
-            expand = true
+            expanded = true
         }
 
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .clickableWithoutRipple {
-                    expand = !expand
+                    expanded = !expanded
                 }
                 .padding(top = 100.dp),
             contentAlignment = Alignment.TopCenter
@@ -54,14 +56,12 @@ fun LayersScreen() {
                     .width(width)
                     .aspectRatio(3 / 5f)
                     .offset(
-                        x = animateDpAsState(
-                            targetValue = if (expand) (-60).dp else 0.dp,
-                            label = ""
-                        ).value,
-                        y = animateDpAsState(
-                            targetValue = if (expand) 60.dp else 0.dp,
-                            label = ""
-                        ).value
+                        x = transition.animateDp(label = "") {
+                            if (it) (-60).dp else 0.dp
+                        }.value,
+                        y = transition.animateDp(label = "") {
+                            if (it) 60.dp else 0.dp
+                        }.value
                     )
                     .border(1.dp, Color.hsl(0f, 0f, 0.8f, 0.5f))
             )
@@ -71,14 +71,12 @@ fun LayersScreen() {
                     .width(width)
                     .aspectRatio(3 / 5f)
                     .offset(
-                        x = animateDpAsState(
-                            targetValue = if (expand) (-20).dp else 0.dp,
-                            label = ""
-                        ).value,
-                        y = animateDpAsState(
-                            targetValue = if (expand) 20.dp else 0.dp,
-                            label = ""
-                        ).value
+                        x = transition.animateDp(label = "") {
+                            if (it) (-20).dp else 0.dp
+                        }.value,
+                        y = transition.animateDp(label = "") {
+                            if (it) 20.dp else 0.dp
+                        }.value
                     )
                     .background(Color(0f, 0f, 0f, 0.5f))
             )
@@ -88,14 +86,12 @@ fun LayersScreen() {
                     .width(width)
                     .aspectRatio(3 / 5f)
                     .offset(
-                        x = animateDpAsState(
-                            targetValue = if (expand) 20.dp else 0.dp,
-                            label = ""
-                        ).value,
-                        y = animateDpAsState(
-                            targetValue = if (expand) (-20).dp else 0.dp,
-                            label = ""
-                        ).value
+                        x = transition.animateDp(label = "") {
+                            if (it) 20.dp else 0.dp
+                        }.value,
+                        y = transition.animateDp(label = "") {
+                            if (it) (-20).dp else 0.dp
+                        }.value
                     )
                     .background(Color(40 / 255f, 187 / 255f, 102 / 255f, 0.5f))
             )
@@ -105,14 +101,12 @@ fun LayersScreen() {
                     .width(width)
                     .aspectRatio(3 / 5f)
                     .offset(
-                        x = animateDpAsState(
-                            targetValue = if (expand) 60.dp else 0.dp,
-                            label = ""
-                        ).value,
-                        y = animateDpAsState(
-                            targetValue = if (expand) (-60).dp else 0.dp,
-                            label = ""
-                        ).value
+                        x = transition.animateDp(label = "") {
+                            if (it) 60.dp else 0.dp
+                        }.value,
+                        y = transition.animateDp(label = "") {
+                            if (it) (-60).dp else 0.dp
+                        }.value
                     )
                     .background(Color.White)
             )

@@ -73,7 +73,7 @@ fun BarChartScreen() {
                 PrimaryColor.copy(0.8f)
             }
         }
-        WeButton(text = "切换滚动", type = ButtonType.PLAIN) {
+        WeButton(text = "切换横向滚动", type = ButtonType.PLAIN) {
             dataSource = buildData(if (scrollable) 6 else 24)
             scrollable = !scrollable
         }

@@ -54,6 +54,7 @@ import top.chengdongqing.weui.ui.components.divider.WeDivider
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.ui.theme.WeUITheme
+import top.chengdongqing.weui.utils.calculateBezierPath
 import top.chengdongqing.weui.utils.clickableWithoutRipple
 import kotlin.math.roundToInt
 
@@ -237,17 +238,6 @@ private fun AnimateToCart(
     ) {
         content()
     }
-}
-
-private fun calculateBezierPath(start: Offset, end: Offset, progress: Float): Offset {
-    val controlPoint = Offset((start.x + end.x) / 2, start.y - 200f)
-
-    val x = (1 - progress) * (1 - progress) * start.x + 2 * (1 - progress) *
-            progress * controlPoint.x + progress * progress * end.x
-    val y = (1 - progress) * (1 - progress) * start.y + 2 * (1 - progress) *
-            progress * controlPoint.y + progress * progress * end.y
-
-    return Offset(x, y)
 }
 
 @Preview

@@ -1,5 +1,5 @@
 [versions]
-agp = "8.4.0-alpha11"
+agp = "8.4.0-alpha12"
 biometric = "1.2.0-alpha05"
 camerax = "1.3.1"
 coil-compose = "2.5.0"
