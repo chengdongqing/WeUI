@@ -73,7 +73,9 @@ fun WeActionSheet(
             }
 
             options.forEachIndexed { index, item ->
-                WeDivider()
+                if (index > 0 || title != null) {
+                    WeDivider()
+                }
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()

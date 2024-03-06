@@ -128,7 +128,7 @@ internal val menus = listOf(
         )
     ),
     MenuGroup(
-        "地图", R.drawable.ic_nav_feedback,
+        "地图组件", R.drawable.ic_nav_feedback,
         listOf(
             MenuItem("LocationPreview", "location-preview"),
             MenuItem("LocationPicker", "location-picker")

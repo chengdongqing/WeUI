@@ -8,8 +8,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import top.chengdongqing.weui.ui.screens.home.HomeScreen
 import top.chengdongqing.weui.ui.screens.layers.LayersScreen
-import top.chengdongqing.weui.ui.screens.map.LocationPickerScreen
-import top.chengdongqing.weui.ui.screens.map.LocationPreviewScreen
+import top.chengdongqing.weui.ui.screens.location.LocationPickerScreen
+import top.chengdongqing.weui.ui.screens.location.LocationPreviewScreen
 import top.chengdongqing.weui.ui.screens.qrcode.generator.QrCodeGenerateScreen
 import top.chengdongqing.weui.ui.screens.qrcode.scanner.QrCodeScanScreen
 

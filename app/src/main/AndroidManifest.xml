@@ -88,6 +88,10 @@
             android:exported="true"
             android:theme="@style/Theme.Floating" />
 
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="3d7c9df2670fa24db2ed7bc8c620a8da" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"

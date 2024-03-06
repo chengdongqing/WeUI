@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.ui.screens.map
+package top.chengdongqing.weui.ui.screens.location
 
 import androidx.compose.runtime.Composable
 import top.chengdongqing.weui.ui.components.screen.WeScreen
