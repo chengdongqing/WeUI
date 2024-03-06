@@ -62,3 +62,11 @@ fun formatFileSize(size: Long): String {
         else -> "${formatFloat(size / (1024 * 1024 * 1024f))} GB"
     }
 }
+
+fun formatDistance(meters: Int): String {
+    return if (meters >= 1000) {
+        "%.1fkm".format(meters / 1000f)
+    } else {
+        "${meters}m"
+    }
+}

@@ -38,15 +38,26 @@ import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.utils.clickableWithoutRipple
 
 @Composable
-fun WeSearchBar(value: String, onChange: (value: String) -> Unit) {
+fun WeSearchBar(
+    value: String,
+    modifier: Modifier = Modifier,
+    label: String = "搜索",
+    onFocusChange: ((Boolean) -> Unit)? = null,
+    onChange: (value: String) -> Unit
+) {
     var focused by remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
 
     // 输入框自动聚焦
+    val focusChanged = remember { mutableStateOf(false) }
     LaunchedEffect(focused) {
         if (focused) {
             focusRequester.requestFocus()
         }
+        if (focusChanged.value) {
+            onFocusChange?.invoke(focused)
+        }
+        focusChanged.value = true
     }
     // 返回时先取消聚焦
     BackHandler(focused) {
@@ -54,7 +65,7 @@ fun WeSearchBar(value: String, onChange: (value: String) -> Unit) {
     }
 
     Row(
-        modifier = Modifier
+        modifier = modifier
             .height(38.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -62,7 +73,7 @@ fun WeSearchBar(value: String, onChange: (value: String) -> Unit) {
             modifier = Modifier
                 .weight(1f)
                 .fillMaxHeight()
-                .background(MaterialTheme.colorScheme.onBackground, RoundedCornerShape(4.dp))
+                .background(MaterialTheme.colorScheme.outline, RoundedCornerShape(4.dp))
         ) {
             if (focused) {
                 BasicTextField(
@@ -94,7 +105,7 @@ fun WeSearchBar(value: String, onChange: (value: String) -> Unit) {
                             ) {
                                 if (value.isEmpty()) {
                                     Text(
-                                        text = "搜索",
+                                        text = label,
                                         color = MaterialTheme.colorScheme.onSecondary,
                                         fontSize = 16.sp
                                     )
@@ -122,7 +133,7 @@ fun WeSearchBar(value: String, onChange: (value: String) -> Unit) {
                         tint = MaterialTheme.colorScheme.onSecondary
                     )
                     Text(
-                        text = "搜索",
+                        text = label,
                         color = MaterialTheme.colorScheme.onSecondary,
                         fontSize = 16.sp
                     )
@@ -136,6 +147,7 @@ fun WeSearchBar(value: String, onChange: (value: String) -> Unit) {
                 modifier = Modifier
                     .clickableWithoutRipple {
                         focused = false
+                        onChange("")
                     }
                     .padding(start = 8.dp)
             )

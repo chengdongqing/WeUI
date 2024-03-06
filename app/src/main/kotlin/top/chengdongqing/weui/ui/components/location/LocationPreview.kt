@@ -8,20 +8,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.MyLocation
 import androidx.compose.material.icons.outlined.Navigation
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -47,6 +43,7 @@ import top.chengdongqing.weui.ui.components.actionsheet.ActionSheetItem
 import top.chengdongqing.weui.ui.components.actionsheet.ActionSheetOptions
 import top.chengdongqing.weui.ui.components.actionsheet.rememberWeActionSheet
 import top.chengdongqing.weui.ui.theme.PrimaryColor
+import top.chengdongqing.weui.utils.bitmapDescriptorFromResource
 
 @Composable
 fun WeLocationPreview(
@@ -59,25 +56,22 @@ fun WeLocationPreview(
     var map by remember { mutableStateOf<AMap?>(null) }
 
     Column(modifier = Modifier.fillMaxSize()) {
-        Box(modifier = Modifier.weight(1f)) {
-            WeAMap {
-                map = it
-                it.moveCamera(CameraUpdateFactory.newLatLngZoom(location, zoom))
+        WeAMap(Modifier.weight(1f)) {
+            map = it
+            it.moveCamera(CameraUpdateFactory.newLatLngZoom(location, zoom))
 
-                val marker = MarkerOptions().apply {
-                    position(location)
-                    icon(
-                        bitmapDescriptorFromResource(
-                            context,
-                            R.drawable.ic_location_marker,
-                            120,
-                            120
-                        )
+            val marker = MarkerOptions().apply {
+                position(location)
+                icon(
+                    bitmapDescriptorFromResource(
+                        context,
+                        R.drawable.ic_location_marker,
+                        120,
+                        120
                     )
-                }
-                it.addMarker(marker)
+                )
             }
-            LocationControl(map)
+            it.addMarker(marker)
         }
         BottomBar(location, name, address)
     }
@@ -147,38 +141,5 @@ private fun navigationToLocation(context: Context, location: LatLng, name: Strin
         Toast
             .makeText(context, "未安装高德地图", Toast.LENGTH_SHORT)
             .show()
-    }
-}
-
-@Composable
-private fun BoxScope.LocationControl(map: AMap?) {
-    Box(
-        modifier = Modifier
-            .align(Alignment.BottomStart)
-            .offset(x = 12.dp, y = (-36).dp)
-            .size(40.dp)
-            .clip(RoundedCornerShape(8.dp))
-            .background(MaterialTheme.colorScheme.onBackground)
-            .clickable {
-                map?.let {
-                    it.animateCamera(
-                        CameraUpdateFactory.newLatLngZoom(
-                            LatLng(
-                                it.myLocation.latitude,
-                                it.myLocation.longitude
-                            ),
-                            16f
-                        )
-                    )
-                }
-            },
-        contentAlignment = Alignment.Center
-    ) {
-        Icon(
-            imageVector = Icons.Outlined.MyLocation,
-            contentDescription = "当前位置",
-            tint = MaterialTheme.colorScheme.onPrimary,
-            modifier = Modifier.size(26.dp)
-        )
     }
 }

@@ -2,36 +2,49 @@ package top.chengdongqing.weui.ui.components.location
 
 import android.Manifest
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.graphics.Color
+import android.widget.Toast
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.MyLocation
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.amap.api.maps.AMap
 import com.amap.api.maps.AMapOptions
+import com.amap.api.maps.CameraUpdateFactory
 import com.amap.api.maps.MapView
 import com.amap.api.maps.MapsInitializer
-import com.amap.api.maps.model.BitmapDescriptor
-import com.amap.api.maps.model.BitmapDescriptorFactory
 import com.amap.api.maps.model.MyLocationStyle
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import top.chengdongqing.weui.R
+import top.chengdongqing.weui.utils.bitmapDescriptorFromResource
+import top.chengdongqing.weui.utils.toLatLng
 
 @Composable
-fun WeAMap(onLoad: (AMap) -> Unit) {
+fun WeAMap(modifier: Modifier = Modifier, onLoad: (AMap) -> Unit) {
     val context = LocalContext.current
     // 初始化地图
     val mapView = rememberMapView(onLoad)
@@ -42,10 +55,46 @@ fun WeAMap(onLoad: (AMap) -> Unit) {
         setLocationArrow(mapView.map, context)
     }
 
-    AndroidView(
-        factory = { mapView },
-        modifier = Modifier.fillMaxSize()
-    )
+    Box(modifier) {
+        AndroidView(
+            factory = { mapView },
+            modifier = Modifier.fillMaxSize()
+        )
+        LocationControl(map = mapView.map)
+    }
+}
+
+@Composable
+private fun BoxScope.LocationControl(map: AMap) {
+    val context = LocalContext.current
+
+    Box(
+        modifier = Modifier
+            .align(Alignment.BottomStart)
+            .offset(x = 12.dp, y = (-36).dp)
+            .size(40.dp)
+            .clip(RoundedCornerShape(8.dp))
+            .background(MaterialTheme.colorScheme.onBackground)
+            .clickable {
+                map.apply {
+                    if (myLocation.isComplete) {
+                        animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation.toLatLng(), 16f))
+                    } else {
+                        Toast
+                            .makeText(context, "定位中...", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+            },
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            imageVector = Icons.Outlined.MyLocation,
+            contentDescription = "当前位置",
+            tint = MaterialTheme.colorScheme.onPrimary,
+            modifier = Modifier.size(26.dp)
+        )
+    }
 }
 
 private fun setLocationArrow(map: AMap, context: Context) {
@@ -132,40 +181,4 @@ private fun MapLifecycleHandler(mapView: MapView) {
             lifecycle.removeObserver(lifecycleObserver)
         }
     }
-}
-
-fun bitmapDescriptorFromResource(
-    context: Context,
-    resId: Int,
-    width: Int? = null,
-    height: Int? = null,
-    rotationAngle: Float? = null
-): BitmapDescriptor? {
-    val drawable = ContextCompat.getDrawable(context, resId) ?: return null
-    val originalWidth = width ?: drawable.intrinsicWidth
-    val originalHeight = height ?: drawable.intrinsicHeight
-    val bitmap = Bitmap.createBitmap(
-        originalWidth,
-        originalHeight,
-        Bitmap.Config.ARGB_8888
-    )
-    val canvas = Canvas(bitmap)
-
-    // 如果提供了旋转角度，就在绘制之前旋转画布
-    rotationAngle?.let {
-        val pivotX = originalWidth / 2f
-        val pivotY = originalHeight / 2f
-        canvas.save() // 保存画布当前的状态
-        canvas.rotate(it, pivotX, pivotY) // 应用旋转
-    }
-
-    drawable.setBounds(0, 0, originalWidth, originalHeight)
-    drawable.draw(canvas)
-
-    // 如果旋转了画布，现在恢复到之前保存的状态
-    rotationAngle?.let {
-        canvas.restore()
-    }
-
-    return BitmapDescriptorFactory.fromBitmap(bitmap)
 }

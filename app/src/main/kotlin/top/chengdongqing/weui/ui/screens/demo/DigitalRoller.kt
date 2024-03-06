@@ -85,7 +85,7 @@ private fun <T> RadioCard(
             )
             .padding(horizontal = 12.dp)
     ) {
-        WeRadioGroup(options, value, onChange = onChange)
+        WeRadioGroup(options, value = value, onChange = onChange)
     }
 }
 

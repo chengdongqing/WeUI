@@ -2,10 +2,12 @@ package top.chengdongqing.weui.ui.components.radio
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 
 data class RadioOption<T>(
     val label: String,
     val value: T,
+    val description: String? = null,
     val disabled: Boolean = false
 )
 
@@ -20,14 +22,16 @@ data class RadioOption<T>(
 @Composable
 fun <T> WeRadioGroup(
     options: List<RadioOption<T>>,
+    modifier: Modifier = Modifier,
     value: T? = null,
     disabled: Boolean = false,
     onChange: ((value: T) -> Unit)? = null
 ) {
-    Column {
+    Column(modifier = modifier) {
         for (option in options) {
             WeRadio(
                 label = option.label,
+                description = option.description,
                 checked = option.value == value,
                 disabled = disabled || option.disabled
             ) {

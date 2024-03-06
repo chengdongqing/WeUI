@@ -2,6 +2,8 @@ package top.chengdongqing.weui.ui.components.radio
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,7 +25,13 @@ import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.utils.clickableWithoutRipple
 
 @Composable
-fun WeRadio(label: String, checked: Boolean, disabled: Boolean, onClick: () -> Unit) {
+fun WeRadio(
+    label: String,
+    description: String? = null,
+    checked: Boolean,
+    disabled: Boolean,
+    onClick: () -> Unit
+) {
     Column {
         Row(
             Modifier
@@ -31,16 +39,25 @@ fun WeRadio(label: String, checked: Boolean, disabled: Boolean, onClick: () -> U
                 .clickableWithoutRipple(!disabled) {
                     onClick()
                 }
-                .padding(vertical = 16.dp)
+                .padding(16.dp)
                 .alpha(if (disabled) 0.1f else 1f),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = label,
-                modifier = Modifier.weight(1f),
-                color = MaterialTheme.colorScheme.onPrimary,
-                fontSize = 17.sp
-            )
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = label,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    fontSize = 17.sp
+                )
+                description?.let {
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = it,
+                        color = MaterialTheme.colorScheme.onSecondary,
+                        fontSize = 14.sp
+                    )
+                }
+            }
             Icon(
                 painter = painterResource(id = R.drawable.ic_check),
                 contentDescription = null,

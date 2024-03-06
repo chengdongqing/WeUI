@@ -20,7 +20,7 @@ fun RadioScreen() {
                 RadioOption(label = "cell standard", value = "2"),
                 RadioOption(label = "cell standard", value = "3", disabled = true),
             ),
-            value
+            value = value
         ) {
             value = it
         }
