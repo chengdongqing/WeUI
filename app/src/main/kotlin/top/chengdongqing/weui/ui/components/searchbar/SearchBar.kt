@@ -42,26 +42,28 @@ fun WeSearchBar(
     value: String,
     modifier: Modifier = Modifier,
     label: String = "搜索",
+    focused: Boolean? = null,
     onFocusChange: ((Boolean) -> Unit)? = null,
     onChange: (value: String) -> Unit
 ) {
-    var focused by remember { mutableStateOf(false) }
+    var localFocused by remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
 
+    val finalFocused = focused ?: localFocused
+    fun setFocus(value: Boolean) {
+        localFocused = value
+        onFocusChange?.invoke(value)
+    }
+
     // 输入框自动聚焦
-    val focusChanged = remember { mutableStateOf(false) }
-    LaunchedEffect(focused) {
-        if (focused) {
+    LaunchedEffect(finalFocused) {
+        if (finalFocused) {
             focusRequester.requestFocus()
         }
-        if (focusChanged.value) {
-            onFocusChange?.invoke(focused)
-        }
-        focusChanged.value = true
     }
     // 返回时先取消聚焦
-    BackHandler(focused) {
-        focused = false
+    BackHandler(finalFocused) {
+        setFocus(false)
     }
 
     Row(
@@ -75,7 +77,7 @@ fun WeSearchBar(
                 .fillMaxHeight()
                 .background(MaterialTheme.colorScheme.outline, RoundedCornerShape(4.dp))
         ) {
-            if (focused) {
+            if (finalFocused) {
                 BasicTextField(
                     value,
                     onValueChange = onChange,
@@ -119,7 +121,7 @@ fun WeSearchBar(
                     modifier = Modifier
                         .fillMaxSize()
                         .clickableWithoutRipple {
-                            focused = true
+                            setFocus(true)
                         },
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
@@ -140,13 +142,13 @@ fun WeSearchBar(
                 }
             }
         }
-        if (focused) {
+        if (finalFocused) {
             Text(
                 text = "取消",
                 color = FontLinkColor,
                 modifier = Modifier
                     .clickableWithoutRipple {
-                        focused = false
+                        setFocus(false)
                         onChange("")
                     }
                     .padding(start = 8.dp)

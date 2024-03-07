@@ -9,7 +9,7 @@ import top.chengdongqing.weui.ui.screens.demo.CubicBezierScreen
 import top.chengdongqing.weui.ui.screens.demo.DigitalKeyboardScreen
 import top.chengdongqing.weui.ui.screens.demo.DigitalRollerScreen
 import top.chengdongqing.weui.ui.screens.demo.DividingRuleScreen
-import top.chengdongqing.weui.ui.screens.demo.DraggableSorterScreen
+import top.chengdongqing.weui.ui.screens.demo.DragSorterScreen
 import top.chengdongqing.weui.ui.screens.demo.NotificationBarScreen
 import top.chengdongqing.weui.ui.screens.demo.PanoramicImageScreen
 import top.chengdongqing.weui.ui.screens.demo.SearchBarScreen
@@ -47,8 +47,8 @@ fun NavGraphBuilder.addDemoGraph() {
     composable("indexed-list") {
         IndexedListScreen()
     }
-    composable("draggable-sorter") {
-        DraggableSorterScreen()
+    composable("drag-sorter") {
+        DragSorterScreen()
     }
     composable("dividing-rule") {
         DividingRuleScreen()

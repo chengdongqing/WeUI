@@ -1,6 +1,5 @@
 package top.chengdongqing.weui.ui.components.location.picker
 
-import android.widget.Toast
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.TweenSpec
 import androidx.compose.foundation.Image
@@ -23,45 +22,46 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.amap.api.maps.AMapUtils
 import com.amap.api.maps.model.LatLng
 import top.chengdongqing.weui.R
 import top.chengdongqing.weui.ui.components.button.ButtonSize
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.location.WeAMap
 import top.chengdongqing.weui.utils.clickableWithoutRipple
+import kotlin.math.roundToInt
 
 @Composable
 fun WeLocationPicker(
-    locationPickerViewModel: LocationPickerViewModel = viewModel(),
+    pickerViewModel: LocationPickerViewModel = viewModel(),
     onCancel: () -> Unit,
     onConfirm: (LocationItem) -> Unit
 ) {
-    val context = LocalContext.current
-
     Column(modifier = Modifier.fillMaxSize()) {
         Box(modifier = Modifier.weight(1f)) {
             WeAMap { map ->
-                locationPickerViewModel.map = map
-                locationPickerViewModel.setCenterChangeListener(map) { latLng ->
-                    locationPickerViewModel.location = latLng
-                }
+                pickerViewModel.map = map
+                pickerViewModel.setCenterChangeListener(map)
             }
-            TopBar(onCancel) {
-                val list = locationPickerViewModel.locationList
-                if (list.isNotEmpty()) {
-                    onConfirm(list[locationPickerViewModel.current])
-                } else {
-                    Toast.makeText(context, "未选择任何地点", Toast.LENGTH_SHORT).show()
-                }
+            TopBar(pickerViewModel.locationList.isEmpty(), onCancel) {
+                val location = pickerViewModel.locationList[pickerViewModel.selectedIndex]
+                    // 始终回调地图中心点坐标
+                    .copy(
+                        latLng = pickerViewModel.center!!,
+                        distance = AMapUtils.calculateLineDistance(
+                            pickerViewModel.center!!,
+                            pickerViewModel.current!!
+                        ).roundToInt()
+                    )
+                onConfirm(location)
             }
-            LocationMarker(locationPickerViewModel.location)
+            LocationMarker(pickerViewModel.center)
         }
-        LocationList(locationPickerViewModel)
+        LocationList(pickerViewModel)
     }
 }
 
@@ -86,7 +86,7 @@ private fun BoxScope.LocationMarker(location: LatLng?) {
 }
 
 @Composable
-private fun TopBar(onCancel: () -> Unit, onConfirm: () -> Unit) {
+private fun TopBar(isEmpty: Boolean, onCancel: () -> Unit, onConfirm: () -> Unit) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
@@ -106,7 +106,8 @@ private fun TopBar(onCancel: () -> Unit, onConfirm: () -> Unit) {
         )
         WeButton(
             text = "确定",
-            size = ButtonSize.SMALL
+            size = ButtonSize.SMALL,
+            disabled = isEmpty
         ) {
             onConfirm()
         }

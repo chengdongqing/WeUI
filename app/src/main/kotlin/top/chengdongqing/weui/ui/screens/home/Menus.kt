@@ -145,7 +145,7 @@ internal val menus = listOf(
             MenuItem("FileBrowser", "file-browser"),
             MenuItem("Paint", "paint"),
             MenuItem("IndexedList", "indexed-list"),
-            MenuItem("DraggableSorter", "draggable-sorter"),
+            MenuItem("DragSorter", "drag-sorter"),
             MenuItem("DividingRule", "dividing-rule"),
             MenuItem("OrgTree", "org-tree"),
             MenuItem("DigitalRoller", "digital-roller"),

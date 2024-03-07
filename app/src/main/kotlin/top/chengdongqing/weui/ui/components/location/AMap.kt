@@ -1,8 +1,12 @@
 package top.chengdongqing.weui.ui.components.location
 
 import android.Manifest
+import android.content.ComponentCallbacks
 import android.content.Context
+import android.content.res.Configuration
 import android.graphics.Color
+import android.os.Build
+import android.os.Bundle
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -77,7 +81,12 @@ private fun BoxScope.LocationControl(map: AMap) {
             .background(MaterialTheme.colorScheme.onBackground)
             .clickable {
                 map.apply {
-                    if (myLocation.isComplete) {
+                    if (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            myLocation.isComplete
+                        } else {
+                            myLocation.latitude != 0.0 && myLocation.longitude != 0.0
+                        }
+                    ) {
                         animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation.toLatLng(), 16f))
                     } else {
                         Toast
@@ -149,24 +158,29 @@ private fun rememberMapView(onLoad: (AMap) -> Unit): MapView {
         MapsInitializer.updatePrivacyShow(context, true, true)
         MapsInitializer.updatePrivacyAgree(context, true)
 
-        MapView(context, AMapOptions().apply {
+        val options = AMapOptions().apply {
             // 设置logo位置
             logoPosition(AMapOptions.LOGO_POSITION_BOTTOM_RIGHT)
             // 不显示缩放控件
             zoomControlsEnabled(false)
             // 设置地图类型
             mapType(if (isDarkTheme) AMap.MAP_TYPE_NIGHT else AMap.MAP_TYPE_NORMAL)
-        }).apply { onLoad(map) }
+        }
+        MapView(context, options).apply {
+            onLoad(map)
+        }
     }
 }
 
 @Composable
 private fun MapLifecycleHandler(mapView: MapView) {
+    val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current.lifecycle
+
     val lifecycleObserver = remember(mapView) {
         LifecycleEventObserver { _, event ->
             when (event) {
-                Lifecycle.Event.ON_CREATE -> mapView.onCreate(null)
+                Lifecycle.Event.ON_CREATE -> mapView.onCreate(Bundle())
                 Lifecycle.Event.ON_RESUME -> mapView.onResume()
                 Lifecycle.Event.ON_PAUSE -> mapView.onPause()
                 Lifecycle.Event.ON_DESTROY -> mapView.onDestroy()
@@ -174,11 +188,22 @@ private fun MapLifecycleHandler(mapView: MapView) {
             }
         }
     }
+    val callbacks = remember(mapView) {
+        object : ComponentCallbacks {
+            override fun onConfigurationChanged(config: Configuration) {}
+            override fun onLowMemory() {
+                mapView.onLowMemory()
+            }
+        }
+    }
 
     DisposableEffect(lifecycle) {
         lifecycle.addObserver(lifecycleObserver)
+        context.registerComponentCallbacks(callbacks)
+
         onDispose {
             lifecycle.removeObserver(lifecycleObserver)
+            context.unregisterComponentCallbacks(callbacks)
         }
     }
 }
