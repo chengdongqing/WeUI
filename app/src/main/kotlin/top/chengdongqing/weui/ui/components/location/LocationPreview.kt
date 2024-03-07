@@ -1,9 +1,5 @@
 package top.chengdongqing.weui.ui.components.location
 
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -43,7 +39,9 @@ import top.chengdongqing.weui.ui.components.actionsheet.ActionSheetItem
 import top.chengdongqing.weui.ui.components.actionsheet.ActionSheetOptions
 import top.chengdongqing.weui.ui.components.actionsheet.rememberWeActionSheet
 import top.chengdongqing.weui.ui.theme.PrimaryColor
-import top.chengdongqing.weui.utils.bitmapDescriptorFromResource
+import top.chengdongqing.weui.utils.MapType
+import top.chengdongqing.weui.utils.buildBitmapDescriptor
+import top.chengdongqing.weui.utils.navigateToLocation
 
 @Composable
 fun WeLocationPreview(
@@ -63,7 +61,7 @@ fun WeLocationPreview(
             val marker = MarkerOptions().apply {
                 position(location)
                 icon(
-                    bitmapDescriptorFromResource(
+                    buildBitmapDescriptor(
                         context,
                         R.drawable.ic_location_marker,
                         120,
@@ -112,9 +110,22 @@ private fun BottomBar(location: LatLng, name: String, address: String?) {
                     .clip(CircleShape)
                     .background(MaterialTheme.colorScheme.background)
                     .clickable {
-                        actionSheet.show(ActionSheetOptions(options = listOf(ActionSheetItem("高德地图"))) {
-                            navigationToLocation(context, location, name)
-                        })
+                        actionSheet.show(
+                            ActionSheetOptions(
+                                options = listOf(
+                                    ActionSheetItem("高德地图"),
+                                    ActionSheetItem("百度地图"),
+                                    ActionSheetItem("腾讯地图"),
+                                    ActionSheetItem("谷歌地图"),
+                                )
+                            ) { index ->
+                                navigateToLocation(
+                                    context,
+                                    MapType.ofIndex(index)!!,
+                                    location,
+                                    name
+                                )
+                            })
                     },
                 contentAlignment = Alignment.Center
             ) {
@@ -128,18 +139,5 @@ private fun BottomBar(location: LatLng, name: String, address: String?) {
             Spacer(modifier = Modifier.height(4.dp))
             Text(text = "导航", color = MaterialTheme.colorScheme.onSecondary, fontSize = 14.sp)
         }
-    }
-}
-
-private fun navigationToLocation(context: Context, location: LatLng, name: String) {
-    val uri =
-        Uri.parse("amapuri://route/plan?dlat=${location.latitude}&dlon=${location.longitude}&dname=$name")
-    val intent = Intent(Intent.ACTION_VIEW, uri)
-    if (intent.resolveActivity(context.packageManager) != null) {
-        context.startActivity(intent)
-    } else {
-        Toast
-            .makeText(context, "未安装高德地图", Toast.LENGTH_SHORT)
-            .show()
     }
 }

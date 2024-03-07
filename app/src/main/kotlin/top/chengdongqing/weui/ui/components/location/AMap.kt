@@ -40,7 +40,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import top.chengdongqing.weui.R
-import top.chengdongqing.weui.utils.bitmapDescriptorFromResource
+import top.chengdongqing.weui.utils.buildBitmapDescriptor
 import top.chengdongqing.weui.utils.toLatLng
 
 @Composable
@@ -106,7 +106,7 @@ private fun setLocationArrow(map: AMap, context: Context) {
             myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE_NO_CENTER)
             // 设置定位图标
             myLocationIcon(
-                bitmapDescriptorFromResource(
+                buildBitmapDescriptor(
                     context,
                     R.drawable.ic_location_rotatable,
                     90,

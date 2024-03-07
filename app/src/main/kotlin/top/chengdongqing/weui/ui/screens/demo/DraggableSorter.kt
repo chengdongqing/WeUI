@@ -43,9 +43,9 @@ import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.theme.WeUITheme
 
 @Composable
-fun DragSorterScreen() {
+fun DraggableSorterScreen() {
     WeScreen(
-        title = "DragSorter",
+        title = "DraggableSorter",
         description = "拖拽排序",
         scrollEnabled = false,
         padding = PaddingValues(0.dp)
@@ -147,6 +147,6 @@ private fun VerticalReorderGrid() {
 @Composable
 private fun PreviewDragSorter() {
     WeUITheme {
-        DragSorterScreen()
+        DraggableSorterScreen()
     }
 }
