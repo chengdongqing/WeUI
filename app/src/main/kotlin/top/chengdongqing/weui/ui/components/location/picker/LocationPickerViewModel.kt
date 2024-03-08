@@ -41,9 +41,9 @@ class LocationPickerViewModel : ViewModel() {
         return if (current == null) {
             emptyList()
         } else {
+            isLoading = true
             withContext(Dispatchers.IO) {
                 suspendCoroutine { continuation ->
-                    isLoading = true
                     // 构建搜索参数：关键字，类别，区域
                     val query = PoiSearchV2.Query(keyword, "", "").apply {
                         // 设置分页参数
@@ -96,7 +96,7 @@ class LocationPickerViewModel : ViewModel() {
                 val p = location.toLatLng()
                 current = p
                 // 移动地图视野到当前位置
-                map.moveCamera(CameraUpdateFactory.newLatLng(p))
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(p, 16f))
                 // 不再监听当前位置变化
                 map.setOnMyLocationChangeListener(null)
             }

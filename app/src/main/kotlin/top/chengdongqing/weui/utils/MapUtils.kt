@@ -21,7 +21,7 @@ fun navigateToLocation(
     context: Context,
     mapType: MapType,
     location: LatLng,
-    name: String,
+    name: String
 ) {
     val uri: Uri = when (mapType) {
         MapType.AMAP -> {
@@ -42,13 +42,7 @@ fun navigateToLocation(
         }
     }
 
-    val intent = Intent(Intent.ACTION_VIEW, uri).apply {
-        if (mapType == MapType.GOOGLE) {
-            // 指定谷歌地图APP打开，因为谷歌地图的URI模式可能被多个应用支持
-            `package` = "com.google.android.apps.maps"
-        }
-    }
-
+    val intent = Intent(Intent.ACTION_VIEW, uri)
     if (intent.resolveActivity(context.packageManager) != null) {
         context.startActivity(intent)
     } else {
@@ -90,7 +84,7 @@ fun buildBitmapDescriptor(
     )
     val canvas = Canvas(bitmap)
 
-    // 如果提供了旋转角度，就在绘制之前旋转画布
+    // 旋转
     rotationAngle?.let {
         val pivotX = originalWidth / 2f
         val pivotY = originalHeight / 2f

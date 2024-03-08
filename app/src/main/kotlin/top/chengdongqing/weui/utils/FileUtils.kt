@@ -33,3 +33,17 @@ suspend fun calculateFileSize(file: File): Long = withContext(Dispatchers.IO) {
         0
     }
 }
+
+fun formatFileSize(file: File): String {
+    val size = if (file.exists()) file.length() else 0
+    return formatFileSize(size)
+}
+
+fun formatFileSize(size: Long): String {
+    return when {
+        size < 1024 -> "$size B"
+        size < 1024 * 1024 -> "${formatFloat(size / 1024f)} KB"
+        size < 1024 * 1024 * 1024 -> "${formatFloat(size / (1024 * 1024f))} MB"
+        else -> "${formatFloat(size / (1024 * 1024 * 1024f))} GB"
+    }
+}

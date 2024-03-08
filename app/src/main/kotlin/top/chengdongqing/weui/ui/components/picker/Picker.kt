@@ -32,11 +32,13 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.ui.components.button.ButtonType
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.popup.WePopup
+import top.chengdongqing.weui.utils.vibrateShort
 import kotlin.math.roundToInt
 
 @Composable
@@ -49,9 +51,7 @@ fun WePicker(
     onChange: (Array<Int>) -> Unit,
     onCancel: () -> Unit
 ) {
-    val localValue = remember(visible) {
-        value.copyOf()
-    }
+    val localValue = remember(visible) { value.copyOf() }
 
     WePopup(
         visible, title = title,
@@ -115,6 +115,7 @@ private fun PickerColumn(
     onChange: (Int) -> Unit
 ) {
     val itemHeight = 56.dp
+    val context = LocalContext.current
     val listState = rememberLazyListState(index)
     val snapFlingBehavior = rememberSnapFlingBehavior(listState)
 
@@ -123,6 +124,7 @@ private fun PickerColumn(
             .collect {
                 if (it != index) {
                     onChange(it)
+                    vibrateShort(context)
                 }
             }
     }

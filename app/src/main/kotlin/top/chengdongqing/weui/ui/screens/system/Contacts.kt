@@ -45,6 +45,7 @@ import top.chengdongqing.weui.ui.components.popup.WePopup
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.components.toast.ToastOptions
 import top.chengdongqing.weui.ui.components.toast.rememberWeToast
+import top.chengdongqing.weui.utils.formatSeconds
 import java.util.Date
 
 @Composable
@@ -241,20 +242,21 @@ private suspend fun loadCallLogs(context: Context): (List<Pair<String, List<Stri
 
             while (cursor.moveToNext()) {
                 val number = cursor.getString(numberIndex)
-                val date =
-                    DateFormat.format(DefaultDateTimeFormatter, Date(cursor.getLong(dateIndex)))
-                        .toString()
+                val date = DateFormat.format(
+                    DefaultDateTimeFormatter,
+                    Date(cursor.getLong(dateIndex))
+                ).toString()
                 val type = when (cursor.getInt(typeIndex)) {
                     CallLog.Calls.OUTGOING_TYPE -> "呼出"
                     CallLog.Calls.INCOMING_TYPE -> "呼入"
                     CallLog.Calls.MISSED_TYPE -> "未接通"
                     else -> "未知"
                 }
-                val duration = cursor.getLong(durationIndex)
+                val duration = cursor.getInt(durationIndex)
                 logs.add(
                     Pair(
                         number,
-                        listOf(date, type + if (duration > 0) duration.toString() + "秒" else "")
+                        listOf(date, type + formatSeconds(duration))
                     )
                 )
             }

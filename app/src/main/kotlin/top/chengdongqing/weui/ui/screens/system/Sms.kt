@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.provider.Telephony.Sms
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
@@ -126,18 +127,26 @@ private suspend fun loadSmsMessages(context: Context): List<Pair<String, String>
     withContext(Dispatchers.IO) {
         val messages = mutableListOf<Pair<String, String>>()
 
-        context.contentResolver
-            .query(
-                Uri.parse("content://sms/inbox"), null, null, null, null
-            )?.use { cursor ->
-                val addressIndex = cursor.getColumnIndex("address")
-                val bodyIndex = cursor.getColumnIndex("body")
+        context.contentResolver.query(
+            Sms.Inbox.CONTENT_URI,
+            arrayOf(
+                Sms.Inbox._ID,
+                Sms.Inbox.ADDRESS,
+                Sms.Inbox.BODY,
+                Sms.Inbox.DATE
+            ),
+            null,
+            null,
+            Sms.Inbox.DATE + " DESC"
+        )?.use { cursor ->
+            val addressIndex = cursor.getColumnIndex(Sms.Inbox.ADDRESS)
+            val bodyIndex = cursor.getColumnIndex(Sms.Inbox.BODY)
 
-                while (cursor.moveToNext()) {
-                    val item = Pair(cursor.getString(addressIndex), cursor.getString(bodyIndex))
-                    messages.add(item)
-                }
+            while (cursor.moveToNext()) {
+                val item = Pair(cursor.getString(addressIndex), cursor.getString(bodyIndex))
+                messages.add(item)
             }
+        }
 
         messages
     }

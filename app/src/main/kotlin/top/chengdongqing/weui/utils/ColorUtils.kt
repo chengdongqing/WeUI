@@ -2,6 +2,10 @@ package top.chengdongqing.weui.utils
 
 import androidx.compose.ui.graphics.Color
 
+/**
+ * 生成不重复的随机颜色
+ * @param count 需要的颜色数量
+ */
 fun generateDistinctColors(count: Int): List<Color> {
     return List(count) { i ->
         // 在360度色相环上均匀分布颜色

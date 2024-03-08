@@ -26,12 +26,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import top.chengdongqing.weui.ui.theme.PrimaryColor
+import top.chengdongqing.weui.utils.UpdatedEffect
 import top.chengdongqing.weui.utils.formatDegree
 import top.chengdongqing.weui.utils.polarToCartesian
+import top.chengdongqing.weui.utils.vibrateShort
 
 @Composable
 fun WeCompass(compassViewModel: CompassViewModel = viewModel()) {
     val context = LocalContext.current
+    val degrees = compassViewModel.degrees
     val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
     val accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) // 加速度计
     val magnetometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) // 磁力计
@@ -57,8 +60,14 @@ fun WeCompass(compassViewModel: CompassViewModel = viewModel()) {
             sensorManager.unregisterListener(compassViewModel.eventListener)
         }
     }
+    // 指向准点方位后触发震动
+    UpdatedEffect(degrees) {
+        if (degrees % 90 == 0) {
+            vibrateShort(context)
+        }
+    }
 
-    CompassSurface(compassViewModel.degrees)
+    CompassSurface(degrees)
 }
 
 @Composable
