@@ -26,11 +26,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.ui.components.button.ButtonType
 import top.chengdongqing.weui.ui.components.button.WeButton
+import top.chengdongqing.weui.ui.components.cardlist.WeCardList
+import top.chengdongqing.weui.ui.components.cardlist.WeCardListItem
 import top.chengdongqing.weui.ui.components.input.WeInput
 import top.chengdongqing.weui.ui.components.loading.LoadMoreType
 import top.chengdongqing.weui.ui.components.loading.WeLoadMore
-import top.chengdongqing.weui.ui.components.pairgroup.WePairGroup
-import top.chengdongqing.weui.ui.components.pairgroup.WePairItem
 import top.chengdongqing.weui.ui.components.picker.WeDatePicker
 import top.chengdongqing.weui.ui.components.popup.WePopup
 import top.chengdongqing.weui.ui.components.screen.WeScreen
@@ -132,9 +132,9 @@ fun CalendarEvents() {
         }
     }
     WePopup(visible, title = "日历事件", swipeable = true, onClose = { visible = false }) {
-        WePairGroup(Modifier.fillMaxHeight(0.5f)) {
+        WeCardList(Modifier.fillMaxHeight(0.5f)) {
             items(events) {
-                WePairItem(label = it.first, value = it.second)
+                WeCardListItem(label = it.first, value = it.second)
             }
             if (events.isEmpty()) {
                 item {

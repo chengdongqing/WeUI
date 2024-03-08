@@ -31,9 +31,9 @@ import top.chengdongqing.weui.R
 import top.chengdongqing.weui.ui.components.actionsheet.ActionSheetItem
 import top.chengdongqing.weui.ui.components.actionsheet.ActionSheetOptions
 import top.chengdongqing.weui.ui.components.actionsheet.rememberWeActionSheet
+import top.chengdongqing.weui.ui.components.cardlist.WeCardListItem
 import top.chengdongqing.weui.ui.components.dialog.DialogOptions
 import top.chengdongqing.weui.ui.components.dialog.rememberWeDialog
-import top.chengdongqing.weui.ui.components.pairgroup.WePairItem
 import top.chengdongqing.weui.ui.components.popup.WePopup
 import top.chengdongqing.weui.ui.components.toast.ToastIcon
 import top.chengdongqing.weui.ui.components.toast.ToastOptions
@@ -167,11 +167,11 @@ private fun FileDetailsPopup(visible: Boolean, file: FileItem, onClose: () -> Un
             value = calculateFileSize(originalFile)
         }
 
-        WePairItem(label = "位置", value = file.path)
-        WePairItem(label = "大小", value = formatFileSize(size))
-        WePairItem(label = "时间", value = file.lastModified)
-        WePairItem(label = "可读", value = originalFile.canRead().format())
-        WePairItem(label = "可写", value = originalFile.canWrite().format())
-        WePairItem(label = "隐藏", value = originalFile.isHidden.format())
+        WeCardListItem(label = "位置", value = file.path)
+        WeCardListItem(label = "大小", value = formatFileSize(size))
+        WeCardListItem(label = "时间", value = file.lastModified)
+        WeCardListItem(label = "可读", value = originalFile.canRead().format())
+        WeCardListItem(label = "可写", value = originalFile.canWrite().format())
+        WeCardListItem(label = "隐藏", value = originalFile.isHidden.format())
     }
 }

@@ -18,18 +18,18 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.ui.components.button.ButtonType
 import top.chengdongqing.weui.ui.components.button.WeButton
-import top.chengdongqing.weui.ui.components.pairgroup.WePairGroup
-import top.chengdongqing.weui.ui.components.pairgroup.WePairItem
+import top.chengdongqing.weui.ui.components.cardlist.WeCardList
+import top.chengdongqing.weui.ui.components.cardlist.WeCardListItem
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.utils.SetupStatusBarStyle
 
 @Composable
 fun SystemStatusScreen() {
     WeScreen(title = "SystemStatus", description = "系统状态，动态更新", scrollEnabled = false) {
-        WePairGroup {
+        WeCardList {
             item {
                 NetworkInfoRows()
-                WePairItem("系统主题", if (isSystemInDarkTheme()) "深色" else "浅色")
+                WeCardListItem("系统主题", if (isSystemInDarkTheme()) "深色" else "浅色")
             }
         }
         Spacer(modifier = Modifier.height(40.dp))
@@ -41,8 +41,8 @@ fun SystemStatusScreen() {
 private fun NetworkInfoRows() {
     val network = rememberNetworkObserver()
 
-    WePairItem("网络类型", network.type)
-    WePairItem("VPN", if (network.isVpnConnected) "已启用" else "未启用")
+    WeCardListItem("网络类型", network.type)
+    WeCardListItem("VPN", if (network.isVpnConnected) "已启用" else "未启用")
 }
 
 @Composable

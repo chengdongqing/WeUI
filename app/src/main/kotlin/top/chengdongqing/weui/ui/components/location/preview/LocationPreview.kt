@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.ui.components.location
+package top.chengdongqing.weui.ui.components.location.preview
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -38,6 +38,7 @@ import top.chengdongqing.weui.R
 import top.chengdongqing.weui.ui.components.actionsheet.ActionSheetItem
 import top.chengdongqing.weui.ui.components.actionsheet.ActionSheetOptions
 import top.chengdongqing.weui.ui.components.actionsheet.rememberWeActionSheet
+import top.chengdongqing.weui.ui.components.location.WeAMap
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.utils.MapType
 import top.chengdongqing.weui.utils.buildBitmapDescriptor
@@ -45,21 +46,23 @@ import top.chengdongqing.weui.utils.navigateToLocation
 
 @Composable
 fun WeLocationPreview(
-    location: LatLng,
-    zoom: Float = 10f,
+    latitude: Double,
+    longitude: Double,
+    zoom: Float = 16f,
     name: String = "位置",
     address: String? = null
 ) {
     val context = LocalContext.current
     var map by remember { mutableStateOf<AMap?>(null) }
+    val latLng = remember(latitude, longitude) { LatLng(latitude, longitude) }
 
     Column(modifier = Modifier.fillMaxSize()) {
         WeAMap(Modifier.weight(1f)) {
             map = it
-            it.moveCamera(CameraUpdateFactory.newLatLngZoom(location, zoom))
+            it.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom))
 
             val marker = MarkerOptions().apply {
-                position(location)
+                position(latLng)
                 icon(
                     buildBitmapDescriptor(
                         context,
@@ -71,7 +74,7 @@ fun WeLocationPreview(
             }
             it.addMarker(marker)
         }
-        BottomBar(location, name, address)
+        BottomBar(latLng, name, address)
     }
 }
 

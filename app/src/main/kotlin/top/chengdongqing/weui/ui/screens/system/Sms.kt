@@ -28,12 +28,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.ui.components.button.ButtonType
 import top.chengdongqing.weui.ui.components.button.WeButton
+import top.chengdongqing.weui.ui.components.cardlist.WeCardList
+import top.chengdongqing.weui.ui.components.cardlist.WeCardListItem
 import top.chengdongqing.weui.ui.components.input.WeInput
 import top.chengdongqing.weui.ui.components.input.WeTextarea
 import top.chengdongqing.weui.ui.components.loading.LoadMoreType
 import top.chengdongqing.weui.ui.components.loading.WeLoadMore
-import top.chengdongqing.weui.ui.components.pairgroup.WePairGroup
-import top.chengdongqing.weui.ui.components.pairgroup.WePairItem
 import top.chengdongqing.weui.ui.components.popup.WePopup
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.components.toast.ToastOptions
@@ -107,9 +107,9 @@ private fun ReadingSms() {
         }
     }
     WePopup(visible, title = "短信", swipeable = true, onClose = { visible = false }) {
-        WePairGroup(Modifier.fillMaxHeight(0.5f)) {
+        WeCardList(Modifier.fillMaxHeight(0.5f)) {
             items(messages) {
-                WePairItem(label = it.first, value = it.second)
+                WeCardListItem(label = it.first, value = it.second)
             }
             if (messages.isEmpty()) {
                 item {

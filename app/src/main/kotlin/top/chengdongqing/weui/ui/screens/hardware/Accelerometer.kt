@@ -14,8 +14,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.ui.components.button.ButtonType
 import top.chengdongqing.weui.ui.components.button.WeButton
-import top.chengdongqing.weui.ui.components.pairgroup.WePairGroup
-import top.chengdongqing.weui.ui.components.pairgroup.WePairItem
+import top.chengdongqing.weui.ui.components.cardlist.WeCardList
+import top.chengdongqing.weui.ui.components.cardlist.WeCardListItem
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.utils.formatFloat
 import top.chengdongqing.weui.utils.rememberSensorValues
@@ -47,9 +47,9 @@ fun AccelerometerScreen() {
                 fontSize = 10.sp
             )
             Spacer(modifier = Modifier.height(20.dp))
-            WePairGroup {
+            WeCardList {
                 itemsIndexed(it) { index, value ->
-                    WePairItem(
+                    WeCardListItem(
                         label = "${getAxisLabel(index)}轴",
                         value = formatFloat(value)
                     )

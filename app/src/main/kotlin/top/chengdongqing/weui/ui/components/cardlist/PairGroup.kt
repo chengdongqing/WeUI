@@ -1,8 +1,9 @@
-package top.chengdongqing.weui.ui.components.pairgroup
+package top.chengdongqing.weui.ui.components.cardlist
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -20,9 +21,10 @@ import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.ui.components.divider.WeDivider
 
 @Composable
-fun WePairGroup(modifier: Modifier = Modifier, content: LazyListScope.() -> Unit) {
+fun WeCardList(modifier: Modifier = Modifier, content: LazyListScope.() -> Unit) {
     LazyColumn(
         modifier = modifier
+            .fillMaxWidth()
             .background(MaterialTheme.colorScheme.onBackground, RoundedCornerShape(8.dp))
             .padding(horizontal = 16.dp)
     ) {
@@ -31,7 +33,7 @@ fun WePairGroup(modifier: Modifier = Modifier, content: LazyListScope.() -> Unit
 }
 
 @Composable
-fun WePairItem(label: String, value: String) {
+fun WeCardListItem(label: String, value: String) {
     Row(
         modifier = Modifier
             .heightIn(60.dp)
@@ -48,7 +50,7 @@ fun WePairItem(label: String, value: String) {
         Spacer(modifier = Modifier.width(16.dp))
         Text(
             text = value,
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.weight(2f),
             color = MaterialTheme.colorScheme.onSecondary,
             fontSize = 14.sp,
             fontWeight = FontWeight.Bold

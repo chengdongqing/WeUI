@@ -17,9 +17,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import top.chengdongqing.weui.ui.components.button.ButtonType
 import top.chengdongqing.weui.ui.components.button.WeButton
+import top.chengdongqing.weui.ui.components.cardlist.WeCardList
+import top.chengdongqing.weui.ui.components.cardlist.WeCardListItem
 import top.chengdongqing.weui.ui.components.input.WeTextarea
-import top.chengdongqing.weui.ui.components.pairgroup.WePairGroup
-import top.chengdongqing.weui.ui.components.pairgroup.WePairItem
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.components.toast.ToastIcon
 import top.chengdongqing.weui.ui.components.toast.ToastOptions
@@ -96,9 +96,9 @@ private fun ConnectedScreen(
     Spacer(modifier = Modifier.height(40.dp))
     Text(text = "收到的消息", fontSize = 12.sp)
     Spacer(modifier = Modifier.height(10.dp))
-    WePairGroup {
+    WeCardList {
         itemsIndexed(socketViewModel.messages) { index, item ->
-            WePairItem(label = "${index + 1}", value = item)
+            WeCardListItem(label = "${index + 1}", value = item)
         }
     }
 }

@@ -8,10 +8,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import top.chengdongqing.weui.ui.screens.home.HomeScreen
 import top.chengdongqing.weui.ui.screens.layers.LayersScreen
-import top.chengdongqing.weui.ui.screens.location.LocationPickerScreen
-import top.chengdongqing.weui.ui.screens.location.LocationPreviewScreen
-import top.chengdongqing.weui.ui.screens.qrcode.generator.QrCodeGenerateScreen
-import top.chengdongqing.weui.ui.screens.qrcode.scanner.QrCodeScanScreen
 
 @Composable
 fun ApplicationNavHost() {
@@ -48,7 +44,6 @@ fun ApplicationNavHost() {
         composable("home") {
             HomeScreen(navController)
         }
-
         addBasicGraph()
         addFormGraph()
         addFeedbackGraph()
@@ -57,20 +52,9 @@ fun ApplicationNavHost() {
         addNetworkGraph()
         addHardwareGraph()
         addChartGraph()
+        addQrCodeGraph(navController)
+        addLocationGraph(navController)
         addDemoGraph()
-
-        composable("qrcode-scanner") {
-            QrCodeScanScreen(navController)
-        }
-        composable("qrcode-generator") {
-            QrCodeGenerateScreen()
-        }
-        composable("location-preview") {
-            LocationPreviewScreen()
-        }
-        composable("location-picker") {
-            LocationPickerScreen()
-        }
         composable("layers") {
             LayersScreen()
         }

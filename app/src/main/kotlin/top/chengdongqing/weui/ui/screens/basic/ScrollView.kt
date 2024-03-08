@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
-import top.chengdongqing.weui.ui.components.pairgroup.WePairItem
+import top.chengdongqing.weui.ui.components.cardlist.WeCardListItem
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -28,7 +28,7 @@ fun ScrollViewScreen() {
                 .padding(horizontal = 16.dp)
         ) {
             items(30) {
-                WePairItem(label = "名字", value = "值${it + 1}")
+                WeCardListItem(label = "名字", value = "值${it + 1}")
             }
         }
         PullToRefreshContainer(state = refreshState)

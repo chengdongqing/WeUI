@@ -22,8 +22,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
-import top.chengdongqing.weui.ui.components.pairgroup.WePairGroup
-import top.chengdongqing.weui.ui.components.pairgroup.WePairItem
+import top.chengdongqing.weui.ui.components.cardlist.WeCardList
+import top.chengdongqing.weui.ui.components.cardlist.WeCardListItem
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.utils.format
 import top.chengdongqing.weui.utils.formatFloat
@@ -52,9 +52,9 @@ fun DeviceInfoScreen() {
             }
         }
 
-        WePairGroup {
+        WeCardList {
             items(deviceInfoItems) {
-                WePairItem(it.first, it.second)
+                WeCardListItem(it.first, it.second)
             }
         }
     }

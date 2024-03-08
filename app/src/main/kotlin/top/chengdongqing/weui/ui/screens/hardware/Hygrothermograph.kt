@@ -10,8 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.ui.components.button.ButtonType
 import top.chengdongqing.weui.ui.components.button.WeButton
-import top.chengdongqing.weui.ui.components.pairgroup.WePairGroup
-import top.chengdongqing.weui.ui.components.pairgroup.WePairItem
+import top.chengdongqing.weui.ui.components.cardlist.WeCardList
+import top.chengdongqing.weui.ui.components.cardlist.WeCardListItem
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.utils.formatFloat
 import top.chengdongqing.weui.utils.rememberSensorValue
@@ -33,13 +33,13 @@ fun HygrothermographScreen() {
             }
         }
         Spacer(modifier = Modifier.height(40.dp))
-        WePairGroup {
+        WeCardList {
             item {
-                WePairItem(
+                WeCardListItem(
                     label = "温度",
                     value = temperature?.let { "${formatFloat(temperature)}°C" } ?: "未知"
                 )
-                WePairItem(
+                WeCardListItem(
                     label = "湿度",
                     value = humidity?.let { "${formatFloat(humidity)}%" } ?: "未知")
             }

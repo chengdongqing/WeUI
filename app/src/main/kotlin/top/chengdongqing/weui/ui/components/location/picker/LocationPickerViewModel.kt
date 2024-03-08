@@ -1,6 +1,7 @@
 package top.chengdongqing.weui.ui.components.location.picker
 
 import android.content.Context
+import android.os.Parcelable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -17,6 +18,7 @@ import com.amap.api.services.poisearch.PoiResultV2
 import com.amap.api.services.poisearch.PoiSearchV2
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.parcelize.Parcelize
 import top.chengdongqing.weui.utils.toLatLng
 import top.chengdongqing.weui.utils.toLatLonPoint
 import kotlin.coroutines.resume
@@ -124,9 +126,10 @@ class LocationPickerViewModel : ViewModel() {
     }
 }
 
+@Parcelize
 data class LocationItem(
     val name: String,
     val address: String? = null,
     val distance: Int = 0,
     val latLng: LatLng
-)
+) : Parcelable
