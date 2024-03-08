@@ -233,7 +233,7 @@ private suspend fun loadCallLogs(context: Context): (List<Pair<String, List<Stri
             null,
             null,
             null,
-            CallLog.Calls.DATE + " DESC"
+            null
         )?.use { cursor ->
             val numberIndex = cursor.getColumnIndex(CallLog.Calls.NUMBER)
             val dateIndex = cursor.getColumnIndex(CallLog.Calls.DATE)

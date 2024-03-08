@@ -19,6 +19,7 @@ fun NavGraphBuilder.addLocationGraph(navController: NavHostController) {
             ?.savedStateHandle
             ?.getStateFlow<LocationItem?>("location", null)
             ?.collectAsState()
+
         LocationPickerScreen(navController, locationState)
     }
 
@@ -29,6 +30,7 @@ fun NavGraphBuilder.addLocationGraph(navController: NavHostController) {
         val zoom = args.getString("zoom")?.toFloat() ?: 16f
         val name = args.getString("name", "位置")
         val address = args.getString("address")
+
         WeLocationPreview(latitude, longitude, zoom, name, address)
     }
     composable("location/pick") {

@@ -5,7 +5,6 @@ import android.content.ComponentCallbacks
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -45,6 +44,7 @@ import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import top.chengdongqing.weui.R
 import top.chengdongqing.weui.utils.buildBitmapDescriptor
+import top.chengdongqing.weui.utils.isLoaded
 import top.chengdongqing.weui.utils.toLatLng
 
 @Composable
@@ -81,12 +81,7 @@ private fun BoxScope.LocationControl(map: AMap) {
             .background(MaterialTheme.colorScheme.onBackground)
             .clickable {
                 map.apply {
-                    if (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                            myLocation.isComplete
-                        } else {
-                            myLocation.latitude != 0.0 && myLocation.longitude != 0.0
-                        }
-                    ) {
+                    if (myLocation.isLoaded()) {
                         animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation.toLatLng(), 16f))
                     } else {
                         Toast

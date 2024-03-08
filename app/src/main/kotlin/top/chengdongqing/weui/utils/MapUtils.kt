@@ -6,13 +6,24 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.location.Location
 import android.net.Uri
+import android.os.Build
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.amap.api.maps.model.BitmapDescriptor
 import com.amap.api.maps.model.BitmapDescriptorFactory
 import com.amap.api.maps.model.LatLng
+import com.amap.api.services.core.AMapException
 import com.amap.api.services.core.LatLonPoint
+import com.amap.api.services.geocoder.GeocodeResult
+import com.amap.api.services.geocoder.GeocodeSearch
+import com.amap.api.services.geocoder.RegeocodeAddress
+import com.amap.api.services.geocoder.RegeocodeQuery
+import com.amap.api.services.geocoder.RegeocodeResult
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.net.URLEncoder
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 /**
  * 调用地图软件导航到指定位置
@@ -101,6 +112,40 @@ fun buildBitmapDescriptor(
     }
 
     return BitmapDescriptorFactory.fromBitmap(bitmap)
+}
+
+/**
+ * 地理逆编码
+ */
+suspend fun getAddressByLatLng(context: Context, latLng: LatLng): RegeocodeAddress? =
+    withContext(Dispatchers.IO) {
+        suspendCoroutine { continuation ->
+            val geocoderSearch = GeocodeSearch(context)
+            geocoderSearch.setOnGeocodeSearchListener(object :
+                GeocodeSearch.OnGeocodeSearchListener {
+                override fun onRegeocodeSearched(result: RegeocodeResult?, resultCode: Int) {
+                    if (resultCode == AMapException.CODE_AMAP_SUCCESS) {
+                        continuation.resume(result?.regeocodeAddress)
+                    } else {
+                        continuation.resume(null)
+                    }
+                }
+
+                override fun onGeocodeSearched(geocodeResult: GeocodeResult?, rCode: Int) {}
+            })
+            val query = RegeocodeQuery(
+                latLng.toLatLonPoint(),
+                100_000f,
+                GeocodeSearch.AMAP
+            )
+            geocoderSearch.getFromLocationAsyn(query)
+        }
+    }
+
+fun Location.isLoaded() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    this.isComplete
+} else {
+    this.latitude != 0.0 && this.longitude != 0.0
 }
 
 fun LatLonPoint.toLatLng() = LatLng(latitude, longitude)

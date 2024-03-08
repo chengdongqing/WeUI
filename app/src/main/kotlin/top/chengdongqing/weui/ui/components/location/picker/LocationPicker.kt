@@ -22,18 +22,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.amap.api.maps.AMapUtils
 import com.amap.api.maps.model.LatLng
 import top.chengdongqing.weui.R
 import top.chengdongqing.weui.ui.components.button.ButtonSize
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.location.WeAMap
 import top.chengdongqing.weui.utils.clickableWithoutRipple
-import kotlin.math.roundToInt
 
 @Composable
 fun WeLocationPicker(
@@ -41,27 +40,24 @@ fun WeLocationPicker(
     onCancel: () -> Unit,
     onConfirm: (LocationItem) -> Unit
 ) {
+    val context = LocalContext.current
+
     Column(modifier = Modifier.fillMaxSize()) {
         Box(modifier = Modifier.weight(1f)) {
             WeAMap { map ->
-                pickerViewModel.map = map
-                pickerViewModel.setCenterChangeListener(map)
+                pickerViewModel.apply {
+                    this.map = map
+                    initializeMyLocation(map)
+                    setCenterChangeListener(map, context)
+                    setMapClickListener(map)
+                }
             }
-            TopBar(pickerViewModel.locationList.isEmpty(), onCancel) {
-                val location = pickerViewModel.locationList[pickerViewModel.selectedIndex]
-                    // 始终回调地图中心点坐标
-                    .copy(
-                        latLng = pickerViewModel.center!!,
-                        distance = AMapUtils.calculateLineDistance(
-                            pickerViewModel.center!!,
-                            pickerViewModel.current!!
-                        ).roundToInt()
-                    )
-                onConfirm(location)
+            TopBar(isEmpty = pickerViewModel.selectedLocation == null, onCancel) {
+                onConfirm(pickerViewModel.selectedLocation!!)
             }
             LocationMarker(pickerViewModel.center)
         }
-        LocationList(pickerViewModel)
+        LocationPickerBottom(pickerViewModel)
     }
 }
 

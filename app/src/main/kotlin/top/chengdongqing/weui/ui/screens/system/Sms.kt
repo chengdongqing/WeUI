@@ -137,7 +137,7 @@ private suspend fun loadSmsMessages(context: Context): List<Pair<String, String>
             ),
             null,
             null,
-            Sms.Inbox.DATE + " DESC"
+            null
         )?.use { cursor ->
             val addressIndex = cursor.getColumnIndex(Sms.Inbox.ADDRESS)
             val bodyIndex = cursor.getColumnIndex(Sms.Inbox.BODY)
