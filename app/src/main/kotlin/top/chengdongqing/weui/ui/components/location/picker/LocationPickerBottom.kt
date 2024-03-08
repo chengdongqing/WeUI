@@ -103,7 +103,13 @@ internal fun LocationPickerBottom(pickerViewModel: LocationPickerViewModel) {
             onLocationClick
         )
         if (!isSearchFocused) {
-            LocationList(locationList, selectedIndex, pickerViewModel, onLocationClick)
+            LocationList(
+                locationList,
+                selectedIndex,
+                pickerViewModel,
+                onSelectChange = { selectedIndex = it },
+                onLocationClick
+            )
         }
     }
 }
@@ -113,6 +119,7 @@ private fun LocationList(
     locationList: List<LocationItem>,
     selectedIndex: Int,
     pickerViewModel: LocationPickerViewModel,
+    onSelectChange: (Int) -> Unit,
     onLocationClick: (LocationItem) -> Unit
 ) {
     val options = rememberLocationOptions(
@@ -126,6 +133,7 @@ private fun LocationList(
         isLoading = pickerViewModel.isLoading,
         isEmpty = pickerViewModel.isEmpty,
     ) { index ->
+        onSelectChange(index)
         onLocationClick(locationList[index])
     }
 }
