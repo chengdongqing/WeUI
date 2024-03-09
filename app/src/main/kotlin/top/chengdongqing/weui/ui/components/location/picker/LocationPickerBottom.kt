@@ -140,7 +140,16 @@ private fun LocationList(
         isEmpty = pickerViewModel.isEmpty,
     ) { index ->
         onSelectChange(index)
-        onLocationClick(locationList[if (pickerViewModel.centerLocation != null) index - 1 else index])
+        val location = if (pickerViewModel.centerLocation != null) {
+            if (index == 0) {
+                pickerViewModel.centerLocation!!
+            } else {
+                locationList[index - 1]
+            }
+        } else {
+            locationList[index]
+        }
+        onLocationClick(location)
     }
 }
 

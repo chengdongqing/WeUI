@@ -57,7 +57,10 @@ fun AMap(modifier: Modifier = Modifier, onLoad: (AMap) -> Unit) {
     // 处理生命周期
     MapLifecycle(mapView)
     // 处理定位权限
-    LocationPermissionHandler()
+    val context = LocalContext.current
+    LocationPermissionHandler {
+        setLocationArrow(mapView.map, context)
+    }
 
     Box(modifier) {
         AndroidView(
@@ -164,7 +167,6 @@ private fun rememberMapView(onLoad: (AMap) -> Unit): MapView {
             mapType(if (isDarkTheme) AMap.MAP_TYPE_NIGHT else AMap.MAP_TYPE_NORMAL)
         }
         MapView(context, options).apply {
-            setLocationArrow(map, context)
             onLoad(map)
         }
     }
