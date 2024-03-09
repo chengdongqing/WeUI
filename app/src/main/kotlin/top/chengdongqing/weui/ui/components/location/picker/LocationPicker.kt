@@ -34,7 +34,7 @@ import top.chengdongqing.weui.ui.components.button.ButtonSize
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.location.AMap
 import top.chengdongqing.weui.utils.clickableWithoutRipple
-import top.chengdongqing.weui.utils.renderBitmapDescriptor
+import top.chengdongqing.weui.utils.createBitmapDescriptor
 
 @Composable
 fun WeLocationPicker(
@@ -86,7 +86,7 @@ private fun BoxScope.LocationMarker(pickerViewModel: LocationPickerViewModel) {
             val markerOptions = MarkerOptions().apply {
                 position(pickerViewModel.selectedLocation?.latLng)
                 icon(
-                    renderBitmapDescriptor(
+                    createBitmapDescriptor(
                         context,
                         R.drawable.ic_location_marker,
                         160,

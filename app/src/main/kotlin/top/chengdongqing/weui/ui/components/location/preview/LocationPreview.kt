@@ -41,8 +41,8 @@ import top.chengdongqing.weui.ui.components.actionsheet.rememberWeActionSheet
 import top.chengdongqing.weui.ui.components.location.AMap
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.utils.MapType
+import top.chengdongqing.weui.utils.createBitmapDescriptor
 import top.chengdongqing.weui.utils.navigateToLocation
-import top.chengdongqing.weui.utils.renderBitmapDescriptor
 
 @Composable
 fun WeLocationPreview(
@@ -64,7 +64,7 @@ fun WeLocationPreview(
             val marker = MarkerOptions().apply {
                 position(latLng)
                 icon(
-                    renderBitmapDescriptor(
+                    createBitmapDescriptor(
                         context,
                         R.drawable.ic_location_marker,
                         120,

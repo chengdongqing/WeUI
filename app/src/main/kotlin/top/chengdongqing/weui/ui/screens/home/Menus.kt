@@ -152,7 +152,7 @@ internal val menus = listOf(
             MenuItem("DigitalKeyboard", "digital-keyboard"),
             MenuItem("CubicBezier", "cubic-bezier"),
             MenuItem("NotificationBar", "notification-bar"),
-            MenuItem("ImageCrop", "image-crop"),
+            MenuItem("ImageCropper", "image-cropper"),
             MenuItem("VideoChannel", "video-channel"),
             MenuItem("SolarSystem", "solar-system"),
             MenuItem("PanoramicImage", "panoramic-image")

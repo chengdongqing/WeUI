@@ -8,6 +8,7 @@ import android.location.Location
 import android.net.Uri
 import android.os.Build
 import android.widget.Toast
+import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import com.amap.api.maps.model.BitmapDescriptor
 import com.amap.api.maps.model.BitmapDescriptorFactory
@@ -78,14 +79,14 @@ enum class MapType(val appName: String) {
  * 将指定的图片资源转为地图支持的bitmap
  * 支持指定宽高、旋转角度
  */
-fun renderBitmapDescriptor(
+fun createBitmapDescriptor(
     context: Context,
-    resId: Int,
+    @DrawableRes iconId: Int,
     width: Int? = null,
     height: Int? = null,
     rotationAngle: Float? = null
 ): BitmapDescriptor? {
-    val drawable = ContextCompat.getDrawable(context, resId) ?: return null
+    val drawable = ContextCompat.getDrawable(context, iconId) ?: return null
     val originalWidth = width ?: drawable.intrinsicWidth
     val originalHeight = height ?: drawable.intrinsicHeight
     val bitmap = Bitmap.createBitmap(
