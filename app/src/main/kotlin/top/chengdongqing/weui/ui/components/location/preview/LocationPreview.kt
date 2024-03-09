@@ -38,11 +38,11 @@ import top.chengdongqing.weui.R
 import top.chengdongqing.weui.ui.components.actionsheet.ActionSheetItem
 import top.chengdongqing.weui.ui.components.actionsheet.ActionSheetOptions
 import top.chengdongqing.weui.ui.components.actionsheet.rememberWeActionSheet
-import top.chengdongqing.weui.ui.components.location.WeAMap
+import top.chengdongqing.weui.ui.components.location.AMap
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.utils.MapType
-import top.chengdongqing.weui.utils.buildBitmapDescriptor
 import top.chengdongqing.weui.utils.navigateToLocation
+import top.chengdongqing.weui.utils.renderBitmapDescriptor
 
 @Composable
 fun WeLocationPreview(
@@ -57,14 +57,14 @@ fun WeLocationPreview(
     val latLng = remember(latitude, longitude) { LatLng(latitude, longitude) }
 
     Column(modifier = Modifier.fillMaxSize()) {
-        WeAMap(Modifier.weight(1f)) {
+        AMap(Modifier.weight(1f)) {
             map = it
             it.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom))
 
             val marker = MarkerOptions().apply {
                 position(latLng)
                 icon(
-                    buildBitmapDescriptor(
+                    renderBitmapDescriptor(
                         context,
                         R.drawable.ic_location_marker,
                         120,

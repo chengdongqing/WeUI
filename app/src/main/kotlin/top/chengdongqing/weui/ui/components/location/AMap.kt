@@ -23,6 +23,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,21 +45,19 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import top.chengdongqing.weui.R
-import top.chengdongqing.weui.utils.buildBitmapDescriptor
 import top.chengdongqing.weui.utils.isLoaded
+import top.chengdongqing.weui.utils.isTrue
+import top.chengdongqing.weui.utils.renderBitmapDescriptor
 import top.chengdongqing.weui.utils.toLatLng
 
 @Composable
-fun WeAMap(modifier: Modifier = Modifier, onLoad: (AMap) -> Unit) {
-    val context = LocalContext.current
+fun AMap(modifier: Modifier = Modifier, onLoad: (AMap) -> Unit) {
     // 初始化地图
     val mapView = rememberMapView(onLoad)
     // 处理生命周期
-    MapLifecycleHandler(mapView)
+    MapLifecycle(mapView)
     // 处理定位权限
-    LocationPermissionHandler {
-        setLocationArrow(mapView.map, context)
-    }
+    LocationPermissionHandler()
 
     Box(modifier) {
         AndroidView(
@@ -81,7 +81,10 @@ private fun BoxScope.LocationControl(map: AMap) {
             .background(MaterialTheme.colorScheme.onBackground)
             .clickable {
                 map.apply {
-                    if (myLocation.isLoaded()) {
+                    if (myLocation
+                            ?.isLoaded()
+                            .isTrue()
+                    ) {
                         animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation.toLatLng(), 16f))
                     } else {
                         Toast
@@ -109,15 +112,14 @@ private fun setLocationArrow(map: AMap, context: Context) {
             // 设置定位类型
             myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE_NO_CENTER)
             // 设置定位图标
-            myLocationIcon(
-                buildBitmapDescriptor(
-                    context,
-                    R.drawable.ic_location_rotatable,
-                    90,
-                    90,
-                    -60f
-                )
+            val icon = renderBitmapDescriptor(
+                context,
+                R.drawable.ic_location_rotatable,
+                90,
+                90,
+                -60f
             )
+            myLocationIcon(icon)
             // 去除精度圆圈
             radiusFillColor(Color.TRANSPARENT)
             strokeWidth(0f)
@@ -128,10 +130,10 @@ private fun setLocationArrow(map: AMap, context: Context) {
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-private fun LocationPermissionHandler(onGranted: () -> Unit) {
+private fun LocationPermissionHandler(onGranted: (() -> Unit)? = null) {
     val permissionState = rememberPermissionState(Manifest.permission.ACCESS_FINE_LOCATION) {
         if (it) {
-            onGranted()
+            onGranted?.invoke()
         }
     }
 
@@ -139,7 +141,7 @@ private fun LocationPermissionHandler(onGranted: () -> Unit) {
         if (!permissionState.status.isGranted) {
             permissionState.launchPermissionRequest()
         } else {
-            onGranted()
+            onGranted?.invoke()
         }
     }
 }
@@ -162,43 +164,60 @@ private fun rememberMapView(onLoad: (AMap) -> Unit): MapView {
             mapType(if (isDarkTheme) AMap.MAP_TYPE_NIGHT else AMap.MAP_TYPE_NORMAL)
         }
         MapView(context, options).apply {
+            setLocationArrow(map, context)
             onLoad(map)
         }
     }
 }
 
 @Composable
-private fun MapLifecycleHandler(mapView: MapView) {
+private fun MapLifecycle(mapView: MapView) {
     val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current.lifecycle
+    val previousState = remember { mutableStateOf(Lifecycle.Event.ON_CREATE) }
 
-    val lifecycleObserver = remember(mapView) {
-        LifecycleEventObserver { _, event ->
-            when (event) {
-                Lifecycle.Event.ON_CREATE -> mapView.onCreate(Bundle())
-                Lifecycle.Event.ON_RESUME -> mapView.onResume()
-                Lifecycle.Event.ON_PAUSE -> mapView.onPause()
-                Lifecycle.Event.ON_DESTROY -> mapView.onDestroy()
-                else -> {}
-            }
-        }
-    }
-    val callbacks = remember(mapView) {
-        object : ComponentCallbacks {
-            override fun onConfigurationChanged(config: Configuration) {}
-            override fun onLowMemory() {
-                mapView.onLowMemory()
-            }
-        }
-    }
+    DisposableEffect(context, lifecycle, mapView) {
+        val mapLifecycleObserver = mapView.lifecycleObserver(previousState)
+        val callbacks = mapView.componentCallbacks()
 
-    DisposableEffect(lifecycle) {
-        lifecycle.addObserver(lifecycleObserver)
+        lifecycle.addObserver(mapLifecycleObserver)
         context.registerComponentCallbacks(callbacks)
 
         onDispose {
-            lifecycle.removeObserver(lifecycleObserver)
+            lifecycle.removeObserver(mapLifecycleObserver)
             context.unregisterComponentCallbacks(callbacks)
         }
     }
+    DisposableEffect(mapView) {
+        onDispose {
+            mapView.onDestroy()
+            mapView.removeAllViews()
+        }
+    }
 }
+
+private fun MapView.lifecycleObserver(previousState: MutableState<Lifecycle.Event>): LifecycleEventObserver =
+    LifecycleEventObserver { _, event ->
+        when (event) {
+            Lifecycle.Event.ON_CREATE -> {
+                if (previousState.value != Lifecycle.Event.ON_STOP) {
+                    this.onCreate(Bundle())
+                }
+            }
+
+            Lifecycle.Event.ON_RESUME -> this.onResume()
+            Lifecycle.Event.ON_PAUSE -> this.onPause()
+
+            else -> {}
+        }
+        previousState.value = event
+    }
+
+private fun MapView.componentCallbacks(): ComponentCallbacks =
+    object : ComponentCallbacks {
+        override fun onConfigurationChanged(config: Configuration) {}
+
+        override fun onLowMemory() {
+            this@componentCallbacks.onLowMemory()
+        }
+    }

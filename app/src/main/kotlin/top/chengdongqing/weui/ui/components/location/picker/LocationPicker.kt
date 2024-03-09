@@ -32,9 +32,9 @@ import com.amap.api.maps.model.MarkerOptions
 import top.chengdongqing.weui.R
 import top.chengdongqing.weui.ui.components.button.ButtonSize
 import top.chengdongqing.weui.ui.components.button.WeButton
-import top.chengdongqing.weui.ui.components.location.WeAMap
-import top.chengdongqing.weui.utils.buildBitmapDescriptor
+import top.chengdongqing.weui.ui.components.location.AMap
 import top.chengdongqing.weui.utils.clickableWithoutRipple
+import top.chengdongqing.weui.utils.renderBitmapDescriptor
 
 @Composable
 fun WeLocationPicker(
@@ -46,7 +46,7 @@ fun WeLocationPicker(
 
     Column(modifier = Modifier.fillMaxSize()) {
         Box(modifier = Modifier.weight(1f)) {
-            WeAMap { map ->
+            AMap { map ->
                 pickerViewModel.apply {
                     this.map = map
                     initializeMyLocation(map)
@@ -86,7 +86,7 @@ private fun BoxScope.LocationMarker(pickerViewModel: LocationPickerViewModel) {
             val markerOptions = MarkerOptions().apply {
                 position(pickerViewModel.selectedLocation?.latLng)
                 icon(
-                    buildBitmapDescriptor(
+                    renderBitmapDescriptor(
                         context,
                         R.drawable.ic_location_marker,
                         160,

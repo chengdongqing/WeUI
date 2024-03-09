@@ -78,7 +78,7 @@ enum class MapType(val appName: String) {
  * 将指定的图片资源转为地图支持的bitmap
  * 支持指定宽高、旋转角度
  */
-fun buildBitmapDescriptor(
+fun renderBitmapDescriptor(
     context: Context,
     resId: Int,
     width: Int? = null,
