@@ -20,8 +20,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
-import top.chengdongqing.weui.utils.getAddressByLatLng
 import top.chengdongqing.weui.utils.isLoaded
+import top.chengdongqing.weui.utils.locationToAddress
 import top.chengdongqing.weui.utils.toLatLng
 import top.chengdongqing.weui.utils.toLatLonPoint
 import kotlin.coroutines.resume
@@ -37,6 +37,8 @@ class LocationPickerViewModel : ViewModel() {
     var current by mutableStateOf<LatLng?>(null) // 当前设备位置
         private set
     var selectedLocation by mutableStateOf<LocationItem?>(null) // 当前选中的位置信息
+    val isListItemClicking = mutableStateOf(false) // 是否刚点击了列表
+    var isSearchMode by mutableStateOf(false) // 是否搜索模式
     var isLoading by mutableStateOf(true) // 是否查询中
     var isEmpty by mutableStateOf(false) // 是否没有查询到结果
 
@@ -102,16 +104,18 @@ class LocationPickerViewModel : ViewModel() {
                 cameraPosition?.let { position ->
                     val target = position.target
                     center = target
-                    viewModelScope.launch {
-                        getAddressByLatLng(context, target)?.let {
-                            val address = it.formatAddress
-                            val startIndex = address.lastIndexOf(it.district)
-                            val name = address.slice(startIndex..address.lastIndex)
-                            centerLocation = LocationItem(
-                                name,
-                                address,
-                                latLng = target
-                            )
+                    if (!isSearchMode && !isListItemClicking.value) {
+                        viewModelScope.launch {
+                            locationToAddress(context, target)?.let {
+                                val address = it.formatAddress
+                                val startIndex = address.lastIndexOf(it.district)
+                                val name = address.slice(startIndex..address.lastIndex)
+                                centerLocation = LocationItem(
+                                    name,
+                                    address,
+                                    latLng = target
+                                )
+                            }
                         }
                     }
                 }

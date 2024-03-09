@@ -51,25 +51,31 @@ import kotlin.concurrent.timerTask
 @Composable
 internal fun LocationPickerBottom(pickerViewModel: LocationPickerViewModel) {
     val context = LocalContext.current
-    var isSearchFocused by remember { mutableStateOf(false) }
-    val isListItemClicking = remember { mutableStateOf(false) }
+    val isListItemClicking = pickerViewModel.isListItemClicking
+    val isSearchMode = pickerViewModel.isSearchMode
     val animatedHeightFraction by animateFloatAsState(
-        targetValue = if (isSearchFocused) 0.6f else 0.4f,
+        targetValue = if (isSearchMode) 0.6f else 0.4f,
         label = ""
     )
     var locationList by remember { mutableStateOf<List<LocationItem>>(emptyList()) }
     var selectedIndex by remember { mutableIntStateOf(0) }
 
     // 地图中心点变化后（不包括点击列表）自动搜索附近POI
-    LaunchedEffect(pickerViewModel.center) {
-        if (!isListItemClicking.value) {
+    LaunchedEffect(pickerViewModel.center, isSearchMode) {
+        if (!isListItemClicking.value && !isSearchMode) {
             pickerViewModel.center?.let { center ->
                 locationList = pickerViewModel.searchPOI(context, center)
                 selectedIndex = 0
             }
         }
     }
+    LaunchedEffect(pickerViewModel.centerLocation) {
+        pickerViewModel.centerLocation.let {
+            pickerViewModel.selectedLocation = it
+        }
+    }
 
+    // 处理列表地址点击事件
     var timer by remember { mutableStateOf<Timer?>(null) }
     val onLocationClick: (LocationItem) -> Unit = { location ->
         timer?.cancel()
@@ -93,16 +99,16 @@ internal fun LocationPickerBottom(pickerViewModel: LocationPickerViewModel) {
     ) {
         SearchBar(
             pickerViewModel,
-            isFocused = isSearchFocused,
+            isFocused = isSearchMode,
             onFocusChange = { focused ->
-                isSearchFocused = focused
+                pickerViewModel.isSearchMode = focused
                 if (!focused && locationList.isNotEmpty()) {
                     pickerViewModel.selectedLocation = locationList[selectedIndex]
                 }
             },
             onLocationClick
         )
-        if (!isSearchFocused) {
+        if (!isSearchMode) {
             LocationList(
                 locationList,
                 selectedIndex,
@@ -134,7 +140,7 @@ private fun LocationList(
         isEmpty = pickerViewModel.isEmpty,
     ) { index ->
         onSelectChange(index)
-        onLocationClick(locationList[index])
+        onLocationClick(locationList[if (pickerViewModel.centerLocation != null) index - 1 else index])
     }
 }
 

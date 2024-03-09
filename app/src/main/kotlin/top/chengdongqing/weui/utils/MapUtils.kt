@@ -117,7 +117,7 @@ fun buildBitmapDescriptor(
 /**
  * 地理逆编码
  */
-suspend fun getAddressByLatLng(context: Context, latLng: LatLng): RegeocodeAddress? =
+suspend fun locationToAddress(context: Context, latLng: LatLng): RegeocodeAddress? =
     withContext(Dispatchers.IO) {
         suspendCoroutine { continuation ->
             val geocoderSearch = GeocodeSearch(context)
@@ -142,6 +142,7 @@ suspend fun getAddressByLatLng(context: Context, latLng: LatLng): RegeocodeAddre
         }
     }
 
+// 判断位置是否加载完成
 fun Location.isLoaded() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
     this.isComplete
 } else {
