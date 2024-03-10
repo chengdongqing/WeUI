@@ -17,15 +17,17 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.unit.dp
 
 @Composable
-internal fun BoxScope.CropperMask() {
+internal fun BoxScope.CropperMask(onSize: (Size) -> Unit) {
     Canvas(modifier = Modifier.matchParentSize()) {
         val space = 25.dp.toPx()
         val width = size.width - space * 2
+        onSize(Size(width, width))
 
-        // 绘制透明区域
         drawIntoCanvas { canvas ->
             canvas.saveLayer(bounds = Rect(offset = Offset.Zero, size = size), Paint())
+            // 绘制遮罩
             drawRect(color = Color(0f, 0f, 0f, 0.4f))
+            // 绘制透明区域
             canvas.saveLayer(
                 bounds = Rect(
                     offset = Offset(x = space, y = size.height / 2 - width / 2),

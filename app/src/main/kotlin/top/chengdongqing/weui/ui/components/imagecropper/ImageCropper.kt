@@ -2,95 +2,56 @@ package top.chengdongqing.weui.ui.components.imagecropper
 
 import android.graphics.Bitmap
 import android.net.Uri
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTransformGestures
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Replay
-import androidx.compose.material.icons.outlined.Rotate90DegreesCcw
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import top.chengdongqing.weui.ui.components.button.ButtonSize
-import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.theme.BackgroundColorDark
 import top.chengdongqing.weui.ui.theme.WeUITheme
-import top.chengdongqing.weui.utils.SetupStatusBarStyle
+import kotlin.math.cos
+import kotlin.math.sin
 
 @Composable
 fun WeImageCropper(uri: Uri, onChange: (Bitmap) -> Unit) {
-    SetupStatusBarStyle(false)
+    val transform = remember { mutableStateOf(ImageTransform()) }
+    var cropperSize by remember { mutableStateOf(Size.Zero) }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black)
-            .statusBarsPadding()
-            .clipToBounds()
             .background(BackgroundColorDark),
         contentAlignment = Alignment.Center
     ) {
-        CropperImage(uri)
-        CropperMask()
-        ActionBar()
+        CropperImage(uri, transform) { transform.value = it }
+        CropperMask { cropperSize = it }
+        ActionBar(transform) { transform.value = it }
     }
 }
 
 @Composable
-private fun BoxScope.ActionBar() {
-    Row(
-        modifier = Modifier
-            .align(Alignment.BottomCenter)
-            .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 24.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(text = "取消", color = Color.White, fontSize = 17.sp)
-        Icon(
-            imageVector = Icons.Outlined.Replay,
-            contentDescription = "恢复",
-            tint = Color.White,
-            modifier = Modifier.size(30.dp)
-        )
-        Icon(
-            imageVector = Icons.Outlined.Rotate90DegreesCcw,
-            contentDescription = "旋转",
-            tint = Color.White,
-            modifier = Modifier.size(30.dp)
-        )
-        WeButton(text = "确定", size = ButtonSize.SMALL)
-    }
-}
-
-@Composable
-private fun CropperImage(uri: Uri) {
-    var scale by remember { mutableFloatStateOf(1f) }
-    var rotationZ by remember { mutableFloatStateOf(0f) }
-    var offsetX by remember { mutableFloatStateOf(0f) }
-    var offsetY by remember { mutableFloatStateOf(0f) }
+private fun CropperImage(
+    uri: Uri,
+    transform: MutableState<ImageTransform>,
+    onChange: (ImageTransform) -> Unit
+) {
+    val animatedRotation by animateFloatAsState(targetValue = transform.value.rotation, label = "")
 
     AsyncImage(
         model = uri,
@@ -98,23 +59,58 @@ private fun CropperImage(uri: Uri) {
         modifier = Modifier
             .fillMaxWidth()
             .graphicsLayer(
-                scaleX = scale,
-                scaleY = scale,
-                rotationZ = rotationZ,
-                translationX = offsetX,
-                translationY = offsetY
+                scaleX = transform.value.scale,
+                scaleY = transform.value.scale,
+                rotationZ = animatedRotation,
+                translationX = transform.value.offsetX,
+                translationY = transform.value.offsetY
             )
             .pointerInput(Unit) {
-                detectTransformGestures { _, pan, zoom, rotation ->
-                    scale = (scale * zoom).coerceIn(1f, 5f)
-                    rotationZ += rotation
-                    offsetX += pan.x
-                    offsetY += pan.y
+                detectTransformGestures { _, pan, zoom, _ ->
+                    val adjustedPan = adjustPanForRotation(pan, -transform.value.rotation)
+
+                    val scale = (transform.value.scale * zoom).coerceIn(0.5f, 5f)
+                    val offsetX = transform.value.offsetX + adjustedPan.x
+                    val offsetY = transform.value.offsetY + adjustedPan.y
+
+                    transform.value = transform.value.copy(
+                        scale = scale,
+                        offsetX = offsetX,
+                        offsetY = offsetY
+                    )
                 }
             },
         contentScale = ContentScale.Fit
     )
 }
+
+/**
+ * 根据图片的旋转角度调整拖动方向
+ *
+ * @param pan 原始拖动向量
+ * @param rotationDegrees 图片的旋转角度
+ * @return 调整后的拖动向量
+ */
+private fun adjustPanForRotation(pan: Offset, rotationDegrees: Float): Offset {
+    // 将角度转换为弧度
+    val radians = Math.toRadians(rotationDegrees.toDouble())
+    // 计算旋转的余弦值和正弦值
+    val cos = cos(radians).toFloat()
+    val sin = sin(radians).toFloat()
+
+    // 对拖动向量应用旋转变换，考虑到旋转矩阵的使用
+    return Offset(
+        x = pan.x * cos + pan.y * sin, // 注意这里与之前的实现有所不同
+        y = -pan.x * sin + pan.y * cos
+    )
+}
+
+internal data class ImageTransform(
+    val scale: Float = 1f,
+    val rotation: Float = 0f,
+    val offsetX: Float = 0f,
+    val offsetY: Float = 0f
+)
 
 @Preview
 @Composable
