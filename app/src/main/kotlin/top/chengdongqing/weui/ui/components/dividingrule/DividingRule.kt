@@ -122,9 +122,9 @@ private fun DrawScope.drawRuleUnit(
 ) {
     val offsetX = offset * 80.dp.toPx()
 
-    val space = 8.dp.toPx()
+    val spacing = 8.dp.toPx()
     repeat(10) { index ->
-        val x = index * space + offsetX
+        val x = index * spacing + offsetX
         val endY = when (index) {
             0 -> 40.dp.toPx()
             5 -> 30.dp.toPx()

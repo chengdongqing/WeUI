@@ -1,32 +1,24 @@
 package top.chengdongqing.weui.ui.components.notificationbar
 
+import androidx.compose.foundation.DefaultMarqueeVelocity
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.MarqueeSpacing
 import androidx.compose.foundation.background
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableIntState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.isActive
 
 enum class NotificationBarEffect {
     ELLIPSIS,
@@ -34,29 +26,25 @@ enum class NotificationBarEffect {
     WRAP
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun WeNotificationBar(
     content: String,
     effect: NotificationBarEffect = NotificationBarEffect.SCROLL,
-    scrollStep: Int = 2,
+    scrollSpacingFraction: Float = 1f,
+    scrollVelocity: Dp = DefaultMarqueeVelocity,
     colors: NotificationBarColors = MaterialTheme.notificationBarColorScheme,
-    padding: PaddingValues = PaddingValues(horizontal = 20.dp, vertical = 12.dp)
-) {
-    var containerWidth by remember { mutableIntStateOf(0) }
-    val offsetX = remember { mutableIntStateOf(0) }
-
-    if (effect == NotificationBarEffect.SCROLL) {
-        ScrollingEffect(content, containerWidth, scrollStep, offsetX)
+    padding: PaddingValues = if (effect == NotificationBarEffect.SCROLL) {
+        PaddingValues(vertical = 12.dp)
+    } else {
+        PaddingValues(horizontal = 16.dp, vertical = 12.dp)
     }
-
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .background(colors.containerColor)
-            .padding(padding)
-            .onSizeChanged {
-                containerWidth = it.width
-            },
+            .padding(padding),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
@@ -66,34 +54,18 @@ fun WeNotificationBar(
             maxLines = if (effect == NotificationBarEffect.WRAP) Int.MAX_VALUE else 1,
             softWrap = effect == NotificationBarEffect.WRAP,
             overflow = if (effect == NotificationBarEffect.ELLIPSIS) TextOverflow.Ellipsis else TextOverflow.Visible,
-            modifier = Modifier.offset { IntOffset(x = offsetX.intValue, y = 0) })
-    }
-}
-
-@Composable
-private fun ScrollingEffect(
-    content: String,
-    containerWidth: Int,
-    scrollStep: Int,
-    offsetX: MutableIntState
-) {
-    val textMeasurer = rememberTextMeasurer()
-    val contentWidth = remember(content) {
-        textMeasurer.measure(content, style = TextStyle(fontSize = 13.sp)).size.width
-    }
-
-    LaunchedEffect(containerWidth, contentWidth, scrollStep) {
-        offsetX.intValue = containerWidth
-
-        while (isActive && contentWidth > containerWidth) {
-            withFrameNanos {
-                if (offsetX.intValue >= -contentWidth) {
-                    offsetX.intValue -= scrollStep
-                } else {
-                    offsetX.intValue = containerWidth
-                }
+            modifier = if (effect == NotificationBarEffect.SCROLL) {
+                Modifier.basicMarquee(
+                    iterations = Int.MAX_VALUE,
+                    delayMillis = 0,
+                    initialDelayMillis = 0,
+                    spacing = MarqueeSpacing.fractionOfContainer(scrollSpacingFraction),
+                    velocity = scrollVelocity
+                )
+            } else {
+                Modifier
             }
-        }
+        )
     }
 }
 

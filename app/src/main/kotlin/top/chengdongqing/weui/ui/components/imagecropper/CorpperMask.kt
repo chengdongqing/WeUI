@@ -19,8 +19,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 internal fun BoxScope.CropperMask(onSize: (Size) -> Unit) {
     Canvas(modifier = Modifier.matchParentSize()) {
-        val space = 25.dp.toPx()
-        val width = size.width - space * 2
+        val spacing = 25.dp.toPx()
+        val width = size.width - spacing * 2
         onSize(Size(width, width))
 
         drawIntoCanvas { canvas ->
@@ -30,7 +30,7 @@ internal fun BoxScope.CropperMask(onSize: (Size) -> Unit) {
             // 绘制透明区域
             canvas.saveLayer(
                 bounds = Rect(
-                    offset = Offset(x = space, y = size.height / 2 - width / 2),
+                    offset = Offset(x = spacing, y = size.height / 2 - width / 2),
                     size = Size(width, width)
                 ),
                 paint = Paint().apply { blendMode = BlendMode.Clear }
@@ -39,7 +39,7 @@ internal fun BoxScope.CropperMask(onSize: (Size) -> Unit) {
         }
 
         // 构造并绘制四个角的装饰
-        drawCorners(space, width)
+        drawCorners(spacing, width)
     }
 }
 

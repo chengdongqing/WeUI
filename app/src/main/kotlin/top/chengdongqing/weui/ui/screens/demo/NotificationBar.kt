@@ -27,10 +27,10 @@ fun NotificationBarScreen() {
         verticalArrangement = Arrangement.spacedBy(40.dp)
     ) {
         val content = remember {
-            """
-                Jetpack Compose 是推荐用于构建原生 Android 界面的新工具包。
-                它可简化并加快 Android 上的界面开发，帮助您使用更少的代码、强大的工具和直观的 Kotlin API，快速打造生动而精彩的应用。
-            """.trimIndent().replace("\n", "")
+            buildString {
+                append("Jetpack Compose 是推荐用于构建原生 Android 界面的新工具包。")
+                append("它可简化并加快 Android 上的界面开发，帮助您使用更少的代码、强大的工具和直观的 Kotlin API，快速打造生动而精彩的应用。")
+            }
         }
 
         Column {
@@ -41,7 +41,15 @@ fun NotificationBarScreen() {
             Title("控制速度")
             WeNotificationBar(
                 content,
-                scrollStep = 8
+                scrollVelocity = 200.dp
+            )
+        }
+        Column {
+            Title("控制间距")
+            WeNotificationBar(
+                content,
+                scrollSpacingFraction = 1f / 2f,
+                scrollVelocity = 300.dp
             )
         }
         Column {

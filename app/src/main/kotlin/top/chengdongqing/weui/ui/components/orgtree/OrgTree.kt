@@ -42,14 +42,14 @@ data class OrgNode(val label: String, val children: List<OrgNode> = emptyList())
 
 @Composable
 fun WeOrgTree(dataSource: List<OrgNode>, isTopLevel: Boolean = true) {
-    val space = 20.dp
+    val spacing = 20.dp
     val lineColor = MaterialTheme.orgTreeColorScheme.lineColor
     val layoutCoordinates = remember { mutableMapOf<Int, Pair<Float, Float>>() }
 
     Row(
         modifier = Modifier
             .onGloballyPositioned { layoutCoordinates.clear() }
-            .drawHorizontalLine(dataSource, layoutCoordinates, lineColor, space)
+            .drawHorizontalLine(dataSource, layoutCoordinates, lineColor, spacing)
     ) {
         dataSource.forEachIndexed { index, item ->
             var expended by remember { mutableStateOf(item.children.isEmpty()) }
@@ -75,7 +75,7 @@ fun WeOrgTree(dataSource: List<OrgNode>, isTopLevel: Boolean = true) {
                         .drawVerticalLine(
                             isTopLevel,
                             lineColor,
-                            space,
+                            spacing,
                             expended,
                             hasChildren = item.children.isNotEmpty()
                         )
@@ -102,7 +102,7 @@ fun WeOrgTree(dataSource: List<OrgNode>, isTopLevel: Boolean = true) {
                 }
                 if (item.children.isNotEmpty()) {
                     if (expended) {
-                        Spacer(modifier = Modifier.height(space * 2))
+                        Spacer(modifier = Modifier.height(spacing * 2))
                         WeOrgTree(item.children, false)
                     } else {
                         Spacer(modifier = Modifier.height(5.dp))
@@ -113,7 +113,7 @@ fun WeOrgTree(dataSource: List<OrgNode>, isTopLevel: Boolean = true) {
                 }
             }
             if (index < dataSource.lastIndex) {
-                Spacer(modifier = Modifier.width(space))
+                Spacer(modifier = Modifier.width(spacing))
             }
         }
     }
