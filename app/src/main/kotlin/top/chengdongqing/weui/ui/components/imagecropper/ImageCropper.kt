@@ -100,7 +100,7 @@ private fun adjustPanForRotation(pan: Offset, rotationDegrees: Float): Offset {
 
     // 对拖动向量应用旋转变换，考虑到旋转矩阵的使用
     return Offset(
-        x = pan.x * cos + pan.y * sin, // 注意这里与之前的实现有所不同
+        x = pan.x * cos + pan.y * sin,
         y = -pan.x * sin + pan.y * cos
     )
 }
