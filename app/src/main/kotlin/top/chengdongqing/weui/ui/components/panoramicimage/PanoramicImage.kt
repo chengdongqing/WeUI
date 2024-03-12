@@ -12,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.IntOffset
@@ -48,6 +49,7 @@ fun WePanoramicImage(image: ImageBitmap, scrollStep: Float = 0.75f) {
         modifier = Modifier
             .fillMaxWidth()
             .aspectRatio(2f / 1f)
+            .clipToBounds()
             .onSizeChanged {
                 size = it
             }
