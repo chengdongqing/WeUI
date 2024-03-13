@@ -3,6 +3,7 @@ package top.chengdongqing.weui.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import top.chengdongqing.weui.ui.components.mediapicker.WeMediaPicker
 import top.chengdongqing.weui.ui.screens.media.camera.CameraScreen
 import top.chengdongqing.weui.ui.screens.media.live.LivePlayerScreen
 import top.chengdongqing.weui.ui.screens.media.live.LivePusherScreen
@@ -22,8 +23,11 @@ fun NavGraphBuilder.addMediaGraph(navController: NavController) {
     composable("live-player") {
         LivePlayerScreen()
     }
+    composable("media-picker/entrance") {
+        MediaPickerScreen(navController)
+    }
     composable("media-picker") {
-        MediaPickerScreen()
+        WeMediaPicker(navController)
     }
     composable("audio-player") {
         AudioPlayerScreen()

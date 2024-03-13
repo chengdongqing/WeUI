@@ -11,10 +11,10 @@ import top.chengdongqing.weui.ui.screens.location.LocationPickerScreen
 import top.chengdongqing.weui.ui.screens.location.LocationPreviewScreen
 
 fun NavGraphBuilder.addLocationGraph(navController: NavHostController) {
-    composable("location-preview") {
+    composable("location-preview/entrance") {
         LocationPreviewScreen(navController)
     }
-    composable("location-picker") {
+    composable("location-picker/entrance") {
         val locationState = navController.currentBackStackEntry
             ?.savedStateHandle
             ?.getStateFlow<LocationItem?>("location", null)
@@ -23,7 +23,7 @@ fun NavGraphBuilder.addLocationGraph(navController: NavHostController) {
         LocationPickerScreen(navController, locationState)
     }
 
-    composable(route = "location/preview/{latitude}/{longitude}?zoom={zoom}&name={name}&address={address}") {
+    composable(route = "location-preview/{latitude}/{longitude}?zoom={zoom}&name={name}&address={address}") {
         val args = it.arguments!!
         val latitude = args.getString("latitude")!!.toDouble()
         val longitude = args.getString("longitude")!!.toDouble()
@@ -33,7 +33,7 @@ fun NavGraphBuilder.addLocationGraph(navController: NavHostController) {
 
         WeLocationPreview(latitude, longitude, zoom, name, address)
     }
-    composable("location/pick") {
+    composable("location-picker") {
         WeLocationPicker(onCancel = {
             navController.popBackStack()
         }) {

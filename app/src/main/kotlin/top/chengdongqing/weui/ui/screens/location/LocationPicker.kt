@@ -36,7 +36,7 @@ fun LocationPickerScreen(
             Spacer(modifier = Modifier.height(20.dp))
         }
         WeButton(text = "选择位置") {
-            navController.navigate("location/pick")
+            navController.navigate("location-picker")
         }
     }
 }

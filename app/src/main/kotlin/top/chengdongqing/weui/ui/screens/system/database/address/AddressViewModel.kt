@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.flow.Flow
 import top.chengdongqing.weui.ui.screens.system.database.address.db.Address
-import top.chengdongqing.weui.ui.screens.system.database.address.db.AddressDao
 import top.chengdongqing.weui.ui.screens.system.database.address.db.ShopDatabase
 
 @Suppress("UNCHECKED_CAST")
@@ -16,14 +15,11 @@ class AddressViewModelFactory(val context: Context) : ViewModelProvider.Factory 
 }
 
 class AddressViewModel(context: Context) : ViewModel() {
-    private val addressDao: AddressDao
-    val addressList: Flow<List<Address>>
-
-    init {
+    private val addressDao by lazy {
         val database = ShopDatabase.getInstance(context)
-        addressDao = database.addressDao()
-        addressList = addressDao.loadAll()
+        database.addressDao()
     }
+    val addressList by lazy { addressDao.loadAll() }
 
     suspend fun insert(address: Address) {
         return addressDao.insert(address)

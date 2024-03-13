@@ -49,7 +49,7 @@ internal val menus = listOf(
     MenuGroup(
         "媒体组件", R.drawable.ic_nav_search,
         listOf(
-            MenuItem("MediaPicker", "media-picker"),
+            MenuItem("MediaPicker", "media-picker/entrance"),
             MenuItem("Camera", "camera"),
             MenuItem("AudioRecorder", "audio-recorder"),
             MenuItem("VideoRecorder", "video-recorder"),
@@ -130,8 +130,8 @@ internal val menus = listOf(
     MenuGroup(
         "地图组件", R.drawable.ic_nav_feedback,
         listOf(
-            MenuItem("LocationPreview", "location-preview"),
-            MenuItem("LocationPicker", "location-picker")
+            MenuItem("LocationPreview", "location-preview/entrance"),
+            MenuItem("LocationPicker", "location-picker/entrance")
         )
     ),
     MenuGroup(

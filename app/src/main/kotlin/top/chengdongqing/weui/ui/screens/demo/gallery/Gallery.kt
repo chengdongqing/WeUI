@@ -137,7 +137,7 @@ private fun MediaItem(item: MediaItem, modifier: Modifier) {
 }
 
 @Composable
-private fun produceThumbnail(item: MediaItem): State<Any?> {
+fun produceThumbnail(item: MediaItem): State<Any?> {
     val context = LocalContext.current
 
     return produceState<Any?>(initialValue = null, item.uri) {

@@ -36,7 +36,7 @@ fun LocationPreviewScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(20.dp))
         WeButton(text = "查看位置") {
             val route = buildString {
-                append("location/preview")
+                append("location-preview")
                 append("/${location.latLng.latitude}/${location.latLng.longitude}")
                 append("?zoom=12&name=${location.name}&address=${location.address}")
             }

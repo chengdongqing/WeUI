@@ -24,30 +24,37 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import top.chengdongqing.weui.ui.components.button.ButtonSize
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.theme.WeUITheme
 
 @Composable
-fun WeMediaPicker() {
+fun WeMediaPicker(
+    navController: NavController,
+    pickerViewModel: MediaPickerViewModel = viewModel(
+        factory = MediaPickerViewModelFactory(LocalContext.current)
+    )
+) {
     WeUITheme(darkTheme = true) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
         ) {
-            TopBar()
-            MediaGrid()
+            TopBar(navController)
+            MediaGrid(pickerViewModel)
             BottomBar()
         }
     }
 }
 
 @Composable
-private fun TopBar() {
+private fun TopBar(navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -61,7 +68,9 @@ private fun TopBar() {
             modifier = Modifier
                 .size(28.dp)
                 .align(Alignment.CenterStart)
-                .clickable { }
+                .clickable {
+                    navController.popBackStack()
+                }
         )
         Row(
             modifier = Modifier
@@ -89,17 +98,11 @@ private fun BottomBar() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 16.dp),
+            .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = "预览", color = MaterialTheme.colorScheme.onPrimary, fontSize = 17.sp)
+        Text(text = "预览(14)", color = MaterialTheme.colorScheme.onPrimary, fontSize = 17.sp)
         WeButton(text = "发送", size = ButtonSize.SMALL)
     }
-}
-
-@Preview
-@Composable
-private fun PreviewMediaPicker() {
-    WeMediaPicker()
 }
