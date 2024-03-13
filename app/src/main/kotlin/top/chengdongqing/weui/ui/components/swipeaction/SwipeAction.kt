@@ -64,7 +64,7 @@ fun WeSwipeAction(
     startOptions: List<SwipeActionItem>? = null,
     endOptions: List<SwipeActionItem>? = null,
     style: SwipeActionStyle = SwipeActionStyle.LABEL,
-    swipeActionState: SwipeActionState = rememberAnchoredDraggableState(
+    swipeActionState: SwipeActionState = rememberSwipeState(
         actionItemWidth = if (style == SwipeActionStyle.LABEL) 80.dp else 66.dp,
         startActionCount = startOptions?.size ?: 0,
         endActionCount = endOptions?.size ?: 0
@@ -195,7 +195,7 @@ private fun ActionItem(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun rememberAnchoredDraggableState(
+fun rememberSwipeState(
     initialValue: DragAnchors = DragAnchors.Center,
     actionItemWidth: Dp = 80.dp,
     startActionCount: Int = 0,

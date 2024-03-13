@@ -3,14 +3,15 @@ package top.chengdongqing.weui.ui.components.popup
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.AnchoredDraggableState
+import androidx.compose.foundation.gestures.DraggableAnchors
 import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.draggable
-import androidx.compose.foundation.gestures.rememberDraggableState
+import androidx.compose.foundation.gestures.anchoredDraggable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -27,23 +28,26 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import kotlinx.coroutines.delay
+import top.chengdongqing.weui.ui.components.swipeaction.DragAnchors
 import top.chengdongqing.weui.utils.clickableWithoutRipple
+import kotlin.math.roundToInt
 
 /**
  * 从底部弹出的半屏弹窗
@@ -57,6 +61,7 @@ import top.chengdongqing.weui.utils.clickableWithoutRipple
  * @param onClose 关闭事件
  * @param content 内容
  */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun WePopup(
     visible: Boolean,
@@ -105,33 +110,25 @@ fun WePopup(
                     enter = enterTransition,
                     exit = exitTransition
                 ) {
-                    var height by remember {
-                        mutableIntStateOf(0)
-                    }
-                    var offsetY by remember {
-                        mutableFloatStateOf(0f)
-                    }
-                    val density = LocalDensity.current
-                    val offsetDp = density.run {
-                        offsetY.toDp()
-                    }
+                    var height by remember { mutableIntStateOf(0) }
+                    val swipeState = rememberSwipeState(height, onClose)
 
                     Box(
                         modifier = Modifier
-                            .offset(
-                                y = animateDpAsState(
-                                    targetValue = offsetDp,
-                                    label = "PopupDragAnimation"
-                                ).value
-                            )
+                            .offset {
+                                IntOffset(
+                                    x = 0,
+                                    y = swipeState
+                                        .requireOffset()
+                                        .roundToInt()
+                                )
+                            }
                             .fillMaxWidth()
                             .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
                             .background(MaterialTheme.colorScheme.onBackground)
                             .clickableWithoutRipple { }
                             .padding(padding)
-                            .onSizeChanged {
-                                height = it.height
-                            }
+                            .onSizeChanged { height = it.height }
                     ) {
                         Column {
                             if (swipeable) {
@@ -139,21 +136,10 @@ fun WePopup(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .offset(y = -(12.dp))
-                                        .draggable(
-                                            state = rememberDraggableState { dragAmount ->
-                                                val value = offsetY + dragAmount
-                                                if (value >= 0) {
-                                                    offsetY = value
-                                                }
-                                            },
-                                            orientation = Orientation.Vertical,
-                                            onDragStopped = {
-                                                if (offsetY < height / 2) {
-                                                    offsetY = 0f
-                                                } else {
-                                                    onClose()
-                                                }
-                                            })
+                                        .anchoredDraggable(
+                                            state = swipeState,
+                                            orientation = Orientation.Vertical
+                                        )
                                         .padding(top = 12.dp),
                                     contentAlignment = Alignment.Center
                                 ) {
@@ -190,4 +176,37 @@ fun WePopup(
             }
         }
     }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun rememberSwipeState(
+    height: Int,
+    onClose: () -> Unit
+): AnchoredDraggableState<DragAnchors> {
+    val density = LocalDensity.current
+    val state = remember(height) {
+        AnchoredDraggableState(
+            initialValue = DragAnchors.Center,
+            anchors = DraggableAnchors {
+                DragAnchors.Center at 0f
+                DragAnchors.End at height.toFloat()
+            },
+            positionalThreshold = { totalDistance -> totalDistance * 0.5f },
+            velocityThreshold = { density.run { 100.dp.toPx() } },
+            animationSpec = tween()
+        )
+    }
+
+    LaunchedEffect(state) {
+        snapshotFlow {
+            state.targetValue
+        }.collect {
+            if (it == DragAnchors.End) {
+                onClose()
+            }
+        }
+    }
+
+    return state
 }

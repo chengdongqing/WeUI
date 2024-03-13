@@ -27,7 +27,7 @@ import top.chengdongqing.weui.ui.components.swipeaction.SwipeActionItem
 import top.chengdongqing.weui.ui.components.swipeaction.SwipeActionStyle
 import top.chengdongqing.weui.ui.components.swipeaction.SwipeActionType
 import top.chengdongqing.weui.ui.components.swipeaction.WeSwipeAction
-import top.chengdongqing.weui.ui.components.swipeaction.rememberAnchoredDraggableState
+import top.chengdongqing.weui.ui.components.swipeaction.rememberSwipeState
 import top.chengdongqing.weui.utils.rememberToggleState
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -78,7 +78,7 @@ fun SwipeActionScreen() {
             defaultValue = DragAnchors.End,
             reverseValue = DragAnchors.Center,
         )
-        val swipeActionState = rememberAnchoredDraggableState(
+        val swipeActionState = rememberSwipeState(
             initialValue = anchor,
             endActionCount = options1.size
         )
