@@ -13,12 +13,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import kotlinx.coroutines.isActive
-import kotlin.math.roundToInt
+import top.chengdongqing.weui.utils.toIntOffset
+import top.chengdongqing.weui.utils.toIntSize
 
 @Composable
 fun WePanoramicImage(image: ImageBitmap, scrollStep: Float = 0.75f) {
@@ -57,16 +59,16 @@ fun WePanoramicImage(image: ImageBitmap, scrollStep: Float = 0.75f) {
         // 默认图片
         drawImage(
             image = image,
-            dstOffset = IntOffset(x.roundToInt(), 0),
-            dstSize = IntSize(imgW.roundToInt(), imgH.roundToInt())
+            dstOffset = Offset(x, 0f).toIntOffset(),
+            dstSize = Size(imgW, imgH).toIntSize()
         )
 
         // 辅助图片，当图片宽度不足以填满容器宽度时用于补充
         if (x + imgW > size.width) {
             drawImage(
                 image = image,
-                dstOffset = IntOffset((x - imgW).roundToInt(), 0),
-                dstSize = IntSize(imgW.roundToInt(), imgH.roundToInt())
+                dstOffset = Offset(x - imgW, 0f).toIntOffset(),
+                dstSize = Size(imgW, imgH).toIntSize()
             )
         }
     }

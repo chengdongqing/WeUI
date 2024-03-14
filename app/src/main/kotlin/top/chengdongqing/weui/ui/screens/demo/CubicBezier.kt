@@ -45,7 +45,6 @@ import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -56,7 +55,7 @@ import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.ui.theme.WeUITheme
 import top.chengdongqing.weui.utils.calculateBezierPath
 import top.chengdongqing.weui.utils.clickableWithoutRipple
-import kotlin.math.roundToInt
+import top.chengdongqing.weui.utils.toIntOffset
 
 @Composable
 fun CubicBezierScreen() {
@@ -216,7 +215,7 @@ private fun AnimateToCart(
     val currentOffset by remember {
         derivedStateOf {
             val path = calculateBezierPath(startOffset, endOffset, animationProgress.value)
-            IntOffset(path.x.roundToInt(), path.y.roundToInt())
+            path.toIntOffset()
         }
     }
 

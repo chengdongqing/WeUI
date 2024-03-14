@@ -13,21 +13,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.withFrameMillis
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.IntSize
 import kotlinx.coroutines.isActive
 import top.chengdongqing.weui.R
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.theme.WeUITheme
 import top.chengdongqing.weui.utils.SetupStatusBarStyle
+import top.chengdongqing.weui.utils.toIntOffset
+import top.chengdongqing.weui.utils.toIntSize
 import kotlin.math.cos
-import kotlin.math.roundToInt
 import kotlin.math.sin
 
 @Composable
@@ -56,7 +56,7 @@ fun SolarSystemScreen() {
                 // 绘制太阳
                 drawImage(
                     image = sunImage,
-                    dstSize = IntSize(size.width.roundToInt(), size.height.roundToInt())
+                    dstSize = Size(size.width, size.height).toIntSize()
                 )
 
                 // 绘制地球及其轨道
@@ -117,13 +117,13 @@ private fun DrawScope.drawCelestialBody(
     position: Offset,
     scale: Float
 ) {
-    val dstSize = IntSize((image.width * scale).roundToInt(), (image.height * scale).roundToInt())
+    val dstSize = Size((image.width * scale), (image.height * scale)).toIntSize()
     drawImage(
         image = image,
-        dstOffset = IntOffset(
-            (position.x - dstSize.width / 2f).roundToInt(),
-            (position.y - dstSize.height / 2f).roundToInt()
-        ),
+        dstOffset = Offset(
+            (position.x - dstSize.width / 2f),
+            (position.y - dstSize.height / 2f)
+        ).toIntOffset(),
         dstSize = dstSize
     )
 }

@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import top.chengdongqing.weui.ui.components.divider.WeDivider
 import top.chengdongqing.weui.ui.theme.FontColorLight
-import kotlin.math.roundToInt
+import top.chengdongqing.weui.utils.toIntOffset
 
 @Composable
 fun WeContextMenu(options: List<String>) {
@@ -43,7 +43,7 @@ fun WeContextMenu(options: List<String>) {
             .background(Color.White)
             .pointerInput(Unit) {
                 detectTapGestures(onLongPress = {
-                    offset = IntOffset(it.x.roundToInt(), it.y.roundToInt())
+                    offset = it.toIntOffset()
                     showPopup = true
                 })
             }

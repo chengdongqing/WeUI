@@ -23,7 +23,7 @@ import top.chengdongqing.weui.utils.rememberLastState
 
 @Composable
 fun ImagePreview(uri: Uri) {
-    val context = LocalContext.current as Activity
+    val activity = LocalContext.current as Activity
     var offset by remember { mutableStateOf(Offset.Zero) }
     var zoom by remember { mutableFloatStateOf(1f) }
     val lastOffset = rememberLastState(value = offset)
@@ -34,11 +34,11 @@ fun ImagePreview(uri: Uri) {
         modifier = Modifier
             .fillMaxSize()
             .pointerInput(Unit) {
-                detectTapGestures(onDoubleTap = {
+                detectTapGestures(onDoubleTap = { tapOffset ->
                     zoom = if (zoom > 1f) 1f else 2f
-                    offset = calculateDoubleTapOffset(zoom, size, it)
+                    offset = tapOffset.calculateDoubleTapOffset(zoom, size)
                 }) {
-                    context.finish()
+                    activity.finish()
                 }
             }
             .pointerInput(Unit) {
@@ -68,22 +68,19 @@ private fun Offset.calculateNewOffset(
     size: IntSize
 ): Offset {
     val newScale = maxOf(1f, zoom * gestureZoom)
-    val newOffset = (this + centroid / zoom) -
-            (centroid / newScale + pan / zoom)
+    val newOffset = (this + centroid / zoom) - (centroid / newScale + pan / zoom)
     return Offset(
         newOffset.x.coerceIn(0f, (size.width / zoom) * (zoom - 1f)),
         newOffset.y.coerceIn(0f, (size.height / zoom) * (zoom - 1f))
     )
 }
 
-private fun calculateDoubleTapOffset(
+private fun Offset.calculateDoubleTapOffset(
     zoom: Float,
-    size: IntSize,
-    tapOffset: Offset
+    size: IntSize
 ): Offset {
-    val newOffset = Offset(tapOffset.x, tapOffset.y)
     return Offset(
-        newOffset.x.coerceIn(0f, (size.width / zoom) * (zoom - 1f)),
-        newOffset.y.coerceIn(0f, (size.height / zoom) * (zoom - 1f))
+        this.x.coerceIn(0f, (size.width / zoom) * (zoom - 1f)),
+        this.y.coerceIn(0f, (size.height / zoom) * (zoom - 1f))
     )
 }

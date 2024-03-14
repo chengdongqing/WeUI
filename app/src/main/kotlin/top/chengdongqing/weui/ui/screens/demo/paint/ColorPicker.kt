@@ -30,15 +30,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import kotlin.math.roundToInt
+import top.chengdongqing.weui.utils.toIntOffset
 import kotlin.random.Random
 import android.graphics.Color as AndroidColor
 
@@ -76,7 +76,7 @@ fun ColorPicker(onColorChange: (Color) -> Unit) {
             tint = activeColor,
             contentDescription = null,
             modifier = Modifier
-                .offset { IntOffset(dragOffset.floatValue.roundToInt(), 0) }
+                .offset { Offset(dragOffset.floatValue, 0f).toIntOffset() }
                 .border(
                     border = BorderStroke(4.dp, MaterialTheme.colorScheme.onSurface),
                     shape = CircleShape
