@@ -26,7 +26,7 @@ internal val menus = listOf(
             MenuItem("Progress", "progress"),
             MenuItem("Steps", "steps"),
             MenuItem("Swiper", "swiper"),
-            MenuItem("ScrollView", "scroll-view"),
+            MenuItem("RefreshableView", "refreshable-view"),
             MenuItem("TabView", "tab-view"),
             MenuItem("SwipeAction", "swipe-action"),
             MenuItem("Skeleton", "skeleton"),

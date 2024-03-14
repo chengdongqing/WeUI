@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -21,8 +23,13 @@ import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.ui.components.divider.WeDivider
 
 @Composable
-fun WeCardList(modifier: Modifier = Modifier, content: LazyListScope.() -> Unit) {
+fun WeCardList(
+    modifier: Modifier = Modifier,
+    state: LazyListState = rememberLazyListState(),
+    content: LazyListScope.() -> Unit
+) {
     LazyColumn(
+        state = state,
         modifier = modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.onBackground, RoundedCornerShape(8.dp))
@@ -33,7 +40,7 @@ fun WeCardList(modifier: Modifier = Modifier, content: LazyListScope.() -> Unit)
 }
 
 @Composable
-fun WeCardListItem(label: String, value: String) {
+fun WeCardListItem(label: String, value: String? = null) {
     Row(
         modifier = Modifier
             .heightIn(60.dp)
@@ -47,14 +54,16 @@ fun WeCardListItem(label: String, value: String) {
             fontSize = 14.sp,
             fontWeight = FontWeight.Bold
         )
-        Spacer(modifier = Modifier.width(16.dp))
-        Text(
-            text = value,
-            modifier = Modifier.weight(2f),
-            color = MaterialTheme.colorScheme.onSecondary,
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Bold
-        )
+        value?.let {
+            Spacer(modifier = Modifier.width(16.dp))
+            Text(
+                text = value,
+                modifier = Modifier.weight(2f),
+                color = MaterialTheme.colorScheme.onSecondary,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
     }
     WeDivider()
 }

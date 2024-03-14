@@ -81,9 +81,7 @@ private fun Rule(
         val valuePerScale = (end - start) / scaleCount
         val widthPerScale = widthPx / scaleCount
 
-        snapshotFlow {
-            scrollState.value
-        }.collect { offset ->
+        snapshotFlow { scrollState.value }.collect { offset ->
             val value = start + offset / widthPerScale * valuePerScale
             onChange(value)
         }

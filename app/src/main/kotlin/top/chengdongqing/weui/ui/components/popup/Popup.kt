@@ -199,9 +199,7 @@ private fun rememberSwipeState(
     }
 
     LaunchedEffect(state) {
-        snapshotFlow {
-            state.targetValue
-        }.collect {
+        snapshotFlow { state.targetValue }.collect {
             if (it == DragAnchors.End) {
                 onClose()
             }
