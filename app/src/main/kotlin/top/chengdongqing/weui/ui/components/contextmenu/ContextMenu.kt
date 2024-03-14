@@ -24,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
@@ -47,7 +46,7 @@ fun WeContextMenu(
                 .width(160.dp)
                 .shadow(8.dp)
                 .clip(RoundedCornerShape(2.dp))
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.onBackground)
         ) {
             options.forEachIndexed { index, item ->
                 Row(

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
@@ -28,7 +29,6 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.ui.components.loading.WeLoading
-import top.chengdongqing.weui.ui.theme.FontSecondaryColorLight
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -59,7 +59,7 @@ fun WeRefreshableView(
         ) {
             WeLoading(isRotating = scrollState.isRefreshing)
             Spacer(modifier = Modifier.width(8.dp))
-            Text(tips, color = FontSecondaryColorLight, fontSize = 14.sp)
+            Text(tips, color = MaterialTheme.colorScheme.onSecondary, fontSize = 14.sp)
         }
 
         val animatedOffsetY by animateIntAsState(
@@ -82,7 +82,7 @@ private fun getRefreshTips(state: PullToRefreshState, positionalThresholdPx: Flo
         state.isRefreshing -> "刷新中..."
         state.verticalOffset > positionalThresholdPx -> "释放立即刷新"
         state.verticalOffset > 0 -> "继续下拉执行刷新"
-        else -> ""
+        else -> "刷新中..."
     }
 }
 
