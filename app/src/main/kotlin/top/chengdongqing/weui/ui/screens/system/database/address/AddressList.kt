@@ -33,14 +33,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 import top.chengdongqing.weui.ui.components.actionsheet.ActionSheetItem
-import top.chengdongqing.weui.ui.components.actionsheet.ActionSheetOptions
-import top.chengdongqing.weui.ui.components.actionsheet.rememberWeActionSheet
-import top.chengdongqing.weui.ui.components.dialog.DialogOptions
-import top.chengdongqing.weui.ui.components.dialog.rememberWeDialog
+import top.chengdongqing.weui.ui.components.actionsheet.rememberActionSheetState
+import top.chengdongqing.weui.ui.components.dialog.rememberDialogState
 import top.chengdongqing.weui.ui.components.divider.WeDivider
 import top.chengdongqing.weui.ui.components.toast.ToastIcon
-import top.chengdongqing.weui.ui.components.toast.ToastOptions
-import top.chengdongqing.weui.ui.components.toast.rememberWeToast
+import top.chengdongqing.weui.ui.components.toast.rememberToastState
 import top.chengdongqing.weui.ui.screens.system.database.address.db.Address
 import top.chengdongqing.weui.ui.screens.system.setClipboardData
 import top.chengdongqing.weui.ui.theme.FontLinkColor
@@ -56,9 +53,9 @@ fun AddressList(
     val addressList by addressViewModel.addressList.collectAsState(emptyList())
 
     val coroutineScope = rememberCoroutineScope()
-    val dialog = rememberWeDialog()
-    val toast = rememberWeToast()
-    val actionSheet = rememberWeActionSheet()
+    val dialog = rememberDialogState()
+    val toast = rememberToastState()
+    val actionSheet = rememberActionSheetState()
     val actions = remember {
         listOf(
             ActionSheetItem("编辑"),
@@ -80,19 +77,19 @@ fun AddressList(
         items(addressList) { item ->
             AddressListItem(item,
                 onLongClick = {
-                    actionSheet.show(ActionSheetOptions(actions) { action ->
+                    actionSheet.show(actions) { action ->
                         when (action) {
                             0 -> {
                                 navigateToForm(item.id)
                             }
 
                             1 -> {
-                                dialog.show(DialogOptions(title = "确定删除该地址吗？") {
+                                dialog.show(title = "确定删除该地址吗？") {
                                     coroutineScope.launch {
                                         addressViewModel.delete(item)
-                                        toast.show(ToastOptions("删除成功", ToastIcon.SUCCESS))
+                                        toast.show("删除成功", ToastIcon.SUCCESS)
                                     }
-                                })
+                                }
                             }
 
                             2 -> {
@@ -101,10 +98,10 @@ fun AddressList(
                                     appendLine("手机号: ${item.phone}")
                                     append("详细地址: ${item.addressDetail}")
                                 })
-                                toast.show(ToastOptions("已复制", ToastIcon.SUCCESS))
+                                toast.show("已复制", ToastIcon.SUCCESS)
                             }
                         }
-                    })
+                    }
                 }) {
                 navigateToForm(item.id)
             }

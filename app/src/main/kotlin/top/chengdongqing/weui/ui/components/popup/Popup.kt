@@ -87,7 +87,7 @@ fun WePopup(
 
     LaunchedEffect(visible) {
         if (!visible) {
-            delay(150)
+            delay(200)
         }
         localVisible = visible
     }

@@ -29,15 +29,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.R
 import top.chengdongqing.weui.ui.components.actionsheet.ActionSheetItem
-import top.chengdongqing.weui.ui.components.actionsheet.ActionSheetOptions
-import top.chengdongqing.weui.ui.components.actionsheet.rememberWeActionSheet
+import top.chengdongqing.weui.ui.components.actionsheet.rememberActionSheetState
 import top.chengdongqing.weui.ui.components.cardlist.WeCardListItem
-import top.chengdongqing.weui.ui.components.dialog.DialogOptions
-import top.chengdongqing.weui.ui.components.dialog.rememberWeDialog
+import top.chengdongqing.weui.ui.components.dialog.rememberDialogState
 import top.chengdongqing.weui.ui.components.popup.WePopup
 import top.chengdongqing.weui.ui.components.toast.ToastIcon
-import top.chengdongqing.weui.ui.components.toast.ToastOptions
-import top.chengdongqing.weui.ui.components.toast.rememberWeToast
+import top.chengdongqing.weui.ui.components.toast.rememberToastState
 import top.chengdongqing.weui.utils.calculateFileSize
 import top.chengdongqing.weui.utils.deleteFile
 import top.chengdongqing.weui.utils.format
@@ -51,9 +48,9 @@ internal fun FileListItem(
     onFileClick: () -> Unit,
     onDeleted: () -> Unit
 ) {
-    val actionSheet = rememberWeActionSheet()
-    val dialog = rememberWeDialog()
-    val toast = rememberWeToast()
+    val actionSheet = rememberActionSheetState()
+    val dialog = rememberDialogState()
+    val toast = rememberToastState()
 
     val menus = remember {
         listOf(
@@ -72,23 +69,23 @@ internal fun FileListItem(
         modifier = Modifier
             .pointerInput(Unit) {
                 detectTapGestures(onLongPress = {
-                    actionSheet.show(ActionSheetOptions(menus) {
+                    actionSheet.show(menus) {
                         when (it) {
                             0 -> {
                                 setVisible(true)
                             }
 
                             1 -> {
-                                dialog.show(DialogOptions(title = "确定删除吗？") {
+                                dialog.show(title = "确定删除吗？") {
                                     if (!deleteFile(File(file.path))) {
-                                        toast.show(ToastOptions("删除失败", ToastIcon.FAIL))
+                                        toast.show("删除失败", ToastIcon.FAIL)
                                     } else {
                                         onDeleted()
                                     }
-                                })
+                                }
                             }
                         }
-                    })
+                    }
                 }) {
                     if (file.isDirectory) {
                         onFolderClick()

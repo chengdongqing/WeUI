@@ -27,8 +27,7 @@ import top.chengdongqing.weui.ui.components.input.WeInput
 import top.chengdongqing.weui.ui.components.input.WeTextarea
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.components.toast.ToastIcon
-import top.chengdongqing.weui.ui.components.toast.ToastOptions
-import top.chengdongqing.weui.ui.components.toast.rememberWeToast
+import top.chengdongqing.weui.ui.components.toast.rememberToastState
 import top.chengdongqing.weui.ui.screens.system.database.address.db.Address
 
 @Composable
@@ -84,7 +83,7 @@ fun AddressFormScreen(
             Spacer(modifier = Modifier.height(20.dp))
 
             val coroutineScope = rememberCoroutineScope()
-            val toast = rememberWeToast()
+            val toast = rememberToastState()
 
             WeButton(
                 text = "确定",
@@ -99,10 +98,10 @@ fun AddressFormScreen(
                 coroutineScope.launch {
                     if (id == null) {
                         addressViewModel.insert(value)
-                        toast.show(ToastOptions("添加成功", ToastIcon.SUCCESS))
+                        toast.show("添加成功", ToastIcon.SUCCESS)
                     } else {
                         addressViewModel.update(value.copy(id = id))
-                        toast.show(ToastOptions("修改成功", ToastIcon.SUCCESS))
+                        toast.show("修改成功", ToastIcon.SUCCESS)
                     }
                     delay(1000)
                     navController.popBackStack()

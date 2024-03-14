@@ -2,6 +2,7 @@ package top.chengdongqing.weui.ui.components.contextmenu
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,11 +23,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
+import top.chengdongqing.weui.utils.toIntOffset
 
 @Composable
 fun WeContextMenu(
@@ -38,7 +44,7 @@ fun WeContextMenu(
     Popup(offset = position, onDismissRequest = onCancel) {
         Column(
             modifier = Modifier
-                .width(180.dp)
+                .width(160.dp)
                 .shadow(8.dp)
                 .clip(RoundedCornerShape(2.dp))
                 .background(Color.White)
@@ -67,24 +73,9 @@ interface ContextMenuState {
     val visible: Boolean
 
     /**
-     * 偏移位置
-     */
-    val position: IntOffset
-
-    /**
-     * 菜单列表
-     */
-    val options: List<String>
-
-    /**
-     * 当前被点击项的在列表中的索引
-     */
-    val listIndex: Int
-
-    /**
      * 显示菜单
      */
-    fun show(position: IntOffset, options: List<String>, currentIndex: Int)
+    fun show(position: IntOffset, options: List<String>, listIndex: Int)
 
     /**
      * 隐藏菜单
@@ -112,14 +103,11 @@ fun rememberContextMenuState(onTap: (listIndex: Int, menuIndex: Int) -> Unit): C
 
 private class ContextMenuStateImpl : ContextMenuState {
     override val visible: Boolean get() = _visible
-    override val position: IntOffset get() = _position
-    override val options: List<String> get() = _options
-    override val listIndex: Int get() = _listIndex
 
-    override fun show(position: IntOffset, options: List<String>, currentIndex: Int) {
-        _listIndex = currentIndex
-        _position = position
-        _options = options
+    override fun show(position: IntOffset, options: List<String>, listIndex: Int) {
+        this.listIndex = listIndex
+        this.position = position
+        this.options = options
         _visible = true
     }
 
@@ -127,8 +115,23 @@ private class ContextMenuStateImpl : ContextMenuState {
         _visible = false
     }
 
+    var position by mutableStateOf(IntOffset.Zero)
+    var options by mutableStateOf<List<String>>(emptyList())
+    var listIndex by mutableIntStateOf(0)
     private var _visible by mutableStateOf(false)
-    private var _position by mutableStateOf(IntOffset.Zero)
-    private var _options by mutableStateOf<List<String>>(emptyList())
-    private var _listIndex by mutableIntStateOf(0)
+}
+
+@Composable
+fun Modifier.contextMenu(onLongPress: (IntOffset) -> Unit): Modifier {
+    var offset by remember { mutableStateOf(Offset.Zero) }
+
+    return this
+        .onGloballyPositioned {
+            offset = it.positionInParent()
+        }
+        .pointerInput(Unit) {
+            detectTapGestures(onLongPress = {
+                onLongPress((offset + it).toIntOffset())
+            })
+        }
 }

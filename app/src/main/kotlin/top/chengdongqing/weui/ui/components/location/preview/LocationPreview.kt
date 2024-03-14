@@ -36,8 +36,7 @@ import com.amap.api.maps.model.LatLng
 import com.amap.api.maps.model.MarkerOptions
 import top.chengdongqing.weui.R
 import top.chengdongqing.weui.ui.components.actionsheet.ActionSheetItem
-import top.chengdongqing.weui.ui.components.actionsheet.ActionSheetOptions
-import top.chengdongqing.weui.ui.components.actionsheet.rememberWeActionSheet
+import top.chengdongqing.weui.ui.components.actionsheet.rememberActionSheetState
 import top.chengdongqing.weui.ui.components.location.AMap
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.utils.MapType
@@ -80,7 +79,7 @@ fun WeLocationPreview(
 
 @Composable
 private fun BottomBar(location: LatLng, name: String, address: String?) {
-    val actionSheet = rememberWeActionSheet()
+    val actionSheet = rememberActionSheetState()
 
     Row(
         modifier = Modifier
@@ -114,21 +113,20 @@ private fun BottomBar(location: LatLng, name: String, address: String?) {
                     .background(MaterialTheme.colorScheme.background)
                     .clickable {
                         actionSheet.show(
-                            ActionSheetOptions(
-                                options = listOf(
-                                    ActionSheetItem("高德地图"),
-                                    ActionSheetItem("百度地图"),
-                                    ActionSheetItem("腾讯地图"),
-                                    ActionSheetItem("谷歌地图"),
-                                )
-                            ) { index ->
-                                navigateToLocation(
-                                    context,
-                                    MapType.ofIndex(index)!!,
-                                    location,
-                                    name
-                                )
-                            })
+                            options = listOf(
+                                ActionSheetItem("高德地图"),
+                                ActionSheetItem("百度地图"),
+                                ActionSheetItem("腾讯地图"),
+                                ActionSheetItem("谷歌地图"),
+                            )
+                        ) { index ->
+                            navigateToLocation(
+                                context,
+                                MapType.ofIndex(index)!!,
+                                location,
+                                name
+                            )
+                        }
                     },
                 contentAlignment = Alignment.Center
             ) {

@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,7 +36,6 @@ import top.chengdongqing.weui.ui.theme.FontLinkColor
 /**
  * 对话框
  *
- * @param visible 是否显示
  * @param title 标题
  * @param content 内容
  * @param okText 确定按钮文字
@@ -46,7 +46,6 @@ import top.chengdongqing.weui.ui.theme.FontLinkColor
  */
 @Composable
 fun WeDialog(
-    visible: Boolean,
     title: String,
     content: String? = null,
     okText: String = "确定",
@@ -55,93 +54,91 @@ fun WeDialog(
     onOk: () -> Unit,
     onCancel: (() -> Unit)? = null
 ) {
-    if (visible) {
-        Dialog(
-            onDismissRequest = {
-                onCancel?.invoke()
-            },
-            properties = DialogProperties(
-                usePlatformDefaultWidth = false
-            )
+    Dialog(
+        onDismissRequest = {
+            onCancel?.invoke()
+        },
+        properties = DialogProperties(
+            usePlatformDefaultWidth = false
+        )
+    ) {
+        Box(
+            modifier = Modifier
+                .clip(RoundedCornerShape(12.dp))
+                .fillMaxWidth(0.8f)
+                .background(MaterialTheme.colorScheme.onBackground)
         ) {
-            Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(12.dp))
-                    .fillMaxWidth(0.8f)
-                    .background(MaterialTheme.colorScheme.onBackground)
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
+                Text(
+                    text = title,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            top = 32.dp,
+                            bottom = if (content != null) 16.dp else 0.dp,
+                            start = 24.dp,
+                            end = 24.dp
+                        ),
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center
+                )
+                if (content != null) {
                     Text(
-                        text = title,
+                        text = content,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(
-                                top = 32.dp,
-                                bottom = if (content != null) 16.dp else 0.dp,
-                                start = 24.dp,
-                                end = 24.dp
-                            ),
-                        color = MaterialTheme.colorScheme.onPrimary,
+                            .padding(horizontal = 24.dp),
+                        color = MaterialTheme.colorScheme.onSecondary,
                         fontSize = 17.sp,
-                        fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center
                     )
-                    if (content != null) {
-                        Text(
-                            text = content,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 24.dp),
-                            color = MaterialTheme.colorScheme.onSecondary,
-                            fontSize = 17.sp,
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(32.dp))
-                    WeDivider()
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        if (onCancel != null) {
-                            Box(
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .height(56.dp)
-                                    .clickable(onClick = onCancel),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(
-                                    text = cancelText,
-                                    color = MaterialTheme.colorScheme.onPrimary,
-                                    fontSize = 17.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
-                            Box(
-                                modifier = Modifier
-                                    .size(0.5.dp, 56.dp)
-                                    .background(MaterialTheme.colorScheme.outline)
-                            )
-                        }
+                }
+                Spacer(modifier = Modifier.height(32.dp))
+                WeDivider()
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    if (onCancel != null) {
                         Box(
                             modifier = Modifier
                                 .weight(1f)
                                 .height(56.dp)
-                                .clickable(onClick = onOk),
+                                .clickable(onClick = onCancel),
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = okText,
-                                color = okColor,
+                                text = cancelText,
+                                color = MaterialTheme.colorScheme.onPrimary,
                                 fontSize = 17.sp,
                                 fontWeight = FontWeight.Bold
                             )
                         }
+                        Box(
+                            modifier = Modifier
+                                .size(0.5.dp, 56.dp)
+                                .background(MaterialTheme.colorScheme.outline)
+                        )
+                    }
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(56.dp)
+                            .clickable(onClick = onOk),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = okText,
+                            color = okColor,
+                            fontSize = 17.sp,
+                            fontWeight = FontWeight.Bold
+                        )
                     }
                 }
             }
@@ -149,61 +146,107 @@ fun WeDialog(
     }
 }
 
-@Composable
-fun rememberWeDialog(): DialogState {
-    var visible by remember { mutableStateOf(false) }
-    var localOptions by remember { mutableStateOf<DialogOptions?>(null) }
+@Stable
+interface DialogState {
+    /**
+     * 是否显示
+     */
+    val visible: Boolean
 
-    localOptions?.let { options ->
-        WeDialog(
-            visible = visible,
-            title = options.title,
-            content = options.content,
-            okText = options.okText,
-            cancelText = options.cancelText,
-            okColor = options.okColor,
-            onOk = {
-                options.onOk?.invoke()
-                if (options.closeOnAction) {
-                    visible = false
-                }
-            },
-            onCancel = if (options.onCancel != null) {
-                {
-                    options.onCancel.invoke()
-                    if (options.closeOnAction) {
-                        visible = false
-                    }
-                }
-            } else null
-        )
-    }
-
-    return DialogState(
-        visible,
-        show = {
-            localOptions = it
-            visible = true
-        },
-        hide = {
-            visible = false
-        }
+    /**
+     * 显示对话框
+     */
+    fun show(
+        title: String,
+        content: String? = null,
+        okText: String = "确定",
+        cancelText: String = "取消",
+        okColor: Color = FontLinkColor,
+        closeOnAction: Boolean = true,
+        onCancel: (() -> Unit)? = {},
+        onOk: (() -> Unit)? = null
     )
+
+    /**
+     * 隐藏对话框
+     */
+    fun hide()
 }
 
-class DialogState(
-    val visible: Boolean,
-    val show: (DialogOptions) -> Unit,
-    val hide: () -> Unit
-)
+@Composable
+fun rememberDialogState(): DialogState {
+    val state = remember { DialogStateImpl() }
 
-data class DialogOptions(
+    if (state.visible) {
+        state.props?.let { props ->
+            WeDialog(
+                title = props.title,
+                content = props.content,
+                okText = props.okText,
+                cancelText = props.cancelText,
+                okColor = props.okColor,
+                onOk = {
+                    props.onOk?.invoke()
+                    if (props.closeOnAction) {
+                        state.hide()
+                    }
+                },
+                onCancel = if (props.onCancel != null) {
+                    {
+                        props.onCancel.invoke()
+                        if (props.closeOnAction) {
+                            state.hide()
+                        }
+                    }
+                } else null
+            )
+        }
+    }
+
+    return state
+}
+
+private class DialogStateImpl : DialogState {
+    override val visible: Boolean get() = _visible
+
+    override fun show(
+        title: String,
+        content: String?,
+        okText: String,
+        cancelText: String,
+        okColor: Color,
+        closeOnAction: Boolean,
+        onCancel: (() -> Unit)?,
+        onOk: (() -> Unit)?
+    ) {
+        props = DialogProps(
+            title,
+            content,
+            okText,
+            cancelText,
+            okColor,
+            closeOnAction,
+            onCancel,
+            onOk
+        )
+        _visible = true
+    }
+
+    override fun hide() {
+        _visible = false
+    }
+
+    var props by mutableStateOf<DialogProps?>(null)
+    private var _visible by mutableStateOf(false)
+}
+
+private data class DialogProps(
     val title: String,
-    val content: String? = null,
-    val okText: String = "确定",
-    val cancelText: String = "取消",
-    val okColor: Color = FontLinkColor,
-    val closeOnAction: Boolean = true,
-    val onCancel: (() -> Unit)? = {},
-    val onOk: (() -> Unit)? = null
+    val content: String?,
+    val okText: String,
+    val cancelText: String,
+    val okColor: Color,
+    val closeOnAction: Boolean,
+    val onCancel: (() -> Unit)?,
+    val onOk: (() -> Unit)?
 )

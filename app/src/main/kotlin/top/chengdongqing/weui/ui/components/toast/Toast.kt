@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -24,6 +25,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,12 +37,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntRect
+import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.center
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.PopupPositionProvider
 import kotlinx.coroutines.delay
 import top.chengdongqing.weui.ui.components.loading.WeLoading
 import top.chengdongqing.weui.ui.theme.BackgroundColorLight
+import top.chengdongqing.weui.utils.rememberStatusBarHeight
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -58,6 +67,7 @@ enum class ToastIcon {
  * @param title 标题
  * @param icon 图标
  * @param duration 显示的时长
+ * @param mask 是否防止触摸穿透
  * @param onClose 关闭事件
  */
 @Composable
@@ -66,6 +76,7 @@ fun WeToast(
     title: String,
     icon: ToastIcon = ToastIcon.NONE,
     duration: Duration = 1500.milliseconds,
+    mask: Boolean = false,
     onClose: () -> Unit
 ) {
     val hasIcon = icon != ToastIcon.NONE
@@ -86,10 +97,30 @@ fun WeToast(
         localVisible = visible
     }
 
+    val positionProvider = remember {
+        object : PopupPositionProvider {
+            override fun calculatePosition(
+                anchorBounds: IntRect,
+                windowSize: IntSize,
+                layoutDirection: LayoutDirection,
+                popupContentSize: IntSize
+            ): IntOffset {
+                return windowSize.center - popupContentSize.center
+            }
+        }
+    }
+    val statusBarHeight = rememberStatusBarHeight()
+
     if (visible || localVisible) {
-        Popup {
+        Popup(popupPositionProvider = positionProvider) {
             Box(
-                modifier = Modifier.fillMaxSize(),
+                modifier = if (mask) {
+                    Modifier
+                        .fillMaxSize()
+                        .offset(y = -statusBarHeight)
+                } else {
+                    Modifier.toastSize(hasIcon)
+                },
                 contentAlignment = Alignment.Center
             ) {
                 AnimatedVisibility(
@@ -98,13 +129,9 @@ fun WeToast(
                     exit = fadeOut() + scaleOut(tween(100), targetScale = 0.8f)
                 ) {
                     Box(
-                        modifier = if (hasIcon) {
-                            Modifier.size(136.dp)
-                        } else {
-                            Modifier
-                                .width(152.dp)
-                                .heightIn(44.dp)
-                        }
+                        modifier =
+                        Modifier
+                            .toastSize(hasIcon)
                             .clip(RoundedCornerShape(12.dp))
                             .background(Color(0xFF4C4C4C)),
                         contentAlignment = Alignment.Center
@@ -147,46 +174,77 @@ fun WeToast(
     }
 }
 
-@Composable
-fun rememberWeToast(): ToastState {
-    var visible by remember {
-        mutableStateOf(false)
+private fun Modifier.toastSize(hasIcon: Boolean): Modifier {
+    return if (hasIcon) {
+        this.size(136.dp)
+    } else {
+        this
+            .width(152.dp)
+            .heightIn(44.dp)
     }
-    var localOptions by remember {
-        mutableStateOf<ToastOptions?>(null)
-    }
-
-    localOptions?.let { options ->
-        WeToast(
-            visible = visible,
-            title = options.title,
-            icon = options.icon,
-            duration = options.duration
-        ) {
-            visible = false
-        }
-    }
-
-    return ToastState(
-        visible,
-        show = {
-            localOptions = it
-            visible = true
-        },
-        hide = {
-            visible = false
-        }
-    )
 }
 
-class ToastState(
-    val visible: Boolean,
-    val show: (ToastOptions) -> Unit,
-    val hide: () -> Unit
-)
+@Stable
+interface ToastState {
+    /**
+     * 是否显示
+     */
+    val visible: Boolean
 
-data class ToastOptions(
+    /**
+     * 显示提示框
+     */
+    fun show(
+        title: String,
+        icon: ToastIcon = ToastIcon.NONE,
+        duration: Duration = 1500.milliseconds,
+        mask: Boolean = false
+    )
+
+    /**
+     * 隐藏提示框
+     */
+    fun hide()
+}
+
+@Composable
+fun rememberToastState(): ToastState {
+    val state = remember { ToastStateImpl() }
+
+    state.props?.let { props ->
+        WeToast(
+            visible = state.visible,
+            title = props.title,
+            icon = props.icon,
+            duration = props.duration,
+            mask = props.mask
+        ) {
+            state.hide()
+        }
+    }
+
+    return state
+}
+
+private class ToastStateImpl : ToastState {
+    override val visible: Boolean get() = _visible
+
+    override fun show(title: String, icon: ToastIcon, duration: Duration, mask: Boolean) {
+        props = ToastProps(title, icon, duration, mask)
+        _visible = true
+    }
+
+    override fun hide() {
+        _visible = false
+    }
+
+    var props by mutableStateOf<ToastProps?>(null)
+    private var _visible by mutableStateOf(false)
+}
+
+private data class ToastProps(
     val title: String,
-    val icon: ToastIcon = ToastIcon.NONE,
-    val duration: Duration = 1500.milliseconds
+    val icon: ToastIcon,
+    val duration: Duration,
+    val mask: Boolean
 )

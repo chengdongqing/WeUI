@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -139,40 +140,66 @@ fun WeActionSheet(
     }
 }
 
-@Composable
-fun rememberWeActionSheet(): ActionSheetState {
-    var visible by remember { mutableStateOf(false) }
-    var localOptions by remember { mutableStateOf<ActionSheetOptions?>(null) }
+@Stable
+interface ActionSheetState {
+    /**
+     * 是否显示
+     */
+    val visible: Boolean
 
-    localOptions?.let { options ->
+    /**
+     * 显示菜单
+     */
+    fun show(
+        options: List<ActionSheetItem>,
+        title: String? = null,
+        onChange: (index: Int) -> Unit
+    )
+
+    /**
+     * 隐藏菜单
+     */
+    fun hide()
+}
+
+@Composable
+fun rememberActionSheetState(): ActionSheetState {
+    val state = remember { ActionSheetStateImpl() }
+
+    state.props?.let { props ->
         WeActionSheet(
-            visible = visible,
-            title = options.title,
-            options = options.options,
-            onCancel = { visible = false },
-            onTap = options.onChange
+            visible = state.visible,
+            title = props.title,
+            options = props.options,
+            onCancel = { state.hide() },
+            onTap = props.onChange
         )
     }
 
-    return ActionSheetState(
-        visible,
-        show = {
-            localOptions = it
-            visible = true
-        },
-        hide = {
-            visible = false
-        }
-    )
+    return state
 }
 
-class ActionSheetState(
-    val visible: Boolean,
-    val show: (ActionSheetOptions) -> Unit,
-    val hide: () -> Unit
-)
+private class ActionSheetStateImpl : ActionSheetState {
+    override val visible: Boolean get() = _visible
 
-data class ActionSheetOptions(
+    override fun show(
+        options: List<ActionSheetItem>,
+        title: String?,
+        onChange: (index: Int) -> Unit
+    ) {
+        props = ActionSheetProps(options, title, onChange)
+        _visible = true
+    }
+
+    override fun hide() {
+        _visible = false
+    }
+
+    var props by mutableStateOf<ActionSheetProps?>(null)
+    private var _visible by mutableStateOf(false)
+}
+
+private data class ActionSheetProps(
     val options: List<ActionSheetItem>,
     val title: String? = null,
     val onChange: (index: Int) -> Unit

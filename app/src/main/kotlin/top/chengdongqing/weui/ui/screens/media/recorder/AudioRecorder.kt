@@ -45,8 +45,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.components.toast.ToastIcon
-import top.chengdongqing.weui.ui.components.toast.ToastOptions
-import top.chengdongqing.weui.ui.components.toast.rememberWeToast
+import top.chengdongqing.weui.ui.components.toast.rememberToastState
 import top.chengdongqing.weui.utils.MediaStoreUtils
 import top.chengdongqing.weui.utils.MediaType
 import top.chengdongqing.weui.utils.formatDuration
@@ -140,7 +139,7 @@ private fun RecordingHandler(isRecording: Boolean, duration: MutableState<Durati
     val timer = remember { mutableStateOf<Timer?>(null) }
     var mediaUri by remember { mutableStateOf<Uri?>(null) }
     val context = LocalContext.current
-    val toast = rememberWeToast()
+    val toast = rememberToastState()
 
     LaunchedEffect(isRecording) {
         if (isRecording) {
@@ -166,7 +165,7 @@ private fun RecordingHandler(isRecording: Boolean, duration: MutableState<Durati
             timer.value = null
             mediaUri?.let {
                 MediaStoreUtils.finishPending(it, context)
-                toast.show(ToastOptions("录音已保存", ToastIcon.SUCCESS))
+                toast.show("录音已保存", ToastIcon.SUCCESS)
             }
         }
     }

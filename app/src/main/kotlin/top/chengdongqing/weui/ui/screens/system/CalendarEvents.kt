@@ -35,8 +35,7 @@ import top.chengdongqing.weui.ui.components.picker.WeDatePicker
 import top.chengdongqing.weui.ui.components.popup.WePopup
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.components.toast.ToastIcon
-import top.chengdongqing.weui.ui.components.toast.ToastOptions
-import top.chengdongqing.weui.ui.components.toast.rememberWeToast
+import top.chengdongqing.weui.ui.components.toast.rememberToastState
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.Date
@@ -57,7 +56,7 @@ fun AddCalendarEvent() {
     val context = LocalContext.current
     val calendarPermissionState = rememberPermissionState(Manifest.permission.WRITE_CALENDAR)
     var title by remember { mutableStateOf("") }
-    val toast = rememberWeToast()
+    val toast = rememberToastState()
 
     WeInput(
         value = title,
@@ -99,9 +98,9 @@ fun AddCalendarEvent() {
                     put(CalendarContract.Events.CALENDAR_ID, 1)
                 }
                 context.contentResolver.insert(CalendarContract.Events.CONTENT_URI, values)
-                toast.show(ToastOptions("已添加", icon = ToastIcon.SUCCESS))
+                toast.show("已添加", icon = ToastIcon.SUCCESS)
             } else {
-                toast.show(ToastOptions("请正确输入", ToastIcon.FAIL))
+                toast.show("请正确输入", ToastIcon.FAIL)
             }
         } else {
             calendarPermissionState.launchPermissionRequest()

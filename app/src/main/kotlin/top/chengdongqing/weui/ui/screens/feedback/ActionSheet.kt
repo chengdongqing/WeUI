@@ -22,13 +22,11 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import top.chengdongqing.weui.ui.components.actionsheet.ActionSheetItem
-import top.chengdongqing.weui.ui.components.actionsheet.ActionSheetOptions
-import top.chengdongqing.weui.ui.components.actionsheet.rememberWeActionSheet
+import top.chengdongqing.weui.ui.components.actionsheet.rememberActionSheetState
 import top.chengdongqing.weui.ui.components.button.ButtonType
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.screen.WeScreen
-import top.chengdongqing.weui.ui.components.toast.ToastOptions
-import top.chengdongqing.weui.ui.components.toast.rememberWeToast
+import top.chengdongqing.weui.ui.components.toast.rememberToastState
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 
 @Composable
@@ -44,8 +42,8 @@ fun ActionSheetScreen() {
 
 @Composable
 private fun RequestPay() {
-    val actionSheet = rememberWeActionSheet()
-    val toast = rememberWeToast()
+    val actionSheet = rememberActionSheetState()
+    val toast = rememberToastState()
     val options = remember {
         listOf(
             ActionSheetItem("微信", color = PrimaryColor),
@@ -56,16 +54,16 @@ private fun RequestPay() {
     }
 
     WeButton(text = "立即支付", type = ButtonType.DANGER) {
-        actionSheet.show(ActionSheetOptions(options, "请选择支付方式") {
-            toast.show(ToastOptions("点击了第${it + 1}个"))
-        })
+        actionSheet.show(options, "请选择支付方式") {
+            toast.show("点击了第${it + 1}个")
+        }
     }
 }
 
 @Composable
 private fun MakeCall() {
-    val actionSheet = rememberWeActionSheet()
-    val toast = rememberWeToast()
+    val actionSheet = rememberActionSheetState()
+    val toast = rememberToastState()
     val options = remember {
         listOf(
             ActionSheetItem("视频通话", icon = {
@@ -88,9 +86,9 @@ private fun MakeCall() {
     }
 
     WeButton(text = "开始通话", type = ButtonType.PLAIN) {
-        actionSheet.show(ActionSheetOptions(options) {
-            toast.show(ToastOptions("开始${options[it].label}"))
-        })
+        actionSheet.show(options) {
+            toast.show("开始${options[it].label}")
+        }
     }
 }
 
@@ -105,7 +103,7 @@ private fun ShareToTimeline() {
         contract = ActivityResultContracts.PickMultipleVisualMedia()
     ) {}
 
-    val actionSheet = rememberWeActionSheet()
+    val actionSheet = rememberActionSheetState()
     val options = remember {
         listOf(
             ActionSheetItem("拍摄", "照片或视频"),
@@ -114,7 +112,7 @@ private fun ShareToTimeline() {
     }
 
     WeButton(text = "发朋友圈") {
-        actionSheet.show(ActionSheetOptions(options) {
+        actionSheet.show(options) {
             when (it) {
                 0 -> {
                     if (permissionState.status.isGranted) {
@@ -128,6 +126,6 @@ private fun ShareToTimeline() {
                     PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo)
                 )
             }
-        })
+        }
     }
 }

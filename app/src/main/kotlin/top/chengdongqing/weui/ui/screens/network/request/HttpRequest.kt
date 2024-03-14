@@ -23,13 +23,12 @@ import kotlinx.coroutines.launch
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.components.toast.ToastIcon
-import top.chengdongqing.weui.ui.components.toast.ToastOptions
-import top.chengdongqing.weui.ui.components.toast.rememberWeToast
+import top.chengdongqing.weui.ui.components.toast.rememberToastState
 
 @Composable
 fun HttpRequestScreen(viewModel: CartViewModel = viewModel()) {
     WeScreen(title = "HttpRequest", description = "Http请求") {
-        val toast = rememberWeToast()
+        val toast = rememberToastState()
         val coroutineScope = rememberCoroutineScope()
         var content by remember { mutableStateOf<String?>(null) }
         var loading by remember { mutableStateOf(false) }
@@ -48,7 +47,7 @@ fun HttpRequestScreen(viewModel: CartViewModel = viewModel()) {
                 if (res.isSuccessful && res.body() != null) {
                     content = res.body().toString()
                 } else {
-                    toast.show(ToastOptions("请求失败", ToastIcon.FAIL))
+                    toast.show("请求失败", ToastIcon.FAIL)
                 }
             }
         }

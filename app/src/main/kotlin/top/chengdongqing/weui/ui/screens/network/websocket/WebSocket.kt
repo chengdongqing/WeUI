@@ -22,8 +22,7 @@ import top.chengdongqing.weui.ui.components.cardlist.WeCardListItem
 import top.chengdongqing.weui.ui.components.input.WeTextarea
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.components.toast.ToastIcon
-import top.chengdongqing.weui.ui.components.toast.ToastOptions
-import top.chengdongqing.weui.ui.components.toast.rememberWeToast
+import top.chengdongqing.weui.ui.components.toast.rememberToastState
 
 @Composable
 fun WebSocketScreen(socketViewModel: WebSocketViewModel = viewModel()) {
@@ -50,7 +49,7 @@ private fun UnconnectedScreen(
     setConnectState: (Boolean) -> Unit
 ) {
     var connecting by remember { mutableStateOf(false) }
-    val toast = rememberWeToast()
+    val toast = rememberToastState()
 
     WeButton(
         text = if (connecting) "连接中..." else "连接WebSocket",
@@ -58,11 +57,11 @@ private fun UnconnectedScreen(
     ) {
         connecting = true
         socketViewModel.open("wss://echo.websocket.org", onFailure = {
-            toast.show(ToastOptions("连接失败", ToastIcon.FAIL))
+            toast.show("连接失败", ToastIcon.FAIL)
             connecting = false
             setConnectState(false)
         }) {
-            toast.show(ToastOptions("连接成功", ToastIcon.SUCCESS))
+            toast.show("连接成功", ToastIcon.SUCCESS)
             setConnectState(true)
         }
     }
@@ -75,7 +74,7 @@ private fun ConnectedScreen(
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     var text by remember { mutableStateOf("") }
-    val toast = rememberWeToast()
+    val toast = rememberToastState()
 
     WeTextarea(value = text, placeholder = "请输入内容") { text = it }
     Spacer(modifier = Modifier.height(20.dp))
@@ -85,7 +84,7 @@ private fun ConnectedScreen(
             keyboardController?.hide()
             text = ""
         } else {
-            toast.show(ToastOptions("请输入内容", ToastIcon.FAIL))
+            toast.show("请输入内容", ToastIcon.FAIL)
         }
     }
     Spacer(modifier = Modifier.height(20.dp))

@@ -28,8 +28,7 @@ import kotlinx.coroutines.launch
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.components.toast.ToastIcon
-import top.chengdongqing.weui.ui.components.toast.ToastOptions
-import top.chengdongqing.weui.ui.components.toast.rememberWeToast
+import top.chengdongqing.weui.ui.components.toast.rememberToastState
 
 @Composable
 fun FileUploadScreen(uploadViewModel: UploadViewModel = viewModel()) {
@@ -37,7 +36,7 @@ fun FileUploadScreen(uploadViewModel: UploadViewModel = viewModel()) {
         var uploading by remember { mutableStateOf(false) }
         var imageInfo by remember { mutableStateOf<UploadResponse.Files.FileItem?>(null) }
 
-        val toast = rememberWeToast()
+        val toast = rememberToastState()
         val context = LocalContext.current
         val coroutineScope = rememberCoroutineScope()
         val pickMediaLauncher = rememberLauncherForActivityResult(
@@ -48,8 +47,8 @@ fun FileUploadScreen(uploadViewModel: UploadViewModel = viewModel()) {
                     uploading = true
                     uploadViewModel.uploadFile(context, uri)?.let {
                         imageInfo = it
-                        toast.show(ToastOptions("上传成功", ToastIcon.SUCCESS))
-                    } ?: toast.show(ToastOptions("上传失败", ToastIcon.FAIL))
+                        toast.show("上传成功", ToastIcon.SUCCESS)
+                    } ?: toast.show("上传失败", ToastIcon.FAIL)
                     uploading = false
                 }
             }

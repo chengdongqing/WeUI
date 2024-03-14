@@ -2,20 +2,13 @@ package top.chengdongqing.weui.ui.screens.system
 
 import android.bluetooth.BluetoothManager
 import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.content.res.Configuration
 import android.location.LocationManager
 import android.net.wifi.WifiManager
 import android.nfc.NfcManager
-import android.os.BatteryManager
 import android.os.Build
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -27,6 +20,8 @@ import top.chengdongqing.weui.ui.components.cardlist.WeCardListItem
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.utils.format
 import top.chengdongqing.weui.utils.formatFloat
+import top.chengdongqing.weui.utils.rememberBatteryInfo
+import top.chengdongqing.weui.utils.rememberStatusBarHeight
 
 @Composable
 fun DeviceInfoScreen() {
@@ -99,47 +94,6 @@ private fun MutableList<Pair<String, String>>.addHardwareItems(context: Context)
     (context.getSystemService(Context.NFC_SERVICE) as? NfcManager)?.defaultAdapter?.let {
         add(Pair("NFC", it.isEnabled.formatEnable()))
     }
-}
-
-@Composable
-private fun rememberStatusBarHeight(): Dp {
-    val density = LocalDensity.current
-    val statusBars = WindowInsets.statusBars
-
-    return remember {
-        with(density) {
-            statusBars.getTop(this).toDp()
-        }
-    }
-}
-
-private data class BatteryInfo(
-    val level: Int,
-    val isCharging: Boolean
-)
-
-@Composable
-private fun rememberBatteryInfo(): BatteryInfo {
-    val batteryStatus = LocalContext.current.registerReceiver(
-        null,
-        IntentFilter(Intent.ACTION_BATTERY_CHANGED)
-    )
-
-    val level by remember {
-        derivedStateOf {
-            val level = batteryStatus?.getIntExtra(BatteryManager.EXTRA_LEVEL, 0) ?: 0
-            val scale = batteryStatus?.getIntExtra(BatteryManager.EXTRA_SCALE, 0) ?: 0
-            (level / scale.toFloat() * 100).toInt()
-        }
-    }
-    val isCharging by remember {
-        derivedStateOf {
-            val status = batteryStatus?.getIntExtra(BatteryManager.EXTRA_STATUS, -1) ?: -1
-            status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL
-        }
-    }
-
-    return BatteryInfo(level, isCharging)
 }
 
 private fun Boolean.formatEnable() = this.format("开", "关")

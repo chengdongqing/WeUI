@@ -18,8 +18,7 @@ import top.chengdongqing.weui.ui.components.input.WeTextarea
 import top.chengdongqing.weui.ui.components.qrcode.generator.WeQrCodeGenerator
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.components.toast.ToastIcon
-import top.chengdongqing.weui.ui.components.toast.ToastOptions
-import top.chengdongqing.weui.ui.components.toast.rememberWeToast
+import top.chengdongqing.weui.ui.components.toast.rememberToastState
 import kotlin.math.roundToInt
 
 @Composable
@@ -28,7 +27,7 @@ fun QrCodeGenerateScreen() {
         var content by remember { mutableStateOf("https://weui.io") }
         var finalContent by remember { mutableStateOf("") }
         val size = rememberScreenWidth()
-        val toast = rememberWeToast()
+        val toast = rememberToastState()
 
         WeTextarea(value = content, placeholder = "请输入内容", topBorder = true) {
             content = it
@@ -38,7 +37,7 @@ fun QrCodeGenerateScreen() {
             if (content.isNotEmpty()) {
                 finalContent = content
             } else {
-                toast.show(ToastOptions("请输入内容", ToastIcon.FAIL))
+                toast.show("请输入内容", ToastIcon.FAIL)
             }
         }
         Spacer(modifier = Modifier.height(60.dp))

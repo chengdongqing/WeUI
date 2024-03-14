@@ -36,8 +36,7 @@ import top.chengdongqing.weui.ui.components.loading.LoadMoreType
 import top.chengdongqing.weui.ui.components.loading.WeLoadMore
 import top.chengdongqing.weui.ui.components.popup.WePopup
 import top.chengdongqing.weui.ui.components.screen.WeScreen
-import top.chengdongqing.weui.ui.components.toast.ToastOptions
-import top.chengdongqing.weui.ui.components.toast.rememberWeToast
+import top.chengdongqing.weui.ui.components.toast.rememberToastState
 
 @Composable
 fun SmsScreen() {
@@ -55,7 +54,7 @@ private fun WritingSms() {
     val smsPermissionState = rememberPermissionState(Manifest.permission.SEND_SMS)
     var number by remember { mutableStateOf("") }
     var content by remember { mutableStateOf("") }
-    val toast = rememberWeToast()
+    val toast = rememberToastState()
 
     WeInput(
         value = number,
@@ -71,7 +70,7 @@ private fun WritingSms() {
     WeButton(text = "发送短信") {
         if (smsPermissionState.status.isGranted) {
             if (number.isEmpty() || content.isEmpty()) {
-                toast.show(ToastOptions("请正确输入"))
+                toast.show("请正确输入")
             } else {
                 val intent = Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:$number")).apply {
                     putExtra("sms_body", content)

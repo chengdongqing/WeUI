@@ -21,15 +21,14 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import com.google.mlkit.vision.barcode.common.Barcode
 import top.chengdongqing.weui.ui.components.toast.ToastIcon
-import top.chengdongqing.weui.ui.components.toast.ToastOptions
-import top.chengdongqing.weui.ui.components.toast.rememberWeToast
+import top.chengdongqing.weui.ui.components.toast.rememberToastState
 import java.util.concurrent.Executors
 
 @Composable
 fun WeQrCodeScanner(onChange: (List<Barcode>) -> Unit) {
     val context = LocalContext.current
     var camera by remember { mutableStateOf<Camera?>(null) }
-    val toast = rememberWeToast()
+    val toast = rememberToastState()
 
     Box {
         CameraView(setCamera = { camera = it }, onChange)
@@ -39,7 +38,7 @@ fun WeQrCodeScanner(onChange: (List<Barcode>) -> Unit) {
                 if (barcodes.isNotEmpty()) {
                     onChange(barcodes)
                 } else {
-                    toast.show(ToastOptions("识别失败", ToastIcon.FAIL))
+                    toast.show("识别失败", ToastIcon.FAIL)
                 }
             }
         }

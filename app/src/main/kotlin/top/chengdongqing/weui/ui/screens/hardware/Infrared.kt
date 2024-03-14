@@ -7,15 +7,14 @@ import androidx.compose.ui.platform.LocalContext
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.components.toast.ToastIcon
-import top.chengdongqing.weui.ui.components.toast.ToastOptions
-import top.chengdongqing.weui.ui.components.toast.rememberWeToast
+import top.chengdongqing.weui.ui.components.toast.rememberToastState
 
 @Composable
 fun InfraredScreen() {
     WeScreen(title = "Infrared", description = "红外信号") {
         val context = LocalContext.current
         val irManager = context.getSystemService(Context.CONSUMER_IR_SERVICE) as? ConsumerIrManager
-        val toast = rememberWeToast()
+        val toast = rememberToastState()
 
         WeButton("发射红外信号") {
             if (irManager?.hasIrEmitter() == true) {
@@ -27,9 +26,9 @@ fun InfraredScreen() {
                 val frequency = 38000
 
                 irManager.transmit(frequency, pattern)
-                toast.show(ToastOptions("已发射", ToastIcon.SUCCESS))
+                toast.show("已发射", ToastIcon.SUCCESS)
             } else {
-                toast.show(ToastOptions("此设备不支持红外", ToastIcon.FAIL))
+                toast.show("此设备不支持红外", ToastIcon.FAIL)
             }
         }
     }

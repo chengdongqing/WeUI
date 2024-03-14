@@ -35,8 +35,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.ui.components.toast.ToastIcon
-import top.chengdongqing.weui.ui.components.toast.ToastOptions
-import top.chengdongqing.weui.ui.components.toast.rememberWeToast
+import top.chengdongqing.weui.ui.components.toast.rememberToastState
 import top.chengdongqing.weui.ui.theme.FontSecondaryColorLight
 import top.chengdongqing.weui.utils.MediaStoreUtils
 import top.chengdongqing.weui.utils.MediaType
@@ -79,7 +78,7 @@ private fun MediaPager(mediaUris: List<Uri>, pagerState: PagerState) {
 private fun BoxScope.MediaPreviewInfo(uris: List<Uri>, pagerState: PagerState) {
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
-    val toast = rememberWeToast()
+    val toast = rememberToastState()
 
     // 当前页
     Text(
@@ -101,9 +100,9 @@ private fun BoxScope.MediaPreviewInfo(uris: List<Uri>, pagerState: PagerState) {
             onClick = {
                 coroutineScope.launch {
                     if (saveMediaToGallery(context, uri)) {
-                        toast.show(ToastOptions("已保存到相册", icon = ToastIcon.SUCCESS))
+                        toast.show("已保存到相册", icon = ToastIcon.SUCCESS)
                     } else {
-                        toast.show(ToastOptions("保存到相册失败", icon = ToastIcon.FAIL))
+                        toast.show("保存到相册失败", icon = ToastIcon.FAIL)
                     }
                 }
             },

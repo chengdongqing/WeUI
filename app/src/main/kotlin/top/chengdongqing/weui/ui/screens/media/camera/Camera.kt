@@ -43,9 +43,8 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import top.chengdongqing.weui.ui.components.toast.ToastIcon
-import top.chengdongqing.weui.ui.components.toast.ToastOptions
 import top.chengdongqing.weui.ui.components.toast.ToastState
-import top.chengdongqing.weui.ui.components.toast.rememberWeToast
+import top.chengdongqing.weui.ui.components.toast.rememberToastState
 import top.chengdongqing.weui.utils.MediaStoreUtils
 import top.chengdongqing.weui.utils.MediaType
 import top.chengdongqing.weui.utils.RequestCameraPermission
@@ -69,7 +68,7 @@ private fun Camera() {
             .build()
     }
     var cameraSelector by remember { mutableStateOf(CameraSelector.DEFAULT_BACK_CAMERA) }
-    val toast = rememberWeToast()
+    val toast = rememberToastState()
     val (flashMode, toggleFlashMode) = rememberToggleState(
         ImageCapture.FLASH_MODE_OFF,
         ImageCapture.FLASH_MODE_ON
@@ -188,12 +187,12 @@ private fun takePhoto(context: Context, imageCapture: ImageCapture, toast: Toast
         ContextCompat.getMainExecutor(context),
         object : ImageCapture.OnImageSavedCallback {
             override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                toast.show(ToastOptions("照片已保存", ToastIcon.SUCCESS))
+                toast.show("照片已保存", ToastIcon.SUCCESS)
             }
 
             override fun onError(e: ImageCaptureException) {
                 e.printStackTrace()
-                toast.show(ToastOptions("拍照失败", ToastIcon.FAIL))
+                toast.show("拍照失败", ToastIcon.FAIL)
             }
         }
     )
