@@ -110,7 +110,7 @@ fun rememberContextMenuState(onTap: (listIndex: Int, menuIndex: Int) -> Unit): C
     return state
 }
 
-class ContextMenuStateImpl : ContextMenuState {
+private class ContextMenuStateImpl : ContextMenuState {
     override val visible: Boolean get() = _visible
     override val position: IntOffset get() = _position
     override val options: List<String> get() = _options

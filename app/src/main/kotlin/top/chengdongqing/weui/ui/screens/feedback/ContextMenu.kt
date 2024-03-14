@@ -1,6 +1,5 @@
 package top.chengdongqing.weui.ui.screens.feedback
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
@@ -21,7 +20,6 @@ import top.chengdongqing.weui.ui.components.dialog.rememberWeDialog
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.utils.toIntOffset
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ContextMenuScreen() {
     WeScreen(
