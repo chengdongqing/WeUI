@@ -23,9 +23,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -36,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nlf.calendar.Lunar
 import com.nlf.calendar.Solar
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import top.chengdongqing.weui.constant.ChineseDateFormatter
 import top.chengdongqing.weui.ui.components.divider.WeDivider
@@ -45,16 +49,11 @@ import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
-private const val startIndex = 1000
-private val today = LocalDate.now()
-
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun WeCalendar(state: CalendarState = rememberCalendarState()) {
     Column {
-        Header(state.currentMonth) {
-            state.setMonth(it)
-        }
+        Header(state.currentMonth) { state.setMonth(it) }
         WeekDaysBar()
         WeDivider()
         DaysGrid(state.pagerState)
@@ -62,7 +61,7 @@ fun WeCalendar(state: CalendarState = rememberCalendarState()) {
 }
 
 @Composable
-private fun Header(currentMonth: LocalDate, setCurrentMonth: (LocalDate) -> Unit) {
+private fun Header(currentMonth: LocalDate, onMonthChange: (LocalDate) -> Unit) {
     val formatter = remember {
         DateTimeFormatter.ofPattern(ChineseDateFormatter)
     }
@@ -73,14 +72,14 @@ private fun Header(currentMonth: LocalDate, setCurrentMonth: (LocalDate) -> Unit
             .padding(top = 15.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        IconButton(onClick = { setCurrentMonth(currentMonth.minusYears(1)) }) {
+        IconButton(onClick = { onMonthChange(currentMonth.minusYears(1)) }) {
             Icon(
                 imageVector = Icons.Outlined.KeyboardDoubleArrowLeft,
                 contentDescription = "上一年",
                 tint = MaterialTheme.colorScheme.onSecondary
             )
         }
-        IconButton(onClick = { setCurrentMonth(currentMonth.minusMonths(1)) }) {
+        IconButton(onClick = { onMonthChange(currentMonth.minusMonths(1)) }) {
             Icon(
                 imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowLeft,
                 contentDescription = "上个月",
@@ -95,14 +94,14 @@ private fun Header(currentMonth: LocalDate, setCurrentMonth: (LocalDate) -> Unit
             modifier = Modifier.weight(1f),
             textAlign = TextAlign.Center
         )
-        IconButton(onClick = { setCurrentMonth(currentMonth.plusMonths(1)) }) {
+        IconButton(onClick = { onMonthChange(currentMonth.plusMonths(1)) }) {
             Icon(
                 imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
                 contentDescription = "下个月",
                 tint = MaterialTheme.colorScheme.onSecondary
             )
         }
-        IconButton(onClick = { setCurrentMonth(currentMonth.plusYears(1)) }) {
+        IconButton(onClick = { onMonthChange(currentMonth.plusYears(1)) }) {
             Icon(
                 imageVector = Icons.Outlined.KeyboardDoubleArrowRight,
                 contentDescription = "下一年",
@@ -140,9 +139,9 @@ private fun WeekDaysBar() {
 @Composable
 private fun DaysGrid(pagerState: PagerState) {
     HorizontalPager(state = pagerState) { page ->
-        val offset = page - startIndex
+        val offset = page - InitialPage
         // 当前月份
-        val date = today.plusMonths(offset.toLong())
+        val date = Today.plusMonths(offset.toLong())
         // 当月总天数
         val daysOfMonth = date.lengthOfMonth()
         // 当月第一天是星期几
@@ -191,7 +190,7 @@ private fun DaysGrid(pagerState: PagerState) {
                             }
                             // 本月的日期
                             else -> {
-                                val isToday = today == date.withDayOfMonth(index - firstDayOfWeek)
+                                val isToday = Today == date.withDayOfMonth(index - firstDayOfWeek)
                                 val day = index - firstDayOfWeek
                                 DayItem(
                                     date = date.withDayOfMonth(day),
@@ -240,39 +239,64 @@ private fun DayItem(
     }
 }
 
+@Stable
+interface CalendarState {
+    /**
+     * 当前月份
+     */
+    val currentMonth: LocalDate
+
+    @OptIn(ExperimentalFoundationApi::class)
+    val pagerState: PagerState
+
+    /**
+     * 设置月份
+     */
+    fun setMonth(month: LocalDate)
+
+    /**
+     * 回到今天
+     */
+    fun toToday() {
+        setMonth(Today)
+    }
+}
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun rememberCalendarState(initialDate: LocalDate = today): CalendarState {
-    val (currentMonth, setCurrentMonth) = remember {
-        mutableStateOf(initialDate)
-    }
-    val pagerState = rememberPagerState(initialPage = startIndex) { 2000 }
+fun rememberCalendarState(initialDate: LocalDate = Today): CalendarState {
     val coroutineScope = rememberCoroutineScope()
+    val pagerState = rememberPagerState(initialPage = InitialPage) { TotalPage }
+    val state = remember { CalendarStateImpl(initialDate, pagerState, coroutineScope) }
 
     LaunchedEffect(pagerState.currentPage) {
-        val offset = pagerState.currentPage - startIndex
-        setCurrentMonth(today.plusMonths(offset.toLong()))
+        val diff = pagerState.currentPage - InitialPage
+        state.setMonth(Today.plusMonths(diff.toLong()))
     }
 
-    val initialMonth = remember { YearMonth.now().minusMonths(startIndex.toLong()) }
-    fun setMonth(value: LocalDate) {
-        setCurrentMonth(value)
-        val page = ChronoUnit.MONTHS.between(initialMonth, YearMonth.from(value)).toInt()
+    return state
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+private class CalendarStateImpl(
+    initialDate: LocalDate,
+    override val pagerState: PagerState,
+    val coroutineScope: CoroutineScope
+) : CalendarState {
+    override val currentMonth: LocalDate get() = _currentMonth
+
+    override fun setMonth(month: LocalDate) {
+        _currentMonth = month
         coroutineScope.launch {
+            val page = ChronoUnit.MONTHS.between(initialMonth, YearMonth.from(month)).toInt()
             pagerState.scrollToPage(page)
         }
     }
 
-    return CalendarState(currentMonth, ::setMonth, pagerState)
+    private val initialMonth = YearMonth.now().minusMonths(InitialPage.toLong())
+    private var _currentMonth by mutableStateOf(initialDate)
 }
 
-@OptIn(ExperimentalFoundationApi::class)
-data class CalendarState(
-    val currentMonth: LocalDate,
-    val setMonth: (LocalDate) -> Unit,
-    val pagerState: PagerState
-) {
-    fun toToday() {
-        setMonth(today)
-    }
-}
+private const val TotalPage = 2000
+private const val InitialPage = 1000
+private val Today = LocalDate.now()

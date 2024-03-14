@@ -39,8 +39,8 @@ import top.chengdongqing.weui.ui.components.divider.WeDivider
 import top.chengdongqing.weui.ui.components.toast.ToastIcon
 import top.chengdongqing.weui.ui.components.toast.rememberToastState
 import top.chengdongqing.weui.ui.screens.system.database.address.db.Address
-import top.chengdongqing.weui.ui.screens.system.setClipboardData
 import top.chengdongqing.weui.ui.theme.FontLinkColor
+import top.chengdongqing.weui.utils.setClipboardData
 
 @Composable
 fun AddressList(
@@ -93,7 +93,7 @@ fun AddressList(
                             }
 
                             2 -> {
-                                setClipboardData(context, buildString {
+                                context.setClipboardData(buildString {
                                     appendLine("联系人: ${item.name}")
                                     appendLine("手机号: ${item.phone}")
                                     append("详细地址: ${item.addressDetail}")

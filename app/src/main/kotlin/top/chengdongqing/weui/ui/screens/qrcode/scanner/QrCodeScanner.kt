@@ -7,8 +7,8 @@ import top.chengdongqing.weui.ui.components.dialog.rememberDialogState
 import top.chengdongqing.weui.ui.components.qrcode.scanner.WeQrCodeScanner
 import top.chengdongqing.weui.ui.components.toast.ToastIcon
 import top.chengdongqing.weui.ui.components.toast.rememberToastState
-import top.chengdongqing.weui.ui.screens.system.setClipboardData
 import top.chengdongqing.weui.utils.RequestCameraPermission
+import top.chengdongqing.weui.utils.setClipboardData
 
 @Composable
 fun QrCodeScanScreen(navController: NavController) {
@@ -24,7 +24,7 @@ fun QrCodeScanScreen(navController: NavController) {
                 content = value,
                 cancelText = "复制",
                 onCancel = {
-                    setClipboardData(context, value)
+                    context.setClipboardData(value)
                     toast.show("已复制", ToastIcon.SUCCESS)
                 }
             )

@@ -39,7 +39,6 @@ fun InformationBarScreen() {
             content = "信息提示 warn strong",
             type = InformationBarType.WARN_STRONG
         )
-        WeInformationBar(content = "信息提示 warn weak", type = InformationBarType.WARN_WEAK)
         WeInformationBar(content = "信息提示 info", type = InformationBarType.INFO)
         WeInformationBar(
             content = "信息提示 tips strong",

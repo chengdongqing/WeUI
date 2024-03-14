@@ -37,12 +37,6 @@ enum class InformationBarType(
     val closeIconColor: Color = Color.White
 ) {
     WARN_STRONG(backgroundColor = Color(0xFFFA5151)),
-    WARN_WEAK(
-        backgroundColor = Color(0x1AFA5151),
-        iconColor = Color(0xFFFA5151),
-        textColor = FontSecondaryColorLight,
-        closeIconColor = FontSecondaryColorLight
-    ),
     INFO(backgroundColor = Color(0f, 0f, 0f, 0.3f)),
     TIPS_STRONG(backgroundColor = Color(0xFFFA9D3B)),
     TIPS_WEAK(
