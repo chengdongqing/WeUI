@@ -33,7 +33,7 @@ fun PieChartScreen() {
             reverseValue = 30.dp
         )
 
-        WePieChart(dataSource, ringWidth) {
+        WePieChart(dataSource, ringWidth.value) {
             formatFloat(it) + "个"
         }
         WeButton(text = "更新数据") {

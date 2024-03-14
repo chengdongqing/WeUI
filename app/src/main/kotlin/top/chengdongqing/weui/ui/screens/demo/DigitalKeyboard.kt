@@ -64,7 +64,7 @@ fun DigitalKeyboardScreen() {
             visible,
             value = value,
             allowDecimal = allowDecimal,
-            confirmButtonOptions = confirmButtonOptions,
+            confirmButtonOptions = confirmButtonOptions.value,
             onHide = {
                 visible = false
             },

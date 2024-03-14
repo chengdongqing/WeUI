@@ -86,7 +86,8 @@ private fun VideoRecorder() {
     val coroutineScope = rememberCoroutineScope()
     Column {
         CameraView(videoCapture, cameraSelector, setCamera)
-        ControlBar(isFlashOn,
+        ControlBar(
+            isFlashOn.value,
             onTakeVideo = {
                 takeVideo(context, videoCapture, setRecorder)
                 coroutineScope.launch {

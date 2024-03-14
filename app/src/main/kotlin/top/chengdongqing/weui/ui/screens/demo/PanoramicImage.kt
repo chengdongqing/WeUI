@@ -30,7 +30,7 @@ fun PanoramicImageScreen() {
             reverseValue = 5f
         )
 
-        WePanoramicImage(image, scrollStep)
+        WePanoramicImage(image, scrollStep.value)
         Spacer(modifier = Modifier.height(40.dp))
         WeButton(text = "切换滚动速度", type = ButtonType.PLAIN) {
             toggleScrollStep()

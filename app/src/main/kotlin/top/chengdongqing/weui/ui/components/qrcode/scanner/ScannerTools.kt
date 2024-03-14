@@ -50,8 +50,8 @@ internal fun BoxScope.ScannerTools(camera: Camera?, onPhotoSelected: (Uri) -> Un
         )
         ToolItem(
             label = "闪光灯",
-            icon = if (isFlashlightOn) Icons.Filled.FlashlightOn else Icons.Filled.FlashlightOff,
-            iconColor = if (isFlashlightOn) PrimaryColor else Color.White
+            icon = if (isFlashlightOn.value) Icons.Filled.FlashlightOn else Icons.Filled.FlashlightOff,
+            iconColor = if (isFlashlightOn.value) PrimaryColor else Color.White
         ) {
             camera?.let {
                 if (camera.cameraInfo.hasFlashUnit()) {

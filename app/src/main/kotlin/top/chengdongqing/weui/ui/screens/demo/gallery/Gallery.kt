@@ -110,7 +110,7 @@ private fun MediaItem(item: MediaItem, modifier: Modifier) {
     Box(
         modifier
             .aspectRatio(1f)
-            .background(Color.LightGray)
+            .background(MaterialTheme.colorScheme.outline)
     ) {
         AsyncImage(
             model = produceThumbnail(item).value,
@@ -123,7 +123,7 @@ private fun MediaItem(item: MediaItem, modifier: Modifier) {
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(6.dp)
-                    .background(MaterialTheme.colorScheme.outline, RoundedCornerShape(16.dp))
+                    .background(Color(0f, 0f, 0f, 0.3f), RoundedCornerShape(16.dp))
                     .padding(vertical = 3.dp, horizontal = 6.dp)
             ) {
                 Text(

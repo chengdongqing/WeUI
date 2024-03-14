@@ -79,7 +79,7 @@ fun SwipeActionScreen() {
             reverseValue = DragAnchors.Center,
         )
         val swipeActionState = rememberSwipeState(
-            initialValue = anchor,
+            initialValue = anchor.value,
             endActionCount = options1.size
         )
         val coroutineScope = rememberCoroutineScope()

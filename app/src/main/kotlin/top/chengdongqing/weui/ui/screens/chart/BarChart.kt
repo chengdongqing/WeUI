@@ -57,8 +57,8 @@ fun BarChartScreen() {
         ) {
             WeBarChart(
                 dataSource,
-                color = color,
-                barWidthRange = 2..maxBarWidth,
+                color = color.value,
+                barWidthRange = 2..maxBarWidth.value,
                 modifier = if (scrollable) {
                     Modifier.width((LocalConfiguration.current.screenWidthDp * 3).dp)
                 } else {

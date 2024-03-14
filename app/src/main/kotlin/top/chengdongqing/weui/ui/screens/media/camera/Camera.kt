@@ -82,7 +82,7 @@ private fun Camera() {
     Column {
         CameraPreview(imageCapture, cameraSelector)
         ControlBar(
-            isFlashOn = flashMode == ImageCapture.FLASH_MODE_ON,
+            isFlashOn = flashMode.value == ImageCapture.FLASH_MODE_ON,
             onTakePhoto = { takePhoto(context, imageCapture, toast) },
             onToggleFlash = {
                 imageCapture.flashMode = toggleFlashMode()

@@ -62,7 +62,7 @@ fun DividingRuleScreen() {
             )
         }
         Spacer(modifier = Modifier.height(20.dp))
-        WeDividingRule(range, colors = colors) {
+        WeDividingRule(range.value, colors = colors.value) {
             value = it
         }
         Spacer(modifier = Modifier.height(60.dp))
