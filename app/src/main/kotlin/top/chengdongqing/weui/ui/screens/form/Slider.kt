@@ -44,7 +44,7 @@ fun SliderScreen() {
             KvRow(key = "定义可选值区间", value = formatFloat(value1))
             WeSlider(
                 value = value1,
-                valueRange = -999.99f..999.99f
+                range = -999.99f..999.99f
             ) {
                 value1 = it
             }
@@ -56,7 +56,7 @@ fun SliderScreen() {
             KvRow(key = "滑动结束后触发", value = value2String)
             WeSlider(
                 value = value2,
-                valueRange = 0f..1f,
+                range = 0f..1f,
                 onChangeFinished = {
                     value2String = formatFloat(value2)
                 }

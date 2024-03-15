@@ -41,7 +41,7 @@ import top.chengdongqing.weui.ui.theme.PrimaryColor
  * 滑块
  *
  * @param value 当前值
- * @param valueRange 可选值区间
+ * @param range 可选值区间
  * @param step 步长
  * @param disabled 是否禁用
  * @param formatter 值格式化函数
@@ -52,7 +52,7 @@ import top.chengdongqing.weui.ui.theme.PrimaryColor
 fun WeSlider(
     value: Float,
     modifier: Modifier = Modifier,
-    valueRange: ClosedFloatingPointRange<Float> = 0f..100f,
+    range: ClosedFloatingPointRange<Float> = 0f..100f,
     @IntRange(from = 0)
     step: Int = 1,
     disabled: Boolean = false,
@@ -60,8 +60,8 @@ fun WeSlider(
     onChangeFinished: (() -> Unit)? = null,
     onChange: (Float) -> Unit
 ) {
-    val min = valueRange.start
-    val max = valueRange.endInclusive
+    val min = range.start
+    val max = range.endInclusive
     val density = LocalDensity.current
     var sliderWidth by remember { mutableIntStateOf(0) }
     var percent by remember { mutableFloatStateOf(0f) }
@@ -109,6 +109,7 @@ fun WeSlider(
                 .pointerInput(Unit) {
                     detectTapGestures {
                         handleChange(it.x)
+                        onChangeFinished?.invoke()
                     }
                 },
             contentAlignment = Alignment.CenterStart
