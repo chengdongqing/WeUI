@@ -92,7 +92,7 @@ fun WeLoadingMP(
 
         repeat(3) { index ->
             val isActive = index == currentIndex.roundToInt()
-            val dotColor = color.copy(alpha = if (isActive) 1f else 0.4f)
+            val dotColor = color.copy(alpha = if (isActive) 0.8f else 0.4f)
             val center = Offset(
                 x = dotRadius + spacing * index,
                 y = size.height / 2

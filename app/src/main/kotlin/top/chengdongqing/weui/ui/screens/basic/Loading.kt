@@ -24,18 +24,21 @@ fun LoadingScreen() {
         verticalArrangement = Arrangement.spacedBy(40.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            WeLoading()
-            Spacer(Modifier.width(24.dp))
             WeLoading(size = 32.dp)
+            Spacer(Modifier.width(24.dp))
+            WeLoading()
             Spacer(Modifier.width(24.dp))
             WeLoading(color = PrimaryColor)
             Spacer(Modifier.width(24.dp))
             WeLoading(size = 32.dp, color = PrimaryColor)
         }
-
         WeLoadingMP()
-        MiLoadingWeb()
-        MiLoadingMobile()
+        Row {
+            MiLoadingMobile()
+            Spacer(Modifier.width(24.dp))
+            MiLoadingMobile(PrimaryColor)
+        }
         DotDanceLoading()
+        MiLoadingWeb()
     }
 }
