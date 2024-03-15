@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -27,7 +26,7 @@ import top.chengdongqing.weui.ui.theme.PrimaryColor
 
 @Composable
 internal fun BoxScope.ScannerDecoration() {
-    ScannerAnimation()
+    ScanningAnimation()
 
     Text(
         text = "扫二维码 / 条码",
@@ -40,26 +39,25 @@ internal fun BoxScope.ScannerDecoration() {
 }
 
 @Composable
-private fun BoxScope.ScannerAnimation() {
+private fun BoxScope.ScanningAnimation() {
     val screenHeight = LocalConfiguration.current.screenHeightDp
     val transition = rememberInfiniteTransition(label = "")
-    val translateY by transition.animateFloat(
+    val offsetY by transition.animateFloat(
         initialValue = 0.2f,
         targetValue = 0.7f,
         animationSpec = InfiniteRepeatableSpec(
             animation = tween(durationMillis = 3000, easing = LinearEasing),
             repeatMode = RepeatMode.Restart
         ),
-        label = "QrCodeScannerAnimation"
+        label = "QrCodeScanningAnimation"
     )
 
     Box(
         modifier = Modifier
-            .offset(y = (translateY * screenHeight).dp)
+            .offset(y = (offsetY * screenHeight).dp)
             .align(Alignment.TopCenter)
-            .fillMaxWidth()
+            .fillMaxWidth(0.8f)
             .height(5.dp)
-            .padding(horizontal = 30.dp)
             .background(
                 Brush.linearGradient(
                     colors = listOf(

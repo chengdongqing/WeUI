@@ -31,18 +31,18 @@ fun SkeletonScreen() {
         description = "骨架屏",
         containerColor = MaterialTheme.colorScheme.surface
     ) {
-        var isActive by remember { mutableStateOf(false) }
+        var isActive by remember { mutableStateOf(true) }
 
-        Controls(isActive) { isActive = !it }
+        ActiveControl(isActive) { isActive = it }
         Spacer(modifier = Modifier.height(60.dp))
         Content(isActive)
     }
 }
 
 @Composable
-private fun ColumnScope.Controls(
-    isActive: Boolean,
-    onActiveChange: (Boolean) -> Unit
+private fun ColumnScope.ActiveControl(
+    value: Boolean,
+    onChange: (Boolean) -> Unit
 ) {
     Row(
         modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -50,7 +50,7 @@ private fun ColumnScope.Controls(
     ) {
         Text(text = "加载中", color = MaterialTheme.colorScheme.onPrimary, fontSize = 16.sp)
         Spacer(modifier = Modifier.width(30.dp))
-        WeSwitch(checked = !isActive, onChange = onActiveChange)
+        WeSwitch(checked = value, onChange = onChange)
     }
 }
 
