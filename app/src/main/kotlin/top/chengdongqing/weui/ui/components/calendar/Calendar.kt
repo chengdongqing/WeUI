@@ -29,6 +29,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -252,7 +253,7 @@ interface CalendarState {
     /**
      * 设置月份
      */
-    fun setMonth(month: LocalDate)
+    fun setMonth(month: LocalDate, scrollToPage: Boolean = true)
 
     /**
      * 回到今天
@@ -269,9 +270,11 @@ fun rememberCalendarState(initialDate: LocalDate = Today): CalendarState {
     val pagerState = rememberPagerState(initialPage = InitialPage) { TotalPage }
     val state = remember { CalendarStateImpl(initialDate, pagerState, coroutineScope) }
 
-    LaunchedEffect(pagerState.currentPage) {
-        val diff = pagerState.currentPage - InitialPage
-        state.setMonth(Today.plusMonths(diff.toLong()))
+    LaunchedEffect(Unit) {
+        snapshotFlow { pagerState.currentPage }.collect { page ->
+            val diff = page - InitialPage
+            state.setMonth(month = Today.plusMonths(diff.toLong()), scrollToPage = false)
+        }
     }
 
     return state
@@ -285,11 +288,14 @@ private class CalendarStateImpl(
 ) : CalendarState {
     override val currentMonth: LocalDate get() = _currentMonth
 
-    override fun setMonth(month: LocalDate) {
+    override fun setMonth(month: LocalDate, scrollToPage: Boolean) {
         _currentMonth = month
-        coroutineScope.launch {
-            val page = ChronoUnit.MONTHS.between(initialMonth, YearMonth.from(month)).toInt()
-            pagerState.scrollToPage(page)
+
+        if (scrollToPage) {
+            coroutineScope.launch {
+                val page = ChronoUnit.MONTHS.between(initialMonth, YearMonth.from(month)).toInt()
+                pagerState.scrollToPage(page)
+            }
         }
     }
 
@@ -297,6 +303,6 @@ private class CalendarStateImpl(
     private var _currentMonth by mutableStateOf(initialDate)
 }
 
+private val Today = LocalDate.now()
 private const val TotalPage = 2000
 private const val InitialPage = 1000
-private val Today = LocalDate.now()
