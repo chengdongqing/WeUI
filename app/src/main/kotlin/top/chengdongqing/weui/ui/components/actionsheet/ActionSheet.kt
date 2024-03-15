@@ -35,6 +35,7 @@ data class ActionSheetItem(
     val description: String? = null,
     val color: Color? = null,
     val disabled: Boolean = false,
+    val value: Any? = null,
     val icon: (@Composable () -> Unit)? = null
 )
 

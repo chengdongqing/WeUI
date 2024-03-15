@@ -1,7 +1,5 @@
 package top.chengdongqing.weui.ui.screens.demo.gallery
 
-import android.Manifest
-import android.content.Intent
 import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Build
@@ -24,7 +22,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.produceState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,8 +32,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
@@ -44,9 +39,10 @@ import okio.IOException
 import top.chengdongqing.weui.constant.ChineseDateWeekFormatter
 import top.chengdongqing.weui.ui.components.loading.WeLoadMore
 import top.chengdongqing.weui.ui.components.screen.WeScreen
-import top.chengdongqing.weui.ui.screens.demo.gallery.preview.MediaPreviewActivity
+import top.chengdongqing.weui.utils.RequestMediaPermission
 import top.chengdongqing.weui.utils.clickableWithoutRipple
 import top.chengdongqing.weui.utils.formatDuration
+import top.chengdongqing.weui.utils.previewMedias
 import java.time.format.DateTimeFormatter
 import kotlin.time.Duration
 
@@ -91,12 +87,7 @@ fun GalleryScreen(galleryViewModel: GalleryViewModel = viewModel()) {
                     }
                     itemsIndexed(items) { index, item ->
                         MediaItem(item, Modifier.clickableWithoutRipple {
-                            val intent = MediaPreviewActivity.newIntent(context).apply {
-                                putExtra("uris", items.map { it.path }.toTypedArray())
-                                putExtra("current", index)
-                                addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-                            }
-                            context.startActivity(intent)
+                            context.previewMedias(items, index)
                         })
                     }
                 }
@@ -171,33 +162,6 @@ fun produceThumbnail(item: MediaItem): State<Any?> {
                 }
             }
         }
-    }
-}
-
-@OptIn(ExperimentalPermissionsApi::class)
-@Composable
-private fun RequestMediaPermission(content: @Composable () -> Unit) {
-    val permissionState = rememberMultiplePermissionsState(
-        remember {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                listOf(
-                    Manifest.permission.READ_MEDIA_IMAGES,
-                    Manifest.permission.READ_MEDIA_VIDEO
-                )
-            } else {
-                listOf(Manifest.permission.READ_EXTERNAL_STORAGE)
-            }
-        }
-    )
-
-    LaunchedEffect(permissionState) {
-        if (!permissionState.allPermissionsGranted) {
-            permissionState.launchMultiplePermissionRequest()
-        }
-    }
-
-    if (permissionState.allPermissionsGranted) {
-        content()
     }
 }
 
