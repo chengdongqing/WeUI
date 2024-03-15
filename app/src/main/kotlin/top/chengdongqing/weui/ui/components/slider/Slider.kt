@@ -1,5 +1,6 @@
 package top.chengdongqing.weui.ui.components.slider
 
+import androidx.annotation.IntRange
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -40,43 +41,44 @@ import top.chengdongqing.weui.ui.theme.PrimaryColor
  * 滑块
  *
  * @param value 当前值
+ * @param valueRange 可选值区间
  * @param step 步长
- * @param min 最小值
- * @param max 最大值
  * @param disabled 是否禁用
  * @param formatter 值格式化函数
+ * @param onChangeFinished 值结束变化事件
  * @param onChange 值改变事件
  */
 @Composable
 fun WeSlider(
-    value: Int,
+    value: Float,
     modifier: Modifier = Modifier,
+    valueRange: ClosedFloatingPointRange<Float> = 0f..100f,
+    @IntRange(from = 0)
     step: Int = 1,
-    min: Int = 0,
-    max: Int = 100,
     disabled: Boolean = false,
-    formatter: ((percent: Int) -> String)? = {
-        "$it%"
-    },
-    onChange: (value: Int) -> Unit
+    formatter: ((Float) -> String)? = null,
+    onChangeFinished: (() -> Unit)? = null,
+    onChange: (Float) -> Unit
 ) {
+    val min = valueRange.start
+    val max = valueRange.endInclusive
     val density = LocalDensity.current
     var sliderWidth by remember { mutableIntStateOf(0) }
-    var fraction by remember { mutableFloatStateOf(0f) }
+    var percent by remember { mutableFloatStateOf(0f) }
     var offsetX by remember { mutableStateOf(0.dp) }
 
     // 值改变后计算相应元素的位置或宽度
     LaunchedEffect(value, sliderWidth) {
-        fraction = (value.coerceIn(min, max) - min) / (max - min).toFloat()
-        offsetX = density.run { (sliderWidth * fraction).toDp() }
+        percent = (value.coerceIn(min, max) - min) / (max - min)
+        offsetX = density.run { (sliderWidth * percent).toDp() }
     }
 
     // 处理滑动或点击事件
     fun handleChange(offsetX: Float) {
         if (!disabled) {
             val newFraction = (offsetX / sliderWidth).coerceIn(0f, 1f)
-            val newValue = (newFraction * (max - min) + min).toInt()
-            if (newValue % step == 0) {
+            val newValue = newFraction * (max - min) + min
+            if (newValue.toInt() % step == 0) {
                 onChange(newValue)
             }
         }
@@ -96,8 +98,10 @@ fun WeSlider(
                     sliderWidth = it.width
                 }
                 // 处理拖动事件
-                .pointerInput(sliderWidth, step, min, max) {
-                    detectHorizontalDragGestures { change, _ ->
+                .pointerInput(Unit) {
+                    detectHorizontalDragGestures(onDragEnd = {
+                        onChangeFinished?.invoke()
+                    }) { change, _ ->
                         handleChange(change.position.x)
                     }
                 }
@@ -120,7 +124,7 @@ fun WeSlider(
                 // 高亮线段
                 Box(
                     Modifier
-                        .fillMaxWidth(fraction)
+                        .fillMaxWidth(percent)
                         .height(2.dp)
                         .background(PrimaryColor)
                 )

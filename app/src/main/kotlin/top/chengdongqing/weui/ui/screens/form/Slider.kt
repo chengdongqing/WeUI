@@ -1,55 +1,88 @@
 package top.chengdongqing.weui.ui.screens.form
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import top.chengdongqing.weui.ui.components.button.ButtonSize
-import top.chengdongqing.weui.ui.components.button.ButtonType
-import top.chengdongqing.weui.ui.components.button.WeButton
-import top.chengdongqing.weui.ui.components.progress.WeCircleProgress
+import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.components.slider.WeSlider
+import top.chengdongqing.weui.utils.formatFloat
 
 @Composable
 fun SliderScreen() {
     WeScreen(title = "Slider", description = "滑块") {
-        var value by remember { mutableIntStateOf(0) }
-        var step by remember { mutableIntStateOf(1) }
-
         Column(
             modifier = Modifier.padding(horizontal = 12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            WeSlider(value, step = step) {
+            var value by remember { mutableFloatStateOf(0f) }
+            WeSlider(
+                value,
+                formatter = { "${formatFloat(it, 0)}%" }
+            ) {
                 value = it
             }
-            Spacer(modifier = Modifier.height(40.dp))
-            WeCircleProgress(percent = value.toFloat())
-            Spacer(modifier = Modifier.height(60.dp))
-            WeButton(text = "设置值为50") {
-                value = 50
-            }
+
             Spacer(modifier = Modifier.height(20.dp))
-            Row {
-                WeButton(text = "设置步长为10", type = ButtonType.PLAIN, size = ButtonSize.SMALL) {
-                    step = 10
+
+            var value1 by remember { mutableFloatStateOf(0f) }
+            KvRow(key = "定义可选值区间", value = formatFloat(value1))
+            WeSlider(
+                value = value1,
+                valueRange = -999.99f..999.99f
+            ) {
+                value1 = it
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            var value2 by remember { mutableFloatStateOf(0f) }
+            var value2String by remember { mutableStateOf("0") }
+            KvRow(key = "滑动结束后触发", value = value2String)
+            WeSlider(
+                value = value2,
+                valueRange = 0f..1f,
+                onChangeFinished = {
+                    value2String = formatFloat(value2)
                 }
-                Spacer(modifier = Modifier.width(10.dp))
-                WeButton(text = "设置步长为1", type = ButtonType.PLAIN, size = ButtonSize.SMALL) {
-                    step = 1
-                }
+            ) {
+                value2 = it
             }
         }
+    }
+}
+
+@Composable
+fun KvRow(key: String, value: String) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Text(
+            text = key,
+            color = MaterialTheme.colorScheme.onPrimary,
+            fontSize = 14.sp
+        )
+        Text(
+            text = value,
+            color = MaterialTheme.colorScheme.onPrimary,
+            fontSize = 14.sp
+        )
     }
 }

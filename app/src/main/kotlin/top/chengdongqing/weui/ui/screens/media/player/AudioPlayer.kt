@@ -75,9 +75,9 @@ private fun ProgressControl(audioState: AudioState) {
     val player = audioState.player
     val duration by rememberUpdatedState(audioState.duration)
 
-    WeSlider(value = audioState.percent, formatter = null) {
-        audioState.setProgress(it)
-        player.seekTo((it.toFloat() / 100 * duration).roundToInt())
+    WeSlider(value = audioState.percent.toFloat()) {
+        audioState.setProgress(it.roundToInt())
+        player.seekTo((it / 100 * duration).roundToInt())
         if (!player.isPlaying) {
             player.start()
             audioState.setPlaying(true)

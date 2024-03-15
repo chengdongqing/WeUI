@@ -32,6 +32,7 @@ import androidx.navigation.NavController
 import top.chengdongqing.weui.ui.components.button.ButtonSize
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.theme.WeUITheme
+import top.chengdongqing.weui.utils.SetupStatusBarStyle
 
 @Composable
 fun WeMediaPicker(
@@ -40,6 +41,7 @@ fun WeMediaPicker(
         factory = MediaPickerViewModelFactory(LocalContext.current)
     )
 ) {
+    SetupStatusBarStyle(isDark = false)
     WeUITheme(darkTheme = true) {
         Column(
             modifier = Modifier

@@ -40,7 +40,7 @@ fun ScreenScreen() {
 
         Box(modifier = Modifier.padding(horizontal = 12.dp)) {
             WeSlider(
-                value = (screenBrightness * 100).toInt(),
+                value = screenBrightness * 100,
                 onChange = {
                     screenBrightness = it / 100f
                     setScreenBrightness(window, screenBrightness)

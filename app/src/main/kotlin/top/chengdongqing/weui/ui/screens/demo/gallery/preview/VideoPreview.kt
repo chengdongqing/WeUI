@@ -145,14 +145,13 @@ private fun BoxScope.ControlBar(
 
         var percent by rememberPlayPercent(progress, duration)
         WeSlider(
-            value = percent,
+            value = percent.toFloat(),
             modifier = Modifier
                 .weight(1f)
-                .padding(horizontal = 16.dp),
-            formatter = null
+                .padding(horizontal = 16.dp)
         ) {
-            percent = it
-            player.seekTo((it.toFloat() / 100 * duration).roundToInt())
+            percent = it.roundToInt()
+            player.seekTo((it / 100 * duration).roundToInt())
             if (!player.isPlaying) {
                 player.start()
                 setPlayingState(true)
