@@ -26,7 +26,7 @@ internal val menus = listOf(
             MenuItem("Progress", "progress"),
             MenuItem("Steps", "steps"),
             MenuItem("Swiper", "swiper"),
-            MenuItem("RefreshableView", "refreshable-view"),
+            MenuItem("RefreshView", "refresh-view"),
             MenuItem("TabView", "tab-view"),
             MenuItem("SwipeAction", "swipe-action"),
             MenuItem("Skeleton", "skeleton"),
@@ -123,7 +123,7 @@ internal val menus = listOf(
     ),
     MenuGroup(
         "二维码", R.drawable.ic_nav_form, listOf(
-            MenuItem("QrCodeScanner", "qrcode-scanner"),
+            MenuItem("QrCodeScanner", "qrcode-scanner/entrance"),
             MenuItem("QrCodeGenerator", "qrcode-generator")
         )
     ),

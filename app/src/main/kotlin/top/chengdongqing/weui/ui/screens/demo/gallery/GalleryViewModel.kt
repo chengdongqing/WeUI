@@ -13,8 +13,6 @@ import kotlinx.coroutines.withContext
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
-import kotlin.time.DurationUnit
-import kotlin.time.toDuration
 
 class GalleryViewModel : ViewModel() {
     var mediaGroups by mutableStateOf<Map<LocalDate, List<MediaItem>>>(emptyMap())
@@ -81,8 +79,7 @@ class GalleryViewModel : ViewModel() {
                             name = cursor.getString(nameColumn),
                             isVideo = cursor.getInt(mediaTypeColumn) == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO,
                             mimeType = cursor.getString(mimeTypeColumn),
-                            duration = cursor.getLong(durationColumn)
-                                .toDuration(DurationUnit.MILLISECONDS),
+                            duration = cursor.getLong(durationColumn) / 1000,
                             size = cursor.getLong(sizeColumn),
                             date = cursor.getLong(dateColumn),
                             path = cursor.getString(dataColumn)

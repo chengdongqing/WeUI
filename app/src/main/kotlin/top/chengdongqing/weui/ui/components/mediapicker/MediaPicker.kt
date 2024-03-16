@@ -1,5 +1,6 @@
 package top.chengdongqing.weui.ui.components.mediapicker
 
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -27,12 +28,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import top.chengdongqing.weui.ui.components.actionsheet.ActionSheetItem
 import top.chengdongqing.weui.ui.components.actionsheet.rememberActionSheetState
 import top.chengdongqing.weui.ui.components.button.ButtonSize
@@ -43,19 +43,15 @@ import top.chengdongqing.weui.utils.RequestMediaPermission
 import top.chengdongqing.weui.utils.SetupStatusBarStyle
 import top.chengdongqing.weui.utils.previewMedias
 
-@Preview
-@Composable
-private fun PreviewMediaPicker() {
-    WeMediaPicker(mediaType = MediaType.VIDEO)
-}
-
 @Composable
 fun WeMediaPicker(
-    navController: NavController? = null,
-    mediaType: MediaType? = null,
     pickerViewModel: MediaPickerViewModel = viewModel(
         factory = MediaPickerViewModelFactory(LocalContext.current)
-    )
+    ),
+    mediaType: MediaType?,
+    countLimits: Int?,
+    onCancel: () -> Unit,
+    onConfirm: (Array<Uri>) -> Unit
 ) {
     SetupStatusBarStyle(isDark = false)
     WeUITheme(darkTheme = true) {
@@ -64,10 +60,12 @@ fun WeMediaPicker(
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
         ) {
-            TopBar(navController, pickerViewModel, mediaType)
+            TopBar(pickerViewModel, mediaType, countLimits, onCancel)
             RequestMediaPermission {
                 MediaGrid(pickerViewModel)
-                BottomBar(pickerViewModel)
+                BottomBar(pickerViewModel) {
+                    onConfirm(pickerViewModel.selectedList.toTypedArray())
+                }
             }
         }
     }
@@ -75,9 +73,10 @@ fun WeMediaPicker(
 
 @Composable
 private fun TopBar(
-    navController: NavController?,
     pickerViewModel: MediaPickerViewModel,
-    mediaType: MediaType?
+    mediaType: MediaType?,
+    countLimits: Int?,
+    onCancel: () -> Unit
 ) {
     val actionSheetState = rememberActionSheetState()
     val typeOptions = remember {
@@ -89,6 +88,7 @@ private fun TopBar(
     }
     LaunchedEffect(mediaType) {
         pickerViewModel.mediaType = mediaType
+        countLimits?.let { pickerViewModel.countLimits = it }
     }
 
     Box(
@@ -102,14 +102,15 @@ private fun TopBar(
             contentDescription = "返回",
             tint = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier
-                .size(28.dp)
                 .align(Alignment.CenterStart)
+                .size(28.dp)
                 .clickable {
-                    navController?.popBackStack()
+                    onCancel()
                 }
         )
         Row(
             modifier = Modifier
+                .align(Alignment.Center)
                 .clip(RoundedCornerShape(20.dp))
                 .background(MaterialTheme.colorScheme.outline)
                 .clickable(enabled = mediaType == null) {
@@ -117,8 +118,7 @@ private fun TopBar(
                         pickerViewModel.mediaType = typeOptions[index].value as MediaType?
                     }
                 }
-                .padding(start = 12.dp, end = 6.dp, top = 6.dp, bottom = 6.dp)
-                .align(Alignment.Center),
+                .padding(start = 12.dp, end = 6.dp, top = 6.dp, bottom = 6.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
@@ -126,19 +126,23 @@ private fun TopBar(
                 color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 17.sp
             )
-            Spacer(modifier = Modifier.width(4.dp))
-            Icon(
-                imageVector = Icons.Filled.ArrowDropDownCircle,
-                contentDescription = "更多",
-                tint = MaterialTheme.colorScheme.outline,
-                modifier = Modifier.size(20.dp)
-            )
+            if (mediaType == null) {
+                Spacer(modifier = Modifier.width(4.dp))
+                Icon(
+                    imageVector = Icons.Filled.ArrowDropDownCircle,
+                    contentDescription = "更多",
+                    tint = Color.LightGray,
+                    modifier = Modifier.size(20.dp)
+                )
+            } else {
+                Spacer(modifier = Modifier.width(6.dp))
+            }
         }
     }
 }
 
 @Composable
-private fun BottomBar(pickerViewModel: MediaPickerViewModel) {
+private fun BottomBar(pickerViewModel: MediaPickerViewModel, onConfirm: () -> Unit) {
     val context = LocalContext.current
     val count = pickerViewModel.selectedList.size
     val countString = if (count > 0) "($count)" else ""
@@ -160,6 +164,12 @@ private fun BottomBar(pickerViewModel: MediaPickerViewModel) {
                     context.previewMedias(pickerViewModel.selectedList)
                 }
         )
-        WeButton(text = "确定$countString", size = ButtonSize.SMALL, disabled = count == 0)
+        WeButton(
+            text = "确定$countString",
+            size = ButtonSize.SMALL,
+            disabled = count == 0
+        ) {
+            onConfirm()
+        }
     }
 }

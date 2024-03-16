@@ -22,7 +22,7 @@ import top.chengdongqing.weui.ui.components.toast.rememberToastState
 import kotlin.math.roundToInt
 
 @Composable
-fun QrCodeGenerateScreen() {
+fun QrCodeGeneratorScreen() {
     WeScreen(title = "QrCodeGenerator", description = "二维码生成") {
         var content by remember { mutableStateOf("https://weui.io") }
         var finalContent by remember { mutableStateOf("") }

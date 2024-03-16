@@ -72,7 +72,7 @@ fun AudioRecorderScreen() {
         RecordingHandler(isRecording, duration)
 
         Text(
-            text = formatDuration(duration.value, true),
+            text = formatDuration(duration.value.inWholeSeconds, true),
             color = MaterialTheme.colorScheme.onPrimary,
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold

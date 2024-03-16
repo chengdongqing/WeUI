@@ -1,14 +1,15 @@
 package top.chengdongqing.weui.ui.components.mediapicker
 
 import android.content.Context
+import android.net.Uri
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import top.chengdongqing.weui.ui.components.mediapicker.data.MediaPickerDIGraph
-import top.chengdongqing.weui.ui.screens.demo.gallery.MediaItem
 import top.chengdongqing.weui.utils.MediaType
 
 @Suppress("UNCHECKED_CAST")
@@ -23,5 +24,6 @@ class MediaPickerViewModel(context: Context) : ViewModel() {
 
     val mediaList by lazy { pickerRepository.loadAllMedias() }
     var mediaType by mutableStateOf<MediaType?>(null)
-    val selectedList = mutableStateListOf<MediaItem>()
+    var countLimits by mutableIntStateOf(99)
+    val selectedList = mutableStateListOf<Uri>()
 }

@@ -5,10 +5,8 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
-import kotlin.time.Duration
 
-fun formatDuration(duration: Duration, fullDuration: Boolean = false): String {
-    val totalSeconds = duration.inWholeSeconds
+fun formatDuration(totalSeconds: Long, fullDuration: Boolean = false): String {
     val hours = totalSeconds / 3600
     val minutes = (totalSeconds % 3600) / 60
     val seconds = totalSeconds % 60

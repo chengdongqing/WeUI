@@ -13,6 +13,7 @@ import top.chengdongqing.weui.ui.components.cardlist.WeCardList
 import top.chengdongqing.weui.ui.components.cardlist.WeCardListItem
 import top.chengdongqing.weui.ui.components.location.picker.LocationItem
 import top.chengdongqing.weui.ui.components.screen.WeScreen
+import top.chengdongqing.weui.utils.openLocation
 
 @Composable
 fun LocationPreviewScreen(navController: NavController) {
@@ -35,12 +36,13 @@ fun LocationPreviewScreen(navController: NavController) {
         }
         Spacer(modifier = Modifier.height(20.dp))
         WeButton(text = "查看位置") {
-            val route = buildString {
-                append("location-preview")
-                append("/${location.latLng.latitude}/${location.latLng.longitude}")
-                append("?zoom=12&name=${location.name}&address=${location.address}")
-            }
-            navController.navigate(route)
+            navController.openLocation(
+                latitude = location.latLng.latitude,
+                longitude = location.latLng.longitude,
+                name = location.name,
+                address = location.address,
+                zoom = 12
+            )
         }
     }
 }

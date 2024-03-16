@@ -16,68 +16,86 @@ import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import org.burnoutcrew.reorderable.NoDragCancelledAnimation
+import kotlinx.coroutines.flow.Flow
 import org.burnoutcrew.reorderable.ReorderableItem
+import org.burnoutcrew.reorderable.detectReorderAfterLongPress
 import org.burnoutcrew.reorderable.rememberReorderableLazyGridState
 import org.burnoutcrew.reorderable.reorderable
 import top.chengdongqing.weui.ui.components.screen.WeScreen
+import top.chengdongqing.weui.utils.MediaType
 
 @Composable
-fun MediaPickerScreen(navController: NavController) {
+fun MediaPickerScreen(
+    mediaListFlow: Flow<List<Uri>>,
+    onChooseMedia: (type: MediaType, count: Int) -> Unit
+) {
     WeScreen(
         title = "MediaPicker",
         description = "媒体选择器",
         containerColor = MaterialTheme.colorScheme.surface,
         scrollEnabled = false
     ) {
-        val data = remember { mutableStateOf<List<Uri>>(emptyList()) }
-        val state = rememberReorderableLazyGridState(
-            dragCancelledAnimation = NoDragCancelledAnimation(),
-            onMove = { from, to ->
-                data.value = data.value.toMutableList().apply {
-                    add(to.index, removeAt(from.index))
+        val data = rememberSaveable(saver = UriListSaver) { mutableStateListOf() }
+        val state = rememberReorderableLazyGridState(onMove = { from, to ->
+            data.apply {
+                add(to.index, removeAt(from.index))
+            }
+        }, canDragOver = { p1, _ ->
+            p1.key != -1
+        })
+
+        LaunchedEffect(Unit) {
+            mediaListFlow.collect {
+                it.forEach { item ->
+                    if (!data.contains(item)) {
+                        data.add(item)
+                    }
                 }
             }
-        )
+        }
 
         LazyVerticalGrid(
-            columns = GridCells.Fixed(3),
             state = state.gridState,
+            columns = GridCells.Fixed(3),
             horizontalArrangement = Arrangement.spacedBy(6.dp),
             verticalArrangement = Arrangement.spacedBy(6.dp),
             modifier = Modifier.reorderable(state)
         ) {
-            items(data.value, { it }) { item ->
+            items(data, key = { it }) { item ->
                 ReorderableItem(state, key = item) { isDragging ->
-                    val elevation = animateDpAsState(if (isDragging) 16.dp else 0.dp, label = "")
+                    val elevation by animateDpAsState(if (isDragging) 16.dp else 0.dp, label = "")
                     Box(
                         modifier = Modifier
                             .aspectRatio(1f)
-                            .shadow(elevation.value)
-                            .background(MaterialTheme.colorScheme.onSurface),
-                        contentAlignment = Alignment.Center
+                            .shadow(elevation)
+                            .background(MaterialTheme.colorScheme.onSurface)
+                            .detectReorderAfterLongPress(state)
                     ) {
                         AsyncImage(
                             model = item,
                             contentDescription = null,
                             contentScale = ContentScale.Crop,
-                            modifier = Modifier.aspectRatio(1f)
+                            modifier = Modifier.matchParentSize()
                         )
                     }
                 }
             }
-            item {
-                PlusButton {
-                    navController.navigate("media-picker")
+            if (data.size < 9) {
+                item(key = -1) {
+                    PlusButton {
+                        onChooseMedia(MediaType.IMAGE, 9 - data.size)
+                    }
                 }
             }
         }
@@ -101,3 +119,12 @@ private fun PlusButton(onClick: () -> Unit) {
         )
     }
 }
+
+private val UriListSaver: Saver<MutableList<Uri>, List<Uri>> = Saver(
+    save = { stateList ->
+        stateList.toList()
+    },
+    restore = { restoredList ->
+        restoredList.toMutableList()
+    }
+)

@@ -6,7 +6,7 @@ import top.chengdongqing.weui.ui.screens.basic.BadgeScreen
 import top.chengdongqing.weui.ui.screens.basic.LoadMoreScreen
 import top.chengdongqing.weui.ui.screens.basic.LoadingScreen
 import top.chengdongqing.weui.ui.screens.basic.ProgressScreen
-import top.chengdongqing.weui.ui.screens.basic.RefreshableScreen
+import top.chengdongqing.weui.ui.screens.basic.RefreshViewScreen
 import top.chengdongqing.weui.ui.screens.basic.SkeletonScreen
 import top.chengdongqing.weui.ui.screens.basic.StepsScreen
 import top.chengdongqing.weui.ui.screens.basic.SwipeActionScreen
@@ -33,8 +33,8 @@ fun NavGraphBuilder.addBasicGraph() {
     composable("swiper") {
         SwiperScreen()
     }
-    composable("refreshable-view") {
-        RefreshableScreen()
+    composable("refresh-view") {
+        RefreshViewScreen()
     }
     composable("tab-view") {
         TabViewScreen()

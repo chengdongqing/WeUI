@@ -141,7 +141,7 @@ private fun BoxScope.ControlBar(
             .padding(horizontal = 12.dp, vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = formatDuration(progress.milliseconds), color = Color.White)
+        Text(text = formatDuration(progress.milliseconds.inWholeSeconds), color = Color.White)
 
         var percent by rememberPlayPercent(progress, duration)
         WeSlider(
@@ -158,7 +158,7 @@ private fun BoxScope.ControlBar(
             }
         }
 
-        Text(text = formatDuration(duration.milliseconds), color = Color.White)
+        Text(text = formatDuration(duration.milliseconds.inWholeSeconds), color = Color.White)
         MuteControl(isMute, audioManager, setMuteState)
     }
 }

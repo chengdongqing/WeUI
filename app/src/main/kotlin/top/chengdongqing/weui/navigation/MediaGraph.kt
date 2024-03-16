@@ -1,8 +1,10 @@
 package top.chengdongqing.weui.navigation
 
+import android.net.Uri
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import kotlinx.coroutines.flow.map
 import top.chengdongqing.weui.ui.components.mediapicker.WeMediaPicker
 import top.chengdongqing.weui.ui.screens.media.camera.CameraScreen
 import top.chengdongqing.weui.ui.screens.media.live.LivePlayerScreen
@@ -12,6 +14,8 @@ import top.chengdongqing.weui.ui.screens.media.player.AudioPlayerScreen
 import top.chengdongqing.weui.ui.screens.media.player.VideoPlayerScreen
 import top.chengdongqing.weui.ui.screens.media.recorder.AudioRecorderScreen
 import top.chengdongqing.weui.ui.screens.media.recorder.VideoRecorderScreen
+import top.chengdongqing.weui.utils.MediaType
+import top.chengdongqing.weui.utils.chooseMedias
 
 fun NavGraphBuilder.addMediaGraph(navController: NavController) {
     composable("camera") {
@@ -23,11 +27,28 @@ fun NavGraphBuilder.addMediaGraph(navController: NavController) {
     composable("live-player") {
         LivePlayerScreen()
     }
-    composable("media-picker/entrance") {
-        MediaPickerScreen(navController)
+    composable("media-picker/entrance") { backStackEntry ->
+        val mediaListFlow = backStackEntry.savedStateHandle
+            .getStateFlow<Array<Uri>>("mediaList", emptyArray())
+            .map { it.toList() }
+
+        MediaPickerScreen(mediaListFlow) { type, count ->
+            backStackEntry.savedStateHandle.remove<Array<Uri>>("mediaList")
+            navController.chooseMedias(type, count)
+        }
     }
-    composable("media-picker") {
-        WeMediaPicker(navController)
+    composable("media-picker?type={type}&count={count}") {
+        val mediaType = it.arguments?.getString("type")
+        val count = it.arguments?.getString("count")?.toInt()
+
+        WeMediaPicker(
+            mediaType = mediaType?.run { MediaType.valueOf(mediaType) },
+            countLimits = count,
+            onCancel = { navController.popBackStack() }
+        ) { list ->
+            navController.previousBackStackEntry?.savedStateHandle?.set("mediaList", list)
+            navController.popBackStack()
+        }
     }
     composable("audio-player") {
         AudioPlayerScreen()

@@ -67,17 +67,21 @@ internal fun ColumnScope.MediaGrid(pickerViewModel: MediaPickerViewModel) {
         modifier = Modifier.weight(1f)
     ) {
         itemsIndexed(filteredMediaList) { index, item ->
-            val selectIndex = pickerViewModel.selectedList.indexOf(item)
+            val selectIndex = pickerViewModel.selectedList.indexOf(item.uri)
             val selected = selectIndex != -1
 
             MediaGridCell(
                 item,
                 selected,
                 selectIndex,
-                onPreview = { context.previewMedias(filteredMediaList, index) }
+                onPreview = {
+                    context.previewMedias(filteredMediaList.map { it.uri }, index)
+                }
             ) {
                 if (selectIndex == -1) {
-                    pickerViewModel.selectedList.add(item)
+                    if (pickerViewModel.selectedList.size < pickerViewModel.countLimits) {
+                        pickerViewModel.selectedList.add(item.uri)
+                    }
                 } else {
                     pickerViewModel.selectedList.removeAt(selectIndex)
                 }

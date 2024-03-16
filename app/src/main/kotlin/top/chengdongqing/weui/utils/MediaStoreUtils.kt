@@ -14,7 +14,6 @@ import androidx.compose.runtime.remember
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import top.chengdongqing.weui.R
-import top.chengdongqing.weui.ui.screens.demo.gallery.MediaItem
 import top.chengdongqing.weui.ui.screens.demo.gallery.preview.MediaPreviewActivity
 
 enum class MediaType {
@@ -89,11 +88,11 @@ fun RequestMediaPermission(content: @Composable () -> Unit) {
     }
 }
 
-fun Context.previewMedias(items: List<MediaItem>, current: Int = 0) {
+fun Context.previewMedias(uris: List<Uri>, current: Int = 0) {
     val intent = MediaPreviewActivity.newIntent(this).apply {
-        putExtra("uris", items.map { it.path }.toTypedArray())
+        putExtra("uris", uris.toTypedArray())
         putExtra("current", current)
         addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
     }
-    this.startActivity(intent)
+    startActivity(intent)
 }

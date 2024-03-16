@@ -9,13 +9,13 @@ import kotlinx.coroutines.delay
 import top.chengdongqing.weui.ui.components.cardlist.WeCardList
 import top.chengdongqing.weui.ui.components.cardlist.WeCardListItem
 import top.chengdongqing.weui.ui.components.loading.WeLoadMore
-import top.chengdongqing.weui.ui.components.refreshableview.WeRefreshableView
+import top.chengdongqing.weui.ui.components.refreshableview.WeRefreshView
 import top.chengdongqing.weui.ui.components.refreshableview.rememberReachBottom
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 
 @Composable
-fun RefreshableScreen() {
-    WeScreen(title = "RefreshableView", description = "可刷新视图", scrollEnabled = false) {
+fun RefreshViewScreen() {
+    WeScreen(title = "RefreshView", description = "可刷新视图", scrollEnabled = false) {
         val listState = rememberLazyListState()
         val listItems = remember {
             mutableStateListOf<String>().apply {
@@ -27,7 +27,7 @@ fun RefreshableScreen() {
             listItems.addAll(List(30) { index -> "${listItems.size + index + 1}" })
         }
 
-        WeRefreshableView(onRefresh = {
+        WeRefreshView(onRefresh = {
             delay(2000)
             listItems.clear()
             listItems.addAll(List(30) { "${it + 1}" })

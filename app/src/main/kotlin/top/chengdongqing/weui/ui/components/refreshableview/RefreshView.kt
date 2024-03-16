@@ -32,7 +32,7 @@ import top.chengdongqing.weui.ui.components.loading.WeLoading
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WeRefreshableView(
+fun WeRefreshView(
     modifier: Modifier = Modifier,
     onRefresh: (suspend () -> Unit)? = null,
     content: @Composable BoxScope.() -> Unit

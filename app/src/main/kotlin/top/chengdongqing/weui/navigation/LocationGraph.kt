@@ -1,6 +1,7 @@
 package top.chengdongqing.weui.navigation
 
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -14,17 +15,19 @@ fun NavGraphBuilder.addLocationGraph(navController: NavHostController) {
     composable("location-preview/entrance") {
         LocationPreviewScreen(navController)
     }
-    composable("location-picker/entrance") {
-        val locationState = navController.currentBackStackEntry
-            ?.savedStateHandle
-            ?.getStateFlow<LocationItem?>("location", null)
-            ?.collectAsState()
+    composable("location-picker/entrance") { backStackEntry ->
+        val location by backStackEntry.savedStateHandle
+            .getStateFlow<LocationItem?>("location", null)
+            .collectAsState()
 
-        LocationPickerScreen(navController, locationState)
+        LocationPickerScreen(location) {
+            backStackEntry.savedStateHandle.remove<LocationItem?>("location")
+            navController.navigate("location-picker")
+        }
     }
 
-    composable(route = "location-preview/{latitude}/{longitude}?zoom={zoom}&name={name}&address={address}") {
-        val args = it.arguments!!
+    composable(route = "location-preview/{latitude}/{longitude}?zoom={zoom}&name={name}&address={address}") { navBackStackEntry ->
+        val args = navBackStackEntry.arguments!!
         val latitude = args.getString("latitude")!!.toDouble()
         val longitude = args.getString("longitude")!!.toDouble()
         val zoom = args.getString("zoom")?.toFloat() ?: 16f

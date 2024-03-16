@@ -54,7 +54,7 @@ fun AudioPlayerScreen() {
         val audioState = rememberAudioPlayer(audioSource)
 
         Text(
-            text = formatDuration(audioState.progress.milliseconds, true),
+            text = formatDuration(audioState.progress.milliseconds.inWholeSeconds, true),
             color = MaterialTheme.colorScheme.onPrimary,
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold
@@ -88,11 +88,11 @@ private fun ProgressControl(audioState: AudioState) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = formatDuration(audioState.progress.milliseconds),
+            text = formatDuration(audioState.progress.milliseconds.inWholeSeconds),
             color = MaterialTheme.colorScheme.onSecondary
         )
         Text(
-            text = formatDuration(audioState.duration.milliseconds),
+            text = formatDuration(audioState.duration.milliseconds.inWholeSeconds),
             color = MaterialTheme.colorScheme.onSecondary
         )
     }

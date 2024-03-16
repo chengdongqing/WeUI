@@ -23,6 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -31,7 +32,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.burnoutcrew.reorderable.NoDragCancelledAnimation
 import org.burnoutcrew.reorderable.ReorderableItem
 import org.burnoutcrew.reorderable.detectReorderAfterLongPress
 import org.burnoutcrew.reorderable.rememberReorderableLazyGridState
@@ -57,18 +57,22 @@ fun DragSorterScreen() {
         }
         Spacer(modifier = Modifier.height(20.dp))
         if (isList) {
-            VerticalReorderList()
+            SortableList()
         } else {
-            VerticalReorderGrid()
+            SortableGrid()
         }
     }
 }
 
 @Composable
-private fun VerticalReorderList() {
-    val data = remember { mutableStateOf(List(100) { "Item ${it + 1}" }) }
+private fun SortableList() {
+    val data = remember {
+        mutableStateListOf<String>().apply {
+            addAll(List(100) { "Item ${it + 1}" })
+        }
+    }
     val state = rememberReorderableLazyListState(onMove = { from, to ->
-        data.value = data.value.toMutableList().apply {
+        data.apply {
             add(to.index, removeAt(from.index))
         }
     })
@@ -80,13 +84,13 @@ private fun VerticalReorderList() {
             .reorderable(state)
             .detectReorderAfterLongPress(state)
     ) {
-        items(data.value, { it }) { item ->
+        items(data, key = { it }) { item ->
             ReorderableItem(state, key = item) { isDragging ->
-                val elevation = animateDpAsState(if (isDragging) 16.dp else 0.dp, label = "")
+                val elevation by animateDpAsState(if (isDragging) 16.dp else 0.dp, label = "")
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .shadow(elevation.value)
+                        .shadow(elevation)
                         .background(MaterialTheme.colorScheme.onBackground)
                         .padding(horizontal = 16.dp, vertical = 22.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
@@ -104,38 +108,39 @@ private fun VerticalReorderList() {
 }
 
 @Composable
-private fun VerticalReorderGrid() {
-    val data = remember { mutableStateOf(List(100) { "Item ${it + 1}" }) }
-    val state = rememberReorderableLazyGridState(
-        dragCancelledAnimation = NoDragCancelledAnimation(),
-        onMove = { from, to ->
-            data.value = data.value.toMutableList().apply {
-                add(to.index, removeAt(from.index))
-            }
+private fun SortableGrid() {
+    val data = remember {
+        mutableStateListOf<String>().apply {
+            addAll((List(100) { "Item ${it + 1}" }))
         }
-    )
+    }
+    val state = rememberReorderableLazyGridState(onMove = { from, to ->
+        data.apply {
+            add(to.index, removeAt(from.index))
+        }
+    })
 
     LazyVerticalGrid(
-        columns = GridCells.Fixed(4),
         state = state.gridState,
+        columns = GridCells.Fixed(4),
         horizontalArrangement = Arrangement.spacedBy(0.5.dp),
         verticalArrangement = Arrangement.spacedBy(0.5.dp),
         modifier = Modifier.reorderable(state)
     ) {
-        items(data.value, { it }) { item ->
+        items(data, key = { it }) { item ->
             ReorderableItem(state, key = item) { isDragging ->
-                val elevation = animateDpAsState(if (isDragging) 16.dp else 0.dp, label = "")
+                val elevation by animateDpAsState(if (isDragging) 16.dp else 0.dp, label = "")
                 Box(
                     modifier = Modifier
                         .aspectRatio(1f)
-                        .shadow(elevation.value)
-                        .background(MaterialTheme.colorScheme.onBackground),
+                        .shadow(elevation)
+                        .background(MaterialTheme.colorScheme.onBackground)
+                        .detectReorderAfterLongPress(state),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = item,
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        modifier = Modifier.detectReorderAfterLongPress(state)
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                 }
             }
