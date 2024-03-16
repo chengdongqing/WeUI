@@ -115,12 +115,10 @@ private fun RecordIcon(isRecording: Boolean) {
         val animatedSize by transition.animateFloat(
             initialValue = 30f,
             targetValue = 40f,
-            animationSpec = remember {
-                infiniteRepeatable(
-                    tween(durationMillis = 1500, easing = LinearEasing),
-                    RepeatMode.Reverse
-                )
-            },
+            animationSpec = infiniteRepeatable(
+                tween(durationMillis = 1500, easing = LinearEasing),
+                RepeatMode.Reverse
+            ),
             label = "AudioRecorderStopIconAnimation"
         )
 

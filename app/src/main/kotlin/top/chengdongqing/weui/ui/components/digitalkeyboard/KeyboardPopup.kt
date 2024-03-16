@@ -50,15 +50,11 @@ internal fun KeyboardPopup(visible: Boolean, onHide: () -> Unit, content: @Compo
             AnimatedVisibility(
                 visible = visible && localVisible,
                 enter = slideInVertically(
-                    animationSpec = remember {
-                        tween(250)
-                    },
+                    animationSpec = tween(250),
                     initialOffsetY = { it }
                 ),
                 exit = slideOutVertically(
-                    animationSpec = remember {
-                        tween(250)
-                    },
+                    animationSpec = tween(250),
                     targetOffsetY = { it }
                 )
             ) {

@@ -67,15 +67,11 @@ fun WePopup(
     visible: Boolean,
     title: String? = null,
     enterTransition: EnterTransition = slideInVertically(
-        animationSpec = remember {
-            tween(150)
-        },
+        animationSpec = tween(150),
         initialOffsetY = { it }
     ),
     exitTransition: ExitTransition = slideOutVertically(
-        animationSpec = remember {
-            tween(150)
-        },
+        animationSpec = tween(150),
         targetOffsetY = { it }
     ),
     padding: PaddingValues = PaddingValues(12.dp),

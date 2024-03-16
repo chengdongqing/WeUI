@@ -48,7 +48,7 @@ fun DragSorterScreen() {
         title = "DragSorter",
         description = "拖拽排序",
         scrollEnabled = false,
-        padding = PaddingValues(0.dp)
+        padding = PaddingValues(horizontal = 16.dp)
     ) {
         var isList by remember { mutableStateOf(true) }
 
@@ -79,7 +79,7 @@ private fun SortableList() {
 
     LazyColumn(
         state = state.listState,
-        verticalArrangement = Arrangement.spacedBy(0.5.dp),
+        verticalArrangement = Arrangement.spacedBy(6.dp),
         modifier = Modifier
             .reorderable(state)
             .detectReorderAfterLongPress(state)
@@ -122,9 +122,9 @@ private fun SortableGrid() {
 
     LazyVerticalGrid(
         state = state.gridState,
-        columns = GridCells.Fixed(4),
-        horizontalArrangement = Arrangement.spacedBy(0.5.dp),
-        verticalArrangement = Arrangement.spacedBy(0.5.dp),
+        columns = GridCells.Fixed(3),
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        verticalArrangement = Arrangement.spacedBy(6.dp),
         modifier = Modifier.reorderable(state)
     ) {
         items(data, key = { it }) { item ->

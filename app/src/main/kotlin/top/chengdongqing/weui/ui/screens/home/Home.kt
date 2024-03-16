@@ -47,28 +47,27 @@ import top.chengdongqing.weui.utils.clickableWithoutRipple
 fun HomeScreen(navController: NavHostController) {
     var current by rememberSaveable { mutableStateOf<Int?>(null) }
 
-    Column(
-        Modifier
+    LazyColumn(
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
             .statusBarsPadding()
+            .padding(horizontal = 16.dp)
     ) {
-        LazyColumn(Modifier.padding(horizontal = 16.dp)) {
-            item { HomeHeader() }
-            itemsIndexed(menus) { index, item ->
-                MenuGroup(
-                    item,
-                    expanded = index == current,
-                    navController
-                ) {
-                    current = if (current == index) null else index
-                }
-                Spacer(Modifier.height(8.dp))
+        item { HomeHeader() }
+        itemsIndexed(menus) { index, item ->
+            MenuGroup(
+                item,
+                expanded = index == current,
+                navController
+            ) {
+                current = if (current == index) null else index
             }
-            item {
-                Spacer(Modifier.height(60.dp))
-                HomeFooter()
-            }
+        }
+        item {
+            Spacer(Modifier.height(60.dp))
+            HomeFooter()
         }
     }
 }

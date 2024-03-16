@@ -48,12 +48,10 @@ fun WeLoading(size: Dp = 16.dp, color: Color = Color.Unspecified, isRotating: Bo
         transition.animateFloat(
             initialValue = 0f,
             targetValue = 360f,
-            animationSpec = remember {
-                infiniteRepeatable(
-                    tween(durationMillis = 1000, easing = LinearEasing),
-                    RepeatMode.Restart
-                )
-            },
+            animationSpec = infiniteRepeatable(
+                tween(durationMillis = 1000, easing = LinearEasing),
+                RepeatMode.Restart
+            ),
             label = "WeLoadingAnimation"
         )
     } else {
