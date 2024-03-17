@@ -52,8 +52,8 @@ fun ApplicationNavHost() {
         addNetworkGraph()
         addHardwareGraph()
         addChartGraph()
-        addQrCodeGraph(navController)
-        addLocationGraph(navController)
+        addQrCodeGraph()
+        addLocationGraph()
         addDemoGraph()
         composable("layers") {
             LayersScreen()

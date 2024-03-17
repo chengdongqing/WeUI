@@ -5,19 +5,20 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.amap.api.maps.model.LatLng
+import top.chengdongqing.weui.data.model.LocationItem
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.cardlist.WeCardList
 import top.chengdongqing.weui.ui.components.cardlist.WeCardListItem
-import top.chengdongqing.weui.ui.components.location.picker.LocationItem
 import top.chengdongqing.weui.ui.components.screen.WeScreen
-import top.chengdongqing.weui.utils.openLocation
+import top.chengdongqing.weui.utils.previewLocation
 
 @Composable
-fun LocationPreviewScreen(navController: NavController) {
+fun LocationPreviewScreen() {
     WeScreen(title = "LocationPreview", description = "查看位置", scrollEnabled = false) {
+        val context = LocalContext.current
         val location = remember {
             LocationItem(
                 name = "庐山国家级旅游风景名胜区",
@@ -28,15 +29,17 @@ fun LocationPreviewScreen(navController: NavController) {
 
         WeCardList {
             item {
-                WeCardListItem(label = "纬度", value = location.latLng.latitude.toString())
-                WeCardListItem(label = "经度", value = location.latLng.longitude.toString())
-                WeCardListItem(label = "位置名称", value = location.name)
-                WeCardListItem(label = "详细位置", value = location.address!!)
+                location.apply {
+                    WeCardListItem(label = "纬度", value = latLng.latitude.toString())
+                    WeCardListItem(label = "经度", value = latLng.longitude.toString())
+                    WeCardListItem(label = "位置名称", value = name)
+                    WeCardListItem(label = "详细位置", value = address!!)
+                }
             }
         }
         Spacer(modifier = Modifier.height(20.dp))
         WeButton(text = "查看位置") {
-            navController.openLocation(
+            context.previewLocation(
                 latitude = location.latLng.latitude,
                 longitude = location.latLng.longitude,
                 name = location.name,

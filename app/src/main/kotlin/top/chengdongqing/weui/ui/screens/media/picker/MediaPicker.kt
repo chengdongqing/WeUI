@@ -29,7 +29,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableFloatState
 import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.MutableState
@@ -57,24 +56,21 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import kotlinx.coroutines.flow.Flow
 import org.burnoutcrew.reorderable.ReorderableItem
 import org.burnoutcrew.reorderable.ReorderableLazyGridState
 import org.burnoutcrew.reorderable.detectReorderAfterLongPress
 import org.burnoutcrew.reorderable.rememberReorderableLazyGridState
 import org.burnoutcrew.reorderable.reorderable
 import top.chengdongqing.weui.R
+import top.chengdongqing.weui.enums.MediaType
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.theme.DangerColorLight
-import top.chengdongqing.weui.utils.MediaType
 import top.chengdongqing.weui.utils.detectDragGesturesAfterLongPressWithoutConsume
 import top.chengdongqing.weui.utils.previewMedias
+import top.chengdongqing.weui.utils.rememberMediaPicker
 
 @Composable
-fun MediaPickerScreen(
-    mediaListFlow: Flow<List<String>>,
-    onChooseMedia: (type: MediaType, count: Int) -> Unit
-) {
+fun MediaPickerScreen() {
     WeScreen(
         title = "MediaPicker",
         description = "媒体选择器",
@@ -90,6 +86,13 @@ fun MediaPickerScreen(
         }, canDragOver = { p1, _ ->
             p1.key != -1
         })
+        val pickMedia = rememberMediaPicker {
+            it.forEach { item ->
+                if (!data.value.contains(item)) {
+                    data.value += item
+                }
+            }
+        }
 
         val density = LocalDensity.current
         val configuration = LocalConfiguration.current
@@ -97,16 +100,6 @@ fun MediaPickerScreen(
         val bottomBarHeight = remember { mutableIntStateOf(0) }
         val currentItemHeight = remember { mutableIntStateOf(0) }
         val currentPositionY = remember { mutableFloatStateOf(0f) }
-
-        LaunchedEffect(Unit) {
-            mediaListFlow.collect {
-                it.forEach { item ->
-                    if (!data.value.contains(item)) {
-                        data.value += item
-                    }
-                }
-            }
-        }
 
         Box {
             PictureGrid(
@@ -116,7 +109,7 @@ fun MediaPickerScreen(
                 currentItemHeight,
                 currentPositionY,
                 bottomBarHeight,
-                onChooseMedia
+                pickMedia
             )
 
             val isReadying by remember {

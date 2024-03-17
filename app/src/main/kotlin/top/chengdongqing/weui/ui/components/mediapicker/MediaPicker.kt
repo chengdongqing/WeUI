@@ -32,12 +32,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import top.chengdongqing.weui.enums.MediaType
 import top.chengdongqing.weui.ui.components.actionsheet.ActionSheetItem
 import top.chengdongqing.weui.ui.components.actionsheet.rememberActionSheetState
 import top.chengdongqing.weui.ui.components.button.ButtonSize
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.theme.WeUITheme
-import top.chengdongqing.weui.utils.MediaType
 import top.chengdongqing.weui.utils.RequestMediaPermission
 import top.chengdongqing.weui.utils.SetupStatusBarStyle
 import top.chengdongqing.weui.utils.previewMedias
@@ -47,8 +47,8 @@ fun WeMediaPicker(
     pickerViewModel: MediaPickerViewModel = viewModel(
         factory = MediaPickerViewModelFactory(LocalContext.current)
     ),
-    mediaType: MediaType?,
-    countLimits: Int?,
+    type: MediaType?,
+    count: Int,
     onCancel: () -> Unit,
     onConfirm: (Array<String>) -> Unit
 ) {
@@ -59,7 +59,7 @@ fun WeMediaPicker(
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
         ) {
-            TopBar(pickerViewModel, mediaType, countLimits, onCancel)
+            TopBar(pickerViewModel, type, count, onCancel)
             RequestMediaPermission {
                 MediaGrid(pickerViewModel)
                 BottomBar(pickerViewModel) {
@@ -73,8 +73,8 @@ fun WeMediaPicker(
 @Composable
 private fun TopBar(
     pickerViewModel: MediaPickerViewModel,
-    mediaType: MediaType?,
-    countLimits: Int?,
+    type: MediaType?,
+    count: Int,
     onCancel: () -> Unit
 ) {
     val actionSheetState = rememberActionSheetState()
@@ -85,9 +85,9 @@ private fun TopBar(
             ActionSheetItem("图片和视频")
         )
     }
-    LaunchedEffect(mediaType) {
-        pickerViewModel.mediaType = mediaType
-        countLimits?.let { pickerViewModel.countLimits = it }
+    LaunchedEffect(type) {
+        pickerViewModel.type = type
+        pickerViewModel.count = count
     }
 
     Box(
@@ -112,20 +112,20 @@ private fun TopBar(
                 .align(Alignment.Center)
                 .clip(RoundedCornerShape(20.dp))
                 .background(MaterialTheme.colorScheme.outline)
-                .clickable(enabled = mediaType == null) {
+                .clickable(enabled = type == null) {
                     actionSheetState.show(typeOptions) { index ->
-                        pickerViewModel.mediaType = typeOptions[index].value as MediaType?
+                        pickerViewModel.type = typeOptions[index].value as MediaType?
                     }
                 }
                 .padding(start = 12.dp, end = 6.dp, top = 6.dp, bottom = 6.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = typeOptions.find { it.value == pickerViewModel.mediaType }?.label!!,
+                text = typeOptions.find { it.value == pickerViewModel.type }?.label!!,
                 color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 17.sp
             )
-            if (mediaType == null) {
+            if (type == null) {
                 Spacer(modifier = Modifier.width(4.dp))
                 Icon(
                     imageVector = Icons.Filled.ArrowDropDownCircle,

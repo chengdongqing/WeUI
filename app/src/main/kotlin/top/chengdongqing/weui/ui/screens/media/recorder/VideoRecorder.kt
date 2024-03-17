@@ -50,16 +50,16 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import top.chengdongqing.weui.enums.MediaType
 import top.chengdongqing.weui.utils.MediaStoreUtils
-import top.chengdongqing.weui.utils.MediaType
 import top.chengdongqing.weui.utils.RequestCameraPermission
 import top.chengdongqing.weui.utils.rememberToggleState
 
 @Composable
 fun VideoRecorderScreen(navController: NavController) {
     RequestCameraPermission(
-        navController,
-        permissions = listOf(Manifest.permission.RECORD_AUDIO)
+        extraPermissions = listOf(Manifest.permission.RECORD_AUDIO),
+        onRevoked = { navController.popBackStack() }
     ) {
         VideoRecorder()
     }

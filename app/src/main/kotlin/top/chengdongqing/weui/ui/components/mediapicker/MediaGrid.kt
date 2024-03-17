@@ -34,10 +34,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import top.chengdongqing.weui.enums.MediaType
 import top.chengdongqing.weui.ui.screens.demo.gallery.MediaItem
 import top.chengdongqing.weui.ui.screens.demo.gallery.produceThumbnail
 import top.chengdongqing.weui.ui.theme.PrimaryColor
-import top.chengdongqing.weui.utils.MediaType
 import top.chengdongqing.weui.utils.clickableWithoutRipple
 import top.chengdongqing.weui.utils.format
 import top.chengdongqing.weui.utils.previewMedias
@@ -46,12 +46,12 @@ import top.chengdongqing.weui.utils.previewMedias
 internal fun ColumnScope.MediaGrid(pickerViewModel: MediaPickerViewModel) {
     val context = LocalContext.current
     val mediaList by pickerViewModel.mediaList.collectAsState(initial = emptyList())
-    val filteredMediaList = remember(mediaList, pickerViewModel.mediaType) {
-        if (pickerViewModel.mediaType == null) {
+    val filteredMediaList = remember(mediaList, pickerViewModel.type) {
+        if (pickerViewModel.type == null) {
             mediaList
         } else {
             mediaList.filter {
-                if (pickerViewModel.mediaType == MediaType.IMAGE) {
+                if (pickerViewModel.type == MediaType.IMAGE) {
                     !it.isVideo
                 } else {
                     it.isVideo
@@ -79,7 +79,7 @@ internal fun ColumnScope.MediaGrid(pickerViewModel: MediaPickerViewModel) {
                 }
             ) {
                 if (selectIndex == -1) {
-                    if (pickerViewModel.selectedList.size < pickerViewModel.countLimits) {
+                    if (pickerViewModel.selectedList.size < pickerViewModel.count) {
                         pickerViewModel.selectedList.add(item.path)
                     }
                 } else {

@@ -4,19 +4,22 @@ import android.Manifest
 import android.os.Build
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.navigation.NavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun RequestMediaPermission(content: @Composable () -> Unit) {
+fun RequestMediaPermission(
+    onRevoked: (() -> Unit)? = null,
+    content: @Composable () -> Unit
+) {
     val permissionState = rememberMultiplePermissionsState(
         remember {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -28,7 +31,11 @@ fun RequestMediaPermission(content: @Composable () -> Unit) {
                 listOf(Manifest.permission.READ_EXTERNAL_STORAGE)
             }
         }
-    )
+    ) { res ->
+        if (res.values.any { value -> !value }) {
+            onRevoked?.invoke()
+        }
+    }
 
     LaunchedEffect(permissionState) {
         if (!permissionState.allPermissionsGranted) {
@@ -44,18 +51,18 @@ fun RequestMediaPermission(content: @Composable () -> Unit) {
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun RequestCameraPermission(
-    navController: NavController,
-    permissions: List<String> = emptyList(),
-    content: @Composable () -> Unit
+    extraPermissions: List<String> = emptyList(),
+    onRevoked: (() -> Unit)? = null,
+    content: @Composable BoxScope.() -> Unit
 ) {
     val permissionState = rememberMultiplePermissionsState(buildList {
         add(Manifest.permission.CAMERA)
-        if (permissions.isNotEmpty()) {
-            addAll(permissions)
+        if (extraPermissions.isNotEmpty()) {
+            addAll(extraPermissions)
         }
     }) { res ->
         if (res.values.any { value -> !value }) {
-            navController.popBackStack()
+            onRevoked?.invoke()
         }
     }
 

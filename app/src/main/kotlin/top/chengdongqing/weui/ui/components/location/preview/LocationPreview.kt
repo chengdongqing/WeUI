@@ -49,7 +49,7 @@ fun WeLocationPreview(
     longitude: Double,
     zoom: Float = 16f,
     name: String = "位置",
-    address: String? = null
+    address: String?
 ) {
     val context = LocalContext.current
     var map by remember { mutableStateOf<AMap?>(null) }

@@ -49,7 +49,7 @@ internal val menus = listOf(
     MenuGroup(
         "媒体组件", R.drawable.ic_nav_search,
         listOf(
-            MenuItem("MediaPicker", "media-picker/entrance"),
+            MenuItem("MediaPicker", "media-picker"),
             MenuItem("Camera", "camera"),
             MenuItem("AudioRecorder", "audio-recorder"),
             MenuItem("VideoRecorder", "video-recorder"),
@@ -123,15 +123,15 @@ internal val menus = listOf(
     ),
     MenuGroup(
         "二维码", R.drawable.ic_nav_form, listOf(
-            MenuItem("QrCodeScanner", "qrcode-scanner/entrance"),
+            MenuItem("QrCodeScanner", "qrcode-scanner"),
             MenuItem("QrCodeGenerator", "qrcode-generator")
         )
     ),
     MenuGroup(
         "地图组件", R.drawable.ic_nav_feedback,
         listOf(
-            MenuItem("LocationPreview", "location-preview/entrance"),
-            MenuItem("LocationPicker", "location-picker/entrance")
+            MenuItem("LocationPreview", "location-preview"),
+            MenuItem("LocationPicker", "location-picker")
         )
     ),
     MenuGroup(

@@ -6,7 +6,6 @@ import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -22,15 +21,16 @@ import androidx.core.content.ContextCompat
 import com.google.mlkit.vision.barcode.common.Barcode
 import top.chengdongqing.weui.ui.components.toast.ToastIcon
 import top.chengdongqing.weui.ui.components.toast.rememberToastState
+import top.chengdongqing.weui.utils.RequestCameraPermission
 import java.util.concurrent.Executors
 
 @Composable
-fun WeQrCodeScanner(onChange: (List<Barcode>) -> Unit) {
+fun WeQrCodeScanner(onRevoked: () -> Unit, onChange: (List<Barcode>) -> Unit) {
     val context = LocalContext.current
     var camera by remember { mutableStateOf<Camera?>(null) }
     val toast = rememberToastState()
 
-    Box {
+    RequestCameraPermission(onRevoked = onRevoked) {
         CameraView(setCamera = { camera = it }, onChange)
         ScannerDecoration()
         ScannerTools(camera) { uri ->

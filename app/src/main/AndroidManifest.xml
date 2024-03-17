@@ -85,6 +85,22 @@
             android:exported="true"
             android:theme="@style/Theme.WeUI" />
         <activity
+            android:name=".ui.components.qrcode.scanner.QrCodeScannerActivity"
+            android:exported="true"
+            android:theme="@style/Theme.WeUI" />
+        <activity
+            android:name=".ui.components.mediapicker.MediaPickerActivity"
+            android:exported="true"
+            android:theme="@style/Theme.WeUI" />
+        <activity
+            android:name=".ui.components.location.preview.LocationPreviewActivity"
+            android:exported="true"
+            android:theme="@style/Theme.WeUI" />
+        <activity
+            android:name=".ui.components.location.picker.LocationPickerActivity"
+            android:exported="true"
+            android:theme="@style/Theme.WeUI" />
+        <activity
             android:name=".ui.screens.hardware.BiometricActivity"
             android:exported="true"
             android:theme="@style/Theme.Floating" />

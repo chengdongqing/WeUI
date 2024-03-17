@@ -10,10 +10,7 @@ import android.provider.MediaStore
 import androidx.core.content.FileProvider
 import androidx.core.net.toFile
 import top.chengdongqing.weui.R
-
-enum class MediaType {
-    IMAGE, VIDEO, AUDIO, RECORDING
-}
+import top.chengdongqing.weui.enums.MediaType
 
 object MediaStoreUtils {
     fun createContentValues(

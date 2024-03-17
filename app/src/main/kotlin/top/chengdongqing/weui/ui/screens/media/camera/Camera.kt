@@ -42,17 +42,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
+import top.chengdongqing.weui.enums.MediaType
 import top.chengdongqing.weui.ui.components.toast.ToastIcon
 import top.chengdongqing.weui.ui.components.toast.ToastState
 import top.chengdongqing.weui.ui.components.toast.rememberToastState
 import top.chengdongqing.weui.utils.MediaStoreUtils
-import top.chengdongqing.weui.utils.MediaType
 import top.chengdongqing.weui.utils.RequestCameraPermission
 import top.chengdongqing.weui.utils.rememberToggleState
 
 @Composable
 fun CameraScreen(navController: NavController) {
-    RequestCameraPermission(navController) {
+    RequestCameraPermission(
+        onRevoked = { navController.popBackStack() }
+    ) {
         Camera()
     }
 }
