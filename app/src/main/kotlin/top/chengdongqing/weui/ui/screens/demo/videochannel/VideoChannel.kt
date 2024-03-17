@@ -20,7 +20,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import top.chengdongqing.weui.ui.screens.demo.gallery.preview.VideoPreview
+import top.chengdongqing.weui.ui.components.videoplayer.WeVideoPlayer
+import top.chengdongqing.weui.ui.components.videoplayer.rememberVideoPlayerState
 import top.chengdongqing.weui.ui.theme.BackgroundColorDark
 import top.chengdongqing.weui.ui.theme.WeUITheme
 import top.chengdongqing.weui.utils.SetupStatusBarStyle
@@ -32,7 +33,15 @@ fun VideoChannelScreen(videoChannelViewModel: VideoChannelViewModel = viewModel(
     val pagerState = rememberPagerState { videoList.size }
 
     SetupStatusBarStyle(isDark = false)
-    VerticalPager(state = pagerState) { index ->
+    VerticalPager(
+        state = pagerState,
+        modifier = Modifier
+            .background(Color.Black)
+            .statusBarsPadding()
+            .fillMaxSize()
+            .padding(top = 10.dp)
+            .background(BackgroundColorDark)
+    ) { index ->
         VideoItem(videoList[index])
     }
 }
@@ -42,17 +51,9 @@ private fun VideoItem(video: Video) {
     var commentsVisible by remember { mutableStateOf(false) }
 
     Box {
-        Column(
-            modifier = Modifier
-                .background(Color.Black)
-                .statusBarsPadding()
-                .fillMaxSize()
-                .padding(top = 10.dp)
-                .background(BackgroundColorDark)
-        ) {
-            Box(modifier = Modifier.weight(1f)) {
-                VideoPreview(uri = Uri.parse(video.videoUrl))
-            }
+        Column {
+            val state = rememberVideoPlayerState(videoSource = Uri.parse(video.videoUrl))
+            WeVideoPlayer(state, modifier = Modifier.weight(1f))
             InformationBar(video, onCommentsClick = {
                 commentsVisible = true
             })

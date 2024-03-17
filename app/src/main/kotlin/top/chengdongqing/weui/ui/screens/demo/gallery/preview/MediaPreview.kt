@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
@@ -36,6 +37,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.ui.components.toast.ToastIcon
 import top.chengdongqing.weui.ui.components.toast.rememberToastState
+import top.chengdongqing.weui.ui.components.videoplayer.VideoPlayerDefaults
+import top.chengdongqing.weui.ui.components.videoplayer.WeVideoPlayer
+import top.chengdongqing.weui.ui.components.videoplayer.rememberVideoPlayerState
 import top.chengdongqing.weui.utils.MediaStoreUtils
 import top.chengdongqing.weui.utils.MediaType
 import top.chengdongqing.weui.utils.SetupFullscreen
@@ -68,7 +72,18 @@ private fun MediaPager(uris: List<Uri>, pagerState: PagerState) {
     ) { index ->
         val uri = uris[index]
         when {
-            uri.isVideoType() -> VideoPreview(uri)
+            uri.isVideoType() -> {
+                val state = rememberVideoPlayerState(videoSource = uri)
+                WeVideoPlayer(state) {
+                    VideoPlayerDefaults.ControlBar(
+                        state,
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .offset(y = (-60).dp)
+                    )
+                }
+            }
+
             else -> ImagePreview(uri)
         }
     }
@@ -101,7 +116,8 @@ private fun BoxScope.ToolBar(uris: List<Uri>, pagerState: PagerState) {
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         ActionIcon(imageVector = Icons.Outlined.Share, label = "分享") {
-            context.shareFile(uri)
+            val type = if (uri.isVideoType()) "video/*" else "image/*"
+            context.shareFile(uri, type)
         }
         ActionIcon(
             imageVector = Icons.Outlined.Download,
