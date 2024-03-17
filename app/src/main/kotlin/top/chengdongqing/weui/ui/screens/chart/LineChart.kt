@@ -21,7 +21,7 @@ import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.ui.theme.WarningColor
 import top.chengdongqing.weui.ui.theme.WeUITheme
-import top.chengdongqing.weui.utils.formatFloat
+import top.chengdongqing.weui.utils.format
 import top.chengdongqing.weui.utils.randomFloat
 
 @Composable
@@ -46,7 +46,7 @@ fun LineChartScreen() {
         WeLineChart(
             dataSources = dataSource
         ) {
-            "¥" + formatFloat(it)
+            "¥" + it.format()
         }
         Spacer(modifier = Modifier.height(40.dp))
         WeButton(text = "更新数据") {

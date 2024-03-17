@@ -13,7 +13,7 @@ import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.cardlist.WeCardList
 import top.chengdongqing.weui.ui.components.cardlist.WeCardListItem
 import top.chengdongqing.weui.ui.components.screen.WeScreen
-import top.chengdongqing.weui.utils.formatFloat
+import top.chengdongqing.weui.utils.format
 import top.chengdongqing.weui.utils.rememberSensorValue
 
 @Composable
@@ -37,11 +37,11 @@ fun HygrothermographScreen() {
             item {
                 WeCardListItem(
                     label = "温度",
-                    value = temperature?.let { "${formatFloat(temperature)}°C" } ?: "未知"
+                    value = temperature?.let { "${temperature.format()}°C" } ?: "未知"
                 )
                 WeCardListItem(
                     label = "湿度",
-                    value = humidity?.let { "${formatFloat(humidity)}%" } ?: "未知")
+                    value = humidity?.let { "${humidity.format()}%" } ?: "未知")
             }
         }
     }

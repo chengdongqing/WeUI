@@ -25,7 +25,7 @@ import top.chengdongqing.weui.ui.components.button.ButtonType
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.input.WeInput
 import top.chengdongqing.weui.ui.components.screen.WeScreen
-import top.chengdongqing.weui.utils.formatFloat
+import top.chengdongqing.weui.utils.format
 
 @Composable
 fun KeyboardScreen() {
@@ -40,7 +40,7 @@ fun KeyboardScreen() {
 
         WeInput(
             value = null,
-            placeholder = "键盘高度: ${formatFloat(keyboardHeight.value)}(dp)",
+            placeholder = "键盘高度: ${keyboardHeight.value.format()}(dp)",
             modifier = Modifier.focusRequester(focusRequester)
         )
         Spacer(modifier = Modifier.height(40.dp))

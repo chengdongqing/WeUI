@@ -46,9 +46,8 @@ import com.google.accompanist.permissions.rememberPermissionState
 import top.chengdongqing.weui.ui.components.button.ButtonType
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.screen.WeScreen
+import top.chengdongqing.weui.utils.format
 import top.chengdongqing.weui.utils.formatDegree
-import top.chengdongqing.weui.utils.formatDouble
-import top.chengdongqing.weui.utils.formatFloat
 
 @SuppressLint("MissingPermission")
 @OptIn(ExperimentalPermissionsApi::class)
@@ -104,10 +103,10 @@ private fun LocationBar(location: Location, satelliteCount: Int) {
     Text(
         text = buildString {
             appendLine("卫星数量：${satelliteCount}颗")
-            val latitude = formatDouble(location.latitude, 6)
-            val longitude = formatDouble(location.longitude, 6)
+            val latitude = location.latitude.format(6)
+            val longitude = location.longitude.format(6)
             appendLine("坐标：$latitude, $longitude")
-            appendLine("海拔：${formatDouble(location.altitude)}m, 精度：${formatFloat(location.accuracy)}m")
+            appendLine("海拔：${location.altitude.format()}m, 精度：${location.accuracy.format()}m")
         },
         color = MaterialTheme.colorScheme.onPrimary,
         fontSize = 12.sp,
@@ -236,8 +235,8 @@ private class SatelliteStatusCallback(
             val info = SatelliteInfo(
                 type = determineSatelliteType(status.getConstellationType(i)),
                 svid = status.getSvid(i),
-                azimuthDegrees = formatDegree(status.getAzimuthDegrees(i), 1),
-                elevationDegrees = formatDegree(status.getElevationDegrees(i), 1),
+                azimuthDegrees = formatDegree(status.getAzimuthDegrees(i)),
+                elevationDegrees = formatDegree(status.getElevationDegrees(i)),
                 frequency = formatFrequency(status.getCarrierFrequencyHz(i)),
                 signalStrength = status.getCn0DbHz(i)
             )

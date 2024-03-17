@@ -17,7 +17,7 @@ import top.chengdongqing.weui.ui.components.compass.WeCompass
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.theme.FontSecondaryColorLight
 import top.chengdongqing.weui.utils.determineAccuracy
-import top.chengdongqing.weui.utils.formatFloat
+import top.chengdongqing.weui.utils.format
 import top.chengdongqing.weui.utils.rememberSensorValue
 
 /**
@@ -42,7 +42,7 @@ fun CompassScreen(compassViewModel: CompassViewModel = viewModel()) {
         }
         pressure?.let {
             Text(
-                text = "气压：${formatFloat(pressure)}hPa（百帕斯卡）",
+                text = "气压：${pressure.format()}hPa（百帕斯卡）",
                 color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 10.sp
             )

@@ -17,7 +17,7 @@ import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.cardlist.WeCardList
 import top.chengdongqing.weui.ui.components.cardlist.WeCardListItem
 import top.chengdongqing.weui.ui.components.screen.WeScreen
-import top.chengdongqing.weui.utils.formatFloat
+import top.chengdongqing.weui.utils.format
 import top.chengdongqing.weui.utils.rememberSensorValues
 
 @Composable
@@ -51,7 +51,7 @@ fun AccelerometerScreen() {
                 itemsIndexed(it) { index, value ->
                     WeCardListItem(
                         label = "${getAxisLabel(index)}轴",
-                        value = formatFloat(value)
+                        value = value.format()
                     )
                 }
             }

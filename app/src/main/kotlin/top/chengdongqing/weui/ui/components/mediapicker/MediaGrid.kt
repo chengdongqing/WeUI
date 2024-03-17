@@ -39,7 +39,7 @@ import top.chengdongqing.weui.ui.screens.demo.gallery.produceThumbnail
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.utils.MediaType
 import top.chengdongqing.weui.utils.clickableWithoutRipple
-import top.chengdongqing.weui.utils.formatDuration
+import top.chengdongqing.weui.utils.format
 import top.chengdongqing.weui.utils.previewMedias
 
 @Composable
@@ -126,7 +126,7 @@ private fun MediaGridCell(
                 )
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
-                    text = formatDuration(item.duration),
+                    text = item.duration.format(),
                     color = Color.White,
                     fontSize = 15.sp
                 )

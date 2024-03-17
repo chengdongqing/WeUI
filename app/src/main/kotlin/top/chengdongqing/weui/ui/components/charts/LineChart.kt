@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import top.chengdongqing.weui.ui.theme.PrimaryColor
-import top.chengdongqing.weui.utils.formatFloat
+import top.chengdongqing.weui.utils.format
 
 data class LineChartData(val points: List<ChartData>, val color: Color)
 
@@ -36,7 +36,7 @@ fun WeLineChart(
     height: Dp = 300.dp,
     color: Color = PrimaryColor.copy(0.8f),
     animationSpec: AnimationSpec<Float> = tween(durationMillis = 800),
-    formatter: (Float) -> String = { formatFloat(it) }
+    formatter: (Float) -> String = { it.format() }
 ) {
     val textMeasurer = rememberTextMeasurer()
     val labelColor = MaterialTheme.colorScheme.onSecondary

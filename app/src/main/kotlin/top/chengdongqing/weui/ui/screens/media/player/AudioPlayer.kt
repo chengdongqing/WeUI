@@ -39,7 +39,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import top.chengdongqing.weui.R
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.components.slider.WeSlider
-import top.chengdongqing.weui.utils.formatDuration
+import top.chengdongqing.weui.utils.format
 import top.chengdongqing.weui.utils.rememberPlayPercent
 import top.chengdongqing.weui.utils.rememberPlayProgress
 import kotlin.math.roundToInt
@@ -54,7 +54,7 @@ fun AudioPlayerScreen() {
         val audioState = rememberAudioPlayer(audioSource)
 
         Text(
-            text = formatDuration(audioState.progress.milliseconds.inWholeSeconds, true),
+            text = audioState.progress.milliseconds.format(isFull = true),
             color = MaterialTheme.colorScheme.onPrimary,
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold
@@ -88,11 +88,11 @@ private fun ProgressControl(audioState: AudioState) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = formatDuration(audioState.progress.milliseconds.inWholeSeconds),
+            text = audioState.progress.milliseconds.format(),
             color = MaterialTheme.colorScheme.onSecondary
         )
         Text(
-            text = formatDuration(audioState.duration.milliseconds.inWholeSeconds),
+            text = audioState.duration.milliseconds.format(),
             color = MaterialTheme.colorScheme.onSecondary
         )
     }

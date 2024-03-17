@@ -48,7 +48,7 @@ import top.chengdongqing.weui.ui.components.toast.ToastIcon
 import top.chengdongqing.weui.ui.components.toast.rememberToastState
 import top.chengdongqing.weui.utils.MediaStoreUtils
 import top.chengdongqing.weui.utils.MediaType
-import top.chengdongqing.weui.utils.formatDuration
+import top.chengdongqing.weui.utils.format
 import java.util.Timer
 import kotlin.concurrent.timerTask
 import kotlin.time.Duration
@@ -72,7 +72,7 @@ fun AudioRecorderScreen() {
         RecordingHandler(isRecording, duration)
 
         Text(
-            text = formatDuration(duration.value.inWholeSeconds, true),
+            text = duration.value.format(isFull = true),
             color = MaterialTheme.colorScheme.onPrimary,
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold

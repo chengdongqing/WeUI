@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.components.slider.WeSlider
-import top.chengdongqing.weui.utils.formatFloat
+import top.chengdongqing.weui.utils.format
 
 @Composable
 fun SliderScreen() {
@@ -33,7 +33,7 @@ fun SliderScreen() {
             var value by remember { mutableFloatStateOf(0f) }
             WeSlider(
                 value,
-                formatter = { "${formatFloat(it, 0)}%" }
+                formatter = { "${it.format(0)}%" }
             ) {
                 value = it
             }
@@ -41,7 +41,7 @@ fun SliderScreen() {
             Spacer(modifier = Modifier.height(20.dp))
 
             var value1 by remember { mutableFloatStateOf(0f) }
-            KvRow(key = "定义可选值区间", value = formatFloat(value1))
+            KvRow(key = "定义可选值区间", value = value1.format())
             WeSlider(
                 value = value1,
                 range = -999.99f..999.99f
@@ -58,7 +58,7 @@ fun SliderScreen() {
                 value = value2,
                 range = 0f..1f,
                 onChangeFinished = {
-                    value2String = formatFloat(value2)
+                    value2String = value2.format()
                 }
             ) {
                 value2 = it

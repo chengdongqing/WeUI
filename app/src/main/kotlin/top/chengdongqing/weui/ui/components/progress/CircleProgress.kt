@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.ui.theme.PrimaryColor
-import top.chengdongqing.weui.utils.formatFloat
+import top.chengdongqing.weui.utils.format
 
 @Composable
 fun WeCircleProgress(
@@ -29,7 +29,7 @@ fun WeCircleProgress(
     strokeWidth: Dp = 6.dp,
     fontSize: TextUnit = 16.sp,
     formatter: ((percent: Float) -> String)? = {
-        "${formatFloat(it)}%"
+        "${it.format()}%"
     }
 ) {
     val localPercent = percent.coerceIn(0f, 100f)

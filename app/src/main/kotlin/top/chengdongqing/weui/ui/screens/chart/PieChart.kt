@@ -15,7 +15,7 @@ import top.chengdongqing.weui.ui.components.charts.ChartData
 import top.chengdongqing.weui.ui.components.charts.WePieChart
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.theme.WeUITheme
-import top.chengdongqing.weui.utils.formatFloat
+import top.chengdongqing.weui.utils.format
 import top.chengdongqing.weui.utils.randomInt
 import top.chengdongqing.weui.utils.rememberToggleState
 
@@ -34,7 +34,7 @@ fun PieChartScreen() {
         )
 
         WePieChart(dataSource, ringWidth.value) {
-            formatFloat(it) + "个"
+            it.format() + "个"
         }
         WeButton(text = "更新数据") {
             dataSource = buildData()

@@ -216,7 +216,7 @@ private fun DrawScope.drawCurrentDegrees(
     colors: CompassColors
 ) {
     val degreeText = AnnotatedString(
-        formatDegree(degrees.toFloat()),
+        formatDegree(degrees.toFloat(), 0),
         SpanStyle(fontSize = 40.sp, fontWeight = FontWeight.Bold)
     )
     val textLayoutResult = textMeasurer.measure(degreeText)

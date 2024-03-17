@@ -44,8 +44,9 @@ import top.chengdongqing.weui.ui.components.loading.WeLoadMore
 import top.chengdongqing.weui.ui.components.popup.WePopup
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.components.toast.rememberToastState
-import top.chengdongqing.weui.utils.formatSeconds
+import top.chengdongqing.weui.utils.formatChinese
 import java.util.Date
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun ContactsScreen() {
@@ -255,7 +256,7 @@ private suspend fun loadCallLogs(context: Context): (List<Pair<String, List<Stri
                 logs.add(
                     Pair(
                         number,
-                        listOf(date, type + formatSeconds(duration))
+                        listOf(date, type + duration.seconds.formatChinese())
                     )
                 )
             }

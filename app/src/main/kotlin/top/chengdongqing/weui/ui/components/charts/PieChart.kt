@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
-import top.chengdongqing.weui.utils.formatFloat
+import top.chengdongqing.weui.utils.format
 import top.chengdongqing.weui.utils.generateDistinctColors
 
 @Composable
@@ -38,7 +38,7 @@ fun WePieChart(
     dataSource: List<ChartData>,
     ringWidth: Dp = 0.dp,
     animationSpec: AnimationSpec<Float> = tween(durationMillis = 800),
-    formatter: (Float) -> String = { formatFloat(it) }
+    formatter: (Float) -> String = { it.format() }
 ) {
     // 数值之和
     val total = remember(dataSource) { dataSource.sumOf { it.value.toDouble() }.toFloat() }

@@ -5,7 +5,8 @@ import android.content.ClipboardManager
 import android.content.Context
 
 fun Context.getClipboardData(): String? =
-    clipboardManager?.primaryClip?.takeIf { it.itemCount > 0 }?.getItemAt(0)?.text?.toString()
+    clipboardManager?.primaryClip?.takeIf { it.itemCount > 0 }
+        ?.getItemAt(0)?.text?.toString()
 
 fun Context.setClipboardData(data: String, label: String = "label") {
     clipboardManager?.apply {
@@ -15,4 +16,4 @@ fun Context.setClipboardData(data: String, label: String = "label") {
 }
 
 private val Context.clipboardManager: ClipboardManager?
-    get() = this.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager
+    get() = getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager

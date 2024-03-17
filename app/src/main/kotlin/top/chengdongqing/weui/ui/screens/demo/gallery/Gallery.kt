@@ -3,7 +3,6 @@ package top.chengdongqing.weui.ui.screens.demo.gallery
 import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Build
-import android.os.Parcelable
 import android.util.Size
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -36,16 +35,16 @@ import coil.compose.AsyncImage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
-import kotlinx.parcelize.Parcelize
 import okio.IOException
 import top.chengdongqing.weui.constant.ChineseDateWeekFormatter
 import top.chengdongqing.weui.ui.components.loading.WeLoadMore
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.utils.RequestMediaPermission
 import top.chengdongqing.weui.utils.clickableWithoutRipple
-import top.chengdongqing.weui.utils.formatDuration
+import top.chengdongqing.weui.utils.format
 import top.chengdongqing.weui.utils.previewMedias
 import java.time.format.DateTimeFormatter
+import kotlin.time.Duration
 
 @Composable
 fun GalleryScreen(galleryViewModel: GalleryViewModel = viewModel()) {
@@ -119,7 +118,7 @@ private fun MediaItem(item: MediaItem, modifier: Modifier) {
                     .padding(vertical = 3.dp, horizontal = 6.dp)
             ) {
                 Text(
-                    text = formatDuration(item.duration),
+                    text = item.duration.format(),
                     color = Color.White,
                     fontSize = 10.sp
                 )
@@ -170,14 +169,13 @@ fun produceThumbnail(item: MediaItem): State<Any?> {
     }
 }
 
-@Parcelize
 data class MediaItem(
     val uri: Uri,
     val name: String,
     val isVideo: Boolean,
     val mimeType: String,
-    val duration: Long,
+    val duration: Duration,
     val size: Long,
     val date: Long,
     val path: String
-) : Parcelable
+)

@@ -19,7 +19,6 @@ import top.chengdongqing.weui.ui.components.cardlist.WeCardList
 import top.chengdongqing.weui.ui.components.cardlist.WeCardListItem
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.utils.format
-import top.chengdongqing.weui.utils.formatFloat
 import top.chengdongqing.weui.utils.rememberBatteryInfo
 import top.chengdongqing.weui.utils.rememberStatusBarHeight
 
@@ -77,7 +76,7 @@ private fun MutableList<Pair<String, String>>.addScreenItems(
     add(Pair("屏幕像素比", density.density.toString()))
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
     add(Pair("屏幕方向", if (isLandscape) "横屏" else "竖屏"))
-    add(Pair("状态栏高度", "${formatFloat(statusBarHeight.value)}(dp)"))
+    add(Pair("状态栏高度", "${statusBarHeight.value.format()}(dp)"))
 }
 
 private fun MutableList<Pair<String, String>>.addHardwareItems(context: Context) {

@@ -27,7 +27,7 @@ import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.theme.DangerColorLight
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.ui.theme.WeUITheme
-import top.chengdongqing.weui.utils.formatFloat
+import top.chengdongqing.weui.utils.format
 import top.chengdongqing.weui.utils.rememberToggleState
 
 @Composable
@@ -56,7 +56,7 @@ fun DividingRuleScreen() {
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = "当前值：${formatFloat(value)}",
+                text = "当前值：${value.format()}",
                 color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier.padding(start = 16.dp)
             )

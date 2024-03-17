@@ -5,6 +5,7 @@ import android.provider.MediaStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import top.chengdongqing.weui.ui.screens.demo.gallery.MediaItem
+import kotlin.time.Duration.Companion.milliseconds
 
 class MediaPickerRepositoryImpl(val context: Context) : MediaPickerRepository {
     override fun loadAllMedias(): Flow<List<MediaItem>> = flow {
@@ -54,7 +55,7 @@ class MediaPickerRepositoryImpl(val context: Context) : MediaPickerRepository {
                         name = cursor.getString(nameColumn),
                         isVideo = cursor.getInt(mediaTypeColumn) == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO,
                         mimeType = cursor.getString(mimeTypeColumn),
-                        duration = cursor.getLong(durationColumn) / 1000,
+                        duration = cursor.getLong(durationColumn).milliseconds,
                         size = cursor.getLong(sizeColumn),
                         date = cursor.getLong(dateColumn),
                         path = cursor.getString(dataColumn)

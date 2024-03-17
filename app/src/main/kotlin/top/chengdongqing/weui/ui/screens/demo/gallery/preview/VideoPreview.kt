@@ -35,7 +35,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import top.chengdongqing.weui.R
 import top.chengdongqing.weui.ui.components.slider.WeSlider
 import top.chengdongqing.weui.utils.clickableWithoutRipple
-import top.chengdongqing.weui.utils.formatDuration
+import top.chengdongqing.weui.utils.format
 import top.chengdongqing.weui.utils.rememberPlayPercent
 import top.chengdongqing.weui.utils.rememberPlayProgress
 import kotlin.math.roundToInt
@@ -140,7 +140,7 @@ private fun BoxScope.ControlBar(
             .padding(horizontal = 12.dp, vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = formatDuration(progress.milliseconds.inWholeSeconds), color = Color.White)
+        Text(text = progress.milliseconds.format(), color = Color.White)
 
         var percent by rememberPlayPercent(progress, duration)
         WeSlider(
@@ -157,7 +157,7 @@ private fun BoxScope.ControlBar(
             }
         }
 
-        Text(text = formatDuration(duration.milliseconds.inWholeSeconds), color = Color.White)
+        Text(text = duration.milliseconds.format(), color = Color.White)
         MuteControl(isMute, audioManager, setMuteState)
     }
 }

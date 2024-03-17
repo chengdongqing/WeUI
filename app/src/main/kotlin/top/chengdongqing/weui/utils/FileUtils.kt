@@ -42,8 +42,8 @@ fun formatFileSize(file: File): String {
 fun formatFileSize(size: Long): String {
     return when {
         size < 1024 -> "$size B"
-        size < 1024 * 1024 -> "${formatFloat(size / 1024f)} KB"
-        size < 1024 * 1024 * 1024 -> "${formatFloat(size / (1024 * 1024f))} MB"
-        else -> "${formatFloat(size / (1024 * 1024 * 1024f))} GB"
+        size < 1024 * 1024 -> "${(size / 1024f).format()} KB"
+        size < 1024 * 1024 * 1024 -> "${(size / (1024 * 1024f)).format()} MB"
+        else -> "${(size / (1024 * 1024 * 1024f)).format()} GB"
     }
 }
