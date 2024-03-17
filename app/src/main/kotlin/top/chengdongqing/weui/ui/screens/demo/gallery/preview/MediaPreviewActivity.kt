@@ -13,15 +13,12 @@ class MediaPreviewActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val uris = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.extras?.getParcelableArray("uris", Uri::class.java)
-        } else {
-            @Suppress("DEPRECATION", "UNCHECKED_CAST")
-            intent.extras?.getParcelableArray("uris") as? Array<Uri>
-        }?.toList()
-        val current = intent.extras?.getInt("current", 0)
+        // 获取参数
+        val uris = intent.getStringArrayExtra("uris") ?: emptyArray()
+        val current = intent.getIntExtra("current", 0)
+
         setContent {
-            MediaPreviewScreen(uris ?: emptyList(), current ?: 0)
+            MediaPreviewScreen(uris.map { Uri.parse("file://$it") }, current)
         }
     }
 

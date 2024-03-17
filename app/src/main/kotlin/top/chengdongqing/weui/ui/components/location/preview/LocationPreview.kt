@@ -120,8 +120,7 @@ private fun BottomBar(location: LatLng, name: String, address: String?) {
                                 ActionSheetItem("谷歌地图"),
                             )
                         ) { index ->
-                            navigateToLocation(
-                                context,
+                            context.navigateToLocation(
                                 MapType.ofIndex(index)!!,
                                 location,
                                 name

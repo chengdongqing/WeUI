@@ -29,8 +29,7 @@ import kotlin.coroutines.suspendCoroutine
 /**
  * 调用地图软件导航到指定位置
  */
-fun navigateToLocation(
-    context: Context,
+fun Context.navigateToLocation(
     mapType: MapType,
     location: LatLng,
     name: String
@@ -55,10 +54,10 @@ fun navigateToLocation(
     }
 
     val intent = Intent(Intent.ACTION_VIEW, uri)
-    if (intent.resolveActivity(context.packageManager) != null) {
-        context.startActivity(intent)
+    if (intent.resolveActivity(packageManager) != null) {
+        startActivity(intent)
     } else {
-        Toast.makeText(context, "未安装${mapType.appName}地图", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "未安装${mapType.appName}地图", Toast.LENGTH_SHORT).show()
     }
 }
 

@@ -1,6 +1,5 @@
 package top.chengdongqing.weui.ui.screens.media.picker
 
-import android.net.Uri
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -73,7 +72,7 @@ import top.chengdongqing.weui.utils.previewMedias
 
 @Composable
 fun MediaPickerScreen(
-    mediaListFlow: Flow<List<Uri>>,
+    mediaListFlow: Flow<List<String>>,
     onChooseMedia: (type: MediaType, count: Int) -> Unit
 ) {
     WeScreen(
@@ -83,7 +82,7 @@ fun MediaPickerScreen(
         padding = PaddingValues(0.dp),
         scrollEnabled = false
     ) {
-        val data = rememberSaveable { mutableStateOf<List<Uri>>(emptyList()) }
+        val data = rememberSaveable { mutableStateOf<List<String>>(emptyList()) }
         val state = rememberReorderableLazyGridState(onMove = { from, to ->
             data.value = data.value.toMutableList().apply {
                 add(to.index, removeAt(from.index))
@@ -95,7 +94,7 @@ fun MediaPickerScreen(
         val density = LocalDensity.current
         val configuration = LocalConfiguration.current
         val screenHeight = remember { density.run { configuration.screenHeightDp.dp.toPx() } }
-        var bottomBarHeight by remember { mutableIntStateOf(0) }
+        val bottomBarHeight = remember { mutableIntStateOf(0) }
         val currentItemHeight = remember { mutableIntStateOf(0) }
         val currentPositionY = remember { mutableFloatStateOf(0f) }
 
@@ -122,14 +121,14 @@ fun MediaPickerScreen(
 
             val isReadying by remember {
                 derivedStateOf {
-                    screenHeight - currentPositionY.floatValue - currentItemHeight.intValue <= bottomBarHeight
+                    screenHeight - currentPositionY.floatValue - currentItemHeight.intValue <= bottomBarHeight.intValue
                 }
             }
             DeleteActionBottomBar(
                 visible = state.draggingItemIndex != null,
                 isReadying
             ) {
-                bottomBarHeight = it
+                bottomBarHeight.intValue = it
             }
         }
     }
@@ -138,11 +137,11 @@ fun MediaPickerScreen(
 @Composable
 private fun PictureGrid(
     state: ReorderableLazyGridState,
-    data: MutableState<List<Uri>>,
+    data: MutableState<List<String>>,
     screenHeight: Float,
     currentItemHeight: MutableIntState,
     currentPositionY: MutableFloatState,
-    bottomBarHeight: Int,
+    bottomBarHeight: MutableIntState,
     onChooseMedia: (type: MediaType, count: Int) -> Unit
 ) {
     val context = LocalContext.current
@@ -176,9 +175,9 @@ private fun PictureGrid(
                         .shadow(elevation)
                         .background(MaterialTheme.colorScheme.onSurface)
                         .detectReorderAfterLongPress(state)
-                        .pointerInput(bottomBarHeight) {
+                        .pointerInput(Unit) {
                             detectDragGesturesAfterLongPressWithoutConsume(onDragEnd = {
-                                if (positionY >= screenHeight - currentItemHeight.intValue - bottomBarHeight) {
+                                if (positionY >= screenHeight - currentItemHeight.intValue - bottomBarHeight.intValue) {
                                     data.value -= item
                                 }
                             }) { _, _ ->
@@ -213,7 +212,8 @@ private fun BoxScope.DeleteActionBottomBar(
     onHeightChange: (Int) -> Unit
 ) {
     AnimatedVisibility(
-        visible, modifier = Modifier.align(Alignment.BottomCenter),
+        visible,
+        modifier = Modifier.align(Alignment.BottomCenter),
         enter = slideInVertically(
             animationSpec = tween(150),
             initialOffsetY = { it }

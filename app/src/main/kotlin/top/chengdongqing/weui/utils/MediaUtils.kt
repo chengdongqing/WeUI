@@ -1,6 +1,5 @@
 package top.chengdongqing.weui.utils
 
-import android.Manifest
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
@@ -8,13 +7,9 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import androidx.core.content.FileProvider
+import androidx.core.net.toFile
 import top.chengdongqing.weui.R
-import top.chengdongqing.weui.ui.screens.demo.gallery.preview.MediaPreviewActivity
 
 enum class MediaType {
     IMAGE, VIDEO, AUDIO, RECORDING
@@ -61,38 +56,16 @@ object MediaStoreUtils {
         }
 }
 
-@OptIn(ExperimentalPermissionsApi::class)
-@Composable
-fun RequestMediaPermission(content: @Composable () -> Unit) {
-    val permissionState = rememberMultiplePermissionsState(
-        remember {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                listOf(
-                    Manifest.permission.READ_MEDIA_IMAGES,
-                    Manifest.permission.READ_MEDIA_VIDEO
-                )
-            } else {
-                listOf(Manifest.permission.READ_EXTERNAL_STORAGE)
-            }
-        }
+fun Context.shareFile(uri: Uri, type: String = "image/*") {
+    val sharingUri = FileProvider.getUriForFile(
+        this,
+        "${packageName}.provider",
+        uri.toFile()
     )
-
-    LaunchedEffect(permissionState) {
-        if (!permissionState.allPermissionsGranted) {
-            permissionState.launchMultiplePermissionRequest()
-        }
-    }
-
-    if (permissionState.allPermissionsGranted) {
-        content()
-    }
-}
-
-fun Context.previewMedias(uris: List<Uri>, current: Int = 0) {
-    val intent = MediaPreviewActivity.newIntent(this).apply {
-        putExtra("uris", uris.toTypedArray())
-        putExtra("current", current)
-        addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+    val intent = Intent(Intent.ACTION_SEND).apply {
+        this.type = type
+        putExtra(Intent.EXTRA_STREAM, sharingUri)
+        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
     }
     startActivity(intent)
 }

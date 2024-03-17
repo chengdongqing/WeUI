@@ -15,7 +15,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -87,13 +86,15 @@ fun rememberContextMenuState(onTap: (listIndex: Int, menuIndex: Int) -> Unit): C
     val state = remember { ContextMenuStateImpl() }
 
     if (state.visible) {
-        WeContextMenu(
-            position = state.position,
-            options = state.options,
-            onCancel = { state.hide() },
-        ) { menuIndex ->
-            onTap(state.listIndex, menuIndex)
-            state.hide()
+        state.props?.let { props ->
+            WeContextMenu(
+                position = props.position,
+                options = props.options,
+                onCancel = { state.hide() },
+            ) { menuIndex ->
+                onTap(props.listIndex, menuIndex)
+                state.hide()
+            }
         }
     }
 
@@ -104,9 +105,7 @@ private class ContextMenuStateImpl : ContextMenuState {
     override val visible: Boolean get() = _visible
 
     override fun show(position: IntOffset, options: List<String>, listIndex: Int) {
-        this.listIndex = listIndex
-        this.position = position
-        this.options = options
+        props = ContextMenuProps(position, options, listIndex)
         _visible = true
     }
 
@@ -114,11 +113,15 @@ private class ContextMenuStateImpl : ContextMenuState {
         _visible = false
     }
 
-    var position by mutableStateOf(IntOffset.Zero)
-    var options by mutableStateOf<List<String>>(emptyList())
-    var listIndex by mutableIntStateOf(0)
+    var props by mutableStateOf<ContextMenuProps?>(null)
     private var _visible by mutableStateOf(false)
 }
+
+private data class ContextMenuProps(
+    val position: IntOffset,
+    val options: List<String>,
+    val listIndex: Int
+)
 
 @Composable
 fun Modifier.contextMenu(onLongPress: (IntOffset) -> Unit): Modifier {

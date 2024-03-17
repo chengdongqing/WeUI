@@ -6,17 +6,17 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
 
-fun vibrateShort(context: Context) {
-    vibrate(context, 15)
+fun Context.vibrateShort() {
+    vibrate(15)
 }
 
-fun vibrateLong(context: Context) {
-    vibrate(context, 400)
+fun Context.vibrateLong() {
+    vibrate(400)
 }
 
-fun vibrate(context: Context, milliseconds: Long) {
+fun Context.vibrate(milliseconds: Long) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        val vibrator = context.getSystemService(
+        val vibrator = getSystemService(
             Context.VIBRATOR_MANAGER_SERVICE
         ) as VibratorManager
         vibrator.defaultVibrator.vibrate(
@@ -27,7 +27,7 @@ fun vibrate(context: Context, milliseconds: Long) {
         )
     } else {
         @Suppress("DEPRECATION")
-        val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         @Suppress("DEPRECATION")
         vibrator.vibrate(milliseconds)
     }

@@ -1,7 +1,6 @@
 package top.chengdongqing.weui.ui.components.mediapicker
 
 import android.content.Context
-import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
@@ -25,5 +24,5 @@ class MediaPickerViewModel(context: Context) : ViewModel() {
     val mediaList by lazy { pickerRepository.loadAllMedias() }
     var mediaType by mutableStateOf<MediaType?>(null)
     var countLimits by mutableIntStateOf(99)
-    val selectedList = mutableStateListOf<Uri>()
+    val selectedList = mutableStateListOf<String>()
 }

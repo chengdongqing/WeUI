@@ -67,7 +67,7 @@ internal fun ColumnScope.MediaGrid(pickerViewModel: MediaPickerViewModel) {
         modifier = Modifier.weight(1f)
     ) {
         itemsIndexed(filteredMediaList) { index, item ->
-            val selectIndex = pickerViewModel.selectedList.indexOf(item.uri)
+            val selectIndex = pickerViewModel.selectedList.indexOf(item.path)
             val selected = selectIndex != -1
 
             MediaGridCell(
@@ -75,12 +75,12 @@ internal fun ColumnScope.MediaGrid(pickerViewModel: MediaPickerViewModel) {
                 selected,
                 selectIndex,
                 onPreview = {
-                    context.previewMedias(filteredMediaList.map { it.uri }, index)
+                    context.previewMedias(filteredMediaList.map { it.path }, index)
                 }
             ) {
                 if (selectIndex == -1) {
                     if (pickerViewModel.selectedList.size < pickerViewModel.countLimits) {
-                        pickerViewModel.selectedList.add(item.uri)
+                        pickerViewModel.selectedList.add(item.path)
                     }
                 } else {
                     pickerViewModel.selectedList.removeAt(selectIndex)
@@ -151,7 +151,7 @@ private fun BoxScope.MediaCheckbox(selected: Boolean, selectIndex: Int, onClick:
         modifier = Modifier
             .align(Alignment.TopEnd)
             .clickableWithoutRipple { onClick() }
-            .padding(6.dp)
+            .padding(top = 6.dp, end = 6.dp, start = 18.dp, bottom = 18.dp)
     ) {
         Box(
             modifier = Modifier

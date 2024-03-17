@@ -124,7 +124,7 @@ private fun PickerColumn(
             .collect {
                 if (it != index) {
                     onChange(it)
-                    vibrateShort(context)
+                    context.vibrateShort()
                 }
             }
     }

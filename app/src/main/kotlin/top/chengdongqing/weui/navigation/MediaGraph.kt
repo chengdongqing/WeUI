@@ -1,6 +1,5 @@
 package top.chengdongqing.weui.navigation
 
-import android.net.Uri
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -29,11 +28,11 @@ fun NavGraphBuilder.addMediaGraph(navController: NavController) {
     }
     composable("media-picker/entrance") { backStackEntry ->
         val mediaListFlow = backStackEntry.savedStateHandle
-            .getStateFlow<Array<Uri>>("mediaList", emptyArray())
+            .getStateFlow<Array<String>>("mediaList", emptyArray())
             .map { it.toList() }
 
         MediaPickerScreen(mediaListFlow) { type, count ->
-            backStackEntry.savedStateHandle.remove<Array<Uri>>("mediaList")
+            backStackEntry.savedStateHandle.remove<Array<String>>("mediaList")
             navController.chooseMedias(type, count)
         }
     }

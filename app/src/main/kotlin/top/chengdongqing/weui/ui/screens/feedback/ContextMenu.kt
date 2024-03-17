@@ -24,7 +24,7 @@ fun ContextMenuScreen() {
         val dialog = rememberDialogState()
         val contextMenuState = rememberContextMenuState { listIndex, menuIndex ->
             dialog.show(
-                title = "您点击了第${listIndex + 1}项的“${menus[menuIndex]}”",
+                title = "你点击了第${listIndex + 1}项的“${menus[menuIndex]}”",
                 onCancel = null
             )
         }

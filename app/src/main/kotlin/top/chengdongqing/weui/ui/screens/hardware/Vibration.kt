@@ -18,11 +18,11 @@ fun VibrationScreen() {
         val context = LocalContext.current
 
         WeButton(text = "短震动") {
-            vibrateShort(context)
+            context.vibrateShort()
         }
         Spacer(modifier = Modifier.height(20.dp))
         WeButton(text = "长震动", type = ButtonType.PLAIN) {
-            vibrateLong(context)
+            context.vibrateLong()
         }
     }
 }

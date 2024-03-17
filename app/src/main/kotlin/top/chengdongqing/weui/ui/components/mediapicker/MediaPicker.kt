@@ -1,6 +1,5 @@
 package top.chengdongqing.weui.ui.components.mediapicker
 
-import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -51,7 +50,7 @@ fun WeMediaPicker(
     mediaType: MediaType?,
     countLimits: Int?,
     onCancel: () -> Unit,
-    onConfirm: (Array<Uri>) -> Unit
+    onConfirm: (Array<String>) -> Unit
 ) {
     SetupStatusBarStyle(isDark = false)
     WeUITheme(darkTheme = true) {

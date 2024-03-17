@@ -63,7 +63,7 @@ fun WeCompass(compassViewModel: CompassViewModel = viewModel()) {
     // 指向准点方位后触发震动
     UpdatedEffect(degrees) {
         if (degrees % 90 == 0) {
-            vibrateShort(context)
+            context.vibrateShort()
         }
     }
 

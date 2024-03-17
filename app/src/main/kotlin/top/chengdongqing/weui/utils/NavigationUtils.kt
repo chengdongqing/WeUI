@@ -1,7 +1,19 @@
 package top.chengdongqing.weui.utils
 
+import android.content.Context
+import android.content.Intent
 import androidx.navigation.NavController
 import com.google.mlkit.vision.barcode.common.Barcode
+import top.chengdongqing.weui.ui.screens.demo.gallery.preview.MediaPreviewActivity
+
+fun Context.previewMedias(uris: List<String>, current: Int = 0) {
+    val intent = MediaPreviewActivity.newIntent(this).apply {
+        putExtra("uris", uris.toTypedArray())
+        putExtra("current", current)
+        addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+    }
+    startActivity(intent)
+}
 
 fun NavController.chooseMedias(
     type: MediaType? = null,

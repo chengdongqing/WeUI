@@ -88,7 +88,7 @@ fun GalleryScreen(galleryViewModel: GalleryViewModel = viewModel()) {
                     }
                     itemsIndexed(items) { index, item ->
                         MediaItem(item, Modifier.clickableWithoutRipple {
-                            context.previewMedias(items.map { it.uri }, index)
+                            context.previewMedias(items.map { it.path }, index)
                         })
                     }
                 }

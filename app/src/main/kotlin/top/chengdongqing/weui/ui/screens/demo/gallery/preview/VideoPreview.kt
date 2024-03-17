@@ -5,11 +5,11 @@ import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.Uri
 import android.widget.VideoView
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -34,7 +34,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import top.chengdongqing.weui.R
 import top.chengdongqing.weui.ui.components.slider.WeSlider
-import top.chengdongqing.weui.ui.theme.BorderColorLight
 import top.chengdongqing.weui.utils.clickableWithoutRipple
 import top.chengdongqing.weui.utils.formatDuration
 import top.chengdongqing.weui.utils.rememberPlayPercent
@@ -137,7 +136,7 @@ private fun BoxScope.ControlBar(
     Row(
         modifier = Modifier
             .align(Alignment.BottomCenter)
-            .background(BorderColorLight)
+            .offset(y = (-60).dp)
             .padding(horizontal = 12.dp, vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
