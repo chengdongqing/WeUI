@@ -81,12 +81,13 @@ object VideoPlayerDefaults {
         ) {
             Text(text = state.currentDuration.milliseconds.format(), color = Color.White)
             WeSlider(
-                value = state.percent,
+                value = state.currentDuration.toFloat(),
+                range = 0f..state.totalDuration.toFloat(),
                 modifier = Modifier
                     .weight(1f)
                     .padding(horizontal = 16.dp)
             ) {
-                state.seekTo((it / 100 * state.totalDuration).roundToInt())
+                state.seekTo(it.roundToInt())
             }
             Text(text = state.totalDuration.milliseconds.format(), color = Color.White)
             MuteControl(state)

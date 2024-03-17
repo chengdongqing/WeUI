@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,11 +32,13 @@ import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun WeAudioPlayer(state: AudioPlayerState) {
-    PrimaryDuration(state)
-    Spacer(modifier = Modifier.height(40.dp))
-    ProgressControl(state)
-    Spacer(modifier = Modifier.height(60.dp))
-    PlayControl(state)
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        PrimaryDuration(state)
+        Spacer(modifier = Modifier.height(40.dp))
+        ProgressControl(state)
+        Spacer(modifier = Modifier.height(60.dp))
+        PlayControl(state)
+    }
 }
 
 @Composable
@@ -50,8 +53,11 @@ private fun PrimaryDuration(state: AudioPlayerState) {
 
 @Composable
 private fun ProgressControl(state: AudioPlayerState) {
-    WeSlider(value = state.percent) {
-        state.seekTo((it / 100 * state.totalDuration).roundToInt())
+    WeSlider(
+        value = state.currentDuration.toFloat(),
+        range = 0f..state.totalDuration.toFloat()
+    ) {
+        state.seekTo(it.roundToInt())
     }
     Row(
         modifier = Modifier.fillMaxWidth(),

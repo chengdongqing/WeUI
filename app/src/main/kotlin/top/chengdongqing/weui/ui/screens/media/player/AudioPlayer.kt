@@ -12,7 +12,7 @@ private const val audioSource =
 
 @Composable
 fun AudioPlayerScreen() {
-    WeScreen(title = "AudioPlayer", description = "音频播放", PaddingValues(24.dp)) {
+    WeScreen(title = "AudioPlayer", description = "音频播放", padding = PaddingValues(24.dp)) {
         WeAudioPlayer(rememberAudioPlayerState(audioSource))
     }
 }

@@ -5,16 +5,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -43,11 +42,6 @@ interface AudioPlayerState {
     val currentDuration: Int
 
     /**
-     * 当前进度百分比
-     */
-    val percent: Float
-
-    /**
      * 播放
      */
     fun play()
@@ -65,17 +59,17 @@ interface AudioPlayerState {
 
 @Composable
 fun rememberAudioPlayerState(audioSource: String): AudioPlayerState {
+    val coroutineScope = rememberCoroutineScope()
     val player = remember { MediaPlayer() }
     MediaPlayerLifecycle(player)
 
     val state = remember(audioSource) {
-        AudioPlayerStateImpl(player, audioSource)
+        AudioPlayerStateImpl(player, audioSource, coroutineScope)
     }
 
-    DisposableEffect(state) {
+    DisposableEffect(Unit) {
         onDispose {
             player.release()
-            state.stopUpdatingProgress()
         }
     }
 
@@ -84,7 +78,8 @@ fun rememberAudioPlayerState(audioSource: String): AudioPlayerState {
 
 private class AudioPlayerStateImpl(
     override val player: MediaPlayer,
-    val audioSource: String
+    val audioSource: String,
+    val coroutineScope: CoroutineScope
 ) : AudioPlayerState {
     override val isPlaying: Boolean
         get() = _isPlaying
@@ -92,8 +87,6 @@ private class AudioPlayerStateImpl(
         get() = _totalDuration
     override val currentDuration: Int
         get() = _currentDuration
-    override val percent: Float
-        get() = _percent
 
     override fun play() {
         if (!player.isPlaying) {
@@ -113,19 +106,19 @@ private class AudioPlayerStateImpl(
 
     override fun seekTo(milliseconds: Int) {
         if (milliseconds <= _totalDuration) {
+            _currentDuration = milliseconds
             player.seekTo(milliseconds)
             if (!player.isPlaying) {
                 play()
             }
-            _percent = calculatePercent(milliseconds)
         }
     }
 
     private fun updateProgress() {
-        progressJob = CoroutineScope(Dispatchers.Main).launch {
+        stopUpdatingProgress()
+        progressJob = coroutineScope.launch {
             while (isActive) {
                 _currentDuration = player.currentPosition
-                _percent = calculatePercent(_currentDuration)
                 delay(500)
             }
         }
@@ -134,14 +127,6 @@ private class AudioPlayerStateImpl(
     fun stopUpdatingProgress() {
         progressJob?.cancel()
         progressJob = null
-    }
-
-    private fun calculatePercent(milliseconds: Int): Float {
-        return if (_totalDuration > 0) {
-            milliseconds.toFloat() / _totalDuration * 100
-        } else {
-            0f
-        }
     }
 
     init {
@@ -161,7 +146,6 @@ private class AudioPlayerStateImpl(
     private var _isPlaying by mutableStateOf(player.isPlaying)
     private var _totalDuration by mutableIntStateOf(0)
     private var _currentDuration by mutableIntStateOf(0)
-    private var _percent by mutableFloatStateOf(0f)
     private var progressJob: Job? = null
 }
 

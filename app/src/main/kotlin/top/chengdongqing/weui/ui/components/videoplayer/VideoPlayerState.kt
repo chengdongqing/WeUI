@@ -8,17 +8,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -57,11 +56,6 @@ interface VideoPlayerState {
     val currentDuration: Int
 
     /**
-     * 当前进度百分比
-     */
-    val percent: Float
-
-    /**
      * 播放
      */
     fun play()
@@ -87,16 +81,17 @@ interface VideoPlayerState {
 fun rememberVideoPlayerState(videoSource: Uri, isLooping: Boolean = true): VideoPlayerState {
     val context = LocalContext.current
     val videoView = remember { VideoView(context) }
-    MediaPlayerLifecycle(videoView)
     val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    val coroutineScope = rememberCoroutineScope()
+    MediaPlayerLifecycle(videoView)
 
     val state = remember(videoSource) {
-        VideoPlayerStateImpl(videoView, audioManager, videoSource, isLooping)
+        VideoPlayerStateImpl(videoView, audioManager, videoSource, isLooping, coroutineScope)
     }
 
-    DisposableEffect(state) {
+    DisposableEffect(Unit) {
         onDispose {
-            state.stopUpdatingProgress()
+            videoView.stopPlayback()
         }
     }
 
@@ -107,7 +102,8 @@ private class VideoPlayerStateImpl(
     override val videoView: VideoView,
     val audioManager: AudioManager,
     val videoSource: Uri,
-    val isLooping: Boolean
+    val isLooping: Boolean,
+    val coroutineScope: CoroutineScope
 ) : VideoPlayerState {
     override val isPrepared: Boolean
         get() = _isPrepared
@@ -119,8 +115,6 @@ private class VideoPlayerStateImpl(
         get() = _totalDuration
     override val currentDuration: Int
         get() = _currentDuration
-    override val percent: Float
-        get() = _percent
 
     override fun play() {
         if (!videoView.isPlaying) {
@@ -140,11 +134,11 @@ private class VideoPlayerStateImpl(
 
     override fun seekTo(milliseconds: Int) {
         if (milliseconds <= _totalDuration) {
+            _currentDuration = milliseconds
             videoView.seekTo(milliseconds)
             if (!videoView.isPlaying) {
                 play()
             }
-            _percent = calculatePercent(milliseconds)
         }
     }
 
@@ -159,10 +153,10 @@ private class VideoPlayerStateImpl(
     }
 
     private fun updateProgress() {
-        progressJob = CoroutineScope(Dispatchers.Main).launch {
+        stopUpdatingProgress()
+        progressJob = coroutineScope.launch {
             while (isActive) {
                 _currentDuration = videoView.currentPosition
-                _percent = calculatePercent(_currentDuration)
                 delay(500)
             }
         }
@@ -173,16 +167,9 @@ private class VideoPlayerStateImpl(
         progressJob = null
     }
 
-    private fun calculatePercent(milliseconds: Int): Float {
-        return if (_totalDuration > 0) {
-            milliseconds.toFloat() / _totalDuration * 100
-        } else {
-            0f
-        }
-    }
-
     init {
         videoView.apply {
+            stopPlayback()
             setVideoURI(videoSource)
             setOnPreparedListener {
                 _isPrepared = true
@@ -201,7 +188,6 @@ private class VideoPlayerStateImpl(
     private var _isMute by mutableStateOf(false)
     private var _totalDuration by mutableIntStateOf(0)
     private var _currentDuration by mutableIntStateOf(0)
-    private var _percent by mutableFloatStateOf(0f)
     private var progressJob: Job? = null
 }
 

@@ -68,8 +68,8 @@ fun WeSlider(
     var offsetX by remember { mutableStateOf(0.dp) }
 
     // 值改变后计算相应元素的位置或宽度
-    LaunchedEffect(value, sliderWidth) {
-        percent = (value.coerceIn(min, max) - min) / (max - min)
+    LaunchedEffect(value, sliderWidth, range) {
+        percent = if (max - min > 0f) (value.coerceIn(min, max) - min) / (max - min) else 0f
         offsetX = density.run { (sliderWidth * percent).toDp() }
     }
 
@@ -78,7 +78,7 @@ fun WeSlider(
         if (!disabled) {
             val newFraction = (offsetX / sliderWidth).coerceIn(0f, 1f)
             val newValue = newFraction * (max - min) + min
-            if (newValue.toInt() % step == 0) {
+            if (newValue.toInt().rem(step) == 0) {
                 onChange(newValue)
             }
         }
@@ -98,7 +98,7 @@ fun WeSlider(
                     sliderWidth = it.width
                 }
                 // 处理拖动事件
-                .pointerInput(Unit) {
+                .pointerInput(range) {
                     detectHorizontalDragGestures(onDragEnd = {
                         onChangeFinished?.invoke()
                     }) { change, _ ->
@@ -106,7 +106,7 @@ fun WeSlider(
                     }
                 }
                 // 处理点击事件
-                .pointerInput(Unit) {
+                .pointerInput(range) {
                     detectTapGestures {
                         handleChange(it.x)
                         onChangeFinished?.invoke()
