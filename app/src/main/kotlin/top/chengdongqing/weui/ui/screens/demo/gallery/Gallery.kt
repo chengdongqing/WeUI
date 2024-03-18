@@ -35,6 +35,7 @@ import top.chengdongqing.weui.ui.components.loading.WeLoadMore
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.utils.RequestMediaPermission
 import top.chengdongqing.weui.utils.format
+import top.chengdongqing.weui.utils.loadMediaThumbnail
 import top.chengdongqing.weui.utils.previewMedias
 import java.time.format.DateTimeFormatter
 import kotlin.time.Duration.Companion.milliseconds
@@ -47,15 +48,15 @@ fun GalleryScreen(navController: NavController) {
         padding = PaddingValues(0.dp),
         scrollEnabled = false
     ) {
-        val context = LocalContext.current
-        val state = rememberGalleryState()
-
-        if (state.isLoading) {
-            WeLoadMore()
-        }
         RequestMediaPermission(onRevoked = {
             navController.popBackStack()
         }) {
+            val state = rememberGalleryState()
+            if (state.isLoading) {
+                WeLoadMore()
+            }
+
+            val context = LocalContext.current
             LazyVerticalGrid(
                 columns = GridCells.Adaptive(100.dp),
                 contentPadding = PaddingValues(bottom = 60.dp),
@@ -77,7 +78,7 @@ fun GalleryScreen(navController: NavController) {
                         )
                     }
                     itemsIndexed(items) { index, item ->
-                        MediaItem(item, state) {
+                        MediaItem(item) {
                             context.previewMedias(items, index)
                         }
                     }
@@ -88,15 +89,16 @@ fun GalleryScreen(navController: NavController) {
 }
 
 @Composable
-private fun MediaItem(media: MediaItem, state: GalleryState, onClick: () -> Unit) {
+private fun MediaItem(media: MediaItem, onClick: () -> Unit) {
     Box(
         modifier = Modifier
             .aspectRatio(1f)
             .background(MaterialTheme.colorScheme.outline)
             .clickable { onClick() }
     ) {
+        val context = LocalContext.current
         val thumbnail by produceState<Any?>(initialValue = null) {
-            value = state.getThumbnail(media)
+            value = context.loadMediaThumbnail(media)
         }
 
         AsyncImage(

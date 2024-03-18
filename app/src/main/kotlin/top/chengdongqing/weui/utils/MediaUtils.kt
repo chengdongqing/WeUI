@@ -9,10 +9,17 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Size
 import androidx.core.content.FileProvider
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.R
+import top.chengdongqing.weui.data.model.MediaItem
+import top.chengdongqing.weui.data.model.isImage
+import top.chengdongqing.weui.data.model.isVideo
 import top.chengdongqing.weui.enums.MediaType
 import java.io.File
+import java.io.IOException
 
 object MediaStoreUtils {
     fun createContentValues(
@@ -67,6 +74,34 @@ fun Context.shareFile(file: File, mimeType: String = "image/*") {
         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
     }
     startActivity(intent)
+}
+
+suspend fun Context.loadMediaThumbnail(media: MediaItem): Any? {
+    // 图片在低版本系统中加载原图
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q && !media.isVideo()) {
+        return media.uri
+    } else {
+        return withContext(Dispatchers.IO) {
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    // 高版本系统直接加载缩略图
+                    contentResolver.loadThumbnail(
+                        media.uri, Size(200, 200), null
+                    )
+                } else {
+                    // 低版本系统获取视频首帧
+                    loadVideoThumbnail(media.uri)
+                }
+            } catch (e: IOException) {
+                e.printStackTrace()
+                if (media.isImage()) {
+                    media.uri
+                } else {
+                    null
+                }
+            }
+        }
+    }
 }
 
 fun Context.loadVideoThumbnail(uri: Uri): Bitmap? {

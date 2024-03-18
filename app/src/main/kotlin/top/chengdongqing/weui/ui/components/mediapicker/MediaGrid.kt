@@ -23,9 +23,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,27 +35,16 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import top.chengdongqing.weui.data.model.MediaItem
 import top.chengdongqing.weui.data.model.isVideo
-import top.chengdongqing.weui.enums.MediaType
-import top.chengdongqing.weui.ui.screens.demo.gallery.produceThumbnail
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.utils.clickableWithoutRipple
 import top.chengdongqing.weui.utils.format
+import top.chengdongqing.weui.utils.loadMediaThumbnail
 import top.chengdongqing.weui.utils.previewMedias
 import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
-internal fun ColumnScope.MediaGrid(pickerViewModel: MediaPickerViewModel) {
+internal fun ColumnScope.MediaGrid(state: MediaPickerState) {
     val context = LocalContext.current
-    val mediaList by pickerViewModel.mediaList.collectAsState(initial = emptyList())
-    val filteredList = remember(mediaList, pickerViewModel.type) {
-        if (pickerViewModel.type == null) {
-            mediaList
-        } else {
-            mediaList.filter {
-                it.isVideo() == (pickerViewModel.type == MediaType.VIDEO)
-            }
-        }
-    }
 
     LazyVerticalGrid(
         columns = GridCells.Adaptive(100.dp),
@@ -64,8 +52,8 @@ internal fun ColumnScope.MediaGrid(pickerViewModel: MediaPickerViewModel) {
         verticalArrangement = Arrangement.spacedBy(2.dp),
         modifier = Modifier.weight(1f)
     ) {
-        itemsIndexed(filteredList) { index, item ->
-            val selectedIndex = pickerViewModel.selectedList.indexOf(item)
+        itemsIndexed(state.mediaList) { index, item ->
+            val selectedIndex = state.selectedMediaList.indexOf(item)
             val selected = selectedIndex != -1
 
             MediaGridCell(
@@ -73,15 +61,15 @@ internal fun ColumnScope.MediaGrid(pickerViewModel: MediaPickerViewModel) {
                 selected,
                 selectedIndex,
                 onPreview = {
-                    context.previewMedias(filteredList, index)
+                    context.previewMedias(state.mediaList, index)
                 }
             ) {
                 if (selectedIndex == -1) {
-                    if (pickerViewModel.selectedList.size < pickerViewModel.count) {
-                        pickerViewModel.selectedList.add(item)
+                    if (state.selectedMediaList.size < state.count) {
+                        state.add(item)
                     }
                 } else {
-                    pickerViewModel.selectedList.removeAt(selectedIndex)
+                    state.removeAt(selectedIndex)
                 }
             }
         }
@@ -90,7 +78,7 @@ internal fun ColumnScope.MediaGrid(pickerViewModel: MediaPickerViewModel) {
 
 @Composable
 private fun MediaGridCell(
-    item: MediaItem,
+    media: MediaItem,
     selected: Boolean,
     selectedIndex: Int,
     onPreview: () -> Unit,
@@ -102,14 +90,19 @@ private fun MediaGridCell(
             .background(MaterialTheme.colorScheme.outline)
             .clickable { onPreview() }
     ) {
+        val context = LocalContext.current
+        val thumbnail by produceState<Any?>(initialValue = null) {
+            value = context.loadMediaThumbnail(media)
+        }
+
         AsyncImage(
-            model = produceThumbnail(item).value,
+            model = thumbnail,
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.matchParentSize()
         )
         // 视频标识及时长
-        if (item.isVideo()) {
+        if (media.isVideo()) {
             Row(
                 modifier = Modifier
                     .align(Alignment.BottomStart)
@@ -124,7 +117,7 @@ private fun MediaGridCell(
                 )
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
-                    text = item.duration.milliseconds.format(),
+                    text = media.duration.milliseconds.format(),
                     color = Color.White,
                     fontSize = 15.sp
                 )

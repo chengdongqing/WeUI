@@ -8,10 +8,11 @@ import top.chengdongqing.weui.data.model.MediaItem
 import top.chengdongqing.weui.enums.MediaType
 
 class LocalMediaRepositoryImpl(private val context: Context) : LocalMediaRepository {
-    override suspend fun loadAllMedias(): List<MediaItem> {
+    override suspend fun loadMediaList(types: Array<MediaType>): List<MediaItem> {
         return withContext(Dispatchers.IO) {
             val mediaItems = mutableListOf<MediaItem>()
 
+            val selectionUri = MediaStore.Files.getContentUri("external")
             val projection = arrayOf(
                 MediaStore.Files.FileColumns._ID,
                 MediaStore.Files.FileColumns.DISPLAY_NAME,
@@ -22,15 +23,16 @@ class LocalMediaRepositoryImpl(private val context: Context) : LocalMediaReposit
                 MediaStore.Files.FileColumns.MEDIA_TYPE,
                 MediaStore.Files.FileColumns.MIME_TYPE
             )
+            val selection =
+                "${MediaStore.Files.FileColumns.MEDIA_TYPE} IN (${types.joinToString(separator = ",") { "?" }})"
+            val selectionArgs = types.map { it.columnType.toString() }.toTypedArray()
+            val sortOrder = "${MediaStore.Files.FileColumns.DATE_ADDED} DESC"
             context.contentResolver.query(
-                MediaStore.Files.getContentUri("external"),
+                selectionUri,
                 projection,
-                MediaStore.Files.FileColumns.MEDIA_TYPE + "=? OR " + MediaStore.Files.FileColumns.MEDIA_TYPE + "=?",
-                arrayOf(
-                    MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString(),
-                    MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString()
-                ),
-                MediaStore.Files.FileColumns.DATE_ADDED + " DESC"
+                selection,
+                selectionArgs,
+                sortOrder
             )?.use { cursor ->
                 val idColumn = cursor.getColumnIndex(MediaStore.Files.FileColumns._ID)
                 val nameColumn =
@@ -49,20 +51,16 @@ class LocalMediaRepositoryImpl(private val context: Context) : LocalMediaReposit
                     cursor.getColumnIndex(MediaStore.Files.FileColumns.DATA)
 
                 while (cursor.moveToNext()) {
-                    val uri = MediaStore.Files.getContentUri("external", cursor.getLong(idColumn))
-                    val mediaType =
-                        if (cursor.getInt(mediaTypeColumn) == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO) {
-                            MediaType.VIDEO
-                        } else {
-                            MediaType.IMAGE
-                        }
+                    val fileUri =
+                        MediaStore.Files.getContentUri("external", cursor.getLong(idColumn))
+                    val mediaType = MediaType.ofColumnType(cursor.getInt(mediaTypeColumn))
 
                     mediaItems.add(
                         MediaItem(
-                            uri,
+                            fileUri,
                             filename = cursor.getString(nameColumn),
                             filepath = cursor.getString(dataColumn),
-                            mediaType = mediaType,
+                            mediaType = mediaType ?: MediaType.IMAGE,
                             mimeType = cursor.getString(mimeTypeColumn),
                             duration = cursor.getLong(durationColumn),
                             size = cursor.getLong(sizeColumn),
