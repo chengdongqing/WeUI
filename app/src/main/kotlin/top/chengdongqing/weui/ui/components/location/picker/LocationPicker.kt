@@ -27,49 +27,45 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.amap.api.maps.model.MarkerOptions
 import top.chengdongqing.weui.R
 import top.chengdongqing.weui.data.model.LocationItem
 import top.chengdongqing.weui.ui.components.button.ButtonSize
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.location.AMap
+import top.chengdongqing.weui.ui.components.location.rememberAMapState
 import top.chengdongqing.weui.utils.clickableWithoutRipple
 import top.chengdongqing.weui.utils.createBitmapDescriptor
 
 @Composable
 fun WeLocationPicker(
-    pickerViewModel: LocationPickerViewModel = viewModel(),
     onCancel: () -> Unit,
     onConfirm: (LocationItem) -> Unit
 ) {
-    val context = LocalContext.current
+    val mapState = rememberAMapState()
+    val state = rememberLocationPickerState(mapState.map)
 
     Column(modifier = Modifier.fillMaxSize()) {
         Box(modifier = Modifier.weight(1f)) {
-            AMap { map ->
-                pickerViewModel.apply {
-                    this.map = map
-                    initializeMyLocation(map)
-                    setCenterChangeListener(map, context)
-                    setMapClickListener(map)
-                }
+            AMap(state = mapState)
+            TopBar(
+                hasSelected = state.selectedLocation != null,
+                onCancel
+            ) {
+                onConfirm(state.selectedLocation!!)
             }
-            TopBar(isEmpty = pickerViewModel.selectedLocation == null, onCancel) {
-                onConfirm(pickerViewModel.selectedLocation!!)
-            }
-            LocationMarker(pickerViewModel)
+            LocationMarker(state)
         }
-        LocationPickerBottom(pickerViewModel)
+        LocationPickerBottom(state)
     }
 }
 
 @Composable
-private fun BoxScope.LocationMarker(pickerViewModel: LocationPickerViewModel) {
-    if (!pickerViewModel.isSearchMode || pickerViewModel.selectedLocation == null) {
+private fun BoxScope.LocationMarker(state: LocationPickerState) {
+    if (!state.isSearchMode || state.selectedLocation == null) {
         val offsetY = remember { Animatable(0f) }
         val animationSpec = remember { TweenSpec<Float>(durationMillis = 300) }
-        LaunchedEffect(pickerViewModel.center) {
+        LaunchedEffect(state.mapCenter) {
             offsetY.animateTo(-10f, animationSpec)
             offsetY.animateTo(0f, animationSpec)
         }
@@ -83,9 +79,9 @@ private fun BoxScope.LocationMarker(pickerViewModel: LocationPickerViewModel) {
         )
     } else {
         val context = LocalContext.current
-        DisposableEffect(pickerViewModel.selectedLocation) {
+        DisposableEffect(state.selectedLocation) {
             val markerOptions = MarkerOptions().apply {
-                position(pickerViewModel.selectedLocation?.latLng)
+                position(state.selectedLocation?.latLng)
                 icon(
                     createBitmapDescriptor(
                         context,
@@ -95,7 +91,7 @@ private fun BoxScope.LocationMarker(pickerViewModel: LocationPickerViewModel) {
                     )
                 )
             }
-            val marker = pickerViewModel.map?.addMarker(markerOptions)
+            val marker = state.map.addMarker(markerOptions)
             onDispose {
                 marker?.remove()
             }
@@ -104,7 +100,7 @@ private fun BoxScope.LocationMarker(pickerViewModel: LocationPickerViewModel) {
 }
 
 @Composable
-private fun TopBar(isEmpty: Boolean, onCancel: () -> Unit, onConfirm: () -> Unit) {
+private fun TopBar(hasSelected: Boolean, onCancel: () -> Unit, onConfirm: () -> Unit) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
@@ -125,7 +121,7 @@ private fun TopBar(isEmpty: Boolean, onCancel: () -> Unit, onConfirm: () -> Unit
         WeButton(
             text = "确定",
             size = ButtonSize.SMALL,
-            disabled = isEmpty
+            disabled = !hasSelected
         ) {
             onConfirm()
         }

@@ -19,10 +19,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,56 +28,61 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.amap.api.maps.AMap
 import com.amap.api.maps.CameraUpdateFactory
-import com.amap.api.maps.model.LatLng
 import com.amap.api.maps.model.MarkerOptions
 import top.chengdongqing.weui.R
+import top.chengdongqing.weui.data.model.LocationPreviewItem
 import top.chengdongqing.weui.ui.components.actionsheet.ActionSheetItem
 import top.chengdongqing.weui.ui.components.actionsheet.rememberActionSheetState
 import top.chengdongqing.weui.ui.components.location.AMap
+import top.chengdongqing.weui.ui.components.location.rememberAMapState
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.utils.MapType
 import top.chengdongqing.weui.utils.createBitmapDescriptor
 import top.chengdongqing.weui.utils.navigateToLocation
 
 @Composable
-fun WeLocationPreview(
-    latitude: Double,
-    longitude: Double,
-    zoom: Float = 16f,
-    name: String = "位置",
-    address: String?
-) {
+fun WeLocationPreview(location: LocationPreviewItem) {
     val context = LocalContext.current
-    var map by remember { mutableStateOf<AMap?>(null) }
-    val latLng = remember(latitude, longitude) { LatLng(latitude, longitude) }
+    val state = rememberAMapState()
+    val map = state.map
+
+    LaunchedEffect(state) {
+        // 设置地图视野
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(location.latLng, location.zoom))
+
+        // 添加定位标记
+        val marker = MarkerOptions().apply {
+            position(location.latLng)
+            icon(
+                createBitmapDescriptor(
+                    context,
+                    R.drawable.ic_location_marker,
+                    120,
+                    120
+                )
+            )
+        }
+        map.addMarker(marker)
+    }
 
     Column(modifier = Modifier.fillMaxSize()) {
-        AMap(Modifier.weight(1f)) {
-            map = it
-            it.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom))
-
-            val marker = MarkerOptions().apply {
-                position(latLng)
-                icon(
-                    createBitmapDescriptor(
-                        context,
-                        R.drawable.ic_location_marker,
-                        120,
-                        120
-                    )
-                )
-            }
-            it.addMarker(marker)
-        }
-        BottomBar(latLng, name, address)
+        AMap(modifier = Modifier.weight(1f), state)
+        BottomBar(location)
     }
 }
 
 @Composable
-private fun BottomBar(location: LatLng, name: String, address: String?) {
+private fun BottomBar(location: LocationPreviewItem) {
     val actionSheet = rememberActionSheetState()
+    val mapOptions = remember {
+        listOf(
+            ActionSheetItem("高德地图"),
+            ActionSheetItem("百度地图"),
+            ActionSheetItem("腾讯地图"),
+            ActionSheetItem("谷歌地图"),
+        )
+    }
 
     Row(
         modifier = Modifier
@@ -90,13 +93,13 @@ private fun BottomBar(location: LatLng, name: String, address: String?) {
     ) {
         Column {
             Text(
-                text = name,
+                text = location.name,
                 color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(14.dp))
-            address?.let {
+            location.address?.let {
                 Text(
                     text = it,
                     color = MaterialTheme.colorScheme.onSecondary,
@@ -112,18 +115,11 @@ private fun BottomBar(location: LatLng, name: String, address: String?) {
                     .clip(CircleShape)
                     .background(MaterialTheme.colorScheme.background)
                     .clickable {
-                        actionSheet.show(
-                            options = listOf(
-                                ActionSheetItem("高德地图"),
-                                ActionSheetItem("百度地图"),
-                                ActionSheetItem("腾讯地图"),
-                                ActionSheetItem("谷歌地图"),
-                            )
-                        ) { index ->
+                        actionSheet.show(mapOptions) { index ->
                             context.navigateToLocation(
                                 MapType.ofIndex(index)!!,
-                                location,
-                                name
+                                location.latLng,
+                                location.name
                             )
                         }
                     },

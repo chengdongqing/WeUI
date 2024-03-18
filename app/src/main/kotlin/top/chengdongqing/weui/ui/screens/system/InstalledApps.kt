@@ -26,12 +26,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
@@ -44,7 +40,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
 import androidx.core.graphics.drawable.toBitmap
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.ui.components.button.ButtonSize
 import top.chengdongqing.weui.ui.components.button.ButtonType
@@ -63,18 +59,18 @@ fun InstalledAppsScreen() {
         scrollEnabled = false
     ) {
         val context = LocalContext.current
-        val apps = rememberInstalledApps()
+        val appList = rememberInstalledAppList()
 
         LazyColumn(verticalArrangement = Arrangement.spacedBy(20.dp)) {
             item {
-                if (apps.isNotEmpty()) {
+                if (appList.isNotEmpty()) {
                     ActionBar(context)
                 } else {
                     WeLoadMore()
                 }
                 Spacer(modifier = Modifier.height(20.dp))
             }
-            items(apps) { app ->
+            items(appList) { app ->
                 AppItem(app, context)
             }
         }
@@ -116,7 +112,7 @@ private fun ActionBar(context: Context) {
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun AppItem(app: App, context: Context) {
+private fun AppItem(app: AppItem, context: Context) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Column(
             modifier = Modifier.weight(1f),
@@ -256,45 +252,45 @@ private fun copyFileToPublicDirectory(
 }
 
 @Composable
-private fun rememberInstalledApps(): List<App> {
+private fun rememberInstalledAppList(): List<AppItem> {
     val context = LocalContext.current
     val packageManager = context.packageManager
-    var apps by remember { mutableStateOf<List<App>>(emptyList()) }
 
-    LaunchedEffect(Unit) {
-        delay(300)
-        val intent = Intent(Intent.ACTION_MAIN, null).apply {
-            addCategory(Intent.CATEGORY_LAUNCHER)
-        }
-        withContext(Dispatchers.IO) {
-            apps = packageManager.queryIntentActivities(intent, 0).map { resolveInfo ->
-                val name = resolveInfo.loadLabel(packageManager).toString()
-                val icon = resolveInfo.loadIcon(packageManager)
-                val packageName = resolveInfo.activityInfo.packageName
-                val packageInfo = packageManager.getPackageInfo(packageName, 0)
-                val versionName = packageInfo.versionName
-                val lastModified = formatTime(packageInfo.lastUpdateTime)
-                val apkPath = packageInfo.applicationInfo.sourceDir
-                val apkSize = formatFileSize(File(apkPath))
-                App(
-                    name,
-                    icon,
-                    packageName,
-                    versionName,
-                    lastModified,
-                    apkPath,
-                    apkSize
-                )
-            }.sortedByDescending {
-                it.lastModified
+    val appList by produceState(initialValue = emptyList()) {
+        launch(Dispatchers.IO) {
+            val intent = Intent(Intent.ACTION_MAIN, null).apply {
+                addCategory(Intent.CATEGORY_LAUNCHER)
+            }
+            value = withContext(Dispatchers.IO) {
+                packageManager.queryIntentActivities(intent, 0).map { resolveInfo ->
+                    val name = resolveInfo.loadLabel(packageManager).toString()
+                    val icon = resolveInfo.loadIcon(packageManager)
+                    val packageName = resolveInfo.activityInfo.packageName
+                    val packageInfo = packageManager.getPackageInfo(packageName, 0)
+                    val versionName = packageInfo.versionName
+                    val lastModified = formatTime(packageInfo.lastUpdateTime)
+                    val apkPath = packageInfo.applicationInfo.sourceDir
+                    val apkSize = formatFileSize(File(apkPath))
+                    AppItem(
+                        name,
+                        icon,
+                        packageName,
+                        versionName,
+                        lastModified,
+                        apkPath,
+                        apkSize
+                    )
+                }.sortedByDescending {
+                    it.lastModified
+                }
             }
         }
     }
 
-    return apps
+    return appList
 }
 
-private data class App(
+private data class AppItem(
     val name: String,
     val icon: Drawable,
     val packageName: String,

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -86,7 +87,7 @@ private fun TopBar(
         modifier = Modifier
             .fillMaxWidth()
             .statusBarsPadding()
-            .padding(start = 16.dp, top = 6.dp, bottom = 12.dp)
+            .padding(top = 6.dp, bottom = 12.dp)
     ) {
         Icon(
             imageVector = Icons.Outlined.Close,
@@ -94,6 +95,7 @@ private fun TopBar(
             tint = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier
                 .align(Alignment.CenterStart)
+                .offset(x = 16.dp)
                 .size(28.dp)
                 .clickable {
                     onCancel()

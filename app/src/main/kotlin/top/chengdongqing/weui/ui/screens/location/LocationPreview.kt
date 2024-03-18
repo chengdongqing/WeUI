@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.amap.api.maps.model.LatLng
-import top.chengdongqing.weui.data.model.LocationItem
+import top.chengdongqing.weui.data.model.LocationPreviewItem
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.cardlist.WeCardList
 import top.chengdongqing.weui.ui.components.cardlist.WeCardListItem
@@ -20,10 +20,11 @@ fun LocationPreviewScreen() {
     WeScreen(title = "LocationPreview", description = "查看位置", scrollEnabled = false) {
         val context = LocalContext.current
         val location = remember {
-            LocationItem(
+            LocationPreviewItem(
                 name = "庐山国家级旅游风景名胜区",
                 address = "江西省九江市庐山市牯岭镇",
-                latLng = LatLng(29.5628, 115.9928)
+                latLng = LatLng(29.5628, 115.9928),
+                zoom = 12f
             )
         }
 
@@ -33,19 +34,13 @@ fun LocationPreviewScreen() {
                     WeCardListItem(label = "纬度", value = latLng.latitude.toString())
                     WeCardListItem(label = "经度", value = latLng.longitude.toString())
                     WeCardListItem(label = "位置名称", value = name)
-                    WeCardListItem(label = "详细位置", value = address!!)
+                    WeCardListItem(label = "详细位置", value = address)
                 }
             }
         }
         Spacer(modifier = Modifier.height(20.dp))
         WeButton(text = "查看位置") {
-            context.previewLocation(
-                latitude = location.latLng.latitude,
-                longitude = location.latLng.longitude,
-                name = location.name,
-                address = location.address,
-                zoom = 12
-            )
+            context.previewLocation(location)
         }
     }
 }

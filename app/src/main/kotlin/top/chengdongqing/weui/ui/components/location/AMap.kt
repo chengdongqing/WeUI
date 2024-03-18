@@ -24,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -51,23 +52,21 @@ import top.chengdongqing.weui.utils.isTrue
 import top.chengdongqing.weui.utils.toLatLng
 
 @Composable
-fun AMap(modifier: Modifier = Modifier, onLoad: (AMap) -> Unit) {
-    // 初始化地图
-    val mapView = rememberMapView(onLoad)
-    // 处理生命周期
-    MapLifecycle(mapView)
-    // 处理定位权限
+fun AMap(modifier: Modifier = Modifier, state: AMapState = rememberAMapState()) {
     val context = LocalContext.current
+    // 处理生命周期
+    MapLifecycle(state.mapView)
+    // 处理定位权限
     LocationPermissionHandler {
-        setLocationArrow(mapView.map, context)
+        setLocationArrow(state.map, context)
     }
 
     Box(modifier) {
         AndroidView(
-            factory = { mapView },
+            factory = { state.mapView },
             modifier = Modifier.fillMaxSize()
         )
-        LocationControl(map = mapView.map)
+        LocationControl(map = state.map)
     }
 }
 
@@ -150,29 +149,6 @@ private fun LocationPermissionHandler(onGranted: (() -> Unit)? = null) {
 }
 
 @Composable
-private fun rememberMapView(onLoad: (AMap) -> Unit): MapView {
-    val context = LocalContext.current
-    val isDarkTheme = isSystemInDarkTheme()
-
-    return remember {
-        MapsInitializer.updatePrivacyShow(context, true, true)
-        MapsInitializer.updatePrivacyAgree(context, true)
-
-        val options = AMapOptions().apply {
-            // 设置logo位置
-            logoPosition(AMapOptions.LOGO_POSITION_BOTTOM_RIGHT)
-            // 不显示缩放控件
-            zoomControlsEnabled(false)
-            // 设置地图类型
-            mapType(if (isDarkTheme) AMap.MAP_TYPE_NIGHT else AMap.MAP_TYPE_NORMAL)
-        }
-        MapView(context, options).apply {
-            onLoad(map)
-        }
-    }
-}
-
-@Composable
 private fun MapLifecycle(mapView: MapView) {
     val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current.lifecycle
@@ -223,3 +199,54 @@ private fun MapView.componentCallbacks(): ComponentCallbacks =
             this@componentCallbacks.onLowMemory()
         }
     }
+
+@Stable
+interface AMapState {
+    /**
+     * 地图视图
+     */
+    val mapView: MapView
+
+    /**
+     * 地图实例
+     */
+    val map: AMap
+}
+
+@Composable
+fun rememberAMapState(): AMapState {
+    val context = LocalContext.current
+    val isDarkTheme = isSystemInDarkTheme()
+
+    return remember {
+        AMapStateImpl(context, isDarkTheme)
+    }
+}
+
+private class AMapStateImpl(context: Context, isDarkTheme: Boolean) : AMapState {
+    override val mapView: MapView
+        get() = _mapView
+    override val map: AMap
+        get() = _map
+
+    private val _mapView: MapView
+    private val _map: AMap
+
+    init {
+        MapsInitializer.updatePrivacyShow(context, true, true)
+        MapsInitializer.updatePrivacyAgree(context, true)
+
+        val options = AMapOptions().apply {
+            // 设置logo位置
+            logoPosition(AMapOptions.LOGO_POSITION_BOTTOM_RIGHT)
+            // 不显示缩放控件
+            zoomControlsEnabled(false)
+            // 设置地图类型
+            mapType(if (isDarkTheme) AMap.MAP_TYPE_NIGHT else AMap.MAP_TYPE_NORMAL)
+        }
+        MapView(context, options).apply {
+            _mapView = this
+            _map = map
+        }
+    }
+}

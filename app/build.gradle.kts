@@ -104,9 +104,7 @@ dependencies {
     implementation(libs.retrofit) // 网络请求
     implementation(libs.retrofit.converter)
     implementation(libs.reorderable) // 拖拽排序
-    implementation(fileTree("libs") {
-        include("*.jar")
-    })
+    implementation(fileTree("libs") { include("*.jar") })
     implementation(libs.amap) // 高德地图
     implementation(libs.amap.search) // 地图支持搜索
     testImplementation(libs.junit)

@@ -28,12 +28,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.amap.api.maps.CameraUpdateFactory
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import top.chengdongqing.weui.data.model.LocationItem
 import top.chengdongqing.weui.ui.components.loading.LoadMoreType
@@ -46,49 +47,42 @@ import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.utils.UpdatedEffect
 import top.chengdongqing.weui.utils.clickableWithoutRipple
 import top.chengdongqing.weui.utils.formatDistance
-import java.util.Timer
-import kotlin.concurrent.timerTask
 
 @Composable
-internal fun LocationPickerBottom(pickerViewModel: LocationPickerViewModel) {
-    val context = LocalContext.current
-    val isListItemClicking = pickerViewModel.isListItemClicking
-    val isSearchMode = pickerViewModel.isSearchMode
+internal fun LocationPickerBottom(state: LocationPickerState) {
+    val isSearchMode = state.isSearchMode
     val animatedHeightFraction by animateFloatAsState(
         targetValue = if (isSearchMode) 0.6f else 0.4f,
         label = ""
     )
     var locationList by remember { mutableStateOf<List<LocationItem>>(emptyList()) }
     var selectedIndex by remember { mutableIntStateOf(0) }
+    val coroutineScope = rememberCoroutineScope()
 
     // 地图中心点变化后（不包括点击列表）自动搜索附近POI
-    LaunchedEffect(pickerViewModel.center, isSearchMode) {
-        if (!isListItemClicking.value && !isSearchMode) {
-            pickerViewModel.center?.let { center ->
-                locationList = pickerViewModel.searchPOI(context, center)
+    LaunchedEffect(state.mapCenter, isSearchMode) {
+        if (!state.isWaiting && !isSearchMode) {
+            state.mapCenter?.let { center ->
+                locationList = state.search(center.latLng)
                 selectedIndex = 0
             }
         }
     }
-    LaunchedEffect(pickerViewModel.centerLocation) {
-        pickerViewModel.centerLocation.let {
-            pickerViewModel.selectedLocation = it
+    LaunchedEffect(state.mapCenter) {
+        state.mapCenter?.let {
+            state.selectedLocation = it
         }
     }
 
     // 处理列表地址点击事件
-    var timer by remember { mutableStateOf<Timer?>(null) }
     val onLocationClick: (LocationItem) -> Unit = { location ->
-        timer?.cancel()
+        state.isWaiting = true
+        state.selectedLocation = location
+        state.map.animateCamera(CameraUpdateFactory.newLatLngZoom(location.latLng, 16f))
 
-        isListItemClicking.value = true
-        pickerViewModel.selectedLocation = location
-        pickerViewModel.map?.animateCamera(CameraUpdateFactory.newLatLngZoom(location.latLng, 16f))
-
-        timer = Timer().apply {
-            schedule(timerTask {
-                isListItemClicking.value = false
-            }, 1000)
+        coroutineScope.launch {
+            delay(1000)
+            state.isWaiting = false
         }
     }
 
@@ -99,12 +93,19 @@ internal fun LocationPickerBottom(pickerViewModel: LocationPickerViewModel) {
             .background(MaterialTheme.colorScheme.surface)
     ) {
         SearchBar(
-            pickerViewModel,
+            state,
             isFocused = isSearchMode,
             onFocusChange = { focused ->
-                pickerViewModel.isSearchMode = focused
+                state.isSearchMode = focused
                 if (!focused && locationList.isNotEmpty()) {
-                    pickerViewModel.selectedLocation = locationList[selectedIndex]
+                    state.selectedLocation = locationList[selectedIndex].apply {
+                        state.map.animateCamera(
+                            CameraUpdateFactory.newLatLngZoom(
+                                latLng,
+                                16f
+                            )
+                        )
+                    }
                 }
             },
             onLocationClick
@@ -113,7 +114,7 @@ internal fun LocationPickerBottom(pickerViewModel: LocationPickerViewModel) {
             LocationList(
                 locationList,
                 selectedIndex,
-                pickerViewModel,
+                state,
                 onSelectChange = { selectedIndex = it },
                 onLocationClick
             )
@@ -125,25 +126,24 @@ internal fun LocationPickerBottom(pickerViewModel: LocationPickerViewModel) {
 private fun LocationList(
     locationList: List<LocationItem>,
     selectedIndex: Int,
-    pickerViewModel: LocationPickerViewModel,
+    state: LocationPickerState,
     onSelectChange: (Int) -> Unit,
     onLocationClick: (LocationItem) -> Unit
 ) {
     val options = rememberLocationOptions(
         locationList,
-        pickerViewModel.centerLocation
+        state.mapCenter
     )
 
     LocationRadioGroup(
         options,
         value = selectedIndex,
-        isLoading = pickerViewModel.isLoading,
-        isEmpty = pickerViewModel.isEmpty,
+        isLoading = state.isLoading
     ) { index ->
         onSelectChange(index)
-        val location = if (pickerViewModel.centerLocation != null) {
+        val location = if (state.mapCenter != null) {
             if (index == 0) {
-                pickerViewModel.centerLocation!!
+                state.mapCenter!!
             } else {
                 locationList[index - 1]
             }
@@ -157,40 +157,40 @@ private fun LocationList(
 @OptIn(FlowPreview::class)
 @Composable
 private fun SearchBar(
-    pickerViewModel: LocationPickerViewModel,
+    state: LocationPickerState,
     isFocused: Boolean,
     onFocusChange: (Boolean) -> Unit,
     onLocationClick: (LocationItem) -> Unit
 ) {
-    val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
     var locationList by remember { mutableStateOf<List<LocationItem>>(emptyList()) }
     var selectedIndex by remember { mutableStateOf<Int?>(null) }
     val options = rememberLocationOptions(locationList)
     val keywordFlow = remember { MutableStateFlow("") }
     val keyword by keywordFlow.collectAsState()
     var type by remember { mutableIntStateOf(0) }
+    var isEmpty by remember { mutableStateOf(false) }
 
-    fun search() {
-        coroutineScope.launch {
-            locationList = if (keyword.isNotEmpty()) {
-                pickerViewModel.searchPOI(
-                    context,
-                    location = if (type == 0) pickerViewModel.current else null,
-                    keyword
-                )
-            } else {
-                emptyList()
-            }
+    suspend fun search() {
+        locationList = if (keyword.isNotEmpty()) {
+            state.search(
+                location = if (type == 0) state.current else null,
+                keyword
+            )
+        } else {
+            emptyList()
         }
+        isEmpty = locationList.isEmpty()
     }
 
     // 输入后执行搜索
     LaunchedEffect(keywordFlow) {
-        // 防抖处理
-        keywordFlow.debounce(300).collect {
-            search()
-        }
+        keywordFlow
+            // 防抖处理
+            .debounce(300)
+            .filter { it.isNotEmpty() }
+            .collect {
+                search()
+            }
     }
     // 类型变化后执行搜索
     UpdatedEffect(type) {
@@ -212,17 +212,19 @@ private fun SearchBar(
         focused = isFocused,
         onFocusChange = onFocusChange,
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
-    ) { keywordFlow.value = it }
+    ) {
+        keywordFlow.value = it
+    }
     if (isFocused) {
         LaunchedEffect(Unit) {
-            pickerViewModel.selectedLocation = null
+            state.selectedLocation = null
         }
         TypeTabRow(value = type) { type = it }
         LocationRadioGroup(
             options,
             value = selectedIndex,
-            isLoading = pickerViewModel.isLoading,
-            isEmpty = pickerViewModel.isEmpty
+            isLoading = state.isLoading,
+            isEmpty
         ) { index ->
             selectedIndex = index
             onLocationClick(locationList[index])
@@ -268,7 +270,7 @@ private fun <T> LocationRadioGroup(
     options: List<RadioOption<T>>,
     value: T? = null,
     isLoading: Boolean,
-    isEmpty: Boolean,
+    isEmpty: Boolean = false,
     onChange: (T) -> Unit
 ) {
     Box(

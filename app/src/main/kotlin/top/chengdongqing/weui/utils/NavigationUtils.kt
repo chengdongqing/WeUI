@@ -9,6 +9,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import top.chengdongqing.weui.data.model.LocationItem
+import top.chengdongqing.weui.data.model.LocationPreviewItem
 import top.chengdongqing.weui.data.model.MediaItem
 import top.chengdongqing.weui.enums.MediaType
 import top.chengdongqing.weui.ui.components.location.picker.LocationPickerActivity
@@ -55,19 +56,9 @@ fun rememberPickMediasLauncher(onChange: (Array<MediaItem>) -> Unit): (type: Med
     }
 }
 
-fun Context.previewLocation(
-    latitude: Double,
-    longitude: Double,
-    name: String,
-    address: String? = null,
-    zoom: Int = 16
-) {
+fun Context.previewLocation(location: LocationPreviewItem) {
     val intent = LocationPreviewActivity.newIntent(this).apply {
-        putExtra("latitude", latitude)
-        putExtra("longitude", longitude)
-        putExtra("name", name)
-        putExtra("address", address)
-        putExtra("zoom", zoom)
+        putExtra("location", location)
     }
     startActivity(intent)
 }
