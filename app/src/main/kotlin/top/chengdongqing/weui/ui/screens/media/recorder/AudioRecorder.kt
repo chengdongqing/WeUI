@@ -34,6 +34,8 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import top.chengdongqing.weui.ui.components.screen.WeScreen
+import top.chengdongqing.weui.ui.components.toast.ToastIcon
+import top.chengdongqing.weui.ui.components.toast.rememberToastState
 import top.chengdongqing.weui.utils.format
 import kotlin.time.Duration.Companion.seconds
 
@@ -50,6 +52,7 @@ fun AudioRecorderScreen() {
             }
         )
         val state = rememberAudioRecorderState()
+        val toast = rememberToastState()
 
         Text(
             text = state.duration.seconds.format(isFull = true),
@@ -70,6 +73,7 @@ fun AudioRecorderScreen() {
                         if (permissionState.allPermissionsGranted) {
                             if (state.isRecording) {
                                 state.stop()
+                                toast.show("录音已保存", ToastIcon.SUCCESS)
                             } else {
                                 state.start()
                             }

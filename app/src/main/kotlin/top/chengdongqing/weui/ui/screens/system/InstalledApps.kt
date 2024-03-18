@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -56,6 +57,7 @@ fun InstalledAppsScreen() {
     WeScreen(
         title = "InstalledApps",
         description = "已安装的应用",
+        padding = PaddingValues(0.dp),
         scrollEnabled = false
     ) {
         val context = LocalContext.current
