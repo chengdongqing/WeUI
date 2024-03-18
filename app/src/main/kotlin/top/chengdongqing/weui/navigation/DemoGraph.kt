@@ -1,5 +1,6 @@
 package top.chengdongqing.weui.navigation
 
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import top.chengdongqing.weui.ui.screens.basic.DropCardScreen
@@ -22,7 +23,7 @@ import top.chengdongqing.weui.ui.screens.demo.orgtree.OrgTreeScreen
 import top.chengdongqing.weui.ui.screens.demo.paint.PaintScreen
 import top.chengdongqing.weui.ui.screens.demo.videochannel.VideoChannelScreen
 
-fun NavGraphBuilder.addDemoGraph() {
+fun NavGraphBuilder.addDemoGraph(navController: NavController) {
     composable("search-bar") {
         SearchBarScreen()
     }
@@ -36,7 +37,7 @@ fun NavGraphBuilder.addDemoGraph() {
         DropCardScreen()
     }
     composable("gallery") {
-        GalleryScreen()
+        GalleryScreen(navController)
     }
     composable("file-browser") {
         FileBrowserScreen()

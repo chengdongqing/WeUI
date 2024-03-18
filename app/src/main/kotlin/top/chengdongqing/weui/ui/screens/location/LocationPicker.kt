@@ -14,7 +14,7 @@ import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.cardlist.WeCardList
 import top.chengdongqing.weui.ui.components.cardlist.WeCardListItem
 import top.chengdongqing.weui.ui.components.screen.WeScreen
-import top.chengdongqing.weui.utils.rememberLocationPicker
+import top.chengdongqing.weui.utils.rememberPickLocationLauncher
 
 @Composable
 fun LocationPickerScreen() {
@@ -33,7 +33,7 @@ fun LocationPickerScreen() {
             Spacer(modifier = Modifier.height(20.dp))
         }
 
-        val pickLocation = rememberLocationPicker {
+        val pickLocation = rememberPickLocationLauncher {
             location = it
         }
         WeButton(text = "选择位置") {

@@ -32,6 +32,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import top.chengdongqing.weui.data.model.MediaItem
 import top.chengdongqing.weui.enums.MediaType
 import top.chengdongqing.weui.ui.components.actionsheet.ActionSheetItem
 import top.chengdongqing.weui.ui.components.actionsheet.rememberActionSheetState
@@ -50,7 +51,7 @@ fun WeMediaPicker(
     type: MediaType?,
     count: Int,
     onCancel: () -> Unit,
-    onConfirm: (Array<String>) -> Unit
+    onConfirm: (Array<MediaItem>) -> Unit
 ) {
     SetupStatusBarStyle(isDark = false)
     WeUITheme(darkTheme = true) {
@@ -60,7 +61,7 @@ fun WeMediaPicker(
                 .background(MaterialTheme.colorScheme.background)
         ) {
             TopBar(pickerViewModel, type, count, onCancel)
-            RequestMediaPermission {
+            RequestMediaPermission(onRevoked = onCancel) {
                 MediaGrid(pickerViewModel)
                 BottomBar(pickerViewModel) {
                     onConfirm(pickerViewModel.selectedList.toTypedArray())
@@ -123,7 +124,7 @@ private fun TopBar(
             Text(
                 text = typeOptions.find { it.value == pickerViewModel.type }?.label!!,
                 color = MaterialTheme.colorScheme.onPrimary,
-                fontSize = 17.sp
+                fontSize = 16.sp
             )
             if (type == null) {
                 Spacer(modifier = Modifier.width(4.dp))

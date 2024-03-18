@@ -1,8 +1,5 @@
 package top.chengdongqing.weui.ui.screens.network.upload
 
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -25,10 +22,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
+import top.chengdongqing.weui.enums.MediaType
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.components.toast.ToastIcon
 import top.chengdongqing.weui.ui.components.toast.rememberToastState
+import top.chengdongqing.weui.utils.rememberPickMediasLauncher
 
 @Composable
 fun FileUploadScreen(uploadViewModel: UploadViewModel = viewModel()) {
@@ -39,18 +38,15 @@ fun FileUploadScreen(uploadViewModel: UploadViewModel = viewModel()) {
         val toast = rememberToastState()
         val context = LocalContext.current
         val coroutineScope = rememberCoroutineScope()
-        val pickMediaLauncher = rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.PickVisualMedia()
-        ) { uri ->
-            uri?.let {
-                coroutineScope.launch {
-                    uploading = true
-                    uploadViewModel.uploadFile(context, uri)?.let {
-                        imageInfo = it
-                        toast.show("上传成功", ToastIcon.SUCCESS)
-                    } ?: toast.show("上传失败", ToastIcon.FAIL)
-                    uploading = false
-                }
+
+        val pickMedia = rememberPickMediasLauncher {
+            coroutineScope.launch {
+                uploading = true
+                uploadViewModel.uploadFile(context, it.first().uri)?.let {
+                    imageInfo = it
+                    toast.show("上传成功", ToastIcon.SUCCESS)
+                } ?: toast.show("上传失败", ToastIcon.FAIL)
+                uploading = false
             }
         }
 
@@ -59,7 +55,7 @@ fun FileUploadScreen(uploadViewModel: UploadViewModel = viewModel()) {
             loading = uploading,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
-            pickMediaLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            pickMedia(MediaType.IMAGE, 1)
         }
 
         imageInfo?.let { image ->

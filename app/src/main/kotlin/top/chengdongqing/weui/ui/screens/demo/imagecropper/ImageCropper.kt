@@ -2,9 +2,6 @@ package top.chengdongqing.weui.ui.screens.demo.imagecropper
 
 import android.graphics.Bitmap
 import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,22 +15,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import top.chengdongqing.weui.enums.MediaType
 import top.chengdongqing.weui.ui.components.button.ButtonType
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.imagecropper.WeImageCropper
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.theme.WeUITheme
+import top.chengdongqing.weui.utils.rememberPickMediasLauncher
 
 @Composable
 fun ImageCropperScreen() {
     WeScreen(title = "ImageCropper", description = "图片裁剪", scrollEnabled = false) {
         var uri by remember { mutableStateOf<Uri?>(null) }
         var croppedImage by remember { mutableStateOf<Bitmap?>(null) }
-
-        val pickMediaLauncher = rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.PickVisualMedia()
-        ) {
-            uri = it
+        val pickMedia = rememberPickMediasLauncher {
+            uri = it.first().uri
         }
 
         uri?.let {
@@ -57,9 +53,7 @@ fun ImageCropperScreen() {
             Spacer(modifier = Modifier.height(20.dp))
         }
         WeButton(text = "选择图片") {
-            pickMediaLauncher.launch(
-                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-            )
+            pickMedia(MediaType.IMAGE, 1)
         }
     }
 }

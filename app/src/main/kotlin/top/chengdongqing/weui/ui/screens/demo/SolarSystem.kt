@@ -32,8 +32,8 @@ import kotlin.math.sin
 
 @Composable
 fun SolarSystemScreen() {
+    SetupStatusBarStyle(isDark = false)
     WeUITheme(darkTheme = true) {
-        SetupStatusBarStyle(isDark = false)
         WeScreen(
             title = "SolarSystem",
             description = "太阳系动画",

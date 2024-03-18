@@ -34,28 +34,26 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import top.chengdongqing.weui.data.model.MediaItem
+import top.chengdongqing.weui.data.model.isVideo
 import top.chengdongqing.weui.enums.MediaType
-import top.chengdongqing.weui.ui.screens.demo.gallery.MediaItem
 import top.chengdongqing.weui.ui.screens.demo.gallery.produceThumbnail
 import top.chengdongqing.weui.ui.theme.PrimaryColor
 import top.chengdongqing.weui.utils.clickableWithoutRipple
 import top.chengdongqing.weui.utils.format
 import top.chengdongqing.weui.utils.previewMedias
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 internal fun ColumnScope.MediaGrid(pickerViewModel: MediaPickerViewModel) {
     val context = LocalContext.current
     val mediaList by pickerViewModel.mediaList.collectAsState(initial = emptyList())
-    val filteredMediaList = remember(mediaList, pickerViewModel.type) {
+    val filteredList = remember(mediaList, pickerViewModel.type) {
         if (pickerViewModel.type == null) {
             mediaList
         } else {
             mediaList.filter {
-                if (pickerViewModel.type == MediaType.IMAGE) {
-                    !it.isVideo
-                } else {
-                    it.isVideo
-                }
+                it.isVideo() == (pickerViewModel.type == MediaType.VIDEO)
             }
         }
     }
@@ -66,24 +64,24 @@ internal fun ColumnScope.MediaGrid(pickerViewModel: MediaPickerViewModel) {
         verticalArrangement = Arrangement.spacedBy(2.dp),
         modifier = Modifier.weight(1f)
     ) {
-        itemsIndexed(filteredMediaList) { index, item ->
-            val selectIndex = pickerViewModel.selectedList.indexOf(item.path)
-            val selected = selectIndex != -1
+        itemsIndexed(filteredList) { index, item ->
+            val selectedIndex = pickerViewModel.selectedList.indexOf(item)
+            val selected = selectedIndex != -1
 
             MediaGridCell(
                 item,
                 selected,
-                selectIndex,
+                selectedIndex,
                 onPreview = {
-                    context.previewMedias(filteredMediaList.map { it.path }, index)
+                    context.previewMedias(filteredList, index)
                 }
             ) {
-                if (selectIndex == -1) {
+                if (selectedIndex == -1) {
                     if (pickerViewModel.selectedList.size < pickerViewModel.count) {
-                        pickerViewModel.selectedList.add(item.path)
+                        pickerViewModel.selectedList.add(item)
                     }
                 } else {
-                    pickerViewModel.selectedList.removeAt(selectIndex)
+                    pickerViewModel.selectedList.removeAt(selectedIndex)
                 }
             }
         }
@@ -94,7 +92,7 @@ internal fun ColumnScope.MediaGrid(pickerViewModel: MediaPickerViewModel) {
 private fun MediaGridCell(
     item: MediaItem,
     selected: Boolean,
-    selectIndex: Int,
+    selectedIndex: Int,
     onPreview: () -> Unit,
     onSelect: () -> Unit
 ) {
@@ -111,7 +109,7 @@ private fun MediaGridCell(
             modifier = Modifier.matchParentSize()
         )
         // 视频标识及时长
-        if (item.isVideo) {
+        if (item.isVideo()) {
             Row(
                 modifier = Modifier
                     .align(Alignment.BottomStart)
@@ -126,7 +124,7 @@ private fun MediaGridCell(
                 )
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
-                    text = item.duration.format(),
+                    text = item.duration.milliseconds.format(),
                     color = Color.White,
                     fontSize = 15.sp
                 )
@@ -141,12 +139,12 @@ private fun MediaGridCell(
             )
         }
         // 选择框
-        MediaCheckbox(selected, selectIndex, onSelect)
+        MediaCheckbox(selected, selectedIndex, onSelect)
     }
 }
 
 @Composable
-private fun BoxScope.MediaCheckbox(selected: Boolean, selectIndex: Int, onClick: () -> Unit) {
+private fun BoxScope.MediaCheckbox(selected: Boolean, selectedIndex: Int, onClick: () -> Unit) {
     Box(
         modifier = Modifier
             .align(Alignment.TopEnd)
@@ -161,7 +159,7 @@ private fun BoxScope.MediaCheckbox(selected: Boolean, selectIndex: Int, onClick:
         ) {
             if (selected) {
                 Text(
-                    text = (selectIndex + 1).toString(),
+                    text = (selectedIndex + 1).toString(),
                     color = Color.White,
                     fontSize = 13.sp
                 )

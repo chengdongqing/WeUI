@@ -8,6 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import top.chengdongqing.weui.data.model.MediaItem
 import top.chengdongqing.weui.enums.MediaType
 import top.chengdongqing.weui.ui.components.mediapicker.data.MediaPickerDIGraph
 
@@ -22,7 +23,7 @@ class MediaPickerViewModel(context: Context) : ViewModel() {
     private val pickerRepository by lazy { MediaPickerDIGraph.createMediaPickerRepository(context) }
 
     val mediaList by lazy { pickerRepository.loadAllMedias() }
-    val selectedList = mutableStateListOf<String>()
+    val selectedList = mutableStateListOf<MediaItem>()
     var type by mutableStateOf<MediaType?>(null)
     var count by mutableIntStateOf(99)
 }

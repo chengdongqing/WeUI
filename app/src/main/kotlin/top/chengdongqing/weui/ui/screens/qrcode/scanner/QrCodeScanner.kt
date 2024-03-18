@@ -12,18 +12,20 @@ import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.ui.components.button.WeButton
 import top.chengdongqing.weui.ui.components.input.WeTextarea
 import top.chengdongqing.weui.ui.components.screen.WeScreen
-import top.chengdongqing.weui.utils.rememberQrCodeScanner
+import top.chengdongqing.weui.utils.rememberScanCodeLauncher
 
 @Composable
 fun QrCodeScanScreen() {
     WeScreen(title = "QrCodeScanner", description = "扫码") {
         var value by remember { mutableStateOf<String?>(null) }
-        val scanCode = rememberQrCodeScanner {
+        val scanCode = rememberScanCodeLauncher {
             value = it.joinToString("\n")
         }
 
-        WeTextarea(value, label = "扫码结果")
-        Spacer(modifier = Modifier.height(40.dp))
+        value?.let {
+            WeTextarea(it, label = "扫码结果")
+            Spacer(modifier = Modifier.height(40.dp))
+        }
         WeButton(text = "扫一扫") {
             scanCode()
         }

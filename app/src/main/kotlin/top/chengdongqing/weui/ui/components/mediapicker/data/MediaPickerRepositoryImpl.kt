@@ -4,8 +4,8 @@ import android.content.Context
 import android.provider.MediaStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import top.chengdongqing.weui.ui.screens.demo.gallery.MediaItem
-import kotlin.time.Duration.Companion.milliseconds
+import top.chengdongqing.weui.data.model.MediaItem
+import top.chengdongqing.weui.enums.MediaType
 
 class MediaPickerRepositoryImpl(val context: Context) : MediaPickerRepository {
     override fun loadAllMedias(): Flow<List<MediaItem>> = flow {
@@ -49,16 +49,23 @@ class MediaPickerRepositoryImpl(val context: Context) : MediaPickerRepository {
 
             while (cursor.moveToNext()) {
                 val uri = MediaStore.Files.getContentUri("external", cursor.getLong(idColumn))
+                val mediaType =
+                    if (cursor.getInt(mediaTypeColumn) == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO) {
+                        MediaType.VIDEO
+                    } else {
+                        MediaType.IMAGE
+                    }
+
                 mediaItems.add(
                     MediaItem(
                         uri,
-                        name = cursor.getString(nameColumn),
-                        isVideo = cursor.getInt(mediaTypeColumn) == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO,
+                        filename = cursor.getString(nameColumn),
+                        filepath = cursor.getString(dataColumn),
+                        mediaType = mediaType,
                         mimeType = cursor.getString(mimeTypeColumn),
-                        duration = cursor.getLong(durationColumn).milliseconds,
+                        duration = cursor.getLong(durationColumn),
                         size = cursor.getLong(sizeColumn),
-                        date = cursor.getLong(dateColumn),
-                        path = cursor.getString(dataColumn)
+                        date = cursor.getLong(dateColumn)
                     )
                 )
             }

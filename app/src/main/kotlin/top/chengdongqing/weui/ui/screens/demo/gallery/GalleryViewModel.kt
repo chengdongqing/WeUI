@@ -10,10 +10,11 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import top.chengdongqing.weui.data.model.MediaItem
+import top.chengdongqing.weui.enums.MediaType
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
-import kotlin.time.Duration.Companion.milliseconds
 
 class GalleryViewModel : ViewModel() {
     var mediaGroups by mutableStateOf<Map<LocalDate, List<MediaItem>>>(emptyMap())
@@ -74,16 +75,23 @@ class GalleryViewModel : ViewModel() {
 
                 while (cursor.moveToNext()) {
                     val uri = MediaStore.Files.getContentUri("external", cursor.getLong(idColumn))
+                    val mediaType =
+                        if (cursor.getInt(mediaTypeColumn) == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO) {
+                            MediaType.VIDEO
+                        } else {
+                            MediaType.IMAGE
+                        }
+
                     mediaItems.add(
                         MediaItem(
                             uri,
-                            name = cursor.getString(nameColumn),
-                            isVideo = cursor.getInt(mediaTypeColumn) == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO,
+                            filename = cursor.getString(nameColumn),
+                            filepath = cursor.getString(dataColumn),
+                            mediaType = mediaType,
                             mimeType = cursor.getString(mimeTypeColumn),
-                            duration = cursor.getLong(durationColumn).milliseconds,
+                            duration = cursor.getLong(durationColumn),
                             size = cursor.getLong(sizeColumn),
-                            date = cursor.getLong(dateColumn),
-                            path = cursor.getString(dataColumn)
+                            date = cursor.getLong(dateColumn)
                         )
                     )
                 }

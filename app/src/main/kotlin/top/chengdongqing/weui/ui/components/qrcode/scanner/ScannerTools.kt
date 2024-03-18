@@ -1,9 +1,6 @@
 package top.chengdongqing.weui.ui.components.qrcode.scanner
 
 import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.Camera
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -32,7 +29,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import top.chengdongqing.weui.enums.MediaType
 import top.chengdongqing.weui.ui.theme.PrimaryColor
+import top.chengdongqing.weui.utils.rememberPickMediasLauncher
 import top.chengdongqing.weui.utils.rememberToggleState
 
 @Composable
@@ -60,17 +59,11 @@ internal fun BoxScope.ScannerTools(camera: Camera?, onPhotoSelected: (Uri) -> Un
             }
         }
 
-        val pickMediaLauncher = rememberLauncherForActivityResult(
-            ActivityResultContracts.PickVisualMedia()
-        ) {
-            it?.let { uri ->
-                onPhotoSelected(uri)
-            }
+        val pickMedia = rememberPickMediasLauncher {
+            onPhotoSelected(it.first().uri)
         }
         ToolItem(label = "相册", icon = Icons.Filled.Image) {
-            pickMediaLauncher.launch(
-                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-            )
+            pickMedia(MediaType.IMAGE, 1)
         }
     }
 }

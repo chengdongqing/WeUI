@@ -1,7 +1,6 @@
 package top.chengdongqing.weui.ui.screens.demo.gallery
 
 import android.media.MediaMetadataRetriever
-import android.net.Uri
 import android.os.Build
 import android.util.Size
 import androidx.compose.foundation.background
@@ -31,12 +30,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import okio.IOException
 import top.chengdongqing.weui.constant.ChineseDateWeekFormatter
+import top.chengdongqing.weui.data.model.MediaItem
+import top.chengdongqing.weui.data.model.isVideo
 import top.chengdongqing.weui.ui.components.loading.WeLoadMore
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.utils.RequestMediaPermission
@@ -44,10 +46,10 @@ import top.chengdongqing.weui.utils.clickableWithoutRipple
 import top.chengdongqing.weui.utils.format
 import top.chengdongqing.weui.utils.previewMedias
 import java.time.format.DateTimeFormatter
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
-fun GalleryScreen(galleryViewModel: GalleryViewModel = viewModel()) {
+fun GalleryScreen(navController: NavController, galleryViewModel: GalleryViewModel = viewModel()) {
     WeScreen(
         title = "Gallery",
         description = "相册",
@@ -59,7 +61,9 @@ fun GalleryScreen(galleryViewModel: GalleryViewModel = viewModel()) {
         if (galleryViewModel.loading) {
             WeLoadMore()
         }
-        RequestMediaPermission {
+        RequestMediaPermission(onRevoked = {
+            navController.popBackStack()
+        }) {
             LaunchedEffect(Unit) {
                 delay(300)
                 galleryViewModel.refresh(context)
@@ -87,7 +91,7 @@ fun GalleryScreen(galleryViewModel: GalleryViewModel = viewModel()) {
                     }
                     itemsIndexed(items) { index, item ->
                         MediaItem(item, Modifier.clickableWithoutRipple {
-                            context.previewMedias(items.map { it.path }, index)
+                            context.previewMedias(items, index)
                         })
                     }
                 }
@@ -109,7 +113,7 @@ private fun MediaItem(item: MediaItem, modifier: Modifier) {
             contentScale = ContentScale.Crop,
             modifier = Modifier.matchParentSize()
         )
-        if (item.isVideo) {
+        if (item.isVideo()) {
             Box(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
@@ -118,7 +122,7 @@ private fun MediaItem(item: MediaItem, modifier: Modifier) {
                     .padding(vertical = 3.dp, horizontal = 6.dp)
             ) {
                 Text(
-                    text = item.duration.format(),
+                    text = item.duration.milliseconds.format(),
                     color = Color.White,
                     fontSize = 10.sp
                 )
@@ -133,7 +137,7 @@ fun produceThumbnail(item: MediaItem): State<Any?> {
 
     return produceState<Any?>(initialValue = null, item.uri) {
         // 图片在低版本系统直接加载原图
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q && !item.isVideo) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q && !item.isVideo()) {
             value = item.uri
         } else {
             value = withContext(Dispatchers.IO) {
@@ -158,7 +162,7 @@ fun produceThumbnail(item: MediaItem): State<Any?> {
                     }
                 } catch (e: IOException) {
                     e.printStackTrace()
-                    if (!item.isVideo) {
+                    if (!item.isVideo()) {
                         item.uri
                     } else {
                         null
@@ -168,14 +172,3 @@ fun produceThumbnail(item: MediaItem): State<Any?> {
         }
     }
 }
-
-data class MediaItem(
-    val uri: Uri,
-    val name: String,
-    val isVideo: Boolean,
-    val mimeType: String,
-    val duration: Duration,
-    val size: Long,
-    val date: Long,
-    val path: String
-)

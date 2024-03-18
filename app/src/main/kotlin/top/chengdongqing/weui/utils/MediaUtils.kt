@@ -8,9 +8,9 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.core.content.FileProvider
-import androidx.core.net.toFile
 import top.chengdongqing.weui.R
 import top.chengdongqing.weui.enums.MediaType
+import java.io.File
 
 object MediaStoreUtils {
     fun createContentValues(
@@ -53,14 +53,14 @@ object MediaStoreUtils {
         }
 }
 
-fun Context.shareFile(uri: Uri, type: String = "image/*") {
+fun Context.shareFile(file: File, mimeType: String = "image/*") {
     val sharingUri = FileProvider.getUriForFile(
         this,
         "${packageName}.provider",
-        uri.toFile()
+        file
     )
     val intent = Intent(Intent.ACTION_SEND).apply {
-        this.type = type
+        this.type = mimeType
         putExtra(Intent.EXTRA_STREAM, sharingUri)
         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
     }

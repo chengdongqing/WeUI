@@ -62,12 +62,13 @@ import org.burnoutcrew.reorderable.detectReorderAfterLongPress
 import org.burnoutcrew.reorderable.rememberReorderableLazyGridState
 import org.burnoutcrew.reorderable.reorderable
 import top.chengdongqing.weui.R
+import top.chengdongqing.weui.data.model.MediaItem
 import top.chengdongqing.weui.enums.MediaType
 import top.chengdongqing.weui.ui.components.screen.WeScreen
 import top.chengdongqing.weui.ui.theme.DangerColorLight
 import top.chengdongqing.weui.utils.detectDragGesturesAfterLongPressWithoutConsume
 import top.chengdongqing.weui.utils.previewMedias
-import top.chengdongqing.weui.utils.rememberMediaPicker
+import top.chengdongqing.weui.utils.rememberPickMediasLauncher
 
 @Composable
 fun MediaPickerScreen() {
@@ -78,7 +79,7 @@ fun MediaPickerScreen() {
         padding = PaddingValues(0.dp),
         scrollEnabled = false
     ) {
-        val data = rememberSaveable { mutableStateOf<List<String>>(emptyList()) }
+        val data = rememberSaveable { mutableStateOf<List<MediaItem>>(emptyList()) }
         val state = rememberReorderableLazyGridState(onMove = { from, to ->
             data.value = data.value.toMutableList().apply {
                 add(to.index, removeAt(from.index))
@@ -86,7 +87,7 @@ fun MediaPickerScreen() {
         }, canDragOver = { p1, _ ->
             p1.key != -1
         })
-        val pickMedia = rememberMediaPicker {
+        val pickMedia = rememberPickMediasLauncher {
             it.forEach { item ->
                 if (!data.value.contains(item)) {
                     data.value += item
@@ -130,7 +131,7 @@ fun MediaPickerScreen() {
 @Composable
 private fun PictureGrid(
     state: ReorderableLazyGridState,
-    data: MutableState<List<String>>,
+    data: MutableState<List<MediaItem>>,
     screenHeight: Float,
     currentItemHeight: MutableIntState,
     currentPositionY: MutableFloatState,
@@ -149,8 +150,8 @@ private fun PictureGrid(
             .fillMaxSize()
             .reorderable(state)
     ) {
-        itemsIndexed(data.value, key = { _, item -> item }) { index, item ->
-            ReorderableItem(state, key = item) { isDragging ->
+        itemsIndexed(data.value, key = { _, item -> item.uri }) { index, item ->
+            ReorderableItem(state, key = item.uri) { isDragging ->
                 val elevation by animateDpAsState(if (isDragging) 16.dp else 0.dp, label = "")
                 var positionY by remember { mutableFloatStateOf(0f) }
 
@@ -180,7 +181,7 @@ private fun PictureGrid(
                         .clickable { context.previewMedias(data.value, index) }
                 ) {
                     AsyncImage(
-                        model = item,
+                        model = item.uri,
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier.matchParentSize()
