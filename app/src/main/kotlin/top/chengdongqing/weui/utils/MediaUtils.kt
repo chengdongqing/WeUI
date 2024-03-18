@@ -3,6 +3,8 @@ package top.chengdongqing.weui.utils
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -15,8 +17,8 @@ import java.io.File
 object MediaStoreUtils {
     fun createContentValues(
         filename: String,
-        mimeType: String,
         mediaType: MediaType,
+        mimeType: String,
         context: Context
     ): ContentValues =
         ContentValues().apply {
@@ -38,11 +40,11 @@ object MediaStoreUtils {
             put(MediaStore.MediaColumns.IS_PENDING, 1)
         }
 
-    fun finishPending(mediaUri: Uri, context: Context) {
+    fun finishPending(uri: Uri, context: Context) {
         val contentValues = ContentValues().apply {
             put(MediaStore.MediaColumns.IS_PENDING, 0)
         }
-        context.contentResolver.update(mediaUri, contentValues, null, null)
+        context.contentResolver.update(uri, contentValues, null, null)
     }
 
     fun getContentUri(mediaType: MediaType): Uri =
@@ -65,4 +67,15 @@ fun Context.shareFile(file: File, mimeType: String = "image/*") {
         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
     }
     startActivity(intent)
+}
+
+fun Context.loadVideoThumbnail(uri: Uri): Bitmap? {
+    return MediaMetadataRetriever().use {
+        it.setDataSource(this, uri)
+        it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)
+            ?.toInt()
+        it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)
+            ?.toInt()
+        it.getFrameAtTime(1, MediaMetadataRetriever.OPTION_CLOSEST_SYNC)
+    }
 }

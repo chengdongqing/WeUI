@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.ui.screens.demo.gallery.preview
+package top.chengdongqing.weui.ui.components.mediapreview
 
 import android.content.Context
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -157,8 +157,8 @@ private suspend fun Context.saveMediaToGallery(media: MediaItem): Boolean {
         try {
             val contentValues = MediaStoreUtils.createContentValues(
                 media.filename,
-                media.mimeType,
                 media.mediaType,
+                media.mimeType,
                 context
             )
             val contentUri = MediaStoreUtils.getContentUri(media.mediaType)

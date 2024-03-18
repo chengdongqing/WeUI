@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.ui.screens.demo.gallery.preview
+package top.chengdongqing.weui.ui.components.mediapreview
 
 import android.app.Activity
 import android.net.Uri

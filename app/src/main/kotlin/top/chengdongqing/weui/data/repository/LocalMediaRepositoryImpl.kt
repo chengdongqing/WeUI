@@ -1,40 +1,15 @@
-package top.chengdongqing.weui.ui.screens.demo.gallery
+package top.chengdongqing.weui.data.repository
 
 import android.content.Context
 import android.provider.MediaStore
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.data.model.MediaItem
 import top.chengdongqing.weui.enums.MediaType
-import java.time.Instant
-import java.time.LocalDate
-import java.time.ZoneId
 
-class GalleryViewModel : ViewModel() {
-    var mediaGroups by mutableStateOf<Map<LocalDate, List<MediaItem>>>(emptyMap())
-    var loading by mutableStateOf(true)
-
-    fun refresh(context: Context) {
-        viewModelScope.launch {
-            loading = true
-            mediaGroups = queryMediaItems(context.applicationContext).groupBy {
-                Instant.ofEpochSecond(it.date).atZone(ZoneId.systemDefault()).toLocalDate()
-            }.toSortedMap(compareByDescending { it })
-                .mapValues { (_, value) ->
-                    value.sortedByDescending { it.date }
-                }
-            loading = false
-        }
-    }
-
-    private suspend fun queryMediaItems(context: Context): List<MediaItem> =
-        withContext(Dispatchers.IO) {
+class LocalMediaRepositoryImpl(private val context: Context) : LocalMediaRepository {
+    override suspend fun loadAllMedias(): List<MediaItem> {
+        return withContext(Dispatchers.IO) {
             val mediaItems = mutableListOf<MediaItem>()
 
             val projection = arrayOf(
@@ -99,4 +74,5 @@ class GalleryViewModel : ViewModel() {
 
             mediaItems
         }
+    }
 }

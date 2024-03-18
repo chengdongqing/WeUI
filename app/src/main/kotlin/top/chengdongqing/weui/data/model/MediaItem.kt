@@ -17,4 +17,5 @@ data class MediaItem(
     val date: Long = 0
 ) : Parcelable
 
+fun MediaItem.isImage(): Boolean = this.mediaType == MediaType.IMAGE
 fun MediaItem.isVideo(): Boolean = this.mediaType == MediaType.VIDEO

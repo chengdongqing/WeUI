@@ -174,8 +174,8 @@ private fun takePhoto(context: Context, imageCapture: ImageCapture, toast: Toast
     val contentUri = MediaStoreUtils.getContentUri(MediaType.IMAGE)
     val contentValues = MediaStoreUtils.createContentValues(
         filename = "IMG_${System.currentTimeMillis()}.jpg",
-        mimeType = "image/jpeg",
         mediaType = MediaType.IMAGE,
+        mimeType = "image/jpeg",
         context
     )
     val outputFileOptions = ImageCapture.OutputFileOptions.Builder(

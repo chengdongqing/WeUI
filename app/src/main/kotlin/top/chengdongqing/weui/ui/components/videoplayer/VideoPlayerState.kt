@@ -82,9 +82,9 @@ fun rememberVideoPlayerState(videoSource: Uri, isLooping: Boolean = true): Video
     val context = LocalContext.current
     val videoView = remember { VideoView(context) }
     val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-    val coroutineScope = rememberCoroutineScope()
     MediaPlayerLifecycle(videoView)
 
+    val coroutineScope = rememberCoroutineScope()
     val state = remember(videoSource) {
         VideoPlayerStateImpl(videoView, audioManager, videoSource, isLooping, coroutineScope)
     }
@@ -103,7 +103,7 @@ private class VideoPlayerStateImpl(
     val audioManager: AudioManager,
     val videoSource: Uri,
     val isLooping: Boolean,
-    val coroutineScope: CoroutineScope
+    private val coroutineScope: CoroutineScope
 ) : VideoPlayerState {
     override val isPrepared: Boolean
         get() = _isPrepared

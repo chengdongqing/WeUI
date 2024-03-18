@@ -198,8 +198,8 @@ private fun takeVideo(
     val contentUri = MediaStoreUtils.getContentUri(MediaType.VIDEO)
     val contentValues = MediaStoreUtils.createContentValues(
         filename = "VID_${System.currentTimeMillis()}.mp4",
-        mimeType = "video/mp4",
         mediaType = MediaType.VIDEO,
+        mimeType = "video/mp4",
         context
     )
     val outputOptions = MediaStoreOutputOptions

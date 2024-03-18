@@ -14,8 +14,8 @@ import top.chengdongqing.weui.enums.MediaType
 import top.chengdongqing.weui.ui.components.location.picker.LocationPickerActivity
 import top.chengdongqing.weui.ui.components.location.preview.LocationPreviewActivity
 import top.chengdongqing.weui.ui.components.mediapicker.MediaPickerActivity
+import top.chengdongqing.weui.ui.components.mediapreview.MediaPreviewActivity
 import top.chengdongqing.weui.ui.components.qrcode.scanner.QrCodeScannerActivity
-import top.chengdongqing.weui.ui.screens.demo.gallery.preview.MediaPreviewActivity
 
 fun Context.previewMedias(medias: List<MediaItem>, current: Int = 0) {
     val intent = MediaPreviewActivity.newIntent(this).apply {

@@ -59,10 +59,10 @@ interface AudioPlayerState {
 
 @Composable
 fun rememberAudioPlayerState(audioSource: String): AudioPlayerState {
-    val coroutineScope = rememberCoroutineScope()
     val player = remember { MediaPlayer() }
     MediaPlayerLifecycle(player)
 
+    val coroutineScope = rememberCoroutineScope()
     val state = remember(audioSource) {
         AudioPlayerStateImpl(player, audioSource, coroutineScope)
     }
@@ -79,7 +79,7 @@ fun rememberAudioPlayerState(audioSource: String): AudioPlayerState {
 private class AudioPlayerStateImpl(
     override val player: MediaPlayer,
     val audioSource: String,
-    val coroutineScope: CoroutineScope
+    private val coroutineScope: CoroutineScope
 ) : AudioPlayerState {
     override val isPlaying: Boolean
         get() = _isPlaying
