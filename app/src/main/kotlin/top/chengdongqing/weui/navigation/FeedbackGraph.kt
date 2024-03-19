@@ -16,16 +16,16 @@ fun NavGraphBuilder.addFeedbackGraph() {
     composable("popup") {
         PopupScreen()
     }
-    composable("action-sheet") {
+    composable("action_sheet") {
         ActionSheetScreen()
     }
     composable("toast") {
         ToastScreen()
     }
-    composable("information-bar") {
+    composable("action_sheet") {
         InformationBarScreen()
     }
-    composable("context-menu") {
+    composable("context_menu") {
         ContextMenuScreen()
     }
 }

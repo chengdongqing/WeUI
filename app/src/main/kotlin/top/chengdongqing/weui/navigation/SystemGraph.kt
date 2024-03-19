@@ -17,13 +17,13 @@ import top.chengdongqing.weui.ui.screens.system.database.DatabaseScreen
 import top.chengdongqing.weui.ui.screens.system.database.address.AddressFormScreen
 
 fun NavGraphBuilder.addSystemGraph(navController: NavController) {
-    composable("device-info") {
+    composable("device_info") {
         DeviceInfoScreen()
     }
-    composable("system-status") {
+    composable("system_status") {
         SystemStatusScreen()
     }
-    composable("installed-apps") {
+    composable("installed_apps") {
         InstalledAppsScreen()
     }
     composable("downloader") {
@@ -32,7 +32,7 @@ fun NavGraphBuilder.addSystemGraph(navController: NavController) {
     composable("database") {
         DatabaseScreen(navController)
     }
-    composable("address-form?id={id}") {
+    composable("address_form?id={id}") {
         val id = it.arguments?.getString("id")?.toInt()
         AddressFormScreen(navController, id)
     }
@@ -48,7 +48,7 @@ fun NavGraphBuilder.addSystemGraph(navController: NavController) {
     composable("keyboard") {
         KeyboardScreen()
     }
-    composable("calendar-events") {
+    composable("calendar_events") {
         CalendarEventsScreen()
     }
     composable("notification") {

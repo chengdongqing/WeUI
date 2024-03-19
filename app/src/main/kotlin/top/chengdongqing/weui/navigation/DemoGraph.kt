@@ -24,7 +24,7 @@ import top.chengdongqing.weui.ui.screens.demo.paint.PaintScreen
 import top.chengdongqing.weui.ui.screens.demo.videochannel.VideoChannelScreen
 
 fun NavGraphBuilder.addDemoGraph(navController: NavController) {
-    composable("search-bar") {
+    composable("search_bar") {
         SearchBarScreen()
     }
     composable("calendar") {
@@ -33,52 +33,52 @@ fun NavGraphBuilder.addDemoGraph(navController: NavController) {
     composable("clock") {
         ClockScreen()
     }
-    composable("drop-card") {
+    composable("drop_card") {
         DropCardScreen()
     }
     composable("gallery") {
         GalleryScreen(navController)
     }
-    composable("file-browser") {
+    composable("file_browser") {
         FileBrowserScreen()
     }
     composable("paint") {
         PaintScreen()
     }
-    composable("indexed-list") {
+    composable("indexed_list") {
         IndexedListScreen()
     }
-    composable("drag-sorter") {
+    composable("drag_sorter") {
         DragSorterScreen()
     }
-    composable("dividing-rule") {
+    composable("dividing_rule") {
         DividingRuleScreen()
     }
-    composable("org-tree") {
+    composable("org_tree") {
         OrgTreeScreen()
     }
-    composable("digital-roller") {
+    composable("digital_roller") {
         DigitalRollerScreen()
     }
-    composable("digital-keyboard") {
+    composable("digital_keyboard") {
         DigitalKeyboardScreen()
     }
-    composable("cubic-bezier") {
+    composable("cubic_bezier") {
         CubicBezierScreen()
     }
-    composable("notification-bar") {
+    composable("notification_bar") {
         NotificationBarScreen()
     }
-    composable("image-cropper") {
+    composable("image_cropper") {
         ImageCropperScreen()
     }
-    composable("video-channel") {
+    composable("video_channel") {
         VideoChannelScreen()
     }
-    composable("solar-system") {
+    composable("solar_system") {
         SolarSystemScreen()
     }
-    composable("panoramic-image") {
+    composable("panoramic_image") {
         PanoramicImageScreen()
     }
 }

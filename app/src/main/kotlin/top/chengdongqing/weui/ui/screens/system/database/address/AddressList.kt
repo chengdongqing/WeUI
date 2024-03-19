@@ -66,7 +66,7 @@ fun AddressList(
 
     fun navigateToForm(id: Int? = null) {
         navController.navigate(buildString {
-            append("address-form")
+            append("address_form")
             if (id != null) {
                 append("?id=${id}")
             }

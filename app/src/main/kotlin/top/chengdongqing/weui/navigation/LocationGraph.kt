@@ -6,10 +6,10 @@ import top.chengdongqing.weui.ui.screens.location.LocationPickerScreen
 import top.chengdongqing.weui.ui.screens.location.LocationPreviewScreen
 
 fun NavGraphBuilder.addLocationGraph() {
-    composable("location-preview") {
+    composable("location_preview") {
         LocationPreviewScreen()
     }
-    composable("location-picker") {
+    composable("location_picker") {
         LocationPickerScreen()
     }
 }

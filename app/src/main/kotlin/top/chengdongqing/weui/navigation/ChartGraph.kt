@@ -7,13 +7,13 @@ import top.chengdongqing.weui.ui.screens.chart.LineChartScreen
 import top.chengdongqing.weui.ui.screens.chart.PieChartScreen
 
 fun NavGraphBuilder.addChartGraph() {
-    composable("bar-chart") {
+    composable("bar_chart") {
         BarChartScreen()
     }
-    composable("line-chart") {
+    composable("bar_chart") {
         LineChartScreen()
     }
-    composable("pie-chart") {
+    composable("pie_chart") {
         PieChartScreen()
     }
 }

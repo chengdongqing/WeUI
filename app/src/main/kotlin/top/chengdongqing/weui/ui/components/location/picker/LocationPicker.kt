@@ -56,7 +56,7 @@ fun WeLocationPicker(
             }
             LocationMarker(state)
         }
-        LocationPickerBottom(state)
+        BottomPanel(state)
     }
 }
 

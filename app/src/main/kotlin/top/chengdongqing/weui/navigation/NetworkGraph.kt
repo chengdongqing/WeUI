@@ -8,16 +8,16 @@ import top.chengdongqing.weui.ui.screens.network.upload.FileUploadScreen
 import top.chengdongqing.weui.ui.screens.network.websocket.WebSocketScreen
 
 fun NavGraphBuilder.addNetworkGraph() {
-    composable("http-request") {
+    composable("http_request") {
         HttpRequestScreen()
     }
-    composable("file-upload") {
+    composable("file_upload") {
         FileUploadScreen()
     }
-    composable("file-download") {
+    composable("file_download") {
         FileDownloadScreen()
     }
-    composable("web-socket") {
+    composable("web_socket") {
         WebSocketScreen()
     }
 }

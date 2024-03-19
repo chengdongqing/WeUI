@@ -21,7 +21,7 @@ fun NavGraphBuilder.addBasicGraph() {
     composable("loading") {
         LoadingScreen()
     }
-    composable("load-more") {
+    composable("load_more") {
         LoadMoreScreen()
     }
     composable("progress") {
@@ -33,13 +33,13 @@ fun NavGraphBuilder.addBasicGraph() {
     composable("swiper") {
         SwiperScreen()
     }
-    composable("refresh-view") {
+    composable("refresh_view") {
         RefreshViewScreen()
     }
-    composable("tab-view") {
+    composable("tab_view") {
         TabViewScreen()
     }
-    composable("swipe-action") {
+    composable("swipe_action") {
         SwipeActionScreen()
     }
     composable("skeleton") {

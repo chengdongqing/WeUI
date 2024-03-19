@@ -77,7 +77,7 @@ interface LocationPickerState {
         keyword: String = "",
         category: String = "",
         region: String = "",
-        pageNumber: Int = 0,
+        pageNum: Int = 0,
         pageSize: Int = 10
     ): List<LocationItem>
 }
@@ -124,13 +124,13 @@ private class LocationPickerStateImpl(
         keyword: String,
         category: String,
         region: String,
-        pageNumber: Int,
+        pageNum: Int,
         pageSize: Int
     ): List<LocationItem> = withContext(Dispatchers.IO) {
         _isLoading = true
         // 构建搜索参数：关键字，类别，区域
         val query = PoiSearchV2.Query(keyword, category, region).apply {
-            this.pageNum = pageNumber
+            this.pageNum = pageNum
             this.pageSize = pageSize
         }
         val poiSearch = PoiSearchV2(context, query)

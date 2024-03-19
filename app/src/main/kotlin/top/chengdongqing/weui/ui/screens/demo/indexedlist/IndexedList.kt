@@ -14,6 +14,6 @@ fun IndexedListScreen() {
         padding = PaddingValues(0.dp),
         scrollEnabled = false
     ) {
-        WeIndexedList(cities)
+        WeIndexedList(CityDataProvider.cities)
     }
 }

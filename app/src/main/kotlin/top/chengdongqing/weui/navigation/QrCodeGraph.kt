@@ -6,10 +6,10 @@ import top.chengdongqing.weui.ui.screens.qrcode.generator.QrCodeGeneratorScreen
 import top.chengdongqing.weui.ui.screens.qrcode.scanner.QrCodeScanScreen
 
 fun NavGraphBuilder.addQrCodeGraph() {
-    composable("qrcode-scanner") {
+    composable("qrcode_scanner") {
         QrCodeScanScreen()
     }
-    composable("qrcode-generator") {
+    composable("qrcode_generator") {
         QrCodeGeneratorScreen()
     }
 }

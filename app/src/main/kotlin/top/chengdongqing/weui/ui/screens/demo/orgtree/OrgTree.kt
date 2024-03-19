@@ -14,7 +14,7 @@ import top.chengdongqing.weui.ui.theme.WeUITheme
 fun OrgTreeScreen() {
     WeScreen(title = "OrgTree", description = "组织架构树") {
         Box(modifier = Modifier.horizontalScroll(rememberScrollState())) {
-            WeOrgTree(governmentMap, true)
+            WeOrgTree(GovernmentDataProvider.governmentMap, true)
         }
     }
 }

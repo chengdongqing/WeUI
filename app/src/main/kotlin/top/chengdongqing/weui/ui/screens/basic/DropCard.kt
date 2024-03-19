@@ -55,7 +55,7 @@ fun DropCardScreen() {
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .matchParentSize()
-                    .background(Color.Black)
+                    .background(Color.LightGray)
             )
         }
     }

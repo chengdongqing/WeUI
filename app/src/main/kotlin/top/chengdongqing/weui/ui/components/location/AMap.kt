@@ -57,7 +57,7 @@ fun AMap(modifier: Modifier = Modifier, state: AMapState = rememberAMapState()) 
     // 处理生命周期
     MapLifecycle(state.mapView)
     // 处理定位权限
-    LocationPermissionHandler {
+    LocationPermission {
         setLocationArrow(state.map, context)
     }
 
@@ -132,7 +132,7 @@ private fun setLocationArrow(map: AMap, context: Context) {
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-private fun LocationPermissionHandler(onGranted: (() -> Unit)? = null) {
+private fun LocationPermission(onGranted: (() -> Unit)? = null) {
     val permissionState = rememberPermissionState(Manifest.permission.ACCESS_FINE_LOCATION) {
         if (it) {
             onGranted?.invoke()

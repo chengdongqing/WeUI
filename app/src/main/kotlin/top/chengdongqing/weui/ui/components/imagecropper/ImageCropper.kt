@@ -39,14 +39,14 @@ fun WeImageCropper(uri: Uri, onChange: (Bitmap) -> Unit) {
             .background(BackgroundColorDark),
         contentAlignment = Alignment.Center
     ) {
-        CropperImage(uri, transform) { transform.value = it }
+        CroppingImage(uri, transform) { transform.value = it }
         CropperMask { cropperSize = it }
         ActionBar(transform) { transform.value = it }
     }
 }
 
 @Composable
-private fun CropperImage(
+private fun CroppingImage(
     uri: Uri,
     transform: MutableState<ImageTransform>,
     onChange: (ImageTransform) -> Unit

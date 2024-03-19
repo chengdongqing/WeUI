@@ -22,13 +22,13 @@ internal val menus = listOf(
         listOf(
             MenuItem("Badge", "badge"),
             MenuItem("Loading", "loading"),
-            MenuItem("LoadMore", "load-more"),
+            MenuItem("LoadMore", "load_more"),
             MenuItem("Progress", "progress"),
             MenuItem("Steps", "steps"),
             MenuItem("Swiper", "swiper"),
-            MenuItem("RefreshView", "refresh-view"),
-            MenuItem("TabView", "tab-view"),
-            MenuItem("SwipeAction", "swipe-action"),
+            MenuItem("RefreshView", "refresh_view"),
+            MenuItem("TabView", "tab_view"),
+            MenuItem("SwipeAction", "swipe_action"),
             MenuItem("Skeleton", "skeleton"),
             MenuItem("Tree", "tree")
         )
@@ -49,25 +49,25 @@ internal val menus = listOf(
     MenuGroup(
         "媒体组件", R.drawable.ic_nav_search,
         listOf(
-            MenuItem("MediaPicker", "media-picker"),
+            MenuItem("MediaPicker", "media_picker"),
             MenuItem("Camera", "camera"),
-            MenuItem("AudioRecorder", "audio-recorder"),
-            MenuItem("VideoRecorder", "video-recorder"),
-            MenuItem("AudioPlayer", "audio-player"),
-            MenuItem("VideoPlayer", "video-player"),
-            MenuItem("LivePlayer", "live-player"),
-            MenuItem("LivePusher", "live-pusher")
+            MenuItem("AudioRecorder", "audio_recorder"),
+            MenuItem("VideoRecorder", "video_recorder"),
+            MenuItem("AudioPlayer", "audio_player"),
+            MenuItem("VideoPlayer", "video_player"),
+            MenuItem("LivePlayer", "live_player"),
+            MenuItem("LivePusher", "live_pusher")
         )
     ),
     MenuGroup(
         "操作反馈", R.drawable.ic_nav_feedback,
         listOf(
-            MenuItem("ActionSheet", "action-sheet"),
+            MenuItem("ActionSheet", "action_sheet"),
             MenuItem("Dialog", "dialog"),
             MenuItem("Popup", "popup"),
             MenuItem("Toast", "toast"),
-            MenuItem("InformationBar", "information-bar"),
-            MenuItem("ContextMenu", "context-menu")
+            MenuItem("InformationBar", "action_sheet"),
+            MenuItem("ContextMenu", "context_menu")
         )
     ),
     MenuGroup(
@@ -75,13 +75,13 @@ internal val menus = listOf(
         listOf(
             MenuItem("Contacts", "contacts"),
             MenuItem("Clipboard", "clipboard"),
-            MenuItem("CalendarEvents", "calendar-events"),
-            MenuItem("DeviceInfo", "device-info"),
+            MenuItem("CalendarEvents", "calendar_events"),
+            MenuItem("DeviceInfo", "device_info"),
             MenuItem("Downloader", "downloader"),
             MenuItem("Database", "database"),
-            MenuItem("SystemStatus", "system-status"),
+            MenuItem("SystemStatus", "system_status"),
             MenuItem("SMS", "sms"),
-            MenuItem("InstalledApps", "installed-apps"),
+            MenuItem("InstalledApps", "installed_apps"),
             MenuItem("Keyboard", "keyboard"),
             MenuItem("Notification", "notification")
         )
@@ -89,10 +89,10 @@ internal val menus = listOf(
     MenuGroup(
         "网络服务", R.drawable.ic_nav_search,
         listOf(
-            MenuItem("HTTPRequest", "http-request"),
-            MenuItem("FileUpload", "file-upload"),
-            MenuItem("FileDownload", "file-download"),
-            MenuItem("WebSocket", "web-socket")
+            MenuItem("HTTPRequest", "http_request"),
+            MenuItem("FileUpload", "file_upload"),
+            MenuItem("FileDownload", "file_download"),
+            MenuItem("WebSocket", "web_socket")
         )
     ),
     MenuGroup(
@@ -116,22 +116,22 @@ internal val menus = listOf(
     MenuGroup(
         "图表组件", R.drawable.ic_nav_layout,
         listOf(
-            MenuItem("BarChart", "bar-chart"),
-            MenuItem("LineChart", "line-chart"),
-            MenuItem("PieChart", "pie-chart")
+            MenuItem("BarChart", "bar_chart"),
+            MenuItem("LineChart", "bar_chart"),
+            MenuItem("PieChart", "pie_chart")
         )
     ),
     MenuGroup(
         "二维码", R.drawable.ic_nav_form, listOf(
-            MenuItem("QrCodeScanner", "qrcode-scanner"),
-            MenuItem("QrCodeGenerator", "qrcode-generator")
+            MenuItem("QrCodeScanner", "qrcode_scanner"),
+            MenuItem("QrCodeGenerator", "qrcode_generator")
         )
     ),
     MenuGroup(
         "地图组件", R.drawable.ic_nav_feedback,
         listOf(
-            MenuItem("LocationPreview", "location-preview"),
-            MenuItem("LocationPicker", "location-picker")
+            MenuItem("LocationPreview", "location_preview"),
+            MenuItem("LocationPicker", "location_picker")
         )
     ),
     MenuGroup(
@@ -139,23 +139,23 @@ internal val menus = listOf(
         listOf(
             MenuItem("Calendar", "calendar"),
             MenuItem("Clock", "clock"),
-            MenuItem("DropCard", "drop-card"),
-            MenuItem("SearchBar", "search-bar"),
+            MenuItem("DropCard", "drop_card"),
+            MenuItem("SearchBar", "search_bar"),
             MenuItem("Gallery", "gallery"),
-            MenuItem("FileBrowser", "file-browser"),
+            MenuItem("FileBrowser", "file_browser"),
             MenuItem("Paint", "paint"),
-            MenuItem("IndexedList", "indexed-list"),
-            MenuItem("DragSorter", "drag-sorter"),
-            MenuItem("DividingRule", "dividing-rule"),
-            MenuItem("OrgTree", "org-tree"),
-            MenuItem("DigitalRoller", "digital-roller"),
-            MenuItem("DigitalKeyboard", "digital-keyboard"),
-            MenuItem("CubicBezier", "cubic-bezier"),
-            MenuItem("NotificationBar", "notification-bar"),
-            MenuItem("ImageCropper", "image-cropper"),
-            MenuItem("VideoChannel", "video-channel"),
-            MenuItem("SolarSystem", "solar-system"),
-            MenuItem("PanoramicImage", "panoramic-image")
+            MenuItem("IndexedList", "indexed_list"),
+            MenuItem("DragSorter", "drag_sorter"),
+            MenuItem("DividingRule", "dividing_rule"),
+            MenuItem("OrgTree", "org_tree"),
+            MenuItem("DigitalRoller", "digital_roller"),
+            MenuItem("DigitalKeyboard", "digital_keyboard"),
+            MenuItem("CubicBezier", "cubic_bezier"),
+            MenuItem("NotificationBar", "notification_bar"),
+            MenuItem("ImageCropper", "image_cropper"),
+            MenuItem("VideoChannel", "video_channel"),
+            MenuItem("SolarSystem", "solar_system"),
+            MenuItem("PanoramicImage", "panoramic_image")
         )
     ),
     MenuGroup("层级规范", R.drawable.ic_nav_zindex, path = "layers")

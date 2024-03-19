@@ -16,25 +16,25 @@ fun NavGraphBuilder.addMediaGraph(navController: NavController) {
     composable("camera") {
         CameraScreen(navController)
     }
-    composable("live-pusher") {
+    composable("live_pusher") {
         LivePusherScreen()
     }
-    composable("live-player") {
+    composable("live_player") {
         LivePlayerScreen()
     }
-    composable("media-picker") {
+    composable("media_picker") {
         MediaPickerScreen()
     }
-    composable("audio-player") {
+    composable("audio_player") {
         AudioPlayerScreen()
     }
-    composable("video-player") {
+    composable("video_player") {
         VideoPlayerScreen()
     }
-    composable("audio-recorder") {
+    composable("audio_recorder") {
         AudioRecorderScreen()
     }
-    composable("video-recorder") {
+    composable("video_recorder") {
         VideoRecorderScreen(navController)
     }
 }
