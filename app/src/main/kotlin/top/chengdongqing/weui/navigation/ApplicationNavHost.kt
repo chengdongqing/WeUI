@@ -6,8 +6,19 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import top.chengdongqing.weui.ui.screens.home.HomeScreen
-import top.chengdongqing.weui.ui.screens.layers.LayersScreen
+import top.chengdongqing.weui.feature.basic.navigation.addBasicGraph
+import top.chengdongqing.weui.feature.charts.navigation.addChartGraph
+import top.chengdongqing.weui.feature.demos.navigation.addDemosGraph
+import top.chengdongqing.weui.feature.feedback.navigation.addFeedbackGraph
+import top.chengdongqing.weui.feature.form.navigation.addFormGraph
+import top.chengdongqing.weui.feature.hardware.navigation.addHardwareGraph
+import top.chengdongqing.weui.feature.location.navigation.addLocationGraph
+import top.chengdongqing.weui.feature.media.navigation.addMediaGraph
+import top.chengdongqing.weui.feature.network.navigation.addNetworkGraph
+import top.chengdongqing.weui.feature.qrcode.navigation.addQrCodeGraph
+import top.chengdongqing.weui.feature.system.navigation.addSystemGraph
+import top.chengdongqing.weui.home.HomeScreen
+import top.chengdongqing.weui.layers.LayersScreen
 
 @Composable
 fun ApplicationNavHost() {
@@ -54,7 +65,7 @@ fun ApplicationNavHost() {
         addChartGraph()
         addQrCodeGraph()
         addLocationGraph()
-        addDemoGraph(navController)
+        addDemosGraph(navController)
         composable("layers") {
             LayersScreen()
         }

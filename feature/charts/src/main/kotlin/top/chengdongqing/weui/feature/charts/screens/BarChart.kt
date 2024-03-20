@@ -24,7 +24,7 @@ import top.chengdongqing.weui.core.ui.theme.WarningColor
 import top.chengdongqing.weui.core.utils.format
 import top.chengdongqing.weui.core.utils.randomFloat
 import top.chengdongqing.weui.core.utils.rememberToggleState
-import top.chengdongqing.weui.feature.charts.components.WeBarChart
+import top.chengdongqing.weui.feature.charts.WeBarChart
 import top.chengdongqing.weui.feature.charts.model.ChartData
 
 @Composable

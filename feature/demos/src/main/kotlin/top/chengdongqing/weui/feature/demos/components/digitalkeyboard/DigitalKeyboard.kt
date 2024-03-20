@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.ui.components.digitalkeyboard
+package top.chengdongqing.weui.feature.demos.components.digitalkeyboard
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,8 +17,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import top.chengdongqing.weui.ui.components.divider.WeDivider
-import top.chengdongqing.weui.ui.theme.PrimaryColor
+import top.chengdongqing.weui.core.ui.components.divider.WeDivider
+import top.chengdongqing.weui.core.ui.theme.PrimaryColor
 
 @Composable
 fun WeDigitalKeyboard(

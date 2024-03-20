@@ -18,7 +18,7 @@ import top.chengdongqing.weui.core.ui.theme.PrimaryColor
 import top.chengdongqing.weui.core.ui.theme.WarningColor
 import top.chengdongqing.weui.core.utils.format
 import top.chengdongqing.weui.core.utils.randomFloat
-import top.chengdongqing.weui.feature.charts.components.WeLineChart
+import top.chengdongqing.weui.feature.charts.WeLineChart
 import top.chengdongqing.weui.feature.charts.model.ChartData
 import top.chengdongqing.weui.feature.charts.model.LineChartData
 

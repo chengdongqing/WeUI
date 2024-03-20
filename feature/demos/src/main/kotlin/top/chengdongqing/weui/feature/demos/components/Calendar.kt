@@ -42,9 +42,8 @@ import com.nlf.calendar.Lunar
 import com.nlf.calendar.Solar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import top.chengdongqing.weui.constant.ChineseDateFormatter
-import top.chengdongqing.weui.ui.components.divider.WeDivider
-import top.chengdongqing.weui.ui.theme.PrimaryColor
+import top.chengdongqing.weui.core.ui.components.divider.WeDivider
+import top.chengdongqing.weui.core.utils.ChineseDateFormatter
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
@@ -152,7 +151,7 @@ private fun DaysGrid(pagerState: PagerState) {
             // 月份背景
             Text(
                 text = date.monthValue.toString(),
-                color = PrimaryColor.copy(0.2f),
+                color = MaterialTheme.colorScheme.primary.copy(0.2f),
                 fontSize = 160.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = FontFamily.Cursive
@@ -219,7 +218,11 @@ private fun DayItem(
         // 公历日期
         Text(
             text = date.dayOfMonth.toString(),
-            color = if (isToday) PrimaryColor else MaterialTheme.colorScheme.onPrimary,
+            color = if (isToday) {
+                MaterialTheme.colorScheme.primary
+            } else {
+                MaterialTheme.colorScheme.onPrimary
+            },
             fontSize = 18.sp,
             fontWeight = if (!outInMonth) FontWeight.Bold else FontWeight.Normal
         )
@@ -234,7 +237,11 @@ private fun DayItem(
         }
         Text(
             text = lunarDay,
-            color = if (isToday) PrimaryColor else MaterialTheme.colorScheme.onSecondary,
+            color = if (isToday) {
+                MaterialTheme.colorScheme.primary
+            } else {
+                MaterialTheme.colorScheme.onSecondary
+            },
             fontSize = 11.sp
         )
     }

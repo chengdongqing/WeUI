@@ -42,9 +42,6 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
-    buildFeatures {
-        compose = true
-    }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.9"
     }
@@ -58,5 +55,6 @@ android {
 dependencies {
 
     implementation(libs.core.ktx)
+    implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.amap)
 }

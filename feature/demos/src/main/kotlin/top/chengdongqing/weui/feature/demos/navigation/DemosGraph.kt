@@ -23,7 +23,7 @@ import top.chengdongqing.weui.feature.demos.screens.SearchBarScreen
 import top.chengdongqing.weui.feature.demos.screens.SolarSystemScreen
 import top.chengdongqing.weui.feature.demos.videochannel.VideoChannelScreen
 
-fun NavGraphBuilder.addDemoGraph(navController: NavController) {
+fun NavGraphBuilder.addDemosGraph(navController: NavController) {
     composable("search_bar") {
         SearchBarScreen()
     }

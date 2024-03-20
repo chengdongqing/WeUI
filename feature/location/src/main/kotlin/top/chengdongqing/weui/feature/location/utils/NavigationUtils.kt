@@ -7,10 +7,10 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import top.chengdongqing.weui.core.ui.components.location.picker.LocationPickerActivity
-import top.chengdongqing.weui.core.ui.components.location.preview.LocationPreviewActivity
 import top.chengdongqing.weui.feature.location.data.model.LocationItem
 import top.chengdongqing.weui.feature.location.data.model.LocationPreviewItem
+import top.chengdongqing.weui.feature.location.picker.LocationPickerActivity
+import top.chengdongqing.weui.feature.location.preview.LocationPreviewActivity
 
 fun Context.previewLocation(location: LocationPreviewItem) {
     val intent = LocationPreviewActivity.newIntent(this).apply {

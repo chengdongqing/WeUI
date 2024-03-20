@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <application>
+        <activity
+            android:name=".mediapreview.MediaPreviewActivity"
+            android:exported="true"
+            android:theme="@style/Theme.WeUI" />
+        <activity
+            android:name=".mediapicker.MediaPickerActivity"
+            android:exported="true"
+            android:theme="@style/Theme.WeUI" />
+    </application>
 </manifest>

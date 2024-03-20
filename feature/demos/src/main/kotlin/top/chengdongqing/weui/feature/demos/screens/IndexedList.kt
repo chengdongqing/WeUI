@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
 import top.chengdongqing.weui.feature.demos.data.CityDataProvider
-import top.chengdongqing.weui.ui.components.indexedlist.WeIndexedList
+import top.chengdongqing.weui.feature.demos.components.indexedlist.WeIndexedList
 
 @Composable
 fun IndexedListScreen() {

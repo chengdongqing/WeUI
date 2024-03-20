@@ -18,8 +18,8 @@ import top.chengdongqing.weui.core.ui.theme.DangerColorLight
 import top.chengdongqing.weui.core.ui.theme.WeUITheme
 import top.chengdongqing.weui.core.utils.clickableWithoutRipple
 import top.chengdongqing.weui.core.utils.rememberToggleState
-import top.chengdongqing.weui.ui.components.digitalkeyboard.DigitalKeyboardConfirmOptions
-import top.chengdongqing.weui.ui.components.digitalkeyboard.WeDigitalKeyboard
+import top.chengdongqing.weui.feature.demos.components.digitalkeyboard.DigitalKeyboardConfirmOptions
+import top.chengdongqing.weui.feature.demos.components.digitalkeyboard.WeDigitalKeyboard
 
 @Composable
 fun DigitalKeyboardScreen() {

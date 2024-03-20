@@ -14,7 +14,7 @@ import top.chengdongqing.weui.core.ui.components.screen.WeScreen
 import top.chengdongqing.weui.core.utils.format
 import top.chengdongqing.weui.core.utils.randomInt
 import top.chengdongqing.weui.core.utils.rememberToggleState
-import top.chengdongqing.weui.feature.charts.components.WePieChart
+import top.chengdongqing.weui.feature.charts.WePieChart
 import top.chengdongqing.weui.feature.charts.model.ChartData
 
 @Composable

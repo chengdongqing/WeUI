@@ -10,7 +10,7 @@ fun NavGraphBuilder.addChartGraph() {
     composable("bar_chart") {
         BarChartScreen()
     }
-    composable("bar_chart") {
+    composable("line_chart") {
         LineChartScreen()
     }
     composable("pie_chart") {

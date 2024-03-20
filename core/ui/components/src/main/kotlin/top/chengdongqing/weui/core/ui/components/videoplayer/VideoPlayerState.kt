@@ -74,7 +74,7 @@ interface VideoPlayerState {
      * 设置静音
      * @param isMute 是否静音
      */
-    fun setMute(isMute: Boolean)
+    fun setMuteState(isMute: Boolean)
 }
 
 @Composable
@@ -139,7 +139,7 @@ private class VideoPlayerStateImpl(
         }
     }
 
-    override fun setMute(isMute: Boolean) {
+    override fun setMuteState(isMute: Boolean) {
         val direction = if (isMute) AudioManager.ADJUST_MUTE else AudioManager.ADJUST_UNMUTE
         audioManager.adjustStreamVolume(
             AudioManager.STREAM_MUSIC,

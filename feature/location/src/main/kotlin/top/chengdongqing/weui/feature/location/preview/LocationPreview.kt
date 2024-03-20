@@ -33,10 +33,10 @@ import com.amap.api.maps.model.MarkerOptions
 import top.chengdongqing.weui.core.ui.components.R
 import top.chengdongqing.weui.core.ui.components.actionsheet.ActionSheetItem
 import top.chengdongqing.weui.core.ui.components.actionsheet.rememberActionSheetState
-import top.chengdongqing.weui.core.ui.components.location.AMap
-import top.chengdongqing.weui.core.ui.components.location.rememberAMapState
+import top.chengdongqing.weui.feature.location.AMap
 import top.chengdongqing.weui.feature.location.data.model.LocationPreviewItem
 import top.chengdongqing.weui.feature.location.data.model.MapType
+import top.chengdongqing.weui.feature.location.rememberAMapState
 import top.chengdongqing.weui.feature.location.utils.createBitmapDescriptor
 import top.chengdongqing.weui.feature.location.utils.navigateToLocation
 

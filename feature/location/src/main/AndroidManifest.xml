@@ -1,4 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <application>
+        <activity
+            android:name=".preview.LocationPreviewActivity"
+            android:exported="true"
+            android:theme="@style/Theme.WeUI" />
+        <activity
+            android:name=".picker.LocationPickerActivity"
+            android:exported="true"
+            android:theme="@style/Theme.WeUI" />
+
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="3d7c9df2670fa24db2ed7bc8c620a8da" />
+    </application>
 </manifest>

@@ -11,7 +11,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.core.utils.formatFileSize
 import top.chengdongqing.weui.core.utils.formatTime
-import top.chengdongqing.weui.feature.demos.`file-browser`.R
 import java.io.File
 
 class FileViewModel : ViewModel() {

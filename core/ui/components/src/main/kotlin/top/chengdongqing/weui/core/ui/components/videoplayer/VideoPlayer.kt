@@ -97,7 +97,7 @@ object VideoPlayerDefaults {
     @Composable
     private fun MuteControl(state: VideoPlayerState) {
         IconButton(onClick = {
-            state.setMute(!state.isMute)
+            state.setMuteState(!state.isMute)
         }) {
             if (state.isMute) {
                 Icon(

@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.ui.components.indexedlist
+package top.chengdongqing.weui.feature.demos.components.indexedlist
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -24,9 +24,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.chengdongqing.weui.ui.components.divider.WeDivider
-import top.chengdongqing.weui.ui.components.loading.WeLoading
-import top.chengdongqing.weui.utils.PinyinUtils.groupByFirstLetter
+import top.chengdongqing.weui.core.ui.components.divider.WeDivider
+import top.chengdongqing.weui.core.ui.components.loading.WeLoading
+import top.chengdongqing.weui.core.utils.PinyinUtils.groupByFirstLetter
 
 @Composable
 fun WeIndexedList(labels: List<String>) {

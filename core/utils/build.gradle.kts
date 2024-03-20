@@ -69,4 +69,5 @@ dependencies {
     implementation(libs.amap.search)
 
     implementation(project(":core:data:model"))
+    implementation(project(":core:ui:theme"))
 }

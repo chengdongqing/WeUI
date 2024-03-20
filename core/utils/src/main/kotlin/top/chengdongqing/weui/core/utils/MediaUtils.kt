@@ -17,6 +17,7 @@ import top.chengdongqing.weui.core.data.model.MediaItem
 import top.chengdongqing.weui.core.data.model.MediaType
 import top.chengdongqing.weui.core.data.model.isImage
 import top.chengdongqing.weui.core.data.model.isVideo
+import top.chengdongqing.weui.core.ui.theme.R
 import java.io.File
 import java.io.IOException
 

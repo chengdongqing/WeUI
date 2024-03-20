@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "top.chengdongqing.weui.feature.demos.file-browser"
+    namespace = "top.chengdongqing.weui.feature.demos.filebrowser"
     compileSdk = 34
 
     defaultConfig {

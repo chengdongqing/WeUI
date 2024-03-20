@@ -8,6 +8,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import top.chengdongqing.weui.core.data.model.MediaItem
 import top.chengdongqing.weui.core.ui.components.R
+import top.chengdongqing.weui.core.ui.theme.WeUITheme
 
 class MediaPreviewActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,7 +23,9 @@ class MediaPreviewActivity : ComponentActivity() {
         val current = intent.getIntExtra("current", 0)
 
         setContent {
-            MediaPreviewScreen(medias, current)
+            WeUITheme {
+                MediaPreviewScreen(medias, current)
+            }
         }
     }
 

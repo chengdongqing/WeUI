@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.ui.components.indexedlist
+package top.chengdongqing.weui.feature.demos.components.indexedlist
 
 import android.view.MotionEvent
 import androidx.compose.foundation.background
@@ -41,8 +41,7 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import top.chengdongqing.weui.ui.theme.PrimaryColor
-import top.chengdongqing.weui.utils.clickableWithoutRipple
+import top.chengdongqing.weui.core.utils.clickableWithoutRipple
 import kotlin.math.roundToInt
 
 @Composable
@@ -122,7 +121,14 @@ private fun IndexBarItem(
     Box(
         modifier = Modifier
             .size(20.dp)
-            .background(if (selected) PrimaryColor else Color.Transparent, CircleShape),
+            .background(
+                if (selected) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    Color.Transparent
+                },
+                CircleShape
+            ),
         contentAlignment = Alignment.Center
     ) {
         Text(

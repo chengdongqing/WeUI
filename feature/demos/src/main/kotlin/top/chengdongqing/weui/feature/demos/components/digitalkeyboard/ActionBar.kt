@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.ui.components.digitalkeyboard
+package top.chengdongqing.weui.feature.demos.components.digitalkeyboard
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.ui.components.digitalkeyboard
+package top.chengdongqing.weui.feature.demos.components.digitalkeyboard
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
