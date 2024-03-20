@@ -32,9 +32,7 @@ fun ImageCropperScreen() {
 
         uri?.let {
             if (croppedImage == null) {
-                WeImageCropper(it) { bitmap ->
-                    croppedImage = bitmap
-                }
+                WeImageCropper(it) {}
             } else {
                 AsyncImage(
                     model = croppedImage,

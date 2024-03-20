@@ -9,31 +9,8 @@ android {
 
     defaultConfig {
         minSdk = 26
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
-
-        android {
-            defaultConfig {
-                ndk {
-                    abiFilters.addAll(listOf("arm64-v8a"))
-                }
-            }
-        }
     }
 
-    buildTypes {
-        release {
-            isMinifyEnabled = true
-
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -46,11 +23,6 @@ android {
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.9"
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
     }
 }
 

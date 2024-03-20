@@ -1,6 +1,5 @@
 package top.chengdongqing.weui.feature.demos.imagecropper.cropper
 
-import android.graphics.Bitmap
 import android.net.Uri
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -29,7 +28,7 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 @Composable
-fun WeImageCropper(uri: Uri, onChange: (Bitmap) -> Unit) {
+fun WeImageCropper(uri: Uri, onChange: () -> Unit) {
     val transform = remember { mutableStateOf(ImageTransform()) }
     var cropperSize by remember { mutableStateOf(Size.Zero) }
 
@@ -39,17 +38,18 @@ fun WeImageCropper(uri: Uri, onChange: (Bitmap) -> Unit) {
             .background(BackgroundColorDark),
         contentAlignment = Alignment.Center
     ) {
-        CroppingImage(uri, transform) { transform.value = it }
+        CroppingImage(uri, transform)
         CropperMask { cropperSize = it }
-        ActionBar(transform) { transform.value = it }
+        ActionBar(transform, onChange = { transform.value = it }) {
+            onChange()
+        }
     }
 }
 
 @Composable
 private fun CroppingImage(
     uri: Uri,
-    transform: MutableState<ImageTransform>,
-    onChange: (ImageTransform) -> Unit
+    transform: MutableState<ImageTransform>
 ) {
     val animatedRotation by animateFloatAsState(targetValue = transform.value.rotation, label = "")
 

@@ -25,7 +25,8 @@ import top.chengdongqing.weui.core.ui.components.button.WeButton
 @Composable
 internal fun BoxScope.ActionBar(
     transform: MutableState<ImageTransform>,
-    onChange: (ImageTransform) -> Unit
+    onChange: (ImageTransform) -> Unit,
+    onConfirm: () -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -56,6 +57,8 @@ internal fun BoxScope.ActionBar(
                 modifier = Modifier.size(28.dp)
             )
         }
-        WeButton(text = "确定", size = ButtonSize.SMALL)
+        WeButton(text = "确定", size = ButtonSize.SMALL) {
+            onConfirm()
+        }
     }
 }
