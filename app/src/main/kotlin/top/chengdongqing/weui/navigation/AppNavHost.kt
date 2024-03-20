@@ -21,7 +21,7 @@ import top.chengdongqing.weui.home.HomeScreen
 import top.chengdongqing.weui.layers.LayersScreen
 
 @Composable
-fun ApplicationNavHost() {
+fun AppNavHost() {
     val navController = rememberNavController()
 
     NavHost(
