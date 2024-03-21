@@ -75,7 +75,6 @@ dependencies {
     implementation(libs.lifecycle.viewmodel.compose)
     implementation(libs.activity.compose)
     implementation(libs.navigation.compose) // 支持页面间导航
-    implementation(libs.accompanist.navigation.animation) // 导航支持动画
     implementation(platform(libs.compose.bom))
     implementation(libs.ui)
     implementation(libs.ui.graphics)
