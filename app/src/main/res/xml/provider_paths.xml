@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--
+context.cacheDir 返回的是内部存储上的缓存目录。这个目录是私有的，其他应用默认无法访问。
+context.externalCacheDir 返回的是外部存储上的缓存目录。尽管这个目录也是应用专用的，不过如果用户通过USB连接到电脑，或者有文件管理器应用，这个目录的内容是可被用户和其他应用访问的。
+-->
+
 <paths>
-    <external-path
+    <cache-path
+        name="cache_files"
+        path="." />
+    <external-cache-path
         name="external_files"
         path="." />
 </paths>

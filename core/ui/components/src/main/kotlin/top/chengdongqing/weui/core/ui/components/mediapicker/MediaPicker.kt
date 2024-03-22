@@ -60,9 +60,13 @@ fun WeMediaPicker(
             if (state.isLoading) {
                 WeLoadMore()
             } else {
-                MediaGrid(state)
-                BottomBar(state) {
-                    onConfirm(state.selectedMediaList.toTypedArray())
+                MediaGrid(state) {
+                    onConfirm(arrayOf(it))
+                }
+                if (count > 1) {
+                    BottomBar(state) {
+                        onConfirm(state.selectedMediaList.toTypedArray())
+                    }
                 }
             }
         }

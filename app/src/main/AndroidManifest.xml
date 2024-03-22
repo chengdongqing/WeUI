@@ -32,6 +32,7 @@
             </intent-filter>
         </activity>
 
+        <!-- FileProvider是一个特殊的ContentProvider，用于安全地共享文件，避免直接使用file://URI，这在Android N及以上版本中是不允许的 -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"

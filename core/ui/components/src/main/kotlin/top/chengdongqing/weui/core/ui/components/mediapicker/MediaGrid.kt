@@ -42,7 +42,7 @@ import top.chengdongqing.weui.core.utils.loadMediaThumbnail
 import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
-internal fun ColumnScope.MediaGrid(state: MediaPickerState) {
+internal fun ColumnScope.MediaGrid(state: MediaPickerState, onConfirm: (MediaItem) -> Unit) {
     val context = LocalContext.current
 
     LazyVerticalGrid(
@@ -59,8 +59,13 @@ internal fun ColumnScope.MediaGrid(state: MediaPickerState) {
                 item,
                 selected,
                 selectedIndex,
-                onPreview = {
-                    context.previewMedias(state.mediaList, index)
+                showCheckbox = state.count > 1,
+                onClick = {
+                    if (state.count > 1) {
+                        context.previewMedias(state.mediaList, index)
+                    } else {
+                        onConfirm(item)
+                    }
                 }
             ) {
                 if (selectedIndex == -1) {
@@ -80,14 +85,15 @@ private fun MediaGridCell(
     media: MediaItem,
     selected: Boolean,
     selectedIndex: Int,
-    onPreview: () -> Unit,
+    showCheckbox: Boolean,
+    onClick: () -> Unit,
     onSelect: () -> Unit
 ) {
     Box(
         modifier = Modifier
             .aspectRatio(1f)
             .background(MaterialTheme.colorScheme.outline)
-            .clickable { onPreview() }
+            .clickable { onClick() }
     ) {
         val context = LocalContext.current
         val thumbnail by produceState<Any?>(initialValue = null) {
@@ -131,7 +137,9 @@ private fun MediaGridCell(
             )
         }
         // 选择框
-        MediaCheckbox(selected, selectedIndex, onSelect)
+        if (showCheckbox) {
+            MediaCheckbox(selected, selectedIndex, onSelect)
+        }
     }
 }
 

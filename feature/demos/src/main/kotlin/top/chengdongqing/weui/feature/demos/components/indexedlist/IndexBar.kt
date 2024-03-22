@@ -25,7 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
@@ -171,7 +171,7 @@ private fun BoxScope.DrawIndicator(title: Char, index: Int, dpHeightPerIndex: Dp
                 x = (-60).dp,
                 y = (-30 + dpHeightPerIndex.value * index + dpHeightPerIndex.value / 2).dp
             )
-            .drawBehind {
+            .drawWithCache {
                 val circlePath = Path().apply {
                     addOval(Rect(Offset(0f, 0f), Size(size.width, size.height)))
                 }
@@ -187,8 +187,11 @@ private fun BoxScope.DrawIndicator(title: Char, index: Int, dpHeightPerIndex: Dp
                     )
                     close()
                 }
-                drawPath(circlePath, color)
-                drawPath(trianglePath, color)
+
+                onDrawBehind {
+                    drawPath(circlePath, color)
+                    drawPath(trianglePath, color)
+                }
             },
         contentAlignment = Alignment.Center
     ) {

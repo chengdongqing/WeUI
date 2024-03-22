@@ -26,15 +26,15 @@ import top.chengdongqing.weui.core.ui.components.button.WeButton
 @Composable
 internal fun BoxScope.ActionBar(
     transform: MutableState<ImageTransform>,
-    onTransform: (ImageTransform) -> Unit,
     onCancel: () -> Unit,
+    onReset: () -> Unit,
     onConfirm: () -> Unit
 ) {
     Row(
         modifier = Modifier
             .align(Alignment.BottomCenter)
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 24.dp),
+            .padding(24.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -44,9 +44,7 @@ internal fun BoxScope.ActionBar(
             fontSize = 16.sp,
             modifier = Modifier.clickable { onCancel() }
         )
-        IconButton(onClick = {
-            onTransform(ImageTransform())
-        }) {
+        IconButton(onClick = onReset) {
             Icon(
                 imageVector = Icons.Outlined.Replay,
                 contentDescription = "恢复",
@@ -55,7 +53,7 @@ internal fun BoxScope.ActionBar(
             )
         }
         IconButton(onClick = {
-            onTransform(transform.value.copy(rotation = transform.value.rotation - 90f))
+            transform.value = transform.value.copy(rotation = transform.value.rotation - 90f)
         }) {
             Icon(
                 imageVector = Icons.Outlined.Rotate90DegreesCcw,

@@ -12,6 +12,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import top.chengdongqing.weui.core.ui.theme.WeUITheme
+import top.chengdongqing.weui.core.utils.SetupStatusBarStyle
 
 class ImageCropperActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,12 +27,15 @@ class ImageCropperActivity : ComponentActivity() {
                 intent.getParcelableExtra("uri")
             }!!
 
-            WeImageCropper(uri, onCancel = { finish() }) {
-                val intent = Intent().apply {
-                    putExtra("uri", it)
+            SetupStatusBarStyle(isDark = false)
+            WeUITheme(darkTheme = true) {
+                WeImageCropper(uri, onCancel = { finish() }) {
+                    val intent = Intent().apply {
+                        putExtra("uri", it)
+                    }
+                    setResult(RESULT_OK, intent)
+                    finish()
                 }
-                setResult(RESULT_OK, intent)
-                finish()
             }
         }
     }

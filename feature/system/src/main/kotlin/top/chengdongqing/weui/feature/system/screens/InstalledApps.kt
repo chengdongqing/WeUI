@@ -192,7 +192,9 @@ private fun AppItem(app: AppItem, context: Context) {
 
 fun installApk(context: Context, apkPath: String) {
     // 复制到可访问的临时文件
-    val tempFile = File.createTempFile("app_", ".apk", context.externalCacheDir)
+    val tempFile = File.createTempFile("app_", ".apk", context.cacheDir).apply {
+        deleteOnExit()
+    }
     File(apkPath).copyTo(tempFile, true)
     // 创建文件共享访问路径
     val uri = FileProvider.getUriForFile(
