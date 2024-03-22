@@ -3,6 +3,7 @@
 agp = "8.4.0-alpha13"
 kotlin = "1.9.22"
 compose-bom = "2024.03.00"
+compose-compiler = "1.5.9"
 core-ktx = "1.12.0"
 lifecycle-runtime-ktx = "2.7.0"
 activity-compose = "1.8.2"
@@ -16,6 +17,8 @@ material-icons-extended = "1.6.4"
 navigation-compose = "2.7.7"
 room = "2.6.1"
 ksp = "1.9.22-1.0.17"
+android-tools = "31.3.1"
+room-gradle-plugin = "2.6.1"
 # 测试相关
 junit = "4.13.2"
 androidx-test-ext-junit = "1.1.5"
@@ -41,18 +44,18 @@ ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" } # 统一管理compose相关依赖版本
 
 # 官方库
-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle-runtime-ktx" } # 支持viewmodel
-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation-compose" } # 支持组件间导航
 material3 = { module = "androidx.compose.material3:material3" } # material3风格的官方组件库及主题
 material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "material-icons-extended" } # icon扩展库
+lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle-runtime-ktx" } # 支持viewmodel
+navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation-compose" } # 支持组件间导航
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist-permissions" } # 简化权限请求
-androidx-biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" } # 简化生物认证
-androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "camerax" } # 简化相机调用
-androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "camerax" } # 相机生命周期管理
-androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "camerax" } # 相机视图容器
-androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" } # 简化数据库访问
-androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" } # room支持kotlin
-androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" } # room支持根据注解自动生成对应实现
+biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" } # 简化生物认证
+camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "camerax" } # 简化相机调用
+camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "camerax" } # 相机生命周期管理
+camera-view = { module = "androidx.camera:camera-view", version.ref = "camerax" } # 相机视图容器
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" } # 简化数据库访问
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" } # room支持kotlin
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" } # room支持根据注解自动生成对应实现
 # 调试相关
 ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" } # 支持compose组件预览
@@ -75,12 +78,25 @@ amap-search = { module = "com.amap.api:search", version.ref = "amap-search" } # 
 zxing-core = { module = "com.google.zxing:core", version.ref = "zxing-core" } # 二维码生成/识别（效率低）
 mlkit-barcode-scanning = { module = "com.google.mlkit:barcode-scanning", version.ref = "mlkit" } # 二维码识别（基于机器学习）
 
+# Dependencies of the included build-logic
+android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
+android-tools-common = { group = "com.android.tools", name = "common", version.ref = "android-tools" }
+kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+ksp-gradle-plugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
+room-gradle-plugin = { group = "androidx.room", name = "room-gradle-plugin", version.ref = "room-gradle-plugin" }
+
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 com-google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+room = { id = "androidx.room", version.ref = "room" }
+
+# Plugins defined by this project
+weui-android-compose-application = { id = "weui.android.compose.application", version = "unspecified" }
+weui-android-compose-library = { id = "weui.android.compose.library", version = "unspecified" }
+weui-android-room = { id = "weui.android.room", version = "unspecified" }
 
 [bundles]
-camerax = ["androidx-camera-camera2", "androidx-camera-lifecycle", "androidx-camera-view"]
+camerax = ["camera-camera2", "camera-lifecycle", "camera-view"]
 retrofit = ["retrofit", "retrofit-converter"]
