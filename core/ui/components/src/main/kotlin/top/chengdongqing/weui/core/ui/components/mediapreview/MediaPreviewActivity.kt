@@ -45,3 +45,12 @@ class MediaPreviewActivity : ComponentActivity() {
         fun newIntent(context: Context) = Intent(context, MediaPreviewActivity::class.java)
     }
 }
+
+fun Context.previewMedias(medias: List<MediaItem>, current: Int = 0) {
+    val intent = MediaPreviewActivity.newIntent(this).apply {
+        putExtra("medias", medias.toTypedArray())
+        putExtra("current", current)
+        addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+    }
+    startActivity(intent)
+}

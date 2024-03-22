@@ -14,7 +14,7 @@ import top.chengdongqing.weui.core.ui.components.cardlist.WeCardList
 import top.chengdongqing.weui.core.ui.components.cardlist.WeCardListItem
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
 import top.chengdongqing.weui.feature.location.data.model.LocationItem
-import top.chengdongqing.weui.feature.location.utils.rememberPickLocationLauncher
+import top.chengdongqing.weui.feature.location.picker.rememberPickLocationLauncher
 
 @Composable
 fun LocationPickerScreen() {

@@ -17,7 +17,7 @@ class LocationPreviewActivity : ComponentActivity() {
             intent.getParcelableExtra("location", LocationPreviewItem::class.java)
         } else {
             @Suppress("DEPRECATION")
-            intent.getParcelableExtra("location") as? LocationPreviewItem
+            intent.getParcelableExtra("location")
         }!!
 
         setContent {
@@ -30,4 +30,11 @@ class LocationPreviewActivity : ComponentActivity() {
     companion object {
         fun newIntent(context: Context) = Intent(context, LocationPreviewActivity::class.java)
     }
+}
+
+fun Context.previewLocation(location: LocationPreviewItem) {
+    val intent = LocationPreviewActivity.newIntent(this).apply {
+        putExtra("location", location)
+    }
+    startActivity(intent)
 }

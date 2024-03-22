@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.core.ui.components.button.WeButton
 import top.chengdongqing.weui.core.ui.components.input.WeTextarea
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
-import top.chengdongqing.weui.feature.qrcode.utils.rememberScanCodeLauncher
+import top.chengdongqing.weui.feature.qrcode.scanner.rememberScanCodeLauncher
 
 @Composable
 fun QrCodeScanScreen() {

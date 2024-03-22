@@ -38,8 +38,8 @@ import top.chengdongqing.weui.core.ui.components.actionsheet.rememberActionSheet
 import top.chengdongqing.weui.core.ui.components.button.ButtonSize
 import top.chengdongqing.weui.core.ui.components.button.WeButton
 import top.chengdongqing.weui.core.ui.components.loading.WeLoadMore
+import top.chengdongqing.weui.core.ui.components.mediapreview.previewMedias
 import top.chengdongqing.weui.core.utils.RequestMediaPermission
-import top.chengdongqing.weui.core.utils.previewMedias
 
 @Composable
 fun WeMediaPicker(

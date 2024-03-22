@@ -28,7 +28,7 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 @Composable
-fun WeImageCropper(uri: Uri, onChange: () -> Unit) {
+fun WeImageCropper(uri: Uri, onCancel: () -> Unit, onConfirm: (Uri) -> Unit) {
     val transform = remember { mutableStateOf(ImageTransform()) }
     var cropperSize by remember { mutableStateOf(Size.Zero) }
 
@@ -40,8 +40,12 @@ fun WeImageCropper(uri: Uri, onChange: () -> Unit) {
     ) {
         CroppingImage(uri, transform)
         CropperMask { cropperSize = it }
-        ActionBar(transform, onChange = { transform.value = it }) {
-            onChange()
+        ActionBar(
+            transform,
+            onTransform = { transform.value = it },
+            onCancel
+        ) {
+            onConfirm(uri)
         }
     }
 }
@@ -116,7 +120,10 @@ internal data class ImageTransform(
 @Composable
 private fun PreviewImageCropper() {
     WeUITheme {
-        WeImageCropper(uri = Uri.parse("https://s1.xiaomiev.com/activity-outer-assets/web/su7/1-3_m.jpg")) {
+        WeImageCropper(
+            uri = Uri.parse("https://s1.xiaomiev.com/activity-outer-assets/web/su7/1-3_m.jpg"),
+            onCancel = {}
+        ) {
 
         }
     }

@@ -24,9 +24,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
 import top.chengdongqing.weui.core.data.model.MediaType
 import top.chengdongqing.weui.core.ui.components.button.WeButton
+import top.chengdongqing.weui.core.ui.components.mediapicker.rememberPickMediasLauncher
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
 import top.chengdongqing.weui.core.ui.components.toast.ToastIcon
-import top.chengdongqing.weui.core.utils.rememberPickMediasLauncher
 import top.chengdongqing.weui.core.ui.components.toast.rememberToastState as rememberToastState1
 
 @Composable

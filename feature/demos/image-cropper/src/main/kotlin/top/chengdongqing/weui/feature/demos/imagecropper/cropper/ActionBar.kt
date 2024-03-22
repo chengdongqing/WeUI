@@ -1,5 +1,6 @@
 package top.chengdongqing.weui.feature.demos.imagecropper.cropper
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Row
@@ -25,7 +26,8 @@ import top.chengdongqing.weui.core.ui.components.button.WeButton
 @Composable
 internal fun BoxScope.ActionBar(
     transform: MutableState<ImageTransform>,
-    onChange: (ImageTransform) -> Unit,
+    onTransform: (ImageTransform) -> Unit,
+    onCancel: () -> Unit,
     onConfirm: () -> Unit
 ) {
     Row(
@@ -36,9 +38,14 @@ internal fun BoxScope.ActionBar(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = "取消", color = Color.White, fontSize = 16.sp)
+        Text(
+            text = "取消",
+            color = Color.White,
+            fontSize = 16.sp,
+            modifier = Modifier.clickable { onCancel() }
+        )
         IconButton(onClick = {
-            onChange(ImageTransform())
+            onTransform(ImageTransform())
         }) {
             Icon(
                 imageVector = Icons.Outlined.Replay,
@@ -48,7 +55,7 @@ internal fun BoxScope.ActionBar(
             )
         }
         IconButton(onClick = {
-            onChange(transform.value.copy(rotation = transform.value.rotation - 90f))
+            onTransform(transform.value.copy(rotation = transform.value.rotation - 90f))
         }) {
             Icon(
                 imageVector = Icons.Outlined.Rotate90DegreesCcw,

@@ -7,10 +7,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -38,7 +36,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import top.chengdongqing.weui.core.ui.components.popup.WePopup
 import top.chengdongqing.weui.core.ui.theme.FontLinkColor
 import top.chengdongqing.weui.core.utils.clickableWithoutRipple
 import top.chengdongqing.weui.feature.demos.videochannel.data.model.VideoComment
@@ -46,14 +43,8 @@ import top.chengdongqing.weui.feature.demos.videochannel.data.model.VideoItem
 
 @Composable
 internal fun CommentsCard(video: VideoItem, visible: Boolean, onClose: () -> Unit) {
-    WePopup(
-        visible,
-        swipeable = true,
-        onClose = onClose,
-        title = "${video.comments}条评论",
-        padding = PaddingValues(top = 12.dp)
-    ) {
-        LazyColumn(modifier = Modifier.fillMaxHeight(0.7f)) {
+    CommentsPopup(visible, onClose, title = "${video.comments}条评论") {
+        LazyColumn {
             item {
                 VideoIntroduction(video)
             }

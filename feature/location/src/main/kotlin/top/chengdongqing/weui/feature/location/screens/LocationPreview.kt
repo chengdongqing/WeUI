@@ -13,7 +13,7 @@ import top.chengdongqing.weui.core.ui.components.cardlist.WeCardList
 import top.chengdongqing.weui.core.ui.components.cardlist.WeCardListItem
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
 import top.chengdongqing.weui.feature.location.data.model.LocationPreviewItem
-import top.chengdongqing.weui.feature.location.utils.previewLocation
+import top.chengdongqing.weui.feature.location.preview.previewLocation
 
 @Composable
 fun LocationPreviewScreen() {

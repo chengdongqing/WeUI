@@ -54,17 +54,17 @@ fun VideoChannelScreen() {
 private fun VideoItem(video: VideoItem) {
     var commentsVisible by remember { mutableStateOf(false) }
 
-    Box {
-        Column {
-            val state = rememberVideoPlayerState(videoSource = Uri.parse(video.videoUrl))
-            WeVideoPlayer(state, modifier = Modifier.weight(1f))
+    Column {
+        val state = rememberVideoPlayerState(videoSource = Uri.parse(video.videoUrl))
+        WeVideoPlayer(state, modifier = Modifier.weight(1f))
+
+        Box {
             InformationBar(video, onCommentsClick = {
                 commentsVisible = true
             })
-        }
-
-        CommentsCard(video, commentsVisible) {
-            commentsVisible = false
+            CommentsCard(video, commentsVisible) {
+                commentsVisible = false
+            }
         }
     }
 }

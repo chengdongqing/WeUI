@@ -35,10 +35,10 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import top.chengdongqing.weui.core.data.model.MediaItem
 import top.chengdongqing.weui.core.data.model.isVideo
+import top.chengdongqing.weui.core.ui.components.mediapreview.previewMedias
 import top.chengdongqing.weui.core.utils.clickableWithoutRipple
 import top.chengdongqing.weui.core.utils.format
 import top.chengdongqing.weui.core.utils.loadMediaThumbnail
-import top.chengdongqing.weui.core.utils.previewMedias
 import kotlin.time.Duration.Companion.milliseconds
 
 @Composable

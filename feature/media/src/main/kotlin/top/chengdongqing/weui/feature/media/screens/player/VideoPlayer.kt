@@ -13,12 +13,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.core.data.model.MediaType
 import top.chengdongqing.weui.core.ui.components.button.WeButton
+import top.chengdongqing.weui.core.ui.components.mediapicker.rememberPickMediasLauncher
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
 import top.chengdongqing.weui.core.ui.components.videoplayer.WeVideoPlayer
 import top.chengdongqing.weui.core.ui.components.videoplayer.rememberVideoPlayerState
 import top.chengdongqing.weui.core.ui.theme.WeUITheme
 import top.chengdongqing.weui.core.utils.SetupStatusBarStyle
-import top.chengdongqing.weui.core.utils.rememberPickMediasLauncher
 
 @Composable
 fun VideoPlayerScreen() {

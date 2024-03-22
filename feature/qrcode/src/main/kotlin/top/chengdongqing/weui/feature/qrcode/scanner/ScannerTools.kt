@@ -31,7 +31,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.core.data.model.MediaType
-import top.chengdongqing.weui.core.utils.rememberPickMediasLauncher
+import top.chengdongqing.weui.core.ui.components.mediapicker.rememberPickMediasLauncher
 import top.chengdongqing.weui.core.utils.rememberToggleState
 
 @Composable

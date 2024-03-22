@@ -31,12 +31,12 @@ import coil.compose.AsyncImage
 import top.chengdongqing.weui.core.data.model.MediaItem
 import top.chengdongqing.weui.core.data.model.isVideo
 import top.chengdongqing.weui.core.ui.components.loading.WeLoadMore
+import top.chengdongqing.weui.core.ui.components.mediapreview.previewMedias
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
 import top.chengdongqing.weui.core.utils.ChineseDateWeekFormatter
 import top.chengdongqing.weui.core.utils.RequestMediaPermission
 import top.chengdongqing.weui.core.utils.format
 import top.chengdongqing.weui.core.utils.loadMediaThumbnail
-import top.chengdongqing.weui.core.utils.previewMedias
 import java.time.format.DateTimeFormatter
 import kotlin.time.Duration.Companion.milliseconds
 
