@@ -38,8 +38,7 @@ dependencies {
     implementation(libs.material3)
     implementation(libs.material.icons.extended)
     implementation(libs.navigation.compose)
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.converter)
+    implementation(libs.bundles.retrofit)
 
     implementation(project(":core:ui:theme"))
     implementation(project(":core:ui:components"))
