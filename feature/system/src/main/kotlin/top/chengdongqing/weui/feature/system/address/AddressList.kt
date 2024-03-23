@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.feature.system.database.address
+package top.chengdongqing.weui.feature.system.address
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
@@ -40,7 +40,7 @@ import top.chengdongqing.weui.core.ui.components.toast.ToastIcon
 import top.chengdongqing.weui.core.ui.components.toast.rememberToastState
 import top.chengdongqing.weui.core.ui.theme.FontLinkColor
 import top.chengdongqing.weui.core.utils.setClipboardData
-import top.chengdongqing.weui.feature.system.database.address.db.Address
+import top.chengdongqing.weui.feature.system.address.repository.Address
 
 @Composable
 fun AddressList(

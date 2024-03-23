@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.feature.system.database.address.db
+package top.chengdongqing.weui.feature.system.address.repository
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -9,11 +9,11 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AddressDao {
-    @Query("SELECT * FROM address")
-    fun loadAll(): Flow<List<Address>>
+    @get:Query("SELECT * FROM address")
+    val addressList: Flow<List<Address>>
 
     @Query("select * from address where id = :id")
-    fun loadById(id: Int): Flow<Address?>
+    suspend fun loadById(id: Int): Address?
 
     @Insert
     suspend fun insert(address: Address)

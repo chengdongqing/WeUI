@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.feature.system.database.address
+package top.chengdongqing.weui.feature.system.address
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import top.chengdongqing.weui.core.ui.components.button.WeButton
 import top.chengdongqing.weui.core.ui.components.input.WeInput
@@ -28,7 +27,7 @@ import top.chengdongqing.weui.core.ui.components.input.WeTextarea
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
 import top.chengdongqing.weui.core.ui.components.toast.ToastIcon
 import top.chengdongqing.weui.core.ui.components.toast.rememberToastState
-import top.chengdongqing.weui.feature.system.database.address.db.Address
+import top.chengdongqing.weui.feature.system.address.repository.Address
 
 @Composable
 fun AddressFormScreen(
@@ -49,7 +48,7 @@ fun AddressFormScreen(
 
         LaunchedEffect(id) {
             if (id != null) {
-                addressViewModel.loadById(id).filterNotNull().collect {
+                addressViewModel.loadById(id)?.let {
                     address["name"] = it.name
                     address["phone"] = it.phone
                     address["addressDetail"] = it.addressDetail

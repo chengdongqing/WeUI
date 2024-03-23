@@ -3,9 +3,11 @@ package top.chengdongqing.weui.feature.system.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import top.chengdongqing.weui.feature.system.address.AddressFormScreen
 import top.chengdongqing.weui.feature.system.screens.CalendarEventsScreen
 import top.chengdongqing.weui.feature.system.screens.ClipboardScreen
 import top.chengdongqing.weui.feature.system.screens.ContactsScreen
+import top.chengdongqing.weui.feature.system.screens.DatabaseScreen
 import top.chengdongqing.weui.feature.system.screens.DeviceInfoScreen
 import top.chengdongqing.weui.feature.system.screens.DownloaderScreen
 import top.chengdongqing.weui.feature.system.screens.InstalledAppsScreen
@@ -13,8 +15,6 @@ import top.chengdongqing.weui.feature.system.screens.KeyboardScreen
 import top.chengdongqing.weui.feature.system.screens.NotificationScreen
 import top.chengdongqing.weui.feature.system.screens.SmsScreen
 import top.chengdongqing.weui.feature.system.screens.SystemStatusScreen
-import top.chengdongqing.weui.feature.system.database.DatabaseScreen
-import top.chengdongqing.weui.feature.system.database.address.AddressFormScreen
 
 fun NavGraphBuilder.addSystemGraph(navController: NavController) {
     composable("device_info") {

@@ -1,11 +1,11 @@
-package top.chengdongqing.weui.feature.system.database
+package top.chengdongqing.weui.feature.system.screens
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
-import top.chengdongqing.weui.feature.system.database.address.AddressList
+import top.chengdongqing.weui.feature.system.address.AddressList
 
 @Composable
 fun DatabaseScreen(navController: NavController) {

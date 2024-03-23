@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.feature.system.database.address.db
+package top.chengdongqing.weui.feature.system.address.repository
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
