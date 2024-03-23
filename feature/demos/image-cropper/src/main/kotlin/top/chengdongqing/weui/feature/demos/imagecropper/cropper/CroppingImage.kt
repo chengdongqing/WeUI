@@ -19,7 +19,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.ContentScale
 import coil.compose.AsyncImage
 import kotlin.math.cos
 import kotlin.math.max
@@ -66,7 +65,6 @@ internal fun BoxScope.CroppingImage(
         AsyncImage(
             model = uri,
             contentDescription = null,
-            contentScale = ContentScale.Fit,
             onState = {
                 it.painter?.intrinsicSize?.let { size ->
                     imageSize = size

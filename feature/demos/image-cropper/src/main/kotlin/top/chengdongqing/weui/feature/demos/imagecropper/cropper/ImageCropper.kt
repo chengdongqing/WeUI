@@ -16,6 +16,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.geometry.center
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.FileProvider
 import kotlinx.coroutines.Dispatchers
@@ -24,6 +25,7 @@ import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.core.ui.components.toast.ToastIcon
 import top.chengdongqing.weui.core.ui.components.toast.rememberToastState
 import top.chengdongqing.weui.core.ui.theme.BackgroundColorDark
+import top.chengdongqing.weui.core.utils.toIntSize
 import java.io.File
 import java.io.FileOutputStream
 import kotlin.time.Duration
@@ -73,8 +75,8 @@ private suspend fun saveCroppedImage(context: Context, bitmap: Bitmap): Uri? {
         val tempFile = File.createTempFile("cropped_", ".png", context.cacheDir).apply {
             deleteOnExit()
         }
-        FileOutputStream(tempFile).use { out ->
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
+        FileOutputStream(tempFile).use { outputStream ->
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
         }
         tempFile
     }
@@ -90,15 +92,17 @@ private suspend fun cropTransformedBitmap(
 ): Bitmap? {
     val originalBitmap = loadBitmap(context, sourceUri) ?: return null
 
+    val intSize = cropperSize.toIntSize()
     val transformedBitmap = Bitmap.createBitmap(
-        cropperSize.width.toInt(),
-        cropperSize.height.toInt(),
+        intSize.width,
+        intSize.height,
         originalBitmap.config
     )
 
     Canvas(transformedBitmap).apply {
-        scale(transform.scale, transform.scale, cropperSize.width / 2, cropperSize.height / 2)
-        rotate(transform.rotation, cropperSize.width / 2, cropperSize.height / 2)
+        val center = cropperSize.center
+        scale(transform.scale, transform.scale, center.x, center.y)
+        rotate(transform.rotation, center.x, center.y)
         translate(transform.offsetX, transform.offsetY)
         drawBitmap(originalBitmap, 0f, 0f, null)
     }

@@ -41,6 +41,7 @@ import androidx.navigation.NavHostController
 import top.chengdongqing.weui.R
 import top.chengdongqing.weui.core.ui.components.divider.WeDivider
 import top.chengdongqing.weui.core.ui.theme.FontColorDark
+import top.chengdongqing.weui.core.ui.theme.InvertColorMatrix
 import top.chengdongqing.weui.core.utils.clickableWithoutRipple
 import top.chengdongqing.weui.home.data.MenuDataProvider
 import top.chengdongqing.weui.home.data.model.MenuGroup
@@ -106,9 +107,11 @@ private fun HomeFooter() {
         Image(
             painter = painterResource(id = R.drawable.ic_footer_link),
             contentDescription = null,
-            colorFilter = if (MaterialTheme.homeColorScheme.iconColor != Color.Unspecified) ColorFilter.tint(
-                MaterialTheme.homeColorScheme.iconColor
-            ) else null,
+            colorFilter = if (MaterialTheme.homeColorScheme.iconColor != Color.Unspecified) {
+                ColorFilter.colorMatrix(InvertColorMatrix)
+            } else {
+                null
+            },
             modifier = Modifier.size(84.dp, 19.dp)
         )
     }
