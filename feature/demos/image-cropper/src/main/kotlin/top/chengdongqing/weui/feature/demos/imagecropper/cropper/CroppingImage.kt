@@ -27,14 +27,14 @@ import kotlin.math.sin
 @Composable
 internal fun BoxScope.CroppingImage(
     uri: Uri,
-    cropperSize: Size,
+    boxSize: Size,
     transform: MutableState<ImageTransform>,
     onInitialStateCalculated: (ImageTransform) -> Unit
 ) {
     var imageSize by remember { mutableStateOf(Size.Zero) }
 
     InitialStateEffect(
-        cropperSize,
+        boxSize,
         imageSize,
         transform,
         onInitialStateCalculated
@@ -49,12 +49,12 @@ internal fun BoxScope.CroppingImage(
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .matchParentSize()
-            .pointerInput(cropperSize, imageSize) {
+            .pointerInput(boxSize, imageSize) {
                 detectTransformGestures { _, pan, zoom, _ ->
                     val adjustedPan = adjustPanForRotation(pan, -transform.value.rotation)
 
                     transform.value = transform.value.calculateNewTransform(
-                        cropperSize,
+                        boxSize,
                         imageSize,
                         adjustedPan,
                         zoom

@@ -16,8 +16,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.geometry.center
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -33,22 +35,36 @@ import kotlin.time.Duration
 @Composable
 fun WeImageCropper(uri: Uri, onCancel: () -> Unit, onConfirm: (Uri) -> Unit) {
     val transform = remember { mutableStateOf(ImageTransform()) }
-    var cropperSize by remember { mutableStateOf(Size.Zero) }
+    var boxSize by remember { mutableStateOf(Size.Zero) }
     var initialState by remember { mutableStateOf<ImageTransform?>(null) }
 
-    val coroutineScope = rememberCoroutineScope()
-    val context = LocalContext.current
     val toast = rememberToastState()
+    val context = LocalContext.current
+    val density = LocalDensity.current
+    val configuration = LocalConfiguration.current
+    val screenSize = remember {
+        density.run {
+            Size(
+                width = configuration.screenWidthDp.dp.toPx(),
+                height = configuration.screenHeightDp.dp.toPx()
+            )
+        }
+    }
+    val coroutineScope = rememberCoroutineScope()
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(BackgroundColorDark)
     ) {
-        CroppingImage(uri, cropperSize, transform) {
+        CroppingImage(
+            uri,
+            boxSize,
+            transform
+        ) {
             initialState = it
         }
-        CropperMask { cropperSize = it }
+        CropperMask { boxSize = it }
         ActionBar(
             transform,
             onCancel,
@@ -60,7 +76,12 @@ fun WeImageCropper(uri: Uri, onCancel: () -> Unit, onConfirm: (Uri) -> Unit) {
         ) {
             toast.show("处理中...", ToastIcon.LOADING, Duration.INFINITE, mask = true)
             coroutineScope.launch {
-                cropTransformedBitmap(context, uri, transform.value, cropperSize)?.let { bitmap ->
+                context.cropImage(
+                    uri,
+                    boxSize,
+                    screenSize,
+                    transform.value
+                )?.let { bitmap ->
                     val croppedUri = saveCroppedImage(context, bitmap)
                     croppedUri?.let(onConfirm)
                 }
@@ -84,30 +105,49 @@ private suspend fun saveCroppedImage(context: Context, bitmap: Bitmap): Uri? {
     return FileProvider.getUriForFile(context, "${context.packageName}.provider", tempFile)
 }
 
-private suspend fun cropTransformedBitmap(
-    context: Context,
-    sourceUri: Uri,
-    transform: ImageTransform,
-    cropperSize: Size
+private suspend fun Context.cropImage(
+    uri: Uri,
+    boxSize: Size,
+    screenSize: Size,
+    transform: ImageTransform
 ): Bitmap? {
-    val originalBitmap = loadBitmap(context, sourceUri) ?: return null
+    val originalBitmap = loadBitmap(this, uri) ?: return null
 
-    val intSize = cropperSize.toIntSize()
-    val transformedBitmap = Bitmap.createBitmap(
+    val intSize = boxSize.toIntSize()
+    val targetBitmap = Bitmap.createBitmap(
         intSize.width,
         intSize.height,
         originalBitmap.config
     )
 
-    Canvas(transformedBitmap).apply {
-        val center = cropperSize.center
-        scale(transform.scale, transform.scale, center.x, center.y)
-        rotate(transform.rotation, center.x, center.y)
-        translate(transform.offsetX, transform.offsetY)
-        drawBitmap(originalBitmap, 0f, 0f, null)
+    Canvas(targetBitmap).apply {
+        // 将Canvas的原点移动到中心
+        translate(
+            boxSize.width / 2f,
+            boxSize.height / 2f
+        )
+        // 应用旋转变换
+        rotate(transform.rotation)
+
+        // 应用缩放变换
+        val scale = transform.scale * (screenSize.width / boxSize.width)
+        scale(scale, scale)
+
+        // 计算偏移量
+        val offsetX =
+            (transform.offsetX + (screenSize.width - boxSize.width) / 2) * (boxSize.width / screenSize.width)
+        val offsetY =
+            (transform.offsetY + (screenSize.height - boxSize.height) / 2) * (boxSize.height / screenSize.height)
+
+        drawBitmap(
+            originalBitmap,
+            -originalBitmap.width / 2 + offsetX,
+            -originalBitmap.height / 2 + offsetY,
+            null
+        )
     }
 
-    return transformedBitmap
+    return targetBitmap
 }
 
 private suspend fun loadBitmap(context: Context, uri: Uri): Bitmap? {

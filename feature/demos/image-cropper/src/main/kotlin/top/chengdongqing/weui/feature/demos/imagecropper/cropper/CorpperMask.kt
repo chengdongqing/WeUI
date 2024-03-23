@@ -17,11 +17,11 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.unit.dp
 
 @Composable
-internal fun BoxScope.CropperMask(onSize: (Size) -> Unit) {
+internal fun BoxScope.CropperMask(onSizeChange: (Size) -> Unit) {
     Canvas(modifier = Modifier.matchParentSize()) {
         val spacing = 25.dp.toPx()
         val width = size.width - spacing * 2
-        onSize(Size(width, width))
+        onSizeChange(Size(width, width))
 
         drawIntoCanvas { canvas ->
             canvas.saveLayer(bounds = Rect(offset = Offset.Zero, size = size), Paint())

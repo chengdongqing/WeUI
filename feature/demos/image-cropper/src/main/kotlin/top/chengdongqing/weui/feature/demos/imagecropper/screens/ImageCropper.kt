@@ -3,8 +3,6 @@ package top.chengdongqing.weui.feature.demos.imagecropper.screens
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -14,7 +12,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.core.data.model.MediaType
@@ -43,14 +40,7 @@ fun ImageCropperScreen() {
         }
 
         croppedImage?.let {
-            Image(
-                bitmap = it,
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxWidth(0.5f)
-                    .aspectRatio(1f)
-            )
+            Image(bitmap = it, contentDescription = null)
             Spacer(modifier = Modifier.height(20.dp))
             WeButton(text = "清除图片", type = ButtonType.DANGER) {
                 croppedImage = null
