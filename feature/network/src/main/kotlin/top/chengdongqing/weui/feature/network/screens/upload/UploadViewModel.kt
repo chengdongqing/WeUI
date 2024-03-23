@@ -10,18 +10,13 @@ import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import top.chengdongqing.weui.feature.network.screens.upload.repository.UploadRepositoryImpl
 import java.io.File
 
 class UploadViewModel : ViewModel() {
-    private val retrofit by lazy {
-        Retrofit.Builder()
-            .baseUrl("https://unidemo.dcloud.net.cn/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+    private val uploadRepository by lazy {
+        UploadRepositoryImpl()
     }
-    private val uploadService by lazy { retrofit.create(UploadService::class.java) }
 
     suspend fun uploadFile(context: Context, uri: Uri): UploadResponse.Files.FileItem? {
         val ctx = context.applicationContext
@@ -64,7 +59,7 @@ class UploadViewModel : ViewModel() {
                 val requestFile = file.asRequestBody(metadata.second.toMediaType())
                 val body = MultipartBody.Part.createFormData("file", metadata.first, requestFile)
 
-                uploadService.uploadFile(body).body()?.files?.file
+                uploadRepository.uploadFile(body).body()?.files?.file
             } else {
                 null
             }

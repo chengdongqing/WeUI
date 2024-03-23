@@ -21,13 +21,13 @@ fun FileDownloadScreen(downloadViewModel: DownloadViewModel = viewModel()) {
         val coroutineScope = rememberCoroutineScope()
 
         bitmap?.let {
-            Image(it, contentDescription = null)
+            Image(bitmap = it, contentDescription = null)
         } ?: WeButton(
             text = if (downloading) "下载中..." else "下载图片",
             loading = downloading
         ) {
+            downloading = true
             coroutineScope.launch {
-                downloading = true
                 bitmap = downloadViewModel.downloadFile("section1.jpg")
                 downloading = false
             }
