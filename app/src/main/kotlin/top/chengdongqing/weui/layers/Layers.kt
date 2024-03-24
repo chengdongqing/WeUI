@@ -34,7 +34,7 @@ fun LayersScreen() {
     ) {
         val width = LocalConfiguration.current.screenWidthDp.dp / 2
         var expanded by remember { mutableStateOf(false) }
-        val transition = updateTransition(targetState = expanded, label = "expanded")
+        val transition = updateTransition(targetState = expanded, label = "layers_transition")
 
         LaunchedEffect(Unit) {
             delay(500)

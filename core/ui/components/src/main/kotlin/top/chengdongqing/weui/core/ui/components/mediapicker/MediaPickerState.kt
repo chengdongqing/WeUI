@@ -16,13 +16,14 @@ import kotlinx.coroutines.launch
 import top.chengdongqing.core.data.repository.LocalMediaRepositoryImpl
 import top.chengdongqing.weui.core.data.model.MediaItem
 import top.chengdongqing.weui.core.data.model.MediaType
+import top.chengdongqing.weui.core.data.model.VisualMediaType
 
 @Stable
 interface MediaPickerState {
     /**
      * 可选择的媒体类型
      */
-    val type: MediaType?
+    val type: VisualMediaType
 
     /**
      * 可选择的最大数量
@@ -62,11 +63,11 @@ interface MediaPickerState {
     /**
      * 刷新可选项
      */
-    fun refresh(type: MediaType?)
+    fun refresh(type: VisualMediaType)
 }
 
 @Composable
-fun rememberMediaPickerState(type: MediaType?, count: Int): MediaPickerState {
+fun rememberMediaPickerState(type: VisualMediaType, count: Int): MediaPickerState {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
@@ -80,12 +81,12 @@ fun rememberMediaPickerState(type: MediaType?, count: Int): MediaPickerState {
 private class MediaPickerStateImpl(
     context: Context,
     private val coroutineScope: CoroutineScope,
-    private val initialType: MediaType?,
+    private val initialType: VisualMediaType,
     override val count: Int
 ) : MediaPickerState {
     override var type by mutableStateOf(initialType)
     override val isTypeEnabled: Boolean
-        get() = initialType == null
+        get() = initialType == VisualMediaType.IMAGE_AND_VIDEO
     override var isLoading by mutableStateOf(true)
     override var mediaList by mutableStateOf<List<MediaItem>>(emptyList())
     override val selectedMediaList = mutableStateListOf<MediaItem>()
@@ -98,12 +99,12 @@ private class MediaPickerStateImpl(
         selectedMediaList.removeAt(index)
     }
 
-    override fun refresh(type: MediaType?) {
+    override fun refresh(type: VisualMediaType) {
         val types = buildList {
-            if (type == null || type == MediaType.IMAGE) {
+            if (type == VisualMediaType.IMAGE_AND_VIDEO || type == VisualMediaType.IMAGE) {
                 add(MediaType.IMAGE)
             }
-            if (type == null || type == MediaType.VIDEO) {
+            if (type == VisualMediaType.IMAGE_AND_VIDEO || type == VisualMediaType.VIDEO) {
                 add(MediaType.VIDEO)
             }
         }.toTypedArray()

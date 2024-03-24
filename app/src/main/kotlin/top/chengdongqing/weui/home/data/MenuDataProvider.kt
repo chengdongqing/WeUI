@@ -38,14 +38,15 @@ internal object MenuDataProvider {
         MenuGroup(
             "媒体组件", R.drawable.ic_nav_search,
             listOf(
-                MenuItem("MediaPicker", "media_picker"),
                 MenuItem("Camera", "camera"),
+                MenuItem("MediaPicker", "media_picker"),
                 MenuItem("AudioRecorder", "audio_recorder"),
-                MenuItem("VideoRecorder", "video_recorder"),
                 MenuItem("AudioPlayer", "audio_player"),
-                MenuItem("VideoPlayer", "video_player"),
                 MenuItem("LivePlayer", "live_player"),
-                MenuItem("LivePusher", "live_pusher")
+                MenuItem("LivePusher", "live_pusher"),
+                MenuItem("Gallery", "gallery"),
+                MenuItem("ImageCropper", "image_cropper"),
+                MenuItem("PanoramicImage", "panoramic_image")
             )
         ),
         MenuGroup(
@@ -130,7 +131,6 @@ internal object MenuDataProvider {
                 MenuItem("Clock", "clock"),
                 MenuItem("DropCard", "drop_card"),
                 MenuItem("SearchBar", "search_bar"),
-                MenuItem("Gallery", "gallery"),
                 MenuItem("FileBrowser", "file_browser"),
                 MenuItem("Paint", "paint"),
                 MenuItem("IndexedList", "indexed_list"),
@@ -141,10 +141,8 @@ internal object MenuDataProvider {
                 MenuItem("DigitalKeyboard", "digital_keyboard"),
                 MenuItem("CubicBezier", "cubic_bezier"),
                 MenuItem("NotificationBar", "notification_bar"),
-                MenuItem("ImageCropper", "image_cropper"),
                 MenuItem("VideoChannel", "video_channel"),
-                MenuItem("SolarSystem", "solar_system"),
-                MenuItem("PanoramicImage", "panoramic_image")
+                MenuItem("SolarSystem", "solar_system")
             )
         ),
         MenuGroup(

@@ -13,7 +13,6 @@
     <application>
         <activity
             android:name=".screens.BiometricActivity"
-            android:exported="true"
             android:theme="@style/Theme.Floating" />
     </application>
 </manifest>

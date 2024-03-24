@@ -5,7 +5,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
-class AddressRepositoryImpl(val context: Context) : AddressRepository {
+class AddressRepositoryImpl(context: Context) : AddressRepository {
     private val database by lazy { AddressDatabase.getInstance(context) }
 
     override val addressList: Flow<List<Address>>

@@ -1,21 +1,13 @@
 package top.chengdongqing.weui.feature.system.address
 
-import android.content.Context
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import top.chengdongqing.weui.feature.system.address.repository.Address
 import top.chengdongqing.weui.feature.system.address.repository.AddressRepositoryImpl
 
-@Suppress("UNCHECKED_CAST")
-class AddressViewModelFactory(val context: Context) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return AddressViewModel(context) as T
-    }
-}
-
-class AddressViewModel(context: Context) : ViewModel() {
+class AddressViewModel(application: Application) : AndroidViewModel(application) {
     private val addressRepository by lazy {
-        AddressRepositoryImpl(context)
+        AddressRepositoryImpl(application)
     }
     val addressList by lazy { addressRepository.addressList }
 

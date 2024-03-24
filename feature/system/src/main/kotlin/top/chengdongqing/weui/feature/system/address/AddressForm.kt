@@ -14,7 +14,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -33,7 +32,7 @@ import top.chengdongqing.weui.feature.system.address.repository.Address
 fun AddressFormScreen(
     navController: NavController,
     id: Int?,
-    addressViewModel: AddressViewModel = viewModel(factory = AddressViewModelFactory(LocalContext.current))
+    addressViewModel: AddressViewModel = viewModel()
 ) {
     WeScreen(
         title = "AddressForm",

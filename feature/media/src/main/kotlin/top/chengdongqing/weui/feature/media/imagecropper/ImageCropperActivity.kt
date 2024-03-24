@@ -1,8 +1,9 @@
-package top.chengdongqing.weui.core.ui.components.mediapicker
+package top.chengdongqing.weui.feature.media.imagecropper
 
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -11,25 +12,26 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import top.chengdongqing.weui.core.data.model.MediaItem
-import top.chengdongqing.weui.core.data.model.VisualMediaType
 import top.chengdongqing.weui.core.ui.theme.WeUITheme
 import top.chengdongqing.weui.core.utils.SetupStatusBarStyle
 
-class MediaPickerActivity : ComponentActivity() {
+class ImageCropperActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val type = intent.getStringExtra("type")?.run { VisualMediaType.valueOf(this) }
-            ?: VisualMediaType.IMAGE_AND_VIDEO
-        val count = intent.getIntExtra("count", 99)
-
         setContent {
+            val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                intent.getParcelableExtra("uri", Uri::class.java)
+            } else {
+                @Suppress("DEPRECATION")
+                intent.getParcelableExtra("uri")
+            }!!
+
             SetupStatusBarStyle(isDark = false)
             WeUITheme(darkTheme = true) {
-                WeMediaPicker(type, count, onCancel = { finish() }) { medias ->
+                WeImageCropper(uri, onCancel = { finish() }) {
                     val intent = Intent().apply {
-                        putExtra("medias", medias)
+                        putExtra("uri", it)
                     }
                     setResult(RESULT_OK, intent)
                     finish()
@@ -39,12 +41,13 @@ class MediaPickerActivity : ComponentActivity() {
     }
 
     companion object {
-        fun newIntent(context: Context) = Intent(context, MediaPickerActivity::class.java)
+        fun newIntent(context: Context) = Intent(context, ImageCropperActivity::class.java)
     }
 }
 
+
 @Composable
-fun rememberPickMediasLauncher(onChange: (Array<MediaItem>) -> Unit): (type: VisualMediaType, count: Int) -> Unit {
+fun rememberImageCropperLauncher(onChange: (Uri) -> Unit): (Uri) -> Unit {
     val context = LocalContext.current
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
@@ -52,19 +55,18 @@ fun rememberPickMediasLauncher(onChange: (Array<MediaItem>) -> Unit): (type: Vis
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.apply {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    getParcelableArrayExtra("medias", MediaItem::class.java)
+                    getParcelableExtra("uri", Uri::class.java)
                 } else {
-                    @Suppress("DEPRECATION", "UNCHECKED_CAST")
-                    (getParcelableArrayExtra("medias") as? Array<MediaItem>)
+                    @Suppress("DEPRECATION")
+                    (getParcelableExtra("uri") as? Uri)
                 }?.let(onChange)
             }
         }
     }
 
-    return { type, count ->
-        val intent = MediaPickerActivity.newIntent(context).apply {
-            putExtra("type", type.toString())
-            putExtra("count", count)
+    return {
+        val intent = ImageCropperActivity.newIntent(context).apply {
+            putExtra("uri", it)
         }
         launcher.launch(intent)
     }

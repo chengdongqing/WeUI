@@ -13,7 +13,6 @@
     <application>
         <activity
             android:name=".scanner.QrCodeScannerActivity"
-            android:exported="true"
             android:theme="@style/Theme.WeUI" />
     </application>
 </manifest>

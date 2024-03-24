@@ -1,11 +1,8 @@
 package top.chengdongqing.weui.feature.demos.navigation
 
-import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import top.chengdongqing.weui.feature.demos.filebrowser.FileBrowserScreen
-import top.chengdongqing.weui.feature.demos.gallery.GalleryScreen
-import top.chengdongqing.weui.feature.demos.imagecropper.screens.ImageCropperScreen
 import top.chengdongqing.weui.feature.demos.paint.PaintScreen
 import top.chengdongqing.weui.feature.demos.screens.CalendarScreen
 import top.chengdongqing.weui.feature.demos.screens.ClockScreen
@@ -18,12 +15,11 @@ import top.chengdongqing.weui.feature.demos.screens.DropCardScreen
 import top.chengdongqing.weui.feature.demos.screens.IndexedListScreen
 import top.chengdongqing.weui.feature.demos.screens.NotificationBarScreen
 import top.chengdongqing.weui.feature.demos.screens.OrgTreeScreen
-import top.chengdongqing.weui.feature.demos.screens.PanoramicImageScreen
 import top.chengdongqing.weui.feature.demos.screens.SearchBarScreen
 import top.chengdongqing.weui.feature.demos.screens.SolarSystemScreen
 import top.chengdongqing.weui.feature.demos.videochannel.VideoChannelScreen
 
-fun NavGraphBuilder.addDemosGraph(navController: NavController) {
+fun NavGraphBuilder.addDemosGraph() {
     composable("search_bar") {
         SearchBarScreen()
     }
@@ -35,9 +31,6 @@ fun NavGraphBuilder.addDemosGraph(navController: NavController) {
     }
     composable("drop_card") {
         DropCardScreen()
-    }
-    composable("gallery") {
-        GalleryScreen(navController)
     }
     composable("file_browser") {
         FileBrowserScreen()
@@ -69,16 +62,10 @@ fun NavGraphBuilder.addDemosGraph(navController: NavController) {
     composable("notification_bar") {
         NotificationBarScreen()
     }
-    composable("image_cropper") {
-        ImageCropperScreen()
-    }
     composable("video_channel") {
         VideoChannelScreen()
     }
     composable("solar_system") {
         SolarSystemScreen()
-    }
-    composable("panoramic_image") {
-        PanoramicImageScreen()
     }
 }

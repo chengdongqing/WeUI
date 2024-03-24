@@ -45,9 +45,7 @@ import top.chengdongqing.weui.feature.system.address.repository.Address
 @Composable
 fun AddressList(
     navController: NavController,
-    addressViewModel: AddressViewModel = viewModel(
-        factory = AddressViewModelFactory(LocalContext.current)
-    )
+    addressViewModel: AddressViewModel = viewModel()
 ) {
     val context = LocalContext.current
     val addressList by addressViewModel.addressList.collectAsState(emptyList())

@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
 @Stable
 interface VideoPlayerState {
     /**
-     * 视频容器实例
+     * 视频视图
      */
     val videoView: VideoView
 

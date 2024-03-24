@@ -30,7 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.chengdongqing.weui.core.data.model.MediaType
+import top.chengdongqing.weui.core.data.model.VisualMediaType
 import top.chengdongqing.weui.core.ui.components.mediapicker.rememberPickMediasLauncher
 import top.chengdongqing.weui.core.utils.rememberToggleState
 
@@ -63,7 +63,7 @@ internal fun BoxScope.ScannerTools(camera: Camera?, onPhotoSelected: (Uri) -> Un
             onPhotoSelected(it.first().uri)
         }
         ToolItem(label = "相册", icon = Icons.Filled.Image) {
-            pickMedia(MediaType.IMAGE, 1)
+            pickMedia(VisualMediaType.IMAGE, 1)
         }
     }
 }

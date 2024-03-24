@@ -17,4 +17,5 @@ dependencies {
     implementation(project(":core:ui:components"))
     implementation(project(":core:utils"))
     implementation(project(":core:data:model"))
+    implementation(project(":core:data:repository"))
 }

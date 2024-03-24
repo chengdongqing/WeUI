@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
-import top.chengdongqing.weui.core.data.model.MediaType
+import top.chengdongqing.weui.core.data.model.VisualMediaType
 import top.chengdongqing.weui.core.ui.components.button.WeButton
 import top.chengdongqing.weui.core.ui.components.mediapicker.rememberPickMediasLauncher
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
@@ -55,7 +55,7 @@ fun FileUploadScreen(uploadViewModel: UploadViewModel = viewModel()) {
             loading = uploading,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
-            pickMedia(MediaType.IMAGE, 1)
+            pickMedia(VisualMediaType.IMAGE, 1)
         }
 
         imageInfo?.let { image ->

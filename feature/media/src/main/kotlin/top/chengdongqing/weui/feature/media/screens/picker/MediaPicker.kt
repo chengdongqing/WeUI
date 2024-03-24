@@ -62,7 +62,7 @@ import org.burnoutcrew.reorderable.detectReorderAfterLongPress
 import org.burnoutcrew.reorderable.rememberReorderableLazyGridState
 import org.burnoutcrew.reorderable.reorderable
 import top.chengdongqing.weui.core.data.model.MediaItem
-import top.chengdongqing.weui.core.data.model.MediaType
+import top.chengdongqing.weui.core.data.model.VisualMediaType
 import top.chengdongqing.weui.core.ui.components.mediapicker.rememberPickMediasLauncher
 import top.chengdongqing.weui.core.ui.components.mediapreview.previewMedias
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
@@ -136,7 +136,7 @@ private fun PictureGrid(
     currentItemHeight: MutableIntState,
     currentPositionY: MutableFloatState,
     bottomBarHeight: MutableIntState,
-    onChooseMedia: (type: MediaType, count: Int) -> Unit
+    onChooseMedia: (type: VisualMediaType, count: Int) -> Unit
 ) {
     val context = LocalContext.current
 
@@ -192,7 +192,7 @@ private fun PictureGrid(
         if (data.value.size < 9) {
             item(key = -1) {
                 PlusButton {
-                    onChooseMedia(MediaType.IMAGE, 9 - data.value.size)
+                    onChooseMedia(VisualMediaType.IMAGE, 9 - data.value.size)
                 }
             }
         }

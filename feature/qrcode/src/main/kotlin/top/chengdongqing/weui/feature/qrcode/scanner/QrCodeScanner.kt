@@ -8,7 +8,6 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,7 +21,7 @@ import com.google.mlkit.vision.barcode.common.Barcode
 import top.chengdongqing.weui.core.ui.components.toast.ToastIcon
 import top.chengdongqing.weui.core.ui.components.toast.rememberToastState
 import top.chengdongqing.weui.core.utils.RequestCameraPermission
-import java.util.concurrent.Executors
+import top.chengdongqing.weui.core.utils.rememberSingleThreadExecutor
 
 @Composable
 fun WeQrCodeScanner(onRevoked: () -> Unit, onChange: (List<Barcode>) -> Unit) {
@@ -49,13 +48,7 @@ fun WeQrCodeScanner(onRevoked: () -> Unit, onChange: (List<Barcode>) -> Unit) {
 private fun CameraView(setCamera: (Camera) -> Unit, onChange: (List<Barcode>) -> Unit) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
-    val scanningExecutor = remember { Executors.newSingleThreadExecutor() }
-
-    DisposableEffect(Unit) {
-        onDispose {
-            scanningExecutor.shutdown()
-        }
-    }
+    val executor = rememberSingleThreadExecutor()
 
     AndroidView(
         factory = { PreviewView(context) },
@@ -75,7 +68,7 @@ private fun CameraView(setCamera: (Camera) -> Unit, onChange: (List<Barcode>) ->
             }
             val imageAnalysis = ImageAnalysis.Builder()
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                .build().apply { setAnalyzer(scanningExecutor, barcodeAnalyzer) }
+                .build().apply { setAnalyzer(executor, barcodeAnalyzer) }
 
             try {
                 cameraProvider.unbindAll()

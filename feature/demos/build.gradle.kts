@@ -15,9 +15,7 @@ dependencies {
     implementation(project(":core:ui:theme"))
     implementation(project(":core:ui:components"))
     implementation(project(":core:utils"))
-    implementation(project(":feature:demos:gallery"))
     implementation(project(":feature:demos:file-browser"))
     implementation(project(":feature:demos:video-channel"))
-    implementation(project(":feature:demos:image-cropper"))
     implementation(project(":feature:demos:paint"))
 }

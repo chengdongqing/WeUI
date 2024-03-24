@@ -24,11 +24,9 @@
     <application>
         <activity
             android:name=".preview.LocationPreviewActivity"
-            android:exported="true"
             android:theme="@style/Theme.WeUI" />
         <activity
             android:name=".picker.LocationPickerActivity"
-            android:exported="true"
             android:theme="@style/Theme.WeUI" />
 
         <meta-data

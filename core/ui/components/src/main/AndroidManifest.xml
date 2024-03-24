@@ -4,11 +4,9 @@
     <application>
         <activity
             android:name=".mediapreview.MediaPreviewActivity"
-            android:exported="true"
             android:theme="@style/Theme.WeUI" />
         <activity
             android:name=".mediapicker.MediaPickerActivity"
-            android:exported="true"
             android:theme="@style/Theme.WeUI" />
     </application>
 </manifest>

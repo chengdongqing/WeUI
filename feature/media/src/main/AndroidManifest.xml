@@ -13,4 +13,10 @@
     <uses-feature
         android:name="android.hardware.microphone"
         android:required="false" />
+
+    <application>
+        <activity
+            android:name=".camera.CameraActivity"
+            android:theme="@style/Theme.WeUI" />
+    </application>
 </manifest>

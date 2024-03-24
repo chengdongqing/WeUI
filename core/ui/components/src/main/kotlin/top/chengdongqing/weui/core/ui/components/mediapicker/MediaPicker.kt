@@ -32,7 +32,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.core.data.model.MediaItem
-import top.chengdongqing.weui.core.data.model.MediaType
+import top.chengdongqing.weui.core.data.model.VisualMediaType
 import top.chengdongqing.weui.core.ui.components.actionsheet.ActionSheetItem
 import top.chengdongqing.weui.core.ui.components.actionsheet.rememberActionSheetState
 import top.chengdongqing.weui.core.ui.components.button.ButtonSize
@@ -43,7 +43,7 @@ import top.chengdongqing.weui.core.utils.RequestMediaPermission
 
 @Composable
 fun WeMediaPicker(
-    type: MediaType?,
+    type: VisualMediaType,
     count: Int,
     onCancel: () -> Unit,
     onConfirm: (Array<MediaItem>) -> Unit
@@ -81,9 +81,9 @@ private fun TopBar(
     val actionSheetState = rememberActionSheetState()
     val typeOptions = remember {
         listOf(
-            ActionSheetItem("选择图片", value = MediaType.IMAGE),
-            ActionSheetItem("选择视频", value = MediaType.VIDEO),
-            ActionSheetItem("图片和视频")
+            ActionSheetItem("选择图片", value = VisualMediaType.IMAGE),
+            ActionSheetItem("选择视频", value = VisualMediaType.VIDEO),
+            ActionSheetItem("图片和视频", value = VisualMediaType.IMAGE_AND_VIDEO)
         )
     }
 
@@ -112,7 +112,7 @@ private fun TopBar(
                 .background(MaterialTheme.colorScheme.outline)
                 .clickable(enabled = state.isTypeEnabled) {
                     actionSheetState.show(typeOptions) { index ->
-                        state.refresh(typeOptions[index].value as MediaType?)
+                        state.refresh(typeOptions[index].value as VisualMediaType)
                     }
                 }
                 .padding(start = 12.dp, end = 6.dp, top = 6.dp, bottom = 6.dp),

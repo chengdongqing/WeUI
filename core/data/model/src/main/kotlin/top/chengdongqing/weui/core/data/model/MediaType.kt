@@ -14,3 +14,9 @@ enum class MediaType(val columnType: Int) {
         }
     }
 }
+
+enum class VisualMediaType {
+    IMAGE,
+    VIDEO,
+    IMAGE_AND_VIDEO
+}
