@@ -38,7 +38,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import top.chengdongqing.weui.core.utils.clickableWithoutRipple
@@ -79,7 +78,10 @@ fun BoxScope.IndexBar(listState: LazyListState, groups: Map<Char, List<String>>)
                                 .coerceIn(indexes.indices)
                             val title = indexes[index]
                             current = title to index
-                            scrollToIndex(coroutineScope, title, groups, listState)
+
+                            coroutineScope.launch {
+                                scrollToIndex(title, groups, listState)
+                            }
                         }
                     },
                 verticalArrangement = Arrangement.Center,
@@ -140,7 +142,9 @@ private fun IndexBarItem(
                     when (motionEvent.action) {
                         MotionEvent.ACTION_DOWN -> {
                             setCurrent(title to index)
-                            scrollToIndex(coroutineScope, title, groups, listState)
+                            coroutineScope.launch {
+                                scrollToIndex(title, groups, listState)
+                            }
                             true
                         }
 
@@ -199,17 +203,14 @@ private fun BoxScope.DrawIndicator(title: Char, index: Int, dpHeightPerIndex: Dp
     }
 }
 
-private fun scrollToIndex(
-    coroutineScope: CoroutineScope,
+private suspend fun scrollToIndex(
     title: Char,
     groups: Map<Char, List<String>>,
     listState: LazyListState
 ) {
-    coroutineScope.launch {
-        val index = calculateIndexForTitle(title, groups, listState.layoutInfo.totalItemsCount)
-        if (index >= 0) {
-            listState.scrollToItem(index)
-        }
+    val index = calculateIndexForTitle(title, groups, listState.layoutInfo.totalItemsCount)
+    if (index >= 0) {
+        listState.scrollToItem(index)
     }
 }
 
