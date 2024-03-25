@@ -13,9 +13,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.core.ui.components.button.WeButton
 import top.chengdongqing.weui.core.ui.components.input.WeInput
-import top.chengdongqing.weui.core.ui.components.picker.WeDatePicker
-import top.chengdongqing.weui.core.ui.components.picker.WeSingleColumnPicker
-import top.chengdongqing.weui.core.ui.components.picker.WeTimePicker
+import top.chengdongqing.weui.core.ui.components.picker.rememberDatePickerState
+import top.chengdongqing.weui.core.ui.components.picker.rememberPickerState
+import top.chengdongqing.weui.core.ui.components.picker.rememberTimePickerState
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
 import top.chengdongqing.weui.core.utils.ChineseDateFormatter
 import top.chengdongqing.weui.core.utils.DefaultTimeFormatter
@@ -36,10 +36,9 @@ fun PickerScreen() {
 
 @Composable
 private fun DatePickDemo() {
-    var visible by remember { mutableStateOf(false) }
+    val state = rememberDatePickerState()
     var value by remember { mutableStateOf(LocalDate.now()) }
 
-    WeDatePicker(visible, value, onCancel = { visible = false }) { value = it }
     WeInput(
         value = value.format(DateTimeFormatter.ofPattern(ChineseDateFormatter)),
         textAlign = TextAlign.Center,
@@ -47,16 +46,17 @@ private fun DatePickDemo() {
     )
     Spacer(modifier = Modifier.height(20.dp))
     WeButton(text = "选择日期") {
-        visible = true
+        state.show(value) {
+            value = it
+        }
     }
 }
 
 @Composable
 private fun TimePickDemo() {
-    var visible by remember { mutableStateOf(false) }
+    val picker = rememberTimePickerState()
     var value by remember { mutableStateOf(LocalTime.now()) }
 
-    WeTimePicker(visible, value, onCancel = { visible = false }) { value = it }
     WeInput(
         value = value.format(DateTimeFormatter.ofPattern(DefaultTimeFormatter)),
         textAlign = TextAlign.Center,
@@ -64,13 +64,15 @@ private fun TimePickDemo() {
     )
     Spacer(modifier = Modifier.height(20.dp))
     WeButton(text = "选择时间") {
-        visible = true
+        picker.show(value) {
+            value = it
+        }
     }
 }
 
 @Composable
 private fun CountryPickDemo() {
-    var visible by remember { mutableStateOf(false) }
+    val picker = rememberPickerState()
     var value by remember { mutableIntStateOf(0) }
     val range = remember {
         listOf(
@@ -86,14 +88,6 @@ private fun CountryPickDemo() {
         )
     }
 
-    WeSingleColumnPicker(
-        visible,
-        title = "选择国家",
-        range = range,
-        value = value,
-        onChange = { value = it },
-        onCancel = { visible = false }
-    )
     WeInput(
         value = range[value],
         textAlign = TextAlign.Center,
@@ -101,6 +95,12 @@ private fun CountryPickDemo() {
     )
     Spacer(modifier = Modifier.height(20.dp))
     WeButton(text = "选择国家") {
-        visible = true
+        picker.show(
+            title = "选择国家",
+            range,
+            value
+        ) {
+            value = it
+        }
     }
 }

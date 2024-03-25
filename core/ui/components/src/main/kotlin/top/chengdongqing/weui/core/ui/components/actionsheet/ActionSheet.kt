@@ -183,6 +183,7 @@ fun rememberActionSheetState(): ActionSheetState {
 private class ActionSheetStateImpl : ActionSheetState {
     override var visible by mutableStateOf(false)
     var props by mutableStateOf<ActionSheetProps?>(null)
+        private set
 
     override fun show(
         options: List<ActionSheetItem>,

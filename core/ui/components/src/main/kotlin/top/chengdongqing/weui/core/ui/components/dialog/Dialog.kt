@@ -209,6 +209,7 @@ fun rememberDialogState(): DialogState {
 private class DialogStateImpl : DialogState {
     override var visible by mutableStateOf(false)
     var props by mutableStateOf<DialogProps?>(null)
+        private set
 
     override fun show(
         title: String,

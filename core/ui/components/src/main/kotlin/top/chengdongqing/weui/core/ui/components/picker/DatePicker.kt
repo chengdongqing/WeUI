@@ -2,6 +2,7 @@ package top.chengdongqing.weui.core.ui.components.picker
 
 import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -59,7 +60,7 @@ fun WeDatePicker(
         )
     }
 
-    WePicker(
+    WeMultipleColumnPicker(
         visible,
         title = "选择日期",
         range = remember {
@@ -110,3 +111,66 @@ fun WeDatePicker(
         onCancel = onCancel
     )
 }
+
+@Stable
+interface DatePickerState {
+    val visible: Boolean
+
+    fun show(
+        value: LocalDate? = null,
+        type: DateType = DateType.DAY,
+        start: LocalDate = LocalDate.now().minusYears(50),
+        end: LocalDate = LocalDate.now().plusYears(10),
+        onChange: (LocalDate) -> Unit
+    )
+
+    fun hide()
+}
+
+@Composable
+fun rememberDatePickerState(): DatePickerState {
+    val state = remember { DatePickerStateImpl() }
+
+    state.props?.let { props ->
+        WeDatePicker(
+            visible = state.visible,
+            value = props.value,
+            type = props.type,
+            start = props.start,
+            end = props.end,
+            onCancel = { state.hide() },
+            onChange = props.onChange
+        )
+    }
+
+    return state
+}
+
+private class DatePickerStateImpl : DatePickerState {
+    override var visible by mutableStateOf(false)
+    var props by mutableStateOf<DatePickerProps?>(null)
+        private set
+
+    override fun show(
+        value: LocalDate?,
+        type: DateType,
+        start: LocalDate,
+        end: LocalDate,
+        onChange: (LocalDate) -> Unit
+    ) {
+        props = DatePickerProps(value, type, start, end, onChange)
+        visible = true
+    }
+
+    override fun hide() {
+        visible = false
+    }
+}
+
+private data class DatePickerProps(
+    val value: LocalDate?,
+    val type: DateType,
+    val start: LocalDate,
+    val end: LocalDate,
+    val onChange: (LocalDate) -> Unit
+)

@@ -104,6 +104,7 @@ fun rememberContextMenuState(onTap: (listIndex: Int, menuIndex: Int) -> Unit): C
 private class ContextMenuStateImpl : ContextMenuState {
     override var visible by mutableStateOf(false)
     var props by mutableStateOf<ContextMenuProps?>(null)
+        private set
 
     override fun show(position: IntOffset, options: List<String>, listIndex: Int) {
         props = ContextMenuProps(position, options, listIndex)

@@ -229,6 +229,7 @@ fun rememberToastState(): ToastState {
 private class ToastStateImpl : ToastState {
     override var visible by mutableStateOf(false)
     var props by mutableStateOf<ToastProps?>(null)
+        private set
 
     override fun show(title: String, icon: ToastIcon, duration: Duration, mask: Boolean) {
         props = ToastProps(title, icon, duration, mask)
