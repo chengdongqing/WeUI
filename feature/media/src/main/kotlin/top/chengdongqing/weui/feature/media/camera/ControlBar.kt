@@ -22,6 +22,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -42,9 +43,11 @@ internal fun ControlBar(state: CameraState, onCapture: (Uri, VisualMediaType) ->
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        IconButton(onClick = {
-            state.toggleFlashState()
-        }) {
+        IconButton(
+            enabled = !state.isUsingFrontCamera,
+            onClick = { state.toggleFlashState() },
+            modifier = Modifier.alpha(if (state.isUsingFrontCamera) 0f else 1f)
+        ) {
             Icon(
                 if (state.isFlashOn) Icons.Filled.FlashOn else Icons.Filled.FlashOff,
                 contentDescription = "开关闪光灯",

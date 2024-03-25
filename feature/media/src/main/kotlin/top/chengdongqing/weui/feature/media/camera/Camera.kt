@@ -56,7 +56,7 @@ private fun ColumnScope.CameraPreview(state: CameraState) {
                     preview.setSurfaceProvider(previewView.surfaceProvider)
                 }
                 state.cameraProvider.unbindAll()
-                state.cameraProvider.bindToLifecycle(
+                state.camera = state.cameraProvider.bindToLifecycle(
                     lifecycleOwner,
                     cameraSelector,
                     preview,

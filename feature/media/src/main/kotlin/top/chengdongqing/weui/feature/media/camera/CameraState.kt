@@ -5,6 +5,7 @@ import android.content.Context
 import android.net.Uri
 import android.util.Rational
 import android.view.ViewGroup
+import androidx.camera.core.Camera
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.lifecycle.ProcessCameraProvider
@@ -45,6 +46,13 @@ interface CameraState {
      * 用于管理camera生命周期等
      */
     val cameraProvider: ProcessCameraProvider
+
+    /**
+     * The camera interface is used to control the flow of data to use cases,
+     * control the camera via the CameraControl,
+     * and publish the state of the camera via CameraInfo.
+     */
+    var camera: Camera?
 
     /**
      * 用于捕获图片
@@ -142,6 +150,7 @@ private class CameraStateImpl(
 ) : CameraState {
     override val cameraProvider: ProcessCameraProvider =
         ProcessCameraProvider.getInstance(context).get()
+    override var camera by mutableStateOf<Camera?>(null)
     override val imageCapture: ImageCapture = ImageCapture.Builder().build()
     override val videoCapture: VideoCapture<Recorder> =
         VideoCapture.withOutput(Recorder.Builder().build())
@@ -235,16 +244,17 @@ private class CameraStateImpl(
     }
 
     override fun toggleFlashState() {
-        imageCapture.flashMode = if (isFlashOn) {
-            ImageCapture.FLASH_MODE_OFF
-        } else {
-            ImageCapture.FLASH_MODE_ON
-        }
         isFlashOn = !isFlashOn
+        camera?.let {
+            if (it.cameraInfo.hasFlashUnit()) {
+                it.cameraControl.enableTorch(isFlashOn)
+            }
+        }
     }
 
     override fun toggleCameraSelector() {
         isUsingFrontCamera = !isUsingFrontCamera
+        isFlashOn = false
     }
 
     private val progressAnimate = Animatable(0f)
