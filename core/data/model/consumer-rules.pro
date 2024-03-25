@@ -1,0 +1,1 @@
+-keep,allowobfuscation class top.chengdongqing.weui.core.data.model.** { *; }

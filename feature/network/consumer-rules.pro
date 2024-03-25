@@ -1,0 +1,5 @@
+-keep class kotlin.coroutines.Continuation
+-if interface * { @retrofit2.http.* public *** *(...); }
+-keep class <3>
+-keep interface retrofit2.** { *; }
+-keep class retrofit2.** { *; }

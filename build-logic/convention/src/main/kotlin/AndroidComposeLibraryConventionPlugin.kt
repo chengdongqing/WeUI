@@ -12,7 +12,11 @@ class AndroidComposeLibraryConventionPlugin : Plugin<Project> {
                 apply("org.jetbrains.kotlin.android")
             }
 
-            val extension = extensions.getByType<LibraryExtension>()
+            val extension = extensions.getByType<LibraryExtension>().apply {
+                defaultConfig {
+                    consumerProguardFile("consumer-rules.pro")
+                }
+            }
             configureAndroidCompose(extension)
         }
     }

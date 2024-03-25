@@ -172,7 +172,7 @@ private fun AppItem(app: AppItem, context: Context) {
                     type = ButtonType.PLAIN,
                     size = ButtonSize.SMALL
                 ) {
-                    copyFileToPublicDirectory(
+                    fileToPublicDirectory(
                         context,
                         app.apkPath,
                         "${app.name}-v${app.versionName}.apk"
@@ -205,7 +205,7 @@ fun installApk(context: Context, apkPath: String) {
     context.startActivity(intent)
 }
 
-private fun copyFileToPublicDirectory(
+private fun fileToPublicDirectory(
     context: Context,
     sourceFilePath: String,
     destinationFileName: String,

@@ -1,0 +1,1 @@
+-keep,allowobfuscation class com.github.houbb.pinyin.** { *; }
