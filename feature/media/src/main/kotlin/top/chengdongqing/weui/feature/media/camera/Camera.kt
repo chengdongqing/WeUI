@@ -1,8 +1,6 @@
 package top.chengdongqing.weui.feature.media.camera
 
 import android.net.Uri
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.Preview
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -14,7 +12,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -28,45 +25,23 @@ fun WeCamera(
     onCapture: (Uri, VisualMediaType) -> Unit
 ) {
     RequestCameraPermission(onRevoked = onRevoked) {
-        val state = rememberCameraState(type)
+        val state = rememberCameraState(type, onCapture = onCapture)
 
         Column {
             CameraPreview(state)
-            ControlBar(state, onCapture)
+            ControlBar(state)
         }
     }
 }
 
 @Composable
 private fun ColumnScope.CameraPreview(state: CameraState) {
-    val lifecycleOwner = LocalLifecycleOwner.current
-    val cameraSelector = if (state.isUsingFrontCamera) {
-        CameraSelector.DEFAULT_FRONT_CAMERA
-    } else {
-        CameraSelector.DEFAULT_BACK_CAMERA
-    }
-
     Box(modifier = Modifier.weight(1f)) {
         AndroidView(
             factory = { state.previewView },
-            modifier = Modifier.fillMaxSize()
-        ) { previewView ->
-            try {
-                val preview = Preview.Builder().build().also { preview ->
-                    preview.setSurfaceProvider(previewView.surfaceProvider)
-                }
-                state.cameraProvider.unbindAll()
-                state.camera = state.cameraProvider.bindToLifecycle(
-                    lifecycleOwner,
-                    cameraSelector,
-                    preview,
-                    state.imageCapture,
-                    state.videoCapture
-                )
-            } catch (e: RuntimeException) {
-                e.printStackTrace()
-            }
-        }
+            modifier = Modifier.fillMaxSize(),
+            update = { state.updateCamera() }
+        )
 
         val tips = remember {
             buildList {

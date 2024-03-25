@@ -20,13 +20,13 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import androidx.core.content.FileProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.core.ui.components.toast.ToastIcon
 import top.chengdongqing.weui.core.ui.components.toast.rememberToastState
 import top.chengdongqing.weui.core.ui.theme.BackgroundColorDark
+import top.chengdongqing.weui.core.utils.getFileProviderUri
 import top.chengdongqing.weui.core.utils.toIntSize
 import java.io.File
 import java.io.FileOutputStream
@@ -102,7 +102,7 @@ private suspend fun saveCroppedImage(context: Context, bitmap: Bitmap): Uri? {
         tempFile
     }
 
-    return FileProvider.getUriForFile(context, "${context.packageName}.provider", tempFile)
+    return context.getFileProviderUri(tempFile)
 }
 
 private suspend fun Context.cropImage(

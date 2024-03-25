@@ -1,5 +1,8 @@
 package top.chengdongqing.weui.core.utils
 
+import android.content.Context
+import android.net.Uri
+import androidx.core.content.FileProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -46,4 +49,8 @@ fun formatFileSize(size: Long): String {
         size < 1024 * 1024 * 1024 -> "${(size / (1024 * 1024f)).format()} MB"
         else -> "${(size / (1024 * 1024 * 1024f)).format()} GB"
     }
+}
+
+fun Context.getFileProviderUri(file: File): Uri {
+    return FileProvider.getUriForFile(this, "$packageName.provider", file)
 }

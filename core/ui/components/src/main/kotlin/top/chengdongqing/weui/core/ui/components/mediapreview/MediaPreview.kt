@@ -54,7 +54,10 @@ fun MediaPreviewScreen(medias: Array<MediaItem>, current: Int = 0) {
     SetupFullscreen()
     Box {
         MediaPager(medias, pagerState)
-        PagerInfo(total = medias.size, current = pagerState.currentPage + 1)
+        PagerInfo(
+            total = medias.size,
+            current = pagerState.currentPage + 1
+        )
         ToolBar(medias, pagerState)
     }
 }

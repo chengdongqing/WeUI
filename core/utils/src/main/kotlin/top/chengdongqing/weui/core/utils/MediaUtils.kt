@@ -10,7 +10,6 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Size
-import androidx.core.content.FileProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.core.data.model.MediaItem
@@ -63,11 +62,7 @@ object MediaStoreUtils {
 }
 
 fun Context.shareFile(file: File, mimeType: String = "image/*") {
-    val sharingUri = FileProvider.getUriForFile(
-        this,
-        "${packageName}.provider",
-        file
-    )
+    val sharingUri = this.getFileProviderUri(file)
     val intent = Intent(Intent.ACTION_SEND).apply {
         this.type = mimeType
         putExtra(Intent.EXTRA_STREAM, sharingUri)

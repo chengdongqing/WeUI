@@ -1,7 +1,6 @@
 package top.chengdongqing.weui.feature.media.camera
 
 import android.Manifest
-import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -34,7 +33,7 @@ import com.google.accompanist.permissions.rememberPermissionState
 import top.chengdongqing.weui.core.data.model.VisualMediaType
 
 @Composable
-internal fun ControlBar(state: CameraState, onCapture: (Uri, VisualMediaType) -> Unit) {
+internal fun ControlBar(state: CameraState) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -49,12 +48,12 @@ internal fun ControlBar(state: CameraState, onCapture: (Uri, VisualMediaType) ->
             modifier = Modifier.alpha(if (state.isUsingFrontCamera) 0f else 1f)
         ) {
             Icon(
-                if (state.isFlashOn) Icons.Filled.FlashOn else Icons.Filled.FlashOff,
+                imageVector = if (state.isFlashOn) Icons.Filled.FlashOn else Icons.Filled.FlashOff,
                 contentDescription = "开关闪光灯",
                 tint = Color.White
             )
         }
-        CaptureButton(state, onCapture)
+        CaptureButton(state)
         IconButton(onClick = {
             state.toggleCameraSelector()
         }) {
@@ -69,7 +68,7 @@ internal fun ControlBar(state: CameraState, onCapture: (Uri, VisualMediaType) ->
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-private fun CaptureButton(state: CameraState, onCapture: (Uri, VisualMediaType) -> Unit) {
+private fun CaptureButton(state: CameraState) {
     val audioPermissionState = rememberPermissionState(Manifest.permission.RECORD_AUDIO)
 
     Box(
@@ -81,9 +80,7 @@ private fun CaptureButton(state: CameraState, onCapture: (Uri, VisualMediaType) 
                     onLongPress = {
                         if (state.type != VisualMediaType.IMAGE) {
                             if (audioPermissionState.status.isGranted) {
-                                state.startRecording {
-                                    onCapture(it, VisualMediaType.VIDEO)
-                                }
+                                state.startRecording()
                             } else {
                                 audioPermissionState.launchPermissionRequest()
                             }
@@ -97,7 +94,7 @@ private fun CaptureButton(state: CameraState, onCapture: (Uri, VisualMediaType) 
                     }
                 ) {
                     if (state.type != VisualMediaType.VIDEO) {
-                        state.takePhoto { onCapture(it, VisualMediaType.IMAGE) }
+                        state.takePhoto()
                     }
                 }
             }

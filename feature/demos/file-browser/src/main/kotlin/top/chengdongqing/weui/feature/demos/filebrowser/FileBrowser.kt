@@ -28,7 +28,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.core.content.FileProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
@@ -38,6 +37,7 @@ import top.chengdongqing.weui.core.ui.components.button.WeButton
 import top.chengdongqing.weui.core.ui.components.loading.LoadMoreType
 import top.chengdongqing.weui.core.ui.components.loading.WeLoadMore
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
+import top.chengdongqing.weui.core.utils.getFileProviderUri
 import java.io.File
 
 @Composable
@@ -115,11 +115,7 @@ private fun FileList(
                         navigateToFolder(item.path)
                     },
                     onFileClick = {
-                        val uri = FileProvider.getUriForFile(
-                            context,
-                            "${context.packageName}.provider",
-                            File(item.path)
-                        )
+                        val uri = context.getFileProviderUri(File(item.path))
                         val intent = Intent(Intent.ACTION_VIEW).apply {
                             setDataAndType(uri, "*/*")
                             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)

@@ -38,7 +38,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.FileProvider
 import androidx.core.graphics.drawable.toBitmap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -50,6 +49,7 @@ import top.chengdongqing.weui.core.ui.components.loading.WeLoadMore
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
 import top.chengdongqing.weui.core.utils.formatFileSize
 import top.chengdongqing.weui.core.utils.formatTime
+import top.chengdongqing.weui.core.utils.getFileProviderUri
 import java.io.File
 
 @Composable
@@ -197,11 +197,7 @@ fun installApk(context: Context, apkPath: String) {
     }
     File(apkPath).copyTo(tempFile, true)
     // 创建文件共享访问路径
-    val uri = FileProvider.getUriForFile(
-        context,
-        "${context.packageName}.provider",
-        tempFile
-    )
+    val uri = context.getFileProviderUri(tempFile)
     val intent = Intent(Intent.ACTION_VIEW).apply {
         setDataAndType(uri, "application/vnd.android.package-archive")
         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)

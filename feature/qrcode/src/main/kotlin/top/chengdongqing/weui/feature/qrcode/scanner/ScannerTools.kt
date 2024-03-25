@@ -1,7 +1,5 @@
 package top.chengdongqing.weui.feature.qrcode.scanner
 
-import android.net.Uri
-import androidx.camera.core.Camera
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -32,10 +30,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.core.data.model.VisualMediaType
 import top.chengdongqing.weui.core.ui.components.mediapicker.rememberPickMediasLauncher
-import top.chengdongqing.weui.core.utils.rememberToggleState
+import top.chengdongqing.weui.core.ui.components.toast.ToastIcon
+import top.chengdongqing.weui.core.ui.components.toast.rememberToastState
 
 @Composable
-internal fun BoxScope.ScannerTools(camera: Camera?, onPhotoSelected: (Uri) -> Unit) {
+internal fun BoxScope.ScannerTools(state: ScannerState) {
+    val toast = rememberToastState()
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -43,24 +44,18 @@ internal fun BoxScope.ScannerTools(camera: Camera?, onPhotoSelected: (Uri) -> Un
             .padding(40.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        val (isFlashlightOn, toggleFlashlight) = rememberToggleState(
-            defaultValue = false,
-            reverseValue = true
-        )
         ToolItem(
             label = "闪光灯",
-            icon = if (isFlashlightOn.value) Icons.Filled.FlashlightOn else Icons.Filled.FlashlightOff,
-            iconColor = if (isFlashlightOn.value) MaterialTheme.colorScheme.primary else Color.White
+            icon = if (state.isFlashOn) Icons.Filled.FlashlightOn else Icons.Filled.FlashlightOff,
+            iconColor = if (state.isFlashOn) MaterialTheme.colorScheme.primary else Color.White
         ) {
-            camera?.let {
-                if (camera.cameraInfo.hasFlashUnit()) {
-                    camera.cameraControl.enableTorch(toggleFlashlight())
-                }
-            }
+            state.toggleFlashState()
         }
 
         val pickMedia = rememberPickMediasLauncher {
-            onPhotoSelected(it.first().uri)
+            state.scanPhoto(it.first().uri) {
+                toast.show("识别失败", ToastIcon.FAIL)
+            }
         }
         ToolItem(label = "相册", icon = Icons.Filled.Image) {
             pickMedia(VisualMediaType.IMAGE, 1)
