@@ -17,7 +17,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -27,7 +26,8 @@ import top.chengdongqing.weui.core.ui.components.button.WeButton
 import top.chengdongqing.weui.core.ui.components.mediapicker.rememberPickMediasLauncher
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
 import top.chengdongqing.weui.core.ui.components.toast.ToastIcon
-import top.chengdongqing.weui.core.ui.components.toast.rememberToastState as rememberToastState1
+import top.chengdongqing.weui.core.ui.components.toast.rememberToastState
+import top.chengdongqing.weui.feature.network.screens.upload.data.model.UploadResponse
 
 @Composable
 fun FileUploadScreen(uploadViewModel: UploadViewModel = viewModel()) {
@@ -35,14 +35,12 @@ fun FileUploadScreen(uploadViewModel: UploadViewModel = viewModel()) {
         var uploading by remember { mutableStateOf(false) }
         var imageInfo by remember { mutableStateOf<UploadResponse.Files.FileItem?>(null) }
 
-        val toast = rememberToastState1()
-        val context = LocalContext.current
+        val toast = rememberToastState()
         val coroutineScope = rememberCoroutineScope()
-
         val pickMedia = rememberPickMediasLauncher {
             coroutineScope.launch {
                 uploading = true
-                uploadViewModel.uploadFile(context, it.first().uri)?.let {
+                uploadViewModel.uploadFile(it.first().uri)?.let {
                     imageInfo = it
                     toast.show("上传成功", ToastIcon.SUCCESS)
                 } ?: toast.show("上传失败", ToastIcon.FAIL)

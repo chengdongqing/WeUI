@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.feature.network.screens.upload
+package top.chengdongqing.weui.feature.network.screens.upload.data.model
 
 data class UploadResponse(
     val error: String,

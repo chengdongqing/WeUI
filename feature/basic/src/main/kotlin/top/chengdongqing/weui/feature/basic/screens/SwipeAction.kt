@@ -19,10 +19,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
+import top.chengdongqing.weui.core.data.model.DragAnchor
 import top.chengdongqing.weui.core.ui.components.button.ButtonType
 import top.chengdongqing.weui.core.ui.components.button.WeButton
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
-import top.chengdongqing.weui.core.ui.components.swipeaction.DragAnchors
 import top.chengdongqing.weui.core.ui.components.swipeaction.SwipeActionItem
 import top.chengdongqing.weui.core.ui.components.swipeaction.SwipeActionStyle
 import top.chengdongqing.weui.core.ui.components.swipeaction.SwipeActionType
@@ -75,8 +75,8 @@ fun SwipeActionScreen() {
 
         val options1 = remember { options.slice(1..2) }
         val (anchor, toggleAnchor) = rememberToggleState(
-            defaultValue = DragAnchors.End,
-            reverseValue = DragAnchors.Center,
+            defaultValue = DragAnchor.End,
+            reverseValue = DragAnchor.Center,
         )
         val swipeActionState = rememberSwipeState(
             initialValue = anchor.value,

@@ -36,6 +36,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import top.chengdongqing.weui.core.data.model.DragAnchor
 import top.chengdongqing.weui.core.ui.theme.DangerColorLight
 import top.chengdongqing.weui.core.ui.theme.PlainColor
 import top.chengdongqing.weui.core.ui.theme.WarningColor
@@ -196,7 +197,7 @@ private fun ActionItem(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun rememberSwipeState(
-    initialValue: DragAnchors = DragAnchors.Center,
+    initialValue: DragAnchor = DragAnchor.Center,
     actionItemWidth: Dp = 80.dp,
     startActionCount: Int = 0,
     endActionCount: Int = 0
@@ -212,9 +213,9 @@ fun rememberSwipeState(
             initialValue,
             // 设置每个锚点对应的位置（偏移量）
             anchors = DraggableAnchors {
-                DragAnchors.Start at -startActionWidthPx
-                DragAnchors.Center at 0f
-                DragAnchors.End at endActionWidthPx
+                DragAnchor.Start at -startActionWidthPx
+                DragAnchor.Center at 0f
+                DragAnchor.End at endActionWidthPx
             },
             // 位置阀值：滑动多远距离自动进入该锚点
             positionalThreshold = { totalDistance -> totalDistance * 0.5f },
@@ -234,13 +235,7 @@ fun rememberSwipeState(
 
 @OptIn(ExperimentalFoundationApi::class)
 data class SwipeActionState(
-    val state: AnchoredDraggableState<DragAnchors>,
+    val state: AnchoredDraggableState<DragAnchor>,
     val actionItemWidthPx: Float,
     val actionItemWidth: Dp
 )
-
-enum class DragAnchors {
-    Start,
-    Center,
-    End
-}

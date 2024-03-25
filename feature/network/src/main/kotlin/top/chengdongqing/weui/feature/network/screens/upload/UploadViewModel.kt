@@ -1,25 +1,25 @@
 package top.chengdongqing.weui.feature.network.screens.upload
 
-import android.content.Context
+import android.app.Application
 import android.net.Uri
 import android.provider.MediaStore
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import top.chengdongqing.weui.feature.network.screens.upload.repository.UploadRepositoryImpl
+import top.chengdongqing.weui.feature.network.screens.upload.data.model.UploadResponse
+import top.chengdongqing.weui.feature.network.screens.upload.data.repository.UploadRepositoryImpl
 import java.io.File
 
-class UploadViewModel : ViewModel() {
+class UploadViewModel(private val application: Application) : AndroidViewModel(application) {
     private val uploadRepository by lazy {
         UploadRepositoryImpl()
     }
 
-    suspend fun uploadFile(context: Context, uri: Uri): UploadResponse.Files.FileItem? {
-        val ctx = context.applicationContext
+    suspend fun uploadFile(uri: Uri): UploadResponse.Files.FileItem? {
         return withContext(Dispatchers.IO) {
             // 查询文件元数据
             val deferredMetadata = async<Pair<String, String>?> {
@@ -28,7 +28,7 @@ class UploadViewModel : ViewModel() {
                     MediaStore.Files.FileColumns.SIZE,
                     MediaStore.Files.FileColumns.MIME_TYPE
                 )
-                ctx.contentResolver.query(uri, projection, null, null)?.use { cursor ->
+                application.contentResolver.query(uri, projection, null, null)?.use { cursor ->
                     val nameColumn = cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME)
                     val mimeTypeColumn =
                         cursor.getColumnIndex(MediaStore.Files.FileColumns.MIME_TYPE)
@@ -43,12 +43,12 @@ class UploadViewModel : ViewModel() {
             }
             // 构建临时文件
             val deferredFile = async {
-                ctx.contentResolver.openInputStream(uri)?.use { inputStream ->
-                    val file = File.createTempFile("uploadFile", ".temp").apply {
+                application.contentResolver.openInputStream(uri)?.use { inputStream ->
+                    val tempFile = File.createTempFile("uploadFile", null).apply {
                         deleteOnExit()
                     }
-                    inputStream.copyTo(file.outputStream())
-                    return@async file
+                    inputStream.copyTo(tempFile.outputStream())
+                    return@async tempFile
                 }
                 null
             }

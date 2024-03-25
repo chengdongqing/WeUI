@@ -1,10 +1,12 @@
-package top.chengdongqing.weui.feature.network.screens.upload.repository
+package top.chengdongqing.weui.feature.network.screens.upload.data.repository
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.MultipartBody
 import retrofit2.Response
-import top.chengdongqing.weui.feature.network.screens.upload.UploadResponse
+import top.chengdongqing.weui.feature.network.screens.upload.data.model.UploadResponse
+import top.chengdongqing.weui.feature.network.screens.upload.retrofit.RetrofitManger
+import top.chengdongqing.weui.feature.network.screens.upload.retrofit.UploadService
 
 class UploadRepositoryImpl : UploadRepository {
     private val uploadService by lazy {

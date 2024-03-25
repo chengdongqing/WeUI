@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.feature.network.screens.upload.repository
+package top.chengdongqing.weui.feature.network.screens.upload.retrofit
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

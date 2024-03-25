@@ -1,9 +1,11 @@
-package top.chengdongqing.weui.feature.network.screens.request.repository
+package top.chengdongqing.weui.feature.network.screens.request.data.repository
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Response
-import top.chengdongqing.weui.feature.network.screens.request.CartItemCount
+import top.chengdongqing.weui.feature.network.screens.request.data.model.CartItemCount
+import top.chengdongqing.weui.feature.network.screens.request.retrofit.CartService
+import top.chengdongqing.weui.feature.network.screens.request.retrofit.RetrofitManger
 
 class CartRepositoryImpl : CartRepository {
     private val cartService by lazy {

@@ -2,7 +2,8 @@ package top.chengdongqing.weui.feature.network.screens.request
 
 import androidx.lifecycle.ViewModel
 import retrofit2.Response
-import top.chengdongqing.weui.feature.network.screens.request.repository.CartRepositoryImpl
+import top.chengdongqing.weui.feature.network.screens.request.data.model.CartItemCount
+import top.chengdongqing.weui.feature.network.screens.request.data.repository.CartRepositoryImpl
 
 class CartViewModel : ViewModel() {
     private val cartRepository by lazy {
