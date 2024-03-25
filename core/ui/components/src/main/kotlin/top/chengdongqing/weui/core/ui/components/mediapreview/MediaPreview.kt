@@ -117,15 +117,22 @@ private fun BoxScope.ToolBar(medias: Array<MediaItem>, pagerState: PagerState) {
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         ActionIcon(imageVector = Icons.Outlined.Share, label = "分享") {
-            val type = if (media.isVideo()) "video/*" else "image/*"
-            context.shareFile(File(media.filepath), type)
+            coroutineScope.launch(Dispatchers.IO) {
+                context.contentResolver.openInputStream(media.uri)?.use { inputStream ->
+                    val tempFile = File.createTempFile(
+                        "media_",
+                        media.filename.substringAfterLast(".")
+                    ).apply {
+                        deleteOnExit()
+                    }
+                    inputStream.copyTo(tempFile.outputStream())
+                    context.shareFile(tempFile, media.mimeType)
+                }
+            }
         }
-        ActionIcon(
-            imageVector = Icons.Outlined.Download,
-            label = "保存"
-        ) {
+        ActionIcon(imageVector = Icons.Outlined.Download, label = "保存") {
             coroutineScope.launch {
-                if (context.saveMediaToGallery(media)) {
+                if (context.saveToAlbum(media)) {
                     toast.show("已保存到相册", icon = ToastIcon.SUCCESS)
                 } else {
                     toast.show("保存失败", icon = ToastIcon.FAIL)
@@ -153,7 +160,7 @@ private fun ActionIcon(imageVector: ImageVector, label: String?, onClick: () -> 
     }
 }
 
-private suspend fun Context.saveMediaToGallery(media: MediaItem): Boolean {
+private suspend fun Context.saveToAlbum(media: MediaItem): Boolean {
     val context = this
 
     return withContext(Dispatchers.IO) {

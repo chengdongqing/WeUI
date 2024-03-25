@@ -49,7 +49,7 @@ import top.chengdongqing.weui.core.ui.components.loading.WeLoadMore
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
 import top.chengdongqing.weui.core.utils.formatFileSize
 import top.chengdongqing.weui.core.utils.formatTime
-import top.chengdongqing.weui.core.utils.getFileProviderUri
+import top.chengdongqing.weui.core.utils.installApp
 import java.io.File
 
 @Composable
@@ -191,18 +191,11 @@ private fun AppItem(app: AppItem, context: Context) {
 }
 
 fun installApk(context: Context, apkPath: String) {
-    // 复制到可访问的临时文件
-    val tempFile = File.createTempFile("app_", ".apk", context.cacheDir).apply {
+    val tempFile = File.createTempFile("app_", ".apk").apply {
         deleteOnExit()
     }
     File(apkPath).copyTo(tempFile, true)
-    // 创建文件共享访问路径
-    val uri = context.getFileProviderUri(tempFile)
-    val intent = Intent(Intent.ACTION_VIEW).apply {
-        setDataAndType(uri, "application/vnd.android.package-archive")
-        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-    }
-    context.startActivity(intent)
+    context.installApp(tempFile)
 }
 
 private fun fileToPublicDirectory(

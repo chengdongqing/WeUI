@@ -8,11 +8,9 @@ import kotlinx.parcelize.Parcelize
 data class MediaItem(
     val uri: Uri,
     val filename: String,
-    val filepath: String,
     val mediaType: MediaType,
     val mimeType: String,
     val duration: Long = 0,
-    val size: Long = 0,
     val date: Long = 0
 ) : Parcelable
 

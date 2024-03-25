@@ -44,7 +44,7 @@ class UploadViewModel : ViewModel() {
             // 构建临时文件
             val deferredFile = async {
                 ctx.contentResolver.openInputStream(uri)?.use { inputStream ->
-                    val file = File.createTempFile("uploadFile", ".temp", context.cacheDir).apply {
+                    val file = File.createTempFile("uploadFile", ".temp").apply {
                         deleteOnExit()
                     }
                     inputStream.copyTo(file.outputStream())

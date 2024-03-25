@@ -62,10 +62,19 @@ object MediaStoreUtils {
 }
 
 fun Context.shareFile(file: File, mimeType: String = "image/*") {
-    val sharingUri = this.getFileProviderUri(file)
+    val sharingUri = getFileProviderUri(file)
     val intent = Intent(Intent.ACTION_SEND).apply {
         this.type = mimeType
         putExtra(Intent.EXTRA_STREAM, sharingUri)
+        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    }
+    startActivity(intent)
+}
+
+fun Context.installApp(file: File) {
+    val uri = getFileProviderUri(file)
+    val intent = Intent(Intent.ACTION_VIEW).apply {
+        setDataAndType(uri, "application/vnd.android.package-archive")
         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
     }
     startActivity(intent)

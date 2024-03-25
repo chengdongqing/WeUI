@@ -83,7 +83,7 @@ fun WeImageCropper(uri: Uri, onCancel: () -> Unit, onConfirm: (Uri) -> Unit) {
                     transform.value
                 )?.let { bitmap ->
                     val croppedUri = saveCroppedImage(context, bitmap)
-                    croppedUri?.let(onConfirm)
+                    onConfirm(croppedUri)
                 }
                 toast.hide()
             }
@@ -91,9 +91,9 @@ fun WeImageCropper(uri: Uri, onCancel: () -> Unit, onConfirm: (Uri) -> Unit) {
     }
 }
 
-private suspend fun saveCroppedImage(context: Context, bitmap: Bitmap): Uri? {
+private suspend fun saveCroppedImage(context: Context, bitmap: Bitmap): Uri {
     val tempFile = withContext(Dispatchers.IO) {
-        val tempFile = File.createTempFile("cropped_", ".png", context.cacheDir).apply {
+        val tempFile = File.createTempFile("cropped_", ".png").apply {
             deleteOnExit()
         }
         FileOutputStream(tempFile).use { outputStream ->
