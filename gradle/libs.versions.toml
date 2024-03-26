@@ -30,7 +30,7 @@ amap = "9.8.3"
 lunar = "1.6.3"
 pinyin = "0.4.0"
 reorderable = "0.9.6"
-retrofit = "2.9.0"
+retrofit = "2.10.0"
 mlkit = "17.2.0"
 zxing-core = "3.4.1"
 

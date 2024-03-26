@@ -4,4 +4,4 @@
 -keep class com.autonavi.aps.amapapi.model.**{ *; }
 -keep class com.amap.api.services.**{ *; }
 
--keep, allowobfuscation class top.chengdongqing.weui.feature.location.data.model.** { *; }
+-keep, allowobfuscation class top.chengdongqing.weui.feature.location.data.model.**

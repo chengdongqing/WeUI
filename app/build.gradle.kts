@@ -68,5 +68,5 @@ dependencies {
     implementation(project(":feature:location"))
     implementation(project(":feature:qrcode"))
     implementation(project(":feature:system"))
-    implementation(project(":feature:demos"))
+    implementation(project(":feature:samples"))
 }
