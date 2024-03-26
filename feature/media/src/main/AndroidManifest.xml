@@ -16,9 +16,6 @@
 
     <application>
         <activity
-            android:name=".camera.CameraActivity"
-            android:theme="@style/Theme.WeUI" />
-        <activity
             android:name=".imagecropper.ImageCropperActivity"
             android:theme="@style/Theme.WeUI" />
     </application>

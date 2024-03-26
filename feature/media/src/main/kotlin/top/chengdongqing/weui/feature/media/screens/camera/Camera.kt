@@ -16,11 +16,11 @@ import top.chengdongqing.weui.core.data.model.VisualMediaType
 import top.chengdongqing.weui.core.ui.components.actionsheet.ActionSheetItem
 import top.chengdongqing.weui.core.ui.components.actionsheet.rememberActionSheetState
 import top.chengdongqing.weui.core.ui.components.button.WeButton
+import top.chengdongqing.weui.core.ui.components.camera.rememberCameraLauncher
 import top.chengdongqing.weui.core.ui.components.input.WeInput
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
 import top.chengdongqing.weui.core.ui.components.videoplayer.WeVideoPlayer
 import top.chengdongqing.weui.core.ui.components.videoplayer.rememberVideoPlayerState
-import top.chengdongqing.weui.feature.media.camera.rememberCameraLauncher
 
 @Composable
 fun CameraScreen() {

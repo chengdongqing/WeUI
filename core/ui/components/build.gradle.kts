@@ -8,6 +8,7 @@ android {
 
 dependencies {
     implementation(libs.coil.compose)
+    implementation(libs.bundles.camerax)
     implementation(libs.accompanist.permissions)
 
     implementation(project(":core:ui:theme"))

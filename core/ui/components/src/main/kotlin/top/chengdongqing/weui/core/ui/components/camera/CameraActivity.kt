@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.feature.media.camera
+package top.chengdongqing.weui.core.ui.components.camera
 
 import android.app.Activity
 import android.content.Context

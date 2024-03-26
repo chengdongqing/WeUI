@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.feature.media.camera
+package top.chengdongqing.weui.core.ui.components.camera
 
 import android.annotation.SuppressLint
 import android.content.Context

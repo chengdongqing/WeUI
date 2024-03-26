@@ -8,5 +8,8 @@
         <activity
             android:name=".mediapicker.MediaPickerActivity"
             android:theme="@style/Theme.WeUI" />
+        <activity
+            android:name=".camera.CameraActivity"
+            android:theme="@style/Theme.WeUI" />
     </application>
 </manifest>

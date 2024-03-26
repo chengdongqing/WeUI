@@ -9,7 +9,6 @@ android {
 dependencies {
     implementation(libs.accompanist.permissions)
     implementation(libs.navigation.compose)
-    implementation(libs.bundles.camerax)
     implementation(libs.coil.compose)
     implementation(libs.reorderable)
 

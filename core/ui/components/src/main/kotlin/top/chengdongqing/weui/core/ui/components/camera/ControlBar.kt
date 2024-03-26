@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.feature.media.camera
+package top.chengdongqing.weui.core.ui.components.camera
 
 import android.Manifest
 import androidx.compose.foundation.background
