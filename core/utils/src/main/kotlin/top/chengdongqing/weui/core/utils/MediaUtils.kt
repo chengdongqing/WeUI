@@ -2,7 +2,6 @@ package top.chengdongqing.weui.core.utils
 
 import android.content.ContentValues
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
 import android.net.Uri
@@ -17,7 +16,6 @@ import top.chengdongqing.weui.core.data.model.MediaType
 import top.chengdongqing.weui.core.data.model.isImage
 import top.chengdongqing.weui.core.data.model.isVideo
 import top.chengdongqing.weui.core.ui.theme.R
-import java.io.File
 import java.io.IOException
 
 object MediaStoreUtils {
@@ -59,25 +57,6 @@ object MediaStoreUtils {
             MediaType.VIDEO -> MediaStore.Video.Media.EXTERNAL_CONTENT_URI
             MediaType.AUDIO, MediaType.RECORDING -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
         }
-}
-
-fun Context.shareFile(file: File, mimeType: String = "image/*") {
-    val sharingUri = getFileProviderUri(file)
-    val intent = Intent(Intent.ACTION_SEND).apply {
-        this.type = mimeType
-        putExtra(Intent.EXTRA_STREAM, sharingUri)
-        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-    }
-    startActivity(intent)
-}
-
-fun Context.installApp(file: File) {
-    val uri = getFileProviderUri(file)
-    val intent = Intent(Intent.ACTION_VIEW).apply {
-        setDataAndType(uri, "application/vnd.android.package-archive")
-        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-    }
-    startActivity(intent)
 }
 
 suspend fun Context.loadMediaThumbnail(media: MediaItem): Any? {

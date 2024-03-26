@@ -9,8 +9,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import top.chengdongqing.core.data.repository.LocalMediaRepositoryImpl
 import top.chengdongqing.weui.core.data.model.MediaItem
@@ -30,6 +28,11 @@ interface GalleryState {
      * 是否在加载中
      */
     val isLoading: Boolean
+
+    /**
+     * 刷新数据
+     */
+    suspend fun refresh(types: Array<MediaType> = arrayOf(MediaType.IMAGE, MediaType.VIDEO))
 }
 
 @Composable
@@ -38,33 +41,28 @@ fun rememberGalleryState(): GalleryState {
     val coroutineScope = rememberCoroutineScope()
 
     return remember {
-        GalleryStateImpl(context, coroutineScope)
+        GalleryStateImpl(context).apply {
+            coroutineScope.launch {
+                refresh()
+            }
+        }
     }
 }
 
-private class GalleryStateImpl(
-    context: Context,
-    coroutineScope: CoroutineScope
-) : GalleryState {
-    override val mediaGroups: Map<LocalDate, List<MediaItem>>
-        get() = _mediaGroups
-    override val isLoading: Boolean
-        get() = _isLoading
+private class GalleryStateImpl(context: Context) : GalleryState {
+    override var mediaGroups by mutableStateOf<Map<LocalDate, List<MediaItem>>>(emptyMap())
+    override var isLoading by mutableStateOf(true)
 
-    init {
-        val mediaRepository = LocalMediaRepositoryImpl(context)
-        coroutineScope.launch(Dispatchers.IO) {
-            _mediaGroups =
-                mediaRepository.loadMediaList(types = arrayOf(MediaType.IMAGE, MediaType.VIDEO))
-                    .groupBy {
-                        Instant.ofEpochSecond(it.date).atZone(ZoneId.systemDefault()).toLocalDate()
-                    }
-                    .toSortedMap(compareByDescending { it })
-                    .mapValues { (_, value) -> value.sortedByDescending { it.date } }
-            _isLoading = false
-        }
+    override suspend fun refresh(types: Array<MediaType>) {
+        isLoading = true
+        mediaGroups = mediaRepository.loadMediaList(types)
+            .groupBy {
+                Instant.ofEpochSecond(it.date).atZone(ZoneId.systemDefault()).toLocalDate()
+            }
+            .toSortedMap(compareByDescending { it })
+            .mapValues { (_, value) -> value.sortedByDescending { it.date } }
+        isLoading = false
     }
 
-    private var _mediaGroups by mutableStateOf<Map<LocalDate, List<MediaItem>>>(emptyMap())
-    private var _isLoading by mutableStateOf(true)
+    private val mediaRepository by lazy { LocalMediaRepositoryImpl(context) }
 }

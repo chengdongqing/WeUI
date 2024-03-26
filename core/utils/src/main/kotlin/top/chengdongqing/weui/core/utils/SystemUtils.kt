@@ -1,8 +1,10 @@
 package top.chengdongqing.weui.core.utils
 
+import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.BatteryManager
+import android.widget.Toast
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.runtime.Composable
@@ -53,3 +55,7 @@ data class BatteryInfo(
     val level: Int,
     val isCharging: Boolean
 )
+
+fun Context.showToast(text: String) {
+    Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+}

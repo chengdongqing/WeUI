@@ -75,23 +75,21 @@ private class AudioRecorderStateImpl(
     private val coroutineScope: CoroutineScope,
     private val context: Context
 ) : AudioRecorderState {
-    override val isRecording: Boolean
-        get() = _isRecording
-    override val duration: Int
-        get() = _duration
+    override var isRecording by mutableStateOf(false)
+    override var duration by mutableIntStateOf(0)
 
     override fun start() {
         prepare(context)
         // 重置计时
-        _duration = 0
+        duration = 0
         // 开始录音
         recorder.start()
-        _isRecording = true
+        isRecording = true
         // 开始计时
         coroutineScope.launch {
-            while (isActive && _isRecording) {
+            while (isActive && isRecording) {
                 delay(1000)
-                _duration += 1
+                duration += 1
             }
         }
     }
@@ -99,7 +97,7 @@ private class AudioRecorderStateImpl(
     override fun stop() {
         // 结束录音
         recorder.stop()
-        _isRecording = false
+        isRecording = false
         // 更新文件状态
         _uri?.let {
             MediaStoreUtils.finishPending(it, context)
@@ -134,7 +132,5 @@ private class AudioRecorderStateImpl(
         }
     }
 
-    private var _isRecording by mutableStateOf(false)
-    private var _duration by mutableIntStateOf(0)
     private var _uri by mutableStateOf<Uri?>(null)
 }

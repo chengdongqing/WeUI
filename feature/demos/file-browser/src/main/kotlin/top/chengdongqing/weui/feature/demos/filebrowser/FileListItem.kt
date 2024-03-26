@@ -38,6 +38,7 @@ import top.chengdongqing.weui.core.utils.calculateFileSize
 import top.chengdongqing.weui.core.utils.deleteFile
 import top.chengdongqing.weui.core.utils.format
 import top.chengdongqing.weui.core.utils.formatFileSize
+import top.chengdongqing.weui.feature.demos.filebrowser.data.model.FileItem
 import java.io.File
 import top.chengdongqing.weui.core.ui.theme.R as ThemeR
 

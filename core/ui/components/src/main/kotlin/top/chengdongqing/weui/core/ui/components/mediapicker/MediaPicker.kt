@@ -23,6 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -31,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.launch
 import top.chengdongqing.weui.core.data.model.MediaItem
 import top.chengdongqing.weui.core.data.model.VisualMediaType
 import top.chengdongqing.weui.core.ui.components.actionsheet.ActionSheetItem
@@ -60,13 +62,9 @@ fun WeMediaPicker(
             if (state.isLoading) {
                 WeLoadMore()
             } else {
-                MediaGrid(state) {
-                    onConfirm(arrayOf(it))
-                }
-                if (count > 1) {
-                    BottomBar(state) {
-                        onConfirm(state.selectedMediaList.toTypedArray())
-                    }
+                MediaGrid(state)
+                BottomBar(state) {
+                    onConfirm(state.selectedMediaList.toTypedArray())
                 }
             }
         }
@@ -78,6 +76,7 @@ private fun TopBar(
     state: MediaPickerState,
     onCancel: () -> Unit
 ) {
+    val coroutineScope = rememberCoroutineScope()
     val actionSheetState = rememberActionSheetState()
     val typeOptions = remember {
         listOf(
@@ -112,7 +111,9 @@ private fun TopBar(
                 .background(MaterialTheme.colorScheme.outline)
                 .clickable(enabled = state.isTypeEnabled) {
                     actionSheetState.show(typeOptions) { index ->
-                        state.refresh(typeOptions[index].value as VisualMediaType)
+                        coroutineScope.launch {
+                            state.refresh(typeOptions[index].value as VisualMediaType)
+                        }
                     }
                 }
                 .padding(start = 12.dp, end = 6.dp, top = 6.dp, bottom = 6.dp),

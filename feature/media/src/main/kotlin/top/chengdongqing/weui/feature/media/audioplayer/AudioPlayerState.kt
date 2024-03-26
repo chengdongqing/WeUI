@@ -85,8 +85,6 @@ private class AudioPlayerStateImpl(
         get() = _isPlaying
     override var totalDuration by mutableIntStateOf(0)
     override var currentDuration by mutableIntStateOf(0)
-    private var _isPlaying by mutableStateOf(player.isPlaying)
-    private var progressJob: Job? = null
 
     override fun play() {
         if (!player.isPlaying) {
@@ -124,7 +122,7 @@ private class AudioPlayerStateImpl(
         }
     }
 
-    fun stopUpdatingProgress() {
+    private fun stopUpdatingProgress() {
         progressJob?.cancel()
         progressJob = null
     }
@@ -142,6 +140,9 @@ private class AudioPlayerStateImpl(
             }
         }
     }
+
+    private var _isPlaying by mutableStateOf(player.isPlaying)
+    private var progressJob: Job? = null
 }
 
 @Composable

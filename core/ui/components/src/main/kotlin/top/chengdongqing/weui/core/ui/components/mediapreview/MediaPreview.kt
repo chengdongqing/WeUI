@@ -48,7 +48,7 @@ import java.io.IOException
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MediaPreviewScreen(medias: Array<MediaItem>, current: Int = 0) {
+fun WeMediaPreview(medias: Array<MediaItem>, current: Int = 0) {
     val pagerState = rememberPagerState(current) { medias.size }
 
     SetupFullscreen()

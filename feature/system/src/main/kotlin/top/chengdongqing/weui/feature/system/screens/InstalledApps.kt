@@ -40,7 +40,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.core.ui.components.button.ButtonSize
 import top.chengdongqing.weui.core.ui.components.button.ButtonType
@@ -49,7 +48,7 @@ import top.chengdongqing.weui.core.ui.components.loading.WeLoadMore
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
 import top.chengdongqing.weui.core.utils.formatFileSize
 import top.chengdongqing.weui.core.utils.formatTime
-import top.chengdongqing.weui.core.utils.installApp
+import top.chengdongqing.weui.core.utils.openFile
 import java.io.File
 
 @Composable
@@ -61,7 +60,7 @@ fun InstalledAppsScreen() {
         scrollEnabled = false
     ) {
         val context = LocalContext.current
-        val appList = rememberInstalledAppList()
+        val appList = rememberInstalledApps()
 
         LazyColumn(verticalArrangement = Arrangement.spacedBy(20.dp)) {
             item {
@@ -195,7 +194,7 @@ fun installApk(context: Context, apkPath: String) {
         deleteOnExit()
     }
     File(apkPath).copyTo(tempFile, true)
-    context.installApp(tempFile)
+    context.openFile(tempFile, "application/vnd.android.package-archive")
 }
 
 private fun fileToPublicDirectory(
@@ -245,37 +244,35 @@ private fun fileToPublicDirectory(
 }
 
 @Composable
-private fun rememberInstalledAppList(): List<AppItem> {
+private fun rememberInstalledApps(): List<AppItem> {
     val context = LocalContext.current
     val packageManager = context.packageManager
 
     val appList by produceState(initialValue = emptyList()) {
-        launch(Dispatchers.IO) {
+        value = withContext(Dispatchers.IO) {
             val intent = Intent(Intent.ACTION_MAIN, null).apply {
                 addCategory(Intent.CATEGORY_LAUNCHER)
             }
-            value = withContext(Dispatchers.IO) {
-                packageManager.queryIntentActivities(intent, 0).map { resolveInfo ->
-                    val name = resolveInfo.loadLabel(packageManager).toString()
-                    val icon = resolveInfo.loadIcon(packageManager)
-                    val packageName = resolveInfo.activityInfo.packageName
-                    val packageInfo = packageManager.getPackageInfo(packageName, 0)
-                    val versionName = packageInfo.versionName
-                    val lastModified = formatTime(packageInfo.lastUpdateTime)
-                    val apkPath = packageInfo.applicationInfo.sourceDir
-                    val apkSize = formatFileSize(File(apkPath))
-                    AppItem(
-                        name,
-                        icon,
-                        packageName,
-                        versionName,
-                        lastModified,
-                        apkPath,
-                        apkSize
-                    )
-                }.sortedByDescending {
-                    it.lastModified
-                }
+            packageManager.queryIntentActivities(intent, 0).map { resolveInfo ->
+                val name = resolveInfo.loadLabel(packageManager).toString()
+                val icon = resolveInfo.loadIcon(packageManager)
+                val packageName = resolveInfo.activityInfo.packageName
+                val packageInfo = packageManager.getPackageInfo(packageName, 0)
+                val versionName = packageInfo.versionName
+                val lastModified = formatTime(packageInfo.lastUpdateTime)
+                val apkPath = packageInfo.applicationInfo.sourceDir
+                val apkSize = formatFileSize(File(apkPath))
+                AppItem(
+                    name,
+                    icon,
+                    packageName,
+                    versionName,
+                    lastModified,
+                    apkPath,
+                    apkSize
+                )
+            }.sortedByDescending {
+                it.lastModified
             }
         }
     }

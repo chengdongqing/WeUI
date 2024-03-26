@@ -10,8 +10,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import top.chengdongqing.core.data.repository.LocalMediaRepositoryImpl
 import top.chengdongqing.weui.core.data.model.MediaItem
@@ -63,7 +61,7 @@ interface MediaPickerState {
     /**
      * 刷新可选项
      */
-    fun refresh(type: VisualMediaType)
+    suspend fun refresh(type: VisualMediaType)
 }
 
 @Composable
@@ -72,15 +70,16 @@ fun rememberMediaPickerState(type: VisualMediaType, count: Int): MediaPickerStat
     val coroutineScope = rememberCoroutineScope()
 
     return remember {
-        MediaPickerStateImpl(context, coroutineScope, type, count).apply {
-            refresh(type)
+        MediaPickerStateImpl(context, type, count).apply {
+            coroutineScope.launch {
+                refresh(type)
+            }
         }
     }
 }
 
 private class MediaPickerStateImpl(
     context: Context,
-    private val coroutineScope: CoroutineScope,
     private val initialType: VisualMediaType,
     override val count: Int
 ) : MediaPickerState {
@@ -99,7 +98,8 @@ private class MediaPickerStateImpl(
         selectedMediaList.removeAt(index)
     }
 
-    override fun refresh(type: VisualMediaType) {
+    override suspend fun refresh(type: VisualMediaType) {
+        this.type = type
         val types = buildList {
             if (type == VisualMediaType.IMAGE_AND_VIDEO || type == VisualMediaType.IMAGE) {
                 add(MediaType.IMAGE)
@@ -109,12 +109,9 @@ private class MediaPickerStateImpl(
             }
         }.toTypedArray()
 
-        this.type = type
-        this.isLoading = true
-        coroutineScope.launch(Dispatchers.IO) {
-            mediaList = mediaRepository.loadMediaList(types)
-            isLoading = false
-        }
+        isLoading = true
+        mediaList = mediaRepository.loadMediaList(types)
+        isLoading = false
     }
 
     private val mediaRepository = LocalMediaRepositoryImpl(context)

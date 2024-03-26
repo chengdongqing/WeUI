@@ -8,7 +8,6 @@ import android.provider.Settings
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -37,7 +36,8 @@ import top.chengdongqing.weui.core.ui.components.button.WeButton
 import top.chengdongqing.weui.core.ui.components.loading.LoadMoreType
 import top.chengdongqing.weui.core.ui.components.loading.WeLoadMore
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
-import top.chengdongqing.weui.core.utils.getFileProviderUri
+import top.chengdongqing.weui.core.utils.openFile
+import top.chengdongqing.weui.feature.demos.filebrowser.data.model.FileItem
 import java.io.File
 
 @Composable
@@ -115,12 +115,7 @@ private fun FileList(
                         navigateToFolder(item.path)
                     },
                     onFileClick = {
-                        val uri = context.getFileProviderUri(File(item.path))
-                        val intent = Intent(Intent.ACTION_VIEW).apply {
-                            setDataAndType(uri, "*/*")
-                            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                        }
-                        context.startActivity(intent)
+                        context.openFile(File(item.path), item.mimeType ?: "*/*")
                     },
                     onDeleted
                 )
@@ -171,13 +166,3 @@ internal fun RequestStoragePermission(content: @Composable () -> Unit) {
         content()
     }
 }
-
-data class FileItem(
-    val name: String,
-    val path: String,
-    val size: String,
-    val isDirectory: Boolean,
-    val lastModified: String,
-    val childrenCount: Int,
-    @DrawableRes val iconId: Int
-)

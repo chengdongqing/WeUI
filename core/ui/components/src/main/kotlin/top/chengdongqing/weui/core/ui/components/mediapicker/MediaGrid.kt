@@ -39,10 +39,11 @@ import top.chengdongqing.weui.core.ui.components.mediapreview.previewMedias
 import top.chengdongqing.weui.core.utils.clickableWithoutRipple
 import top.chengdongqing.weui.core.utils.format
 import top.chengdongqing.weui.core.utils.loadMediaThumbnail
+import top.chengdongqing.weui.core.utils.showToast
 import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
-internal fun ColumnScope.MediaGrid(state: MediaPickerState, onConfirm: (MediaItem) -> Unit) {
+internal fun ColumnScope.MediaGrid(state: MediaPickerState) {
     val context = LocalContext.current
 
     LazyVerticalGrid(
@@ -59,18 +60,15 @@ internal fun ColumnScope.MediaGrid(state: MediaPickerState, onConfirm: (MediaIte
                 item,
                 selected,
                 selectedIndex,
-                showCheckbox = state.count > 1,
                 onClick = {
-                    if (state.count > 1) {
-                        context.previewMedias(state.mediaList, index)
-                    } else {
-                        onConfirm(item)
-                    }
+                    context.previewMedias(state.mediaList, index)
                 }
             ) {
                 if (selectedIndex == -1) {
                     if (state.selectedMediaList.size < state.count) {
                         state.add(item)
+                    } else {
+                        context.showToast("你最多只能选择${state.count}个")
                     }
                 } else {
                     state.removeAt(selectedIndex)
@@ -85,7 +83,6 @@ private fun MediaGridCell(
     media: MediaItem,
     selected: Boolean,
     selectedIndex: Int,
-    showCheckbox: Boolean,
     onClick: () -> Unit,
     onSelect: () -> Unit
 ) {
@@ -133,13 +130,11 @@ private fun MediaGridCell(
             Box(
                 modifier = Modifier
                     .matchParentSize()
-                    .background(Color(0f, 0f, 0f, 0.3f))
+                    .background(Color(0f, 0f, 0f, 0.4f))
             )
         }
         // 选择框
-        if (showCheckbox) {
-            MediaCheckbox(selected, selectedIndex, onSelect)
-        }
+        MediaCheckbox(selected, selectedIndex, onSelect)
     }
 }
 

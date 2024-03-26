@@ -7,9 +7,12 @@ context.externalCacheDir 返回的是外部存储上的缓存目录。尽管这�
 
 <paths>
     <cache-path
-        name="cache_files"
+        name="cache"
         path="." />
     <external-cache-path
-        name="external_files"
+        name="external_cache"
+        path="." />
+    <external-path
+        name="files_root"
         path="." />
 </paths>

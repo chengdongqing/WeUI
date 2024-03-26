@@ -24,7 +24,7 @@ class MediaPreviewActivity : ComponentActivity() {
 
         setContent {
             WeUITheme {
-                MediaPreviewScreen(medias, current)
+                WeMediaPreview(medias, current)
             }
         }
     }

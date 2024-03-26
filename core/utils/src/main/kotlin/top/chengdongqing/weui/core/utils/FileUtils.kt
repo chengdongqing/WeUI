@@ -1,6 +1,7 @@
 package top.chengdongqing.weui.core.utils
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import androidx.core.content.FileProvider
 import kotlinx.coroutines.Dispatchers
@@ -53,4 +54,23 @@ fun formatFileSize(size: Long): String {
 
 fun Context.getFileProviderUri(file: File): Uri {
     return FileProvider.getUriForFile(this, "$packageName.provider", file)
+}
+
+fun Context.shareFile(file: File, mimeType: String = "image/*") {
+    val sharingUri = getFileProviderUri(file)
+    val intent = Intent(Intent.ACTION_SEND).apply {
+        this.type = mimeType
+        putExtra(Intent.EXTRA_STREAM, sharingUri)
+        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    }
+    startActivity(intent)
+}
+
+fun Context.openFile(file: File, mimeType: String) {
+    val uri = getFileProviderUri(file)
+    val intent = Intent(Intent.ACTION_VIEW).apply {
+        setDataAndType(uri, mimeType)
+        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    }
+    startActivity(intent)
 }

@@ -2,6 +2,9 @@ package top.chengdongqing.weui.core.ui.theme
 
 import androidx.compose.ui.graphics.ColorMatrix
 
+/**
+ * 反色矩阵
+ */
 val InvertColorMatrix by lazy {
     ColorMatrix(
         floatArrayOf(

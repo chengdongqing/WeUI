@@ -124,7 +124,6 @@ private class ScannerStateImpl(
                 onFail()
             }
         }
-        isFlashOn = false
     }
 
     private var camera: Camera? = null
