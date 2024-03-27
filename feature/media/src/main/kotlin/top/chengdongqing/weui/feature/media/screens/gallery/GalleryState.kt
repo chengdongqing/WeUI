@@ -1,6 +1,7 @@
 package top.chengdongqing.weui.feature.media.screens.gallery
 
 import android.content.Context
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
@@ -25,7 +26,7 @@ interface GalleryState {
     val mediaGroups: Map<LocalDate, List<MediaItem>>
 
     /**
-     * 是否在加载中
+     * 是否加载中
      */
     val isLoading: Boolean
 
@@ -33,6 +34,11 @@ interface GalleryState {
      * 刷新数据
      */
     suspend fun refresh(types: Array<MediaType> = arrayOf(MediaType.IMAGE, MediaType.VIDEO))
+
+    /**
+     * 滚动到指定日期
+     */
+    suspend fun LazyGridState.scrollToDate(targetDate: LocalDate)
 }
 
 @Composable
@@ -61,8 +67,23 @@ private class GalleryStateImpl(context: Context) : GalleryState {
             }
             .toSortedMap(compareByDescending { it })
             .mapValues { (_, value) -> value.sortedByDescending { it.date } }
+        calculateTitleIndexMap()
         isLoading = false
     }
 
+    private fun calculateTitleIndexMap() {
+        var currentIndex = 0
+        mediaGroups.forEach { (date, items) ->
+            dateToIndexMap[date] = currentIndex
+            currentIndex += 1 + items.size
+        }
+    }
+
+    override suspend fun LazyGridState.scrollToDate(targetDate: LocalDate) {
+        val index = dateToIndexMap[targetDate] ?: layoutInfo.totalItemsCount
+        scrollToItem(index)
+    }
+
     private val mediaRepository by lazy { LocalMediaRepositoryImpl(context) }
+    private val dateToIndexMap = mutableMapOf<LocalDate, Int>()
 }

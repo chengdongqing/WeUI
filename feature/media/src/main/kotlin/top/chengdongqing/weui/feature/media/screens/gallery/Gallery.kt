@@ -37,7 +37,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -61,7 +60,6 @@ import top.chengdongqing.weui.core.utils.format
 import top.chengdongqing.weui.core.utils.loadMediaThumbnail
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import kotlin.math.ceil
 import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
@@ -82,7 +80,7 @@ fun GalleryScreen(navController: NavController) {
             if (state.isLoading) {
                 WeLoadMore()
             }
-            FilterBar(gridState, state.mediaGroups)
+            FilterBar(gridState, state)
             LazyVerticalGrid(
                 state = gridState,
                 columns = GridCells.Adaptive(100.dp),
@@ -97,15 +95,7 @@ fun GalleryScreen(navController: NavController) {
                         key = date,
                         span = { GridItemSpan(maxLineSpan) }
                     ) {
-                        Text(
-                            text = title,
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 8.dp, horizontal = 12.dp)
-                        )
+                        MediaGroupTitle(title)
                     }
                     itemsIndexed(items) { index, item ->
                         MediaItem(item) {
@@ -116,6 +106,19 @@ fun GalleryScreen(navController: NavController) {
             }
         }
     }
+}
+
+@Composable
+private fun MediaGroupTitle(title: String) {
+    Text(
+        text = title,
+        color = MaterialTheme.colorScheme.onPrimary,
+        fontSize = 14.sp,
+        fontWeight = FontWeight.Bold,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp, horizontal = 12.dp)
+    )
 }
 
 @Composable
@@ -156,11 +159,10 @@ private fun MediaItem(media: MediaItem, onClick: () -> Unit) {
 }
 
 @Composable
-private fun FilterBar(gridState: LazyGridState, mediaGroups: Map<LocalDate, List<MediaItem>>) {
+private fun FilterBar(gridState: LazyGridState, state: GalleryState) {
     val picker = rememberDatePickerState()
     var value by remember { mutableStateOf(LocalDate.now()) }
     val coroutineScope = rememberCoroutineScope()
-    val density = LocalDensity.current
 
     LaunchedEffect(Unit) {
         snapshotFlow {
@@ -185,15 +187,10 @@ private fun FilterBar(gridState: LazyGridState, mediaGroups: Map<LocalDate, List
                         end = LocalDate.now()
                     ) {
                         value = it
-
-                        coroutineScope.launch {
-                            val index = calculateIndexForKey(
-                                mediaGroups,
-                                it,
-                                gridState.layoutInfo.viewportSize.width,
-                                density.run { 100.dp.toPx() }
-                            )
-                            gridState.scrollToItem(index)
+                        with(state) {
+                            coroutineScope.launch {
+                                gridState.scrollToDate(it)
+                            }
                         }
                     }
                 }
@@ -214,21 +211,4 @@ private fun FilterBar(gridState: LazyGridState, mediaGroups: Map<LocalDate, List
             )
         }
     }
-}
-
-private fun calculateIndexForKey(
-    mediaGroups: Map<LocalDate, List<MediaItem>>,
-    targetKey: LocalDate,
-    viewportWidth: Int,
-    minSize: Float
-): Int {
-    var index = 0
-    val columns = (viewportWidth / minSize).toInt()
-    for ((date, items) in mediaGroups) {
-        if (date.isEqual(targetKey) || date.isBefore(targetKey)) break
-        val rows = ceil(items.size / columns.toDouble()).toInt()
-        val remainder = items.size.rem(columns)
-        index += 1 + rows * columns - remainder
-    }
-    return index
 }
