@@ -8,7 +8,6 @@ import android.net.wifi.ScanResult
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.provider.Settings
-import android.widget.Toast
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -43,6 +42,7 @@ import top.chengdongqing.weui.core.ui.components.divider.WeDivider
 import top.chengdongqing.weui.core.ui.components.loading.LoadMoreType
 import top.chengdongqing.weui.core.ui.components.loading.WeLoadMore
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
+import top.chengdongqing.weui.core.utils.showToast
 
 @SuppressLint("MissingPermission")
 @OptIn(ExperimentalPermissionsApi::class)
@@ -65,11 +65,11 @@ fun WiFiScreen() {
         WeButton(text = "扫描Wi-Fi") {
             if (permissionState.allPermissionsGranted) {
                 if (wifiManager == null) {
-                    Toast.makeText(context, "此设备不支持Wi-Fi", Toast.LENGTH_SHORT).show()
+                    context.showToast("此设备不支持Wi-Fi")
                 } else if (wifiManager.isWifiEnabled) {
                     wifiList = buildWiFiList(wifiManager.scanResults)
                 } else {
-                    Toast.makeText(context, "Wi-Fi未开启", Toast.LENGTH_SHORT).show()
+                    context.showToast("Wi-Fi未开启")
                     context.startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
                 }
             } else {

@@ -11,7 +11,6 @@ import android.location.LocationManager
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
-import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -48,6 +47,7 @@ import top.chengdongqing.weui.core.ui.components.button.WeButton
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
 import top.chengdongqing.weui.core.utils.format
 import top.chengdongqing.weui.core.utils.formatDegree
+import top.chengdongqing.weui.core.utils.showToast
 
 @SuppressLint("MissingPermission")
 @OptIn(ExperimentalPermissionsApi::class)
@@ -74,7 +74,7 @@ fun GNSSScreen() {
             WeButton(text = "开始扫描") {
                 if (permissionState.status.isGranted) {
                     if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                        Toast.makeText(context, "位置服务未开启", Toast.LENGTH_SHORT).show()
+                        context.showToast("位置服务未开启")
                         context.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
                     } else {
                         setObserving(true)

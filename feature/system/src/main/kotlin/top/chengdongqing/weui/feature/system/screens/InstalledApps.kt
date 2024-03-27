@@ -8,7 +8,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -49,6 +48,7 @@ import top.chengdongqing.weui.core.ui.components.screen.WeScreen
 import top.chengdongqing.weui.core.utils.formatFileSize
 import top.chengdongqing.weui.core.utils.formatTime
 import top.chengdongqing.weui.core.utils.openFile
+import top.chengdongqing.weui.core.utils.showToast
 import java.io.File
 
 @Composable
@@ -96,7 +96,7 @@ private fun ActionBar(context: Context) {
             if (intent.resolveActivity(context.packageManager) != null) {
                 context.startActivity(intent)
             } else {
-                Toast.makeText(context, "未安装地图应用", Toast.LENGTH_SHORT).show()
+                context.showToast("未安装地图应用")
             }
         }
         WeButton(
@@ -206,7 +206,7 @@ private fun fileToPublicDirectory(
     val sourceFile = File(sourceFilePath)
     val resolver = context.contentResolver
 
-    Toast.makeText(context, "开始复制", Toast.LENGTH_SHORT).show()
+    context.showToast("开始复制")
     try {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             val values = ContentValues().apply {
@@ -222,7 +222,7 @@ private fun fileToPublicDirectory(
                 resolver.openOutputStream(it)?.use { outputStream ->
                     sourceFile.inputStream().use { input ->
                         input.copyTo(outputStream)
-                        Toast.makeText(context, "已复制", Toast.LENGTH_SHORT).show()
+                        context.showToast("已复制")
                     }
                 }
             }
@@ -234,12 +234,12 @@ private fun fileToPublicDirectory(
             sourceFile.inputStream().use { input ->
                 destinationFile.outputStream().use { output ->
                     input.copyTo(output)
-                    Toast.makeText(context, "复制成功", Toast.LENGTH_SHORT).show()
+                    context.showToast("复制成功")
                 }
             }
         }
     } catch (e: Exception) {
-        Toast.makeText(context, "复制失败: ${e.message}", Toast.LENGTH_SHORT).show()
+        context.showToast("复制失败: ${e.message}")
     }
 }
 

@@ -130,7 +130,7 @@ fun CalendarEvents() {
             calendarPermissionState.launchPermissionRequest()
         }
     }
-    WePopup(visible, title = "日历事件", swipeable = true, onClose = { visible = false }) {
+    WePopup(visible, title = "日历事件", onClose = { visible = false }) {
         WeCardList(Modifier.fillMaxHeight(0.5f)) {
             items(events) {
                 WeCardListItem(label = it.first, value = it.second)

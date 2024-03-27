@@ -20,22 +20,25 @@ import top.chengdongqing.weui.core.ui.components.screen.WeScreen
 fun PopupScreen() {
     WeScreen(title = "Popup", description = "弹出框") {
         var visible by remember { mutableStateOf(false) }
-        var swipeable by remember { mutableStateOf(false) }
+        var draggable by remember { mutableStateOf(false) }
 
-        WePopup(visible, swipeable = swipeable, onClose = {
-            visible = false
-        }, title = "标题") {
+        WePopup(
+            visible,
+            title = "标题",
+            draggable = draggable,
+            onClose = { visible = false }
+        ) {
             Text(text = "内容", color = MaterialTheme.colorScheme.onPrimary)
             Spacer(modifier = Modifier.height(200.dp))
         }
 
         WeButton(text = "样式一", type = ButtonType.PLAIN) {
-            swipeable = false
+            draggable = false
             visible = true
         }
         Spacer(modifier = Modifier.height(20.dp))
         WeButton(text = "样式二", type = ButtonType.PLAIN) {
-            swipeable = true
+            draggable = true
             visible = true
         }
     }

@@ -8,6 +8,7 @@ import androidx.compose.foundation.gestures.AnchoredDraggableState
 import androidx.compose.foundation.gestures.DraggableAnchors
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.anchoredDraggable
+import androidx.compose.foundation.gestures.snapTo
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -25,6 +26,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,6 +38,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import top.chengdongqing.weui.core.data.model.DragAnchor
 import top.chengdongqing.weui.core.ui.theme.DangerColorLight
 import top.chengdongqing.weui.core.ui.theme.PlainColor
@@ -65,7 +68,7 @@ fun WeSwipeAction(
     startOptions: List<SwipeActionItem>? = null,
     endOptions: List<SwipeActionItem>? = null,
     style: SwipeActionStyle = SwipeActionStyle.LABEL,
-    swipeActionState: SwipeActionState = rememberSwipeState(
+    swipeActionState: SwipeActionState = rememberSwipeActionState(
         actionItemWidth = if (style == SwipeActionStyle.LABEL) 80.dp else 66.dp,
         startActionCount = startOptions?.size ?: 0,
         endActionCount = endOptions?.size ?: 0
@@ -75,8 +78,9 @@ fun WeSwipeAction(
     height: Dp = 60.dp,
     content: @Composable (BoxScope.() -> Unit)
 ) {
-    val state = swipeActionState.state
+    val state = swipeActionState.draggableState
     val isLabelStyle = style == SwipeActionStyle.LABEL
+    val coroutineScope = rememberCoroutineScope()
 
     Box(
         modifier = Modifier
@@ -121,6 +125,9 @@ fun WeSwipeAction(
                         item
                     ) {
                         onStartTap?.invoke(index)
+                        coroutineScope.launch {
+                            state.snapTo(DragAnchor.Center)
+                        }
                     }
                 }
             }
@@ -141,6 +148,9 @@ fun WeSwipeAction(
                         item
                     ) {
                         onEndTap?.invoke(index)
+                        coroutineScope.launch {
+                            state.snapTo(DragAnchor.Center)
+                        }
                     }
                 }
             }
@@ -196,7 +206,7 @@ private fun ActionItem(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun rememberSwipeState(
+fun rememberSwipeActionState(
     initialValue: DragAnchor = DragAnchor.Center,
     actionItemWidth: Dp = 80.dp,
     startActionCount: Int = 0,
@@ -235,7 +245,7 @@ fun rememberSwipeState(
 
 @OptIn(ExperimentalFoundationApi::class)
 data class SwipeActionState(
-    val state: AnchoredDraggableState<DragAnchor>,
+    val draggableState: AnchoredDraggableState<DragAnchor>,
     val actionItemWidthPx: Float,
     val actionItemWidth: Dp
 )

@@ -8,7 +8,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.Uri
 import android.os.Environment
-import android.widget.Toast
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
@@ -24,6 +23,7 @@ import top.chengdongqing.weui.core.ui.components.button.WeButton
 import top.chengdongqing.weui.core.ui.components.input.WeInput
 import top.chengdongqing.weui.core.ui.components.input.WeTextarea
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
+import top.chengdongqing.weui.core.utils.showToast
 
 @Composable
 fun DownloaderScreen() {
@@ -59,7 +59,7 @@ private fun download(context: Context, name: String, url: String) {
     // 加入下载队列
     val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
     val downloadId = downloadManager.enqueue(request)
-    Toast.makeText(context, "开始下载", Toast.LENGTH_SHORT).show()
+    context.showToast("开始下载")
 
     // 注册广播接收器
     val receiver = DownloadBroadcastReceiver(downloadManager, downloadId)
@@ -86,7 +86,7 @@ private class DownloadBroadcastReceiver(
             if (cursor.moveToFirst()) {
                 val status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
                 if (status == DownloadManager.STATUS_SUCCESSFUL) {
-                    Toast.makeText(context, "下载完成", Toast.LENGTH_SHORT).show()
+                    context.showToast("下载完成")
                     val uri =
                         cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI))
                     if (uri.endsWith(".apk")) {

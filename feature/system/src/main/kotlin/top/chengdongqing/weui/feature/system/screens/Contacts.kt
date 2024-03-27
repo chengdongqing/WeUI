@@ -137,7 +137,7 @@ private fun PhoneContactList() {
             contactsPermissionState.launchPermissionRequest()
         }
     }
-    WePopup(visible, title = "通讯录", swipeable = true, onClose = { visible = false }) {
+    WePopup(visible, title = "通讯录", onClose = { visible = false }) {
         WeCardList(Modifier.fillMaxHeight(0.5f)) {
             items(contacts) {
                 WeCardListItem(label = it.first, value = it.second)
@@ -208,7 +208,7 @@ fun PhoneCallLogList() {
             callLogPermissionState.launchPermissionRequest()
         }
     }
-    WePopup(visible, title = "通话记录", swipeable = true, onClose = { visible = false }) {
+    WePopup(visible, title = "通话记录", onClose = { visible = false }) {
         WeCardList(Modifier.fillMaxHeight(0.5f)) {
             items(logs) {
                 WeCardListItem(label = it.first, value = it.second)

@@ -18,13 +18,15 @@ import top.chengdongqing.weui.core.ui.components.actionsheet.rememberActionSheet
 import top.chengdongqing.weui.core.ui.components.button.WeButton
 import top.chengdongqing.weui.core.ui.components.camera.rememberCameraLauncher
 import top.chengdongqing.weui.core.ui.components.input.WeInput
+import top.chengdongqing.weui.core.ui.components.popup.WePopup
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
 import top.chengdongqing.weui.core.ui.components.videoplayer.WeVideoPlayer
 import top.chengdongqing.weui.core.ui.components.videoplayer.rememberVideoPlayerState
+import top.chengdongqing.weui.core.ui.theme.WeUITheme
 
 @Composable
 fun CameraScreen() {
-    WeScreen(title = "Camera", description = "相机", scrollEnabled = false) {
+    WeScreen(title = "Camera", description = "相机") {
         val options = remember {
             listOf(
                 ActionSheetItem(label = "照片", value = VisualMediaType.IMAGE),
@@ -37,9 +39,12 @@ fun CameraScreen() {
 
         var uri by remember { mutableStateOf<Uri?>(null) }
         var type by remember { mutableStateOf<VisualMediaType?>(null) }
+        var visible by remember { mutableStateOf(false) }
+
         val launchCamera = rememberCameraLauncher { uri1, type1 ->
             uri = uri1
             type = type1
+            visible = true
         }
 
         WeInput(
@@ -56,16 +61,20 @@ fun CameraScreen() {
             launchCamera(options[current].value as VisualMediaType)
         }
 
-        Spacer(modifier = Modifier.height(60.dp))
-
-        uri?.let {
-            if (type == VisualMediaType.IMAGE) {
-                AsyncImage(
-                    model = it,
-                    contentDescription = null
-                )
-            } else {
-                WeVideoPlayer(state = rememberVideoPlayerState(videoSource = it), controlBar = {})
+        WeUITheme(darkTheme = true, darkStatusBar = true) {
+            WePopup(visible, onClose = { visible = false }) {
+                uri?.let {
+                    if (type == VisualMediaType.IMAGE) {
+                        AsyncImage(
+                            model = it,
+                            contentDescription = null
+                        )
+                    } else {
+                        WeVideoPlayer(
+                            state = rememberVideoPlayerState(videoSource = it)
+                        )
+                    }
+                }
             }
         }
     }

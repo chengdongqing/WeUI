@@ -105,7 +105,7 @@ private fun ReadingSms() {
             readSmsPermissionState.launchPermissionRequest()
         }
     }
-    WePopup(visible, title = "短信", swipeable = true, onClose = { visible = false }) {
+    WePopup(visible, title = "短信", onClose = { visible = false }) {
         WeCardList(Modifier.fillMaxHeight(0.5f)) {
             items(messages) {
                 WeCardListItem(label = it.first, value = it.second)

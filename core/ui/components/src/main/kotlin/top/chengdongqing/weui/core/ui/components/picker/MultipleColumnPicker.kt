@@ -60,9 +60,10 @@ fun WeMultipleColumnPicker(
 
     WePopup(
         visible,
-        title,
+        title = title,
         enterTransition = fadeIn(tween(150)) + slideInVertically(tween(150)) { it / 3 },
         exitTransition = fadeOut(tween(150)) + slideOutVertically(tween(150)) { it / 3 },
+        draggable = false,
         onClose = onCancel
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {

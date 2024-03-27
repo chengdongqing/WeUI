@@ -132,7 +132,13 @@ fun WeToast(
                         modifier =
                         Modifier
                             .toastSize(hasIcon)
-                            .clip(RoundedCornerShape(12.dp))
+                            .clip(
+                                if (icon != ToastIcon.NONE) {
+                                    RoundedCornerShape(12.dp)
+                                } else {
+                                    RoundedCornerShape(8.dp)
+                                }
+                            )
                             .background(Color(0xFF4C4C4C)),
                         contentAlignment = Alignment.Center
                     ) {

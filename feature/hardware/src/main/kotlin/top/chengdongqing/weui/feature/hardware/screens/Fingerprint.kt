@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import androidx.biometric.BiometricPrompt
 import androidx.compose.runtime.Composable
@@ -12,6 +11,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.fragment.app.FragmentActivity
 import top.chengdongqing.weui.core.ui.components.button.WeButton
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
+import top.chengdongqing.weui.core.utils.showToast
 
 @Composable
 fun FingerprintScreen() {
@@ -46,19 +46,19 @@ private fun createBiometricPrompt(activity: FragmentActivity): BiometricPrompt {
         override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
             super.onAuthenticationError(errorCode, errString)
             activity.finish()
-            Toast.makeText(activity, "此设备不支持指纹识别", Toast.LENGTH_SHORT).show()
+            activity.showToast(errString.toString())
         }
 
         override fun onAuthenticationFailed() {
             super.onAuthenticationFailed()
-            Toast.makeText(activity, "认证失败", Toast.LENGTH_SHORT).show()
+            activity.showToast("认证失败")
         }
 
         override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
             super.onAuthenticationSucceeded(result)
             activity.setResult(Activity.RESULT_OK)
             activity.finish()
-            Toast.makeText(activity, "认证成功", Toast.LENGTH_SHORT).show()
+            activity.showToast("认证成功")
         }
     }
     return BiometricPrompt(activity, callback)

@@ -48,6 +48,7 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun WeUITheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
+    darkStatusBar: Boolean = !darkTheme,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -60,7 +61,8 @@ fun WeUITheme(
             val window = (view.context as Activity).window
             window.statusBarColor = Color.Transparent.toArgb()
             WindowCompat.setDecorFitsSystemWindows(window, false)
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars =
+                darkStatusBar
         }
     }
 

@@ -11,7 +11,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
-import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
@@ -37,6 +36,7 @@ import top.chengdongqing.weui.core.ui.components.divider.WeDivider
 import top.chengdongqing.weui.core.ui.components.loading.LoadMoreType
 import top.chengdongqing.weui.core.ui.components.loading.WeLoadMore
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
+import top.chengdongqing.weui.core.utils.showToast
 
 @SuppressLint("MissingPermission")
 @OptIn(ExperimentalPermissionsApi::class)
@@ -67,7 +67,7 @@ fun BluetoothScreen() {
         WeButton(text = "扫描蓝牙") {
             if (permissionState.allPermissionsGranted) {
                 if (bluetoothAdapter == null) {
-                    Toast.makeText(context, "此设备不支持蓝牙", Toast.LENGTH_SHORT).show()
+                    context.showToast("此设备不支持蓝牙")
                 } else if (!bluetoothAdapter.isEnabled) {
                     launchBluetooth()
                 } else {
@@ -156,7 +156,7 @@ private fun rememberBluetoothLauncher(): () -> Unit {
         contract = ActivityResultContracts.StartActivityForResult()
     ) {
         if (it.resultCode == Activity.RESULT_OK) {
-            Toast.makeText(context, "蓝牙已打开", Toast.LENGTH_SHORT).show()
+            context.showToast("蓝牙已打开")
         }
     }
 

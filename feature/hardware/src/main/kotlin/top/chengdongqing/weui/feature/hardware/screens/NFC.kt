@@ -4,11 +4,11 @@ import android.content.Context
 import android.content.Intent
 import android.nfc.NfcManager
 import android.provider.Settings
-import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import top.chengdongqing.weui.core.ui.components.button.WeButton
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
+import top.chengdongqing.weui.core.utils.showToast
 
 @Composable
 fun NFCScreen() {
@@ -19,11 +19,11 @@ fun NFCScreen() {
 
         WeButton(text = "扫描NFC") {
             if (nfcAdapter == null) {
-                Toast.makeText(context, "此设备不支持NFC", Toast.LENGTH_SHORT).show()
+                context.showToast("此设备不支持NFC")
             } else if (nfcAdapter.isEnabled) {
-                Toast.makeText(context, "示例待完善", Toast.LENGTH_SHORT).show()
+                context.showToast("示例待完善")
             } else {
-                Toast.makeText(context, "NFC未开启", Toast.LENGTH_SHORT).show()
+                context.showToast("NFC未开启")
                 context.startActivity(Intent(Settings.ACTION_NFC_SETTINGS))
             }
         }

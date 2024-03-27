@@ -157,7 +157,6 @@ private fun FileDetailsPopup(visible: Boolean, file: FileItem, onClose: () -> Un
         visible,
         title = file.name,
         padding = PaddingValues(20.dp),
-        swipeable = true,
         onClose = onClose
     ) {
         val originalFile = remember { File(file.path) }

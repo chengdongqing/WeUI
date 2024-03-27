@@ -7,13 +7,13 @@ import android.graphics.Canvas
 import android.location.Location
 import android.net.Uri
 import android.os.Build
-import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import com.amap.api.maps.model.BitmapDescriptor
 import com.amap.api.maps.model.BitmapDescriptorFactory
 import com.amap.api.maps.model.LatLng
 import com.amap.api.services.core.LatLonPoint
+import top.chengdongqing.weui.core.utils.showToast
 import top.chengdongqing.weui.feature.location.data.model.MapType
 import java.net.URLEncoder
 
@@ -48,7 +48,7 @@ fun Context.navigateToLocation(
     if (intent.resolveActivity(packageManager) != null) {
         startActivity(intent)
     } else {
-        Toast.makeText(this, "未安装${mapType.appName}地图", Toast.LENGTH_SHORT).show()
+        showToast("未安装${mapType.appName}地图")
     }
 }
 
