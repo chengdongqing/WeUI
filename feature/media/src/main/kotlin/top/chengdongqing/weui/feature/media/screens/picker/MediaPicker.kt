@@ -113,14 +113,14 @@ fun MediaPickerScreen() {
                 pickMedia
             )
 
-            val isReadying by remember {
+            val isReady by remember {
                 derivedStateOf {
                     screenHeight - currentPositionY.floatValue - currentItemHeight.intValue <= bottomBarHeight.intValue
                 }
             }
-            DeleteActionBottomBar(
+            BottomDeleteBar(
                 visible = state.draggingItemIndex != null,
-                isReadying
+                isReady
             ) {
                 bottomBarHeight.intValue = it
             }
@@ -200,9 +200,9 @@ private fun PictureGrid(
 }
 
 @Composable
-private fun BoxScope.DeleteActionBottomBar(
+private fun BoxScope.BottomDeleteBar(
     visible: Boolean,
-    isReadying: Boolean,
+    isReady: Boolean,
     onHeightChange: (Int) -> Unit
 ) {
     AnimatedVisibility(
@@ -228,7 +228,7 @@ private fun BoxScope.DeleteActionBottomBar(
                 },
         ) {
             Icon(
-                imageVector = if (isReadying) {
+                imageVector = if (isReady) {
                     Icons.Outlined.DeleteSweep
                 } else {
                     Icons.Outlined.Delete
@@ -239,7 +239,7 @@ private fun BoxScope.DeleteActionBottomBar(
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = if (isReadying) "松开即可删除" else "拖动到此处删除",
+                text = if (isReady) "松开即可删除" else "拖动到此处删除",
                 color = Color.White,
                 fontSize = 12.sp
             )

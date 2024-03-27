@@ -25,9 +25,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,15 +34,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import top.chengdongqing.weui.core.ui.components.popup.WePopup
 import top.chengdongqing.weui.core.utils.format
-import top.chengdongqing.weui.feature.media.audioplayer.WeAudioPlayer
-import top.chengdongqing.weui.feature.media.audioplayer.rememberAudioPlayerState
 import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun WeAudioRecorder(state: AudioRecorderState = rememberAudioRecorderState()) {
+fun WeAudioRecorder(
+    state: AudioRecorderState = rememberAudioRecorderState(),
+    onRecord: (Uri) -> Unit
+) {
     val permissionState = rememberMultiplePermissionsState(
         buildList {
             add(Manifest.permission.RECORD_AUDIO)
@@ -54,8 +51,6 @@ fun WeAudioRecorder(state: AudioRecorderState = rememberAudioRecorderState()) {
             }
         }
     )
-    var uri by remember { mutableStateOf<Uri?>(null) }
-    var visible by remember { mutableStateOf(false) }
 
     Text(
         text = state.duration.seconds.format(isFull = true),
@@ -75,8 +70,9 @@ fun WeAudioRecorder(state: AudioRecorderState = rememberAudioRecorderState()) {
                 .clickable {
                     if (permissionState.allPermissionsGranted) {
                         if (state.isRecording) {
-                            uri = state.stop()
-                            visible = true
+                            state
+                                .stop()
+                                .also(onRecord)
                         } else {
                             state.start()
                         }
@@ -87,12 +83,6 @@ fun WeAudioRecorder(state: AudioRecorderState = rememberAudioRecorderState()) {
                 .padding(12.dp)
         ) {
             RecordIcon(state.isRecording)
-        }
-    }
-
-    WePopup(visible, onClose = { visible = false }) {
-        uri?.let {
-            WeAudioPlayer(rememberAudioPlayerState(it))
         }
     }
 }
