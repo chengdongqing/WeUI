@@ -42,8 +42,8 @@ import top.chengdongqing.weui.feature.samples.videochannel.data.model.VideoComme
 import top.chengdongqing.weui.feature.samples.videochannel.data.model.VideoItem
 
 @Composable
-internal fun CommentsCard(video: VideoItem, visible: Boolean, onClose: () -> Unit) {
-    CommentsPopup(visible, onClose, title = "${video.comments}条评论") {
+internal fun CommentsCard(visible: Boolean, video: VideoItem, onClose: () -> Unit) {
+    CommentsPopup(visible, title = "${video.comments}条评论", onClose) {
         LazyColumn {
             item {
                 VideoIntroduction(video)

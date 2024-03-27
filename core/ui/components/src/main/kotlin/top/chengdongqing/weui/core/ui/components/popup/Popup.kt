@@ -8,7 +8,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.DraggableState
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
@@ -36,9 +35,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -99,16 +103,24 @@ fun WePopup(
                 targetValue = offsetY.intValue,
                 label = "PopupDraggingAnimation"
             )
-            val draggableState = rememberDraggableState {
-                offsetY.intValue = (offsetY.intValue + it.roundToInt()).coerceAtLeast(0)
-            }
 
             Box(
                 modifier = Modifier
+                    .fillMaxWidth()
                     .offset {
                         IntOffset(x = 0, y = animatedOffsetY)
                     }
-                    .fillMaxWidth()
+                    .draggable(
+                        state = rememberDraggableState {
+                            handleDrag(offsetY, it)
+                        },
+                        enabled = draggable,
+                        orientation = Orientation.Vertical,
+                        onDragStopped = {
+                            handleDragStopped(offsetY, height, onClose)
+                        }
+                    )
+                    .nestedScroll(rememberNestedScrollConnection(offsetY, height, onClose))
                     .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
                     .background(MaterialTheme.colorScheme.onBackground)
                     .clickableWithoutRipple { }
@@ -119,7 +131,7 @@ fun WePopup(
             ) {
                 Column {
                     if (draggable) {
-                        DraggableLine(draggableState, offsetY, height, onClose)
+                        DraggableLine()
                     }
 
                     title?.let {
@@ -164,27 +176,11 @@ private fun PopupContainer(
 }
 
 @Composable
-private fun DraggableLine(
-    draggableState: DraggableState,
-    offsetY: MutableIntState,
-    height: Int,
-    onClose: () -> Unit
-) {
+private fun DraggableLine() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .offset(y = -(12.dp))
-            .draggable(
-                draggableState,
-                orientation = Orientation.Vertical,
-                onDragStopped = {
-                    if (offsetY.intValue > height / 2) {
-                        onClose()
-                    } else {
-                        offsetY.intValue = 0
-                    }
-                }
-            )
             .padding(top = 12.dp),
         contentAlignment = Alignment.Center
     ) {
@@ -213,5 +209,50 @@ private fun PopupTitle(title: String) {
             fontSize = 17.sp,
             fontWeight = FontWeight.Bold
         )
+    }
+}
+
+@Composable
+private fun rememberNestedScrollConnection(
+    offsetY: MutableIntState,
+    height: Int,
+    onClose: () -> Unit
+): NestedScrollConnection {
+    return remember(height) {
+        object : NestedScrollConnection {
+            override fun onPostScroll(
+                consumed: Offset,
+                available: Offset,
+                source: NestedScrollSource
+            ): Offset {
+                if (source == NestedScrollSource.Drag) {
+                    handleDrag(offsetY, available.y)
+                    return available
+                } else {
+                    return Offset.Zero
+                }
+            }
+
+            override suspend fun onPostFling(
+                consumed: Velocity,
+                available: Velocity
+            ): Velocity {
+                handleDragStopped(offsetY, height, onClose)
+                return available
+            }
+        }
+    }
+}
+
+private fun handleDrag(offsetY: MutableIntState, delta: Float) {
+    offsetY.intValue = (offsetY.intValue + delta.roundToInt())
+        .coerceAtLeast(0)
+}
+
+private fun handleDragStopped(offsetY: MutableIntState, height: Int, onClose: () -> Unit) {
+    if (offsetY.intValue > height / 2) {
+        onClose()
+    } else {
+        offsetY.intValue = 0
     }
 }

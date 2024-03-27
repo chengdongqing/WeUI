@@ -21,24 +21,31 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
 internal fun CommentsPopup(
     visible: Boolean,
-    onClose: () -> Unit,
     title: String,
+    onClose: () -> Unit,
     content: @Composable () -> Unit
 ) {
     BackHandler(visible) {
@@ -46,12 +53,12 @@ internal fun CommentsPopup(
     }
 
     val density = LocalDensity.current
-    val screenHeightDp = LocalConfiguration.current.screenHeightDp
-    var currentHeight by remember(visible) {
-        mutableStateOf((screenHeightDp * 0.7).dp)
+    val screenHeight = LocalConfiguration.current.screenHeightDp
+    val currentHeight = remember(visible) {
+        mutableStateOf((screenHeight * 0.7).dp)
     }
     val animatedHeight by animateDpAsState(
-        targetValue = if (visible) currentHeight else 0.dp,
+        targetValue = if (visible) currentHeight.value else 0.dp,
         label = "CommentsPopupAnimation"
     )
 
@@ -62,22 +69,26 @@ internal fun CommentsPopup(
                 .height(animatedHeight)
                 .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
                 .background(MaterialTheme.colorScheme.onBackground)
+                .draggable(
+                    state = rememberDraggableState {
+                        handleDrag(currentHeight, it, density)
+                    },
+                    orientation = Orientation.Vertical,
+                    onDragStopped = {
+                        handleDragStopped(currentHeight, screenHeight, onClose)
+                    })
+                .nestedScroll(
+                    rememberNestedScrollConnection(
+                        currentHeight,
+                        screenHeight,
+                        density,
+                        onClose
+                    )
+                )
         ) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .draggable(
-                        state = rememberDraggableState { dragAmount ->
-                            currentHeight -= density.run { dragAmount.toDp() }
-                        },
-                        orientation = Orientation.Vertical,
-                        onDragStopped = {
-                            if (currentHeight > screenHeightDp.dp * 0.7f / 2) {
-                                currentHeight = screenHeightDp.dp * 0.7f
-                            } else {
-                                onClose()
-                            }
-                        })
                     .padding(horizontal = 12.dp, vertical = 18.dp)
             ) {
                 Box(
@@ -106,5 +117,54 @@ internal fun CommentsPopup(
             }
             content()
         }
+    }
+}
+
+@Composable
+private fun rememberNestedScrollConnection(
+    currentHeight: MutableState<Dp>,
+    screenHeight: Int,
+    density: Density,
+    onClose: () -> Unit
+): NestedScrollConnection {
+    return remember(screenHeight) {
+        object : NestedScrollConnection {
+            override fun onPostScroll(
+                consumed: Offset,
+                available: Offset,
+                source: NestedScrollSource
+            ): Offset {
+                if (source == NestedScrollSource.Drag) {
+                    handleDrag(currentHeight, available.y, density)
+                    return available
+                } else {
+                    return Offset.Zero
+                }
+            }
+
+            override suspend fun onPostFling(
+                consumed: Velocity,
+                available: Velocity
+            ): Velocity {
+                handleDragStopped(currentHeight, screenHeight, onClose)
+                return available
+            }
+        }
+    }
+}
+
+private fun handleDrag(currentHeight: MutableState<Dp>, delta: Float, density: Density) {
+    currentHeight.value -= density.run { delta.toDp() }
+}
+
+private fun handleDragStopped(
+    currentHeight: MutableState<Dp>,
+    screenHeight: Int,
+    onClose: () -> Unit
+) {
+    if (currentHeight.value.value > screenHeight * 0.7f / 2) {
+        currentHeight.value = screenHeight.dp * 0.7f
+    } else {
+        onClose()
     }
 }
