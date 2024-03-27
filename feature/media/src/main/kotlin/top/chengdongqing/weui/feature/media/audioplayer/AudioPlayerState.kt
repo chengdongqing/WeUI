@@ -1,8 +1,11 @@
 package top.chengdongqing.weui.feature.media.audioplayer
 
+import android.content.Context
 import android.media.MediaPlayer
+import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -10,6 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -42,12 +46,18 @@ interface AudioPlayerState {
     val currentDuration: Int
 
     /**
-     * 播放
+     * 设置音源
+     */
+    fun setSource(path: String)
+    fun setSource(uri: Uri)
+
+    /**
+     * 开始播放
      */
     fun play()
 
     /**
-     * 暂停
+     * 暂停播放
      */
     fun pause()
 
@@ -58,13 +68,36 @@ interface AudioPlayerState {
 }
 
 @Composable
-fun rememberAudioPlayerState(audioSource: String): AudioPlayerState {
+fun rememberAudioPlayerState(path: String): AudioPlayerState {
+    val state = rememberAudioPlayerState()
+
+    LaunchedEffect(path) {
+        state.setSource(path)
+    }
+
+    return state
+}
+
+@Composable
+fun rememberAudioPlayerState(uri: Uri): AudioPlayerState {
+    val state = rememberAudioPlayerState()
+
+    LaunchedEffect(uri) {
+        state.setSource(uri)
+    }
+
+    return state
+}
+
+@Composable
+fun rememberAudioPlayerState(): AudioPlayerState {
     val player = remember { MediaPlayer() }
     MediaPlayerLifecycle(player)
 
+    val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
-    val state = remember(audioSource) {
-        AudioPlayerStateImpl(player, audioSource, coroutineScope)
+    val state = remember {
+        AudioPlayerStateImpl(player, context, coroutineScope)
     }
 
     DisposableEffect(Unit) {
@@ -78,13 +111,25 @@ fun rememberAudioPlayerState(audioSource: String): AudioPlayerState {
 
 private class AudioPlayerStateImpl(
     override val player: MediaPlayer,
-    val audioSource: String,
+    private val context: Context,
     private val coroutineScope: CoroutineScope
 ) : AudioPlayerState {
     override val isPlaying: Boolean
         get() = _isPlaying
     override var totalDuration by mutableIntStateOf(0)
     override var currentDuration by mutableIntStateOf(0)
+
+    override fun setSource(path: String) {
+        reset()
+        player.setDataSource(path)
+        prepare()
+    }
+
+    override fun setSource(uri: Uri) {
+        reset()
+        player.setDataSource(context, uri)
+        prepare()
+    }
 
     override fun play() {
         if (!player.isPlaying) {
@@ -127,10 +172,15 @@ private class AudioPlayerStateImpl(
         progressJob = null
     }
 
-    init {
+    private fun reset() {
+        player.reset()
+        _isPlaying = false
+        currentDuration = 0
+        stopUpdatingProgress()
+    }
+
+    private fun prepare() {
         player.apply {
-            reset()
-            setDataSource(audioSource)
             prepareAsync()
             setOnPreparedListener {
                 totalDuration = it.duration

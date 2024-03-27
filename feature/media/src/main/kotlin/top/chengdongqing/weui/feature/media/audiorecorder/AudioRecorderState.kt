@@ -18,8 +18,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import top.chengdongqing.weui.core.data.model.MediaType
-import top.chengdongqing.weui.core.utils.MediaStoreUtils
+import top.chengdongqing.weui.core.utils.getFileProviderUri
+import java.io.File
 
 @Stable
 interface AudioRecorderState {
@@ -41,7 +41,7 @@ interface AudioRecorderState {
     /**
      * 结束录音
      */
-    fun stop()
+    fun stop(): Uri
 }
 
 @Composable
@@ -79,7 +79,7 @@ private class AudioRecorderStateImpl(
     override var duration by mutableIntStateOf(0)
 
     override fun start() {
-        prepare(context)
+        prepare()
         // 重置计时
         duration = 0
         // 开始录音
@@ -94,17 +94,14 @@ private class AudioRecorderStateImpl(
         }
     }
 
-    override fun stop() {
-        // 结束录音
+    override fun stop(): Uri {
         recorder.stop()
         isRecording = false
-        // 更新文件状态
-        _uri?.let {
-            MediaStoreUtils.finishPending(it, context)
-        }
+
+        return context.getFileProviderUri(tempFile!!)
     }
 
-    private fun prepare(context: Context) {
+    private fun prepare() {
         // 初始化参数
         recorder.apply {
             reset()
@@ -113,24 +110,13 @@ private class AudioRecorderStateImpl(
             setAudioEncoder(MediaRecorder.AudioEncoder.HE_AAC)
         }
 
-        // 创建媒体文件
-        val contentUri = MediaStoreUtils.getContentUri(MediaType.RECORDING)
-        val contentValues = MediaStoreUtils.createContentValues(
-            filename = "RCD_${System.currentTimeMillis()}.mp3",
-            mediaType = MediaType.RECORDING,
-            mimeType = "audio/mp3",
-            context
-        )
-        context.contentResolver.apply {
-            insert(contentUri, contentValues)?.let { uri ->
-                openFileDescriptor(uri, "w")?.use {
-                    recorder.setOutputFile(it.fileDescriptor)
-                    recorder.prepare()
-                    _uri = uri
-                }
-            }
+        // 保存到临时文件
+        tempFile = File.createTempFile("RCD_", ".aac").apply {
+            deleteOnExit()
         }
+        recorder.setOutputFile(tempFile)
+        recorder.prepare()
     }
 
-    private var _uri by mutableStateOf<Uri?>(null)
+    private var tempFile: File? = null
 }
