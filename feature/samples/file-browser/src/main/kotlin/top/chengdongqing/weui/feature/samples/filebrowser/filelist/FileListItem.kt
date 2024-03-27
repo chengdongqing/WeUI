@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.feature.samples.filebrowser
+package top.chengdongqing.weui.feature.samples.filebrowser.filelist
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -38,6 +38,7 @@ import top.chengdongqing.weui.core.utils.calculateFileSize
 import top.chengdongqing.weui.core.utils.deleteFile
 import top.chengdongqing.weui.core.utils.format
 import top.chengdongqing.weui.core.utils.formatFileSize
+import top.chengdongqing.weui.feature.samples.filebrowser.R
 import top.chengdongqing.weui.feature.samples.filebrowser.data.model.FileItem
 import java.io.File
 import top.chengdongqing.weui.core.ui.theme.R as ThemeR

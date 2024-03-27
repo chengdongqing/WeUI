@@ -10,7 +10,7 @@ import top.chengdongqing.weui.feature.samples.filebrowser.data.model.FileItem
 import java.io.File
 
 class FileRepositoryImpl : FileRepository {
-    override suspend fun getListFiles(filepath: String): List<FileItem> =
+    override suspend fun getFileList(filepath: String): List<FileItem> =
         withContext(Dispatchers.IO) {
             File(filepath).listFiles()?.filter { !it.isHidden }
                 ?.sortedWith(compareBy {

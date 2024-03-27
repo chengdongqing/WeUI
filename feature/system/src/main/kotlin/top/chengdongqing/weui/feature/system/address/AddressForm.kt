@@ -102,7 +102,7 @@ fun AddressFormScreen(
                         toast.show("修改成功", ToastIcon.SUCCESS)
                     }
                     delay(1000)
-                    navController.popBackStack()
+                    navController.navigateUp()
                 }
             }
         }

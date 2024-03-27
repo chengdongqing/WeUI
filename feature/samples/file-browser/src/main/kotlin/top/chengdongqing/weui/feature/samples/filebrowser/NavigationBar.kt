@@ -16,22 +16,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import top.chengdongqing.weui.core.ui.theme.R
 import top.chengdongqing.weui.core.utils.clickableWithoutRipple
 
 @Composable
-internal fun NavigationBar(folders: MutableList<String>) {
+internal fun NavigationBar(navController: NavController, folders: MutableList<String>) {
     val levels = folders.size
     val lazyListState = rememberLazyListState()
     LaunchedEffect(levels) {
-        if (levels > 1) {
-            lazyListState.animateScrollToItem(levels - 1)
-        }
+        lazyListState.animateScrollToItem(folders.lastIndex)
     }
 
     Row {
         FolderLabel("内部存储", levels == 1) {
-            folders.subList(1, levels).clear()
+            if (folders.size > 1) {
+                repeat(folders.size - 1) {
+                    navController.popBackStack()
+                }
+                folders.subList(1, levels).clear()
+            }
         }
         if (levels > 1) {
             FolderArrowIcon()
@@ -43,7 +47,11 @@ internal fun NavigationBar(folders: MutableList<String>) {
                     item {
                         FolderLabel(label, isActive) {
                             if (!isActive) {
-                                folders.retainAll(folders.subList(0, index + 2))
+                                val toRemoveFolders = folders.slice(index + 2..folders.lastIndex)
+                                folders.removeAll(toRemoveFolders)
+                                repeat(toRemoveFolders.size) {
+                                    navController.popBackStack()
+                                }
                             }
                         }
                         if (index < levels - 2) {

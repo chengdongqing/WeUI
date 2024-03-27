@@ -46,18 +46,18 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import top.chengdongqing.weui.core.ui.components.R
+import top.chengdongqing.weui.core.utils.isTrue
 import top.chengdongqing.weui.feature.location.utils.createBitmapDescriptor
 import top.chengdongqing.weui.feature.location.utils.isLoaded
-import top.chengdongqing.weui.core.utils.isTrue
 import top.chengdongqing.weui.feature.location.utils.toLatLng
 
 @Composable
 fun AMap(modifier: Modifier = Modifier, state: AMapState = rememberAMapState()) {
     val context = LocalContext.current
     // 处理生命周期
-    MapLifecycleEffect(state.mapView)
+    LifecycleEffect(state.mapView)
     // 处理定位权限
-    LocationPermissionEffect {
+    PermissionHandler {
         setLocationArrow(state.map, context)
     }
 
@@ -132,7 +132,7 @@ private fun setLocationArrow(map: AMap, context: Context) {
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-private fun LocationPermissionEffect(onGranted: (() -> Unit)? = null) {
+private fun PermissionHandler(onGranted: (() -> Unit)? = null) {
     val permissionState = rememberPermissionState(Manifest.permission.ACCESS_FINE_LOCATION) {
         if (it) {
             onGranted?.invoke()
@@ -149,7 +149,7 @@ private fun LocationPermissionEffect(onGranted: (() -> Unit)? = null) {
 }
 
 @Composable
-private fun MapLifecycleEffect(mapView: MapView) {
+private fun LifecycleEffect(mapView: MapView) {
     val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val previousState = remember { mutableStateOf(Lifecycle.Event.ON_CREATE) }
