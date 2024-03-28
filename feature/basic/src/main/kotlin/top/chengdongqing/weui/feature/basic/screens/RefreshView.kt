@@ -5,12 +5,14 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import kotlinx.coroutines.delay
 import top.chengdongqing.weui.core.ui.components.cardlist.WeCardList
 import top.chengdongqing.weui.core.ui.components.cardlist.WeCardListItem
 import top.chengdongqing.weui.core.ui.components.loading.WeLoadMore
 import top.chengdongqing.weui.core.ui.components.refreshview.WeRefreshView
-import top.chengdongqing.weui.core.ui.components.refreshview.rememberReachBottom
+import top.chengdongqing.weui.core.ui.components.refreshview.rememberLoadMoreState
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
 
 @Composable
@@ -22,21 +24,24 @@ fun RefreshViewScreen() {
                 addAll(List(30) { "${it + 1}" })
             }
         }
-        val isLoadingMore = rememberReachBottom(listState) {
+        val loadMoreState = rememberLoadMoreState(listState) {
             delay(2000)
             listItems.addAll(List(30) { index -> "${listItems.size + index + 1}" })
         }
 
-        WeRefreshView(onRefresh = {
-            delay(2000)
-            listItems.clear()
-            listItems.addAll(List(30) { "${it + 1}" })
-        }) {
+        WeRefreshView(
+            modifier = Modifier.nestedScroll(loadMoreState.nestedScrollConnection),
+            onRefresh = {
+                delay(2000)
+                listItems.clear()
+                listItems.addAll(List(30) { "${it + 1}" })
+            }
+        ) {
             WeCardList(state = listState) {
                 items(listItems, key = { it }) {
                     WeCardListItem(label = "第${it}行")
                 }
-                if (isLoadingMore) {
+                if (loadMoreState.isLoadingMore) {
                     item {
                         WeLoadMore()
                     }
