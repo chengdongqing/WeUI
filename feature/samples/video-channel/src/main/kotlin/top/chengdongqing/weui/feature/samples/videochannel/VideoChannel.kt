@@ -61,7 +61,7 @@ private fun VideoItem(video: VideoItem) {
             InformationBar(video, onCommentsClick = {
                 commentsVisible = true
             })
-            CommentsCard(commentsVisible, video) {
+            CommentList(commentsVisible, video) {
                 commentsVisible = false
             }
         }
