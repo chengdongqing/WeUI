@@ -1,5 +1,6 @@
 package top.chengdongqing.weui.feature.samples.filebrowser.filelist
 
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -20,13 +22,19 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.core.ui.components.actionsheet.ActionSheetItem
 import top.chengdongqing.weui.core.ui.components.actionsheet.rememberActionSheetState
 import top.chengdongqing.weui.core.ui.components.cardlist.WeCardListItem
@@ -38,6 +46,7 @@ import top.chengdongqing.weui.core.utils.calculateFileSize
 import top.chengdongqing.weui.core.utils.deleteFile
 import top.chengdongqing.weui.core.utils.format
 import top.chengdongqing.weui.core.utils.formatFileSize
+import top.chengdongqing.weui.core.utils.loadVideoThumbnail
 import top.chengdongqing.weui.feature.samples.filebrowser.R
 import top.chengdongqing.weui.feature.samples.filebrowser.data.model.FileItem
 import java.io.File
@@ -98,24 +107,7 @@ internal fun FileListItem(
             },
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Box(
-            modifier = Modifier.size(48.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            if (file.isDirectory) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_folder),
-                    contentDescription = "文件夹",
-                    modifier = Modifier.matchParentSize()
-                )
-            } else {
-                Image(
-                    painter = painterResource(id = file.iconId),
-                    contentDescription = "文件",
-                    modifier = Modifier.size(38.dp)
-                )
-            }
-        }
+        FileThumbnail(file)
         Spacer(modifier = Modifier.width(16.dp))
         Column(modifier = Modifier.weight(1f)) {
             Text(
@@ -149,6 +141,60 @@ internal fun FileListItem(
             contentDescription = "下一级",
             tint = MaterialTheme.colorScheme.secondary
         )
+    }
+}
+
+@Composable
+private fun FileThumbnail(file: FileItem) {
+    @Composable
+    fun FileIcon() {
+        Image(
+            painter = painterResource(id = file.iconId),
+            contentDescription = "文件",
+            modifier = Modifier.size(38.dp)
+        )
+    }
+
+    Box(
+        modifier = Modifier.size(48.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        if (file.isDirectory) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_folder),
+                contentDescription = "文件夹",
+                modifier = Modifier.matchParentSize()
+            )
+        } else {
+            if (file.isVisualMedia) {
+                val context = LocalContext.current
+                val thumbnail by produceState<Any?>(initialValue = null) {
+                    val uri = Uri.parse(file.path)
+                    value = if (file.mimeType.startsWith("image")) {
+                        uri
+                    } else {
+                        withContext(Dispatchers.IO) {
+                            context.loadVideoThumbnail(uri)
+                        }
+                    }
+                }
+
+                if (thumbnail != null) {
+                    AsyncImage(
+                        model = thumbnail,
+                        contentDescription = "文件",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .size(38.dp)
+                            .clip(RoundedCornerShape(6.dp))
+                    )
+                } else {
+                    FileIcon()
+                }
+            } else {
+                FileIcon()
+            }
+        }
     }
 }
 

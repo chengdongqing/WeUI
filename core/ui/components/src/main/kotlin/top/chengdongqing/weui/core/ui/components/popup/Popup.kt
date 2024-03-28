@@ -120,7 +120,19 @@ fun WePopup(
                             handleDragStopped(offsetY, height, onClose)
                         }
                     )
-                    .nestedScroll(rememberNestedScrollConnection(offsetY, height, onClose))
+                    .then(
+                        if (draggable) {
+                            Modifier.nestedScroll(
+                                rememberNestedScrollConnection(
+                                    offsetY,
+                                    height,
+                                    onClose
+                                )
+                            )
+                        } else {
+                            Modifier
+                        }
+                    )
                     .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
                     .background(MaterialTheme.colorScheme.onBackground)
                     .clickableWithoutRipple { }
@@ -220,6 +232,15 @@ private fun rememberNestedScrollConnection(
 ): NestedScrollConnection {
     return remember(height) {
         object : NestedScrollConnection {
+            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                if (source == NestedScrollSource.Drag && offsetY.intValue > 0) {
+                    handleDrag(offsetY, available.y)
+                    return available
+                } else {
+                    return Offset.Zero
+                }
+            }
+
             override fun onPostScroll(
                 consumed: Offset,
                 available: Offset,

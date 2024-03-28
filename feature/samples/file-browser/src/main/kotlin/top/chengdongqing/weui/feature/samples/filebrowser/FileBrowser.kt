@@ -18,7 +18,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.listSaver
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
@@ -41,7 +44,14 @@ fun FileBrowserScreen() {
         RequestStoragePermission {
             val navController = rememberNavController()
             val rootPath = remember { Environment.getExternalStorageDirectory().path }
-            val folders = remember { mutableStateListOf(rootPath) }
+            val folders = rememberSaveable(
+                saver = listSaver(
+                    save = { list -> list.toList() },
+                    restore = { list -> list.toMutableStateList() }
+                )
+            ) {
+                mutableStateListOf(rootPath)
+            }
 
             Column {
                 NavigationBar(navController, folders)

@@ -6,8 +6,9 @@ data class FileItem(
     val name: String,
     val path: String,
     val size: String,
-    val mimeType: String?,
+    val mimeType: String,
     val isDirectory: Boolean,
+    val isVisualMedia: Boolean,
     val lastModified: String,
     val childrenCount: Int,
     @DrawableRes val iconId: Int

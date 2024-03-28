@@ -20,27 +20,33 @@ class FileRepositoryImpl : FileRepository {
                         name = file.name,
                         path = file.path,
                         size = formatFileSize(file),
-                        mimeType = getFileMimeType(file),
+                        mimeType = file.getFileMimeType(),
                         isDirectory = file.isDirectory,
+                        isVisualMedia = file.isVisualMedia(),
                         lastModified = formatTime(file.lastModified()),
                         childrenCount = file.listFiles()?.filter { !it.isHidden }?.size ?: 0,
-                        iconId = getFileIcon(file)
+                        iconId = file.getFileIcon()
                     )
                 } ?: emptyList()
         }
 
-    private fun getFileMimeType(file: File): String {
-        val extension = MimeTypeMap.getFileExtensionFromUrl(file.path)
+    private fun File.isVisualMedia(): Boolean {
+        val mimeType = getFileMimeType()
+        return mimeType.startsWith("image") || mimeType.startsWith("video")
+    }
+
+    private fun File.getFileMimeType(): String {
+        val extension = MimeTypeMap.getFileExtensionFromUrl(path)
         return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
-            ?: when (file.extension) {
+            ?: when (extension) {
                 "mp4", "mkv", "flv" -> "video/*"
                 "mp3", "flac", "aac", "wav" -> "audio/*"
                 else -> "*/*"
             }
     }
 
-    private fun getFileIcon(file: File): Int {
-        val extension = MimeTypeMap.getFileExtensionFromUrl(file.path)
+    private fun File.getFileIcon(): Int {
+        val extension = MimeTypeMap.getFileExtensionFromUrl(path)
         return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)?.let {
             when {
                 it.startsWith("image") -> R.drawable.ic_picture
@@ -55,7 +61,7 @@ class FileRepositoryImpl : FileRepository {
 
                 else -> R.drawable.ic_file
             }
-        } ?: when (file.extension) {
+        } ?: when (extension) {
             "apk" -> R.drawable.ic_apk
             "mp3", "flac", "aac", "wav" -> R.drawable.ic_music
             else -> {
