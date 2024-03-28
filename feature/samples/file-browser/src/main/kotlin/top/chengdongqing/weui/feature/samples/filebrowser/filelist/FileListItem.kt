@@ -1,5 +1,7 @@
 package top.chengdongqing.weui.feature.samples.filebrowser.filelist
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -24,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -32,7 +35,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.core.ui.components.actionsheet.ActionSheetItem
@@ -168,29 +170,27 @@ private fun FileThumbnail(file: FileItem) {
         } else {
             if (file.isVisualMedia) {
                 val context = LocalContext.current
-                val thumbnail by produceState<Any?>(initialValue = null) {
+                val thumbnail by produceState<Bitmap?>(initialValue = null) {
                     val uri = Uri.parse(file.path)
-                    value = if (file.mimeType.startsWith("image")) {
-                        uri
-                    } else {
-                        withContext(Dispatchers.IO) {
+                    value = withContext(Dispatchers.IO) {
+                        if (file.mimeType.startsWith("image")) {
+                            BitmapFactory.decodeFile(file.path)
+                        } else {
                             context.loadVideoThumbnail(uri)
                         }
                     }
                 }
 
-                if (thumbnail != null) {
-                    AsyncImage(
-                        model = thumbnail,
+                thumbnail?.let {
+                    Image(
+                        bitmap = it.asImageBitmap(),
                         contentDescription = "文件",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .size(38.dp)
                             .clip(RoundedCornerShape(6.dp))
                     )
-                } else {
-                    FileIcon()
-                }
+                } ?: FileIcon()
             } else {
                 FileIcon()
             }
