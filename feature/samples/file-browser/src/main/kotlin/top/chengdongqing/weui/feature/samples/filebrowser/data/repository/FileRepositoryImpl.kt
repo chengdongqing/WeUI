@@ -12,10 +12,8 @@ import java.io.File
 class FileRepositoryImpl : FileRepository {
     override suspend fun getFileList(filepath: String): List<FileItem> =
         withContext(Dispatchers.IO) {
-            File(filepath).listFiles()?.filter { !it.isHidden }
-                ?.sortedWith(compareBy {
-                    !it.isDirectory
-                })?.map { file ->
+            File(filepath).listFiles()
+                ?.sortedWith(compareBy { !it.isDirectory })?.map { file ->
                     FileItem(
                         name = file.name,
                         path = file.path,
@@ -38,7 +36,7 @@ class FileRepositoryImpl : FileRepository {
     private fun File.getFileMimeType(): String {
         val extension = MimeTypeMap.getFileExtensionFromUrl(path)
         return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
-            ?: when (extension) {
+            ?: when (this.extension) {
                 "mp4", "mkv", "flv" -> "video/*"
                 "mp3", "flac", "aac", "wav" -> "audio/*"
                 else -> "*/*"
@@ -61,7 +59,7 @@ class FileRepositoryImpl : FileRepository {
 
                 else -> R.drawable.ic_file
             }
-        } ?: when (extension) {
+        } ?: when (this.extension) {
             "apk" -> R.drawable.ic_apk
             "mp3", "flac", "aac", "wav" -> R.drawable.ic_music
             else -> {

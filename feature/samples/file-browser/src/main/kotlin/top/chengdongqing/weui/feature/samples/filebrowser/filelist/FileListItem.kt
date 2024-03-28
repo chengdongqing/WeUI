@@ -171,12 +171,11 @@ private fun FileThumbnail(file: FileItem) {
             if (file.isVisualMedia) {
                 val context = LocalContext.current
                 val thumbnail by produceState<Bitmap?>(initialValue = null) {
-                    val uri = Uri.parse(file.path)
                     value = withContext(Dispatchers.IO) {
                         if (file.mimeType.startsWith("image")) {
                             BitmapFactory.decodeFile(file.path)
                         } else {
-                            context.loadVideoThumbnail(uri)
+                            context.loadVideoThumbnail(Uri.parse(file.path))
                         }
                     }
                 }

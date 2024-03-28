@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import top.chengdongqing.weui.core.data.model.Result
 import top.chengdongqing.weui.core.ui.components.loading.LoadMoreType
@@ -37,6 +38,7 @@ fun FileListScreen(
     }
 
     WeRefreshView(onRefresh = {
+        delay(1000)
         fileViewModel.refresh(path)
     }) {
         FileList(
