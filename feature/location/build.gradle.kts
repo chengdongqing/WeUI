@@ -12,8 +12,7 @@ dependencies {
     implementation(libs.accompanist.permissions)
     implementation(libs.amap)
     implementation(libs.amap.search)
-    implementation(libs.datastore.core)
-    implementation(libs.datastore.preferences)
+    implementation(libs.bundles.datastore)
 
     implementation(project(":core:ui:theme"))
     implementation(project(":core:ui:components"))

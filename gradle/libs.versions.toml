@@ -103,3 +103,4 @@ weui-android-room = { id = "weui.android.room", version = "unspecified" }
 [bundles]
 camerax = ["camera-camera2", "camera-lifecycle", "camera-view"]
 retrofit = ["retrofit", "retrofit-converter"]
+datastore = ["datastore-core", "datastore-preferences"]
