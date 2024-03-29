@@ -60,7 +60,7 @@ fun WeDatePicker(
         )
     }
 
-    WeMultipleColumnPicker(
+    WePicker(
         visible,
         title = "选择日期",
         range = remember {

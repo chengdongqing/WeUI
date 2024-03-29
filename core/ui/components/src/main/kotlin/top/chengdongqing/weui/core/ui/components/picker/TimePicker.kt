@@ -60,7 +60,7 @@ fun WeTimePicker(
         )
     }
 
-    WeMultipleColumnPicker(
+    WePicker(
         visible,
         title = "选择时间",
         range = remember {

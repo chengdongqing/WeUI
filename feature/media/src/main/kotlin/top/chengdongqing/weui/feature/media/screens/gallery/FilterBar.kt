@@ -60,6 +60,7 @@ internal fun FilterBar(gridState: LazyGridState, state: GalleryState) {
                 .clickableWithoutRipple {
                     picker.show(
                         value,
+                        // start = state.mediaGroups.keys.last(),
                         end = LocalDate.now()
                     ) {
                         value = it

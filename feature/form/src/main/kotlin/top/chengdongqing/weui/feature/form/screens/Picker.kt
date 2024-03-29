@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.core.ui.components.button.WeButton
 import top.chengdongqing.weui.core.ui.components.input.WeInput
 import top.chengdongqing.weui.core.ui.components.picker.rememberDatePickerState
-import top.chengdongqing.weui.core.ui.components.picker.rememberPickerState
+import top.chengdongqing.weui.core.ui.components.picker.rememberSingleColumnPickerState
 import top.chengdongqing.weui.core.ui.components.picker.rememberTimePickerState
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
 import top.chengdongqing.weui.core.utils.ChineseDateFormatter
@@ -72,7 +72,7 @@ private fun TimePickDemo() {
 
 @Composable
 private fun CountryPickDemo() {
-    val picker = rememberPickerState()
+    val picker = rememberSingleColumnPickerState()
     var value by remember { mutableIntStateOf(0) }
     val range = remember {
         listOf(

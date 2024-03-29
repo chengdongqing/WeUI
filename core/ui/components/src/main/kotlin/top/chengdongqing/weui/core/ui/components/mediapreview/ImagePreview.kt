@@ -25,7 +25,7 @@ import top.chengdongqing.weui.core.utils.rememberLastState
 fun ImagePreview(uri: Uri) {
     val activity = LocalContext.current as Activity
     var offset by remember { mutableStateOf(Offset.Zero) }
-    var zoom by remember { mutableFloatStateOf(1f) }
+    var scale by remember { mutableFloatStateOf(1f) }
     val lastOffset = rememberLastState(value = offset)
 
     AsyncImage(
@@ -35,26 +35,26 @@ fun ImagePreview(uri: Uri) {
             .fillMaxSize()
             .pointerInput(Unit) {
                 detectTapGestures(onDoubleTap = { tapOffset ->
-                    zoom = if (zoom > 1f) 1f else 2f
-                    offset = tapOffset.calculateDoubleTapOffset(zoom, size)
+                    scale = if (scale > 1f) 1f else 2f
+                    offset = tapOffset.calculateDoubleTapOffset(scale, size)
                 }) {
                     activity.finish()
                 }
             }
             .pointerInput(Unit) {
-                detectTransformGesturesWithManualConsuming { centroid, pan, gestureZoom, _, consumeChanges ->
-                    offset = offset.calculateNewOffset(centroid, pan, zoom, gestureZoom, size)
-                    zoom = maxOf(1f, zoom * gestureZoom)
-                    if (zoom > 1f && offset.x != lastOffset.value.x) {
+                detectTransformGesturesWithManualConsuming { centroid, pan, zoom, _, consumeChanges ->
+                    offset = offset.calculateNewOffset(centroid, pan, scale, zoom, size)
+                    scale = maxOf(1f, scale * zoom)
+                    if (scale > 1f && offset.x != lastOffset.value.x) {
                         consumeChanges()
                     }
                 }
             }
             .graphicsLayer {
-                translationX = -offset.x * zoom
-                translationY = -offset.y * zoom
-                scaleX = zoom
-                scaleY = zoom
+                translationX = -offset.x * scale
+                translationY = -offset.y * scale
+                scaleX = scale
+                scaleY = scale
                 transformOrigin = TransformOrigin(0f, 0f)
             }
     )
