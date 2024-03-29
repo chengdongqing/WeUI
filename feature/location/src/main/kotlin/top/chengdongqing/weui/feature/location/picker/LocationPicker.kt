@@ -43,10 +43,7 @@ fun WeLocationPicker(
     onConfirm: (LocationItem) -> Unit
 ) {
     val mapState = rememberAMapState()
-    val state =
-        rememberLocationPickerState(
-            mapState.map
-        )
+    val state = rememberLocationPickerState(mapState.map)
 
     Column(modifier = Modifier.fillMaxSize()) {
         Box(modifier = Modifier.weight(1f)) {

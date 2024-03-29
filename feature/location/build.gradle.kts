@@ -10,9 +10,10 @@ android {
 dependencies {
     implementation(libs.navigation.compose)
     implementation(libs.accompanist.permissions)
-    implementation(fileTree("libs") { include("*.jar") })
     implementation(libs.amap)
     implementation(libs.amap.search)
+    implementation(libs.datastore.core)
+    implementation(libs.datastore.preferences)
 
     implementation(project(":core:ui:theme"))
     implementation(project(":core:ui:components"))

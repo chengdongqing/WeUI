@@ -1,6 +1,7 @@
 [versions]
 # 核心库
-agp = "8.4.0-beta01"
+agp = "8.4.0-beta02"
+datastore = "1.1.0-beta02"
 kotlin = "1.9.22"
 compose-bom = "2024.03.00"
 compose-compiler = "1.5.10"
@@ -56,6 +57,8 @@ camera-view = { module = "androidx.camera:camera-view", version.ref = "camerax" 
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" } # 简化数据库访问
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" } # room支持kotlin
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" } # room支持根据注解自动生成对应实现
+datastore-core = { module = "androidx.datastore:datastore-core", version.ref = "datastore" }
+datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 # 调试相关
 ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" } # 支持compose组件预览

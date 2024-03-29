@@ -2,7 +2,9 @@ package top.chengdongqing.weui.feature.location.picker
 
 import android.content.Context
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -17,6 +19,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import top.chengdongqing.weui.feature.location.data.model.LocationItem
 import top.chengdongqing.weui.feature.location.data.repository.LocationRepositoryImpl
+import top.chengdongqing.weui.feature.location.data.repository.locationFlow
+import top.chengdongqing.weui.feature.location.data.repository.saveLocation
 import top.chengdongqing.weui.feature.location.utils.isLoaded
 import top.chengdongqing.weui.feature.location.utils.toLatLng
 
@@ -75,18 +79,34 @@ interface LocationPickerState {
 fun rememberLocationPickerState(map: AMap): LocationPickerState {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
+    val currentLocation by context.locationFlow.collectAsState(initial = null)
+
+    LaunchedEffect(currentLocation) {
+        currentLocation?.let {
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(it, 16f))
+        }
+    }
 
     return remember {
-        LocationPickerStateImpl(map, context, coroutineScope)
+        LocationPickerStateImpl(map, context, coroutineScope, currentLocation)
     }
 }
 
 private class LocationPickerStateImpl(
     override val map: AMap,
     val context: Context,
-    val coroutineScope: CoroutineScope
+    val coroutineScope: CoroutineScope,
+    val currentLocation: LatLng?,
 ) : LocationPickerState {
-    override var current by mutableStateOf<LatLng?>(null)
+    override var current: LatLng?
+        get() = currentLocation
+        set(value) {
+            value?.let {
+                coroutineScope.launch {
+                    context.saveLocation(it)
+                }
+            }
+        }
     override var mapCenter by mutableStateOf<LocationItem?>(null)
     override var selectedLocation by mutableStateOf<LocationItem?>(null)
     override var isSearchMode by mutableStateOf(false)

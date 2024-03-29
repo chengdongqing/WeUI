@@ -91,7 +91,7 @@ private fun FileList(
                                 navigateToFolder(item.path)
                             },
                             onFileClick = {
-                                context.openFile(File(item.path), item.mimeType ?: "*/*")
+                                context.openFile(File(item.path), item.mimeType)
                             },
                             onDeleted
                         )

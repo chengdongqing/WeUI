@@ -43,7 +43,7 @@ fun NotificationBarScreen() {
             )
         }
         Column {
-            Title("首位间距")
+            Title("首尾间距")
             WeNotificationBar(
                 content,
                 scrollSpacingFraction = 1f / 2f,
