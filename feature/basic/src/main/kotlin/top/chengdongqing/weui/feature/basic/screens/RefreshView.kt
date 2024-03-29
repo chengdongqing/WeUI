@@ -1,5 +1,6 @@
 package top.chengdongqing.weui.feature.basic.screens
 
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
@@ -8,8 +9,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import kotlinx.coroutines.delay
-import top.chengdongqing.weui.core.ui.components.cardlist.WeCardList
 import top.chengdongqing.weui.core.ui.components.cardlist.WeCardListItem
+import top.chengdongqing.weui.core.ui.components.cardlist.cartList
 import top.chengdongqing.weui.core.ui.components.loading.WeLoadMore
 import top.chengdongqing.weui.core.ui.components.refreshview.WeRefreshView
 import top.chengdongqing.weui.core.ui.components.refreshview.rememberLoadMoreState
@@ -37,7 +38,7 @@ fun RefreshViewScreen() {
                 listItems.addAll(List(30) { "${it + 1}" })
             }
         ) {
-            WeCardList(state = listState) {
+            LazyColumn(state = listState, modifier = Modifier.cartList()) {
                 items(listItems, key = { it }) {
                     WeCardListItem(label = "第${it}行")
                 }

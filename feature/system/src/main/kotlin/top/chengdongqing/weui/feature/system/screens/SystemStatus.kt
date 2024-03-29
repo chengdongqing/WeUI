@@ -7,6 +7,7 @@ import android.net.NetworkCapabilities
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -18,15 +19,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.core.ui.components.button.ButtonType
 import top.chengdongqing.weui.core.ui.components.button.WeButton
-import top.chengdongqing.weui.core.ui.components.cardlist.WeCardList
 import top.chengdongqing.weui.core.ui.components.cardlist.WeCardListItem
+import top.chengdongqing.weui.core.ui.components.cardlist.cartList
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
 import top.chengdongqing.weui.core.utils.SetupStatusBarStyle
 
 @Composable
 fun SystemStatusScreen() {
     WeScreen(title = "SystemStatus", description = "系统状态，动态更新", scrollEnabled = false) {
-        WeCardList {
+        LazyColumn(modifier = Modifier.cartList()) {
             item {
                 NetworkInfoRows()
                 WeCardListItem("系统主题", if (isSystemInDarkTheme()) "深色" else "浅色")

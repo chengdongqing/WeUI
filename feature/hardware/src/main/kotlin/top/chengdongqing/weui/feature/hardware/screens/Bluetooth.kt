@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -31,7 +32,7 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import top.chengdongqing.weui.core.ui.components.button.WeButton
-import top.chengdongqing.weui.core.ui.components.cardlist.WeCardList
+import top.chengdongqing.weui.core.ui.components.cardlist.cartList
 import top.chengdongqing.weui.core.ui.components.divider.WeDivider
 import top.chengdongqing.weui.core.ui.components.loading.LoadMoreType
 import top.chengdongqing.weui.core.ui.components.loading.WeLoadMore
@@ -86,7 +87,7 @@ fun BluetoothScreen() {
 @Composable
 private fun BluetoothList(bluetoothList: List<BluetoothInfo>) {
     if (bluetoothList.isNotEmpty()) {
-        WeCardList {
+        LazyColumn(modifier = Modifier.cartList()) {
             itemsIndexed(bluetoothList, key = { _, item -> item.address }) { index, device ->
                 BluetoothListItem(device)
                 if (index < bluetoothList.lastIndex) {

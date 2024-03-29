@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
@@ -35,8 +36,8 @@ import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.core.ui.components.button.ButtonSize
 import top.chengdongqing.weui.core.ui.components.button.ButtonType
 import top.chengdongqing.weui.core.ui.components.button.WeButton
-import top.chengdongqing.weui.core.ui.components.cardlist.WeCardList
 import top.chengdongqing.weui.core.ui.components.cardlist.WeCardListItem
+import top.chengdongqing.weui.core.ui.components.cardlist.cartList
 import top.chengdongqing.weui.core.ui.components.input.WeInput
 import top.chengdongqing.weui.core.ui.components.loading.LoadMoreType
 import top.chengdongqing.weui.core.ui.components.loading.WeLoadMore
@@ -138,7 +139,11 @@ private fun PhoneContactList() {
         }
     }
     WePopup(visible, title = "通讯录", onClose = { visible = false }) {
-        WeCardList(Modifier.fillMaxHeight(0.5f)) {
+        LazyColumn(
+            modifier = Modifier
+                .cartList()
+                .fillMaxHeight(0.5f)
+        ) {
             items(contacts) {
                 WeCardListItem(label = it.first, value = it.second)
             }
@@ -209,7 +214,11 @@ fun PhoneCallLogList() {
         }
     }
     WePopup(visible, title = "通话记录", onClose = { visible = false }) {
-        WeCardList(Modifier.fillMaxHeight(0.5f)) {
+        LazyColumn(
+            modifier = Modifier
+                .cartList()
+                .fillMaxHeight(0.5f)
+        ) {
             items(logs) {
                 WeCardListItem(label = it.first, value = it.second)
             }

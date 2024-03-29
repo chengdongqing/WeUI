@@ -2,6 +2,7 @@ package top.chengdongqing.weui.feature.network.websocket
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,8 +18,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import top.chengdongqing.weui.core.ui.components.button.ButtonType
 import top.chengdongqing.weui.core.ui.components.button.WeButton
-import top.chengdongqing.weui.core.ui.components.cardlist.WeCardList
 import top.chengdongqing.weui.core.ui.components.cardlist.WeCardListItem
+import top.chengdongqing.weui.core.ui.components.cardlist.cartList
 import top.chengdongqing.weui.core.ui.components.input.WeTextarea
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
 import top.chengdongqing.weui.core.ui.components.toast.ToastIcon
@@ -95,7 +96,7 @@ private fun ConnectedScreen(
     Spacer(modifier = Modifier.height(40.dp))
     Text(text = "收到的消息", fontSize = 12.sp)
     Spacer(modifier = Modifier.height(10.dp))
-    WeCardList {
+    LazyColumn(modifier = Modifier.cartList()) {
         itemsIndexed(socketViewModel.messages) { index, item ->
             WeCardListItem(label = "${index + 1}", value = item)
         }

@@ -55,7 +55,7 @@ private class LoadMoreStateImpl(
                     isLoadingMore = true
                     launch {
                         delay(100)
-                        listState.animateScrollToItem(listState.layoutInfo.totalItemsCount - 1)
+                        listState.scrollToItem(listState.layoutInfo.totalItemsCount - 1)
                     }
                     onReachBottom()
                     isLoadingMore = false

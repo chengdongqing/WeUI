@@ -1,15 +1,16 @@
 package top.chengdongqing.weui.feature.feedback.screens
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import top.chengdongqing.weui.core.ui.components.cardlist.WeCardList
 import top.chengdongqing.weui.core.ui.components.cardlist.WeCardListItem
-import top.chengdongqing.weui.core.ui.components.dialog.rememberDialogState
-import top.chengdongqing.weui.core.ui.components.screen.WeScreen
+import top.chengdongqing.weui.core.ui.components.cardlist.cartList
 import top.chengdongqing.weui.core.ui.components.contextmenu.contextMenu
 import top.chengdongqing.weui.core.ui.components.contextmenu.rememberContextMenuState
+import top.chengdongqing.weui.core.ui.components.dialog.rememberDialogState
+import top.chengdongqing.weui.core.ui.components.screen.WeScreen
 
 @Composable
 fun ContextMenuScreen() {
@@ -29,7 +30,7 @@ fun ContextMenuScreen() {
             )
         }
 
-        WeCardList {
+        LazyColumn(modifier = Modifier.cartList()) {
             items(30) { index ->
                 Box(
                     modifier = Modifier

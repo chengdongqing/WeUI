@@ -8,6 +8,7 @@ import android.text.format.DateFormat
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,8 +27,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.core.ui.components.button.ButtonType
 import top.chengdongqing.weui.core.ui.components.button.WeButton
-import top.chengdongqing.weui.core.ui.components.cardlist.WeCardList
 import top.chengdongqing.weui.core.ui.components.cardlist.WeCardListItem
+import top.chengdongqing.weui.core.ui.components.cardlist.cartList
 import top.chengdongqing.weui.core.ui.components.input.WeInput
 import top.chengdongqing.weui.core.ui.components.loading.LoadMoreType
 import top.chengdongqing.weui.core.ui.components.loading.WeLoadMore
@@ -131,7 +132,11 @@ fun CalendarEvents() {
         }
     }
     WePopup(visible, title = "日历事件", onClose = { visible = false }) {
-        WeCardList(Modifier.fillMaxHeight(0.5f)) {
+        LazyColumn(
+            modifier = Modifier
+                .cartList()
+                .fillMaxHeight(0.5f)
+        ) {
             items(events) {
                 WeCardListItem(label = it.first, value = it.second)
             }

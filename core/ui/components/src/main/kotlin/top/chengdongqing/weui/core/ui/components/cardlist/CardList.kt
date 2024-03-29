@@ -1,16 +1,13 @@
 package top.chengdongqing.weui.core.ui.components.cardlist
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -23,21 +20,10 @@ import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.core.ui.components.divider.WeDivider
 
 @Composable
-fun WeCardList(
-    modifier: Modifier = Modifier,
-    state: LazyListState = rememberLazyListState(),
-    content: LazyListScope.() -> Unit
-) {
-    LazyColumn(
-        state = state,
-        modifier = modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.onBackground, RoundedCornerShape(8.dp))
-            .padding(horizontal = 16.dp)
-    ) {
-        content()
-    }
-}
+fun Modifier.cartList(padding: PaddingValues = PaddingValues(horizontal = 16.dp)) = this
+    .fillMaxWidth()
+    .background(MaterialTheme.colorScheme.onBackground, RoundedCornerShape(8.dp))
+    .padding(padding)
 
 @Composable
 fun WeCardListItem(label: String, value: String? = null) {

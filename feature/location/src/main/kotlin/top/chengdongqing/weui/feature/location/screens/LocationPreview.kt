@@ -2,6 +2,7 @@ package top.chengdongqing.weui.feature.location.screens
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -9,8 +10,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.amap.api.maps.model.LatLng
 import top.chengdongqing.weui.core.ui.components.button.WeButton
-import top.chengdongqing.weui.core.ui.components.cardlist.WeCardList
 import top.chengdongqing.weui.core.ui.components.cardlist.WeCardListItem
+import top.chengdongqing.weui.core.ui.components.cardlist.cartList
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
 import top.chengdongqing.weui.feature.location.data.model.LocationPreviewItem
 import top.chengdongqing.weui.feature.location.preview.previewLocation
@@ -28,7 +29,7 @@ fun LocationPreviewScreen() {
             )
         }
 
-        WeCardList {
+        LazyColumn(modifier = Modifier.cartList()) {
             item {
                 location.apply {
                     WeCardListItem(label = "纬度", value = latLng.latitude.toString())

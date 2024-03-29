@@ -8,6 +8,7 @@ import android.provider.Telephony.Sms
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
@@ -28,8 +29,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.core.ui.components.button.ButtonType
 import top.chengdongqing.weui.core.ui.components.button.WeButton
-import top.chengdongqing.weui.core.ui.components.cardlist.WeCardList
 import top.chengdongqing.weui.core.ui.components.cardlist.WeCardListItem
+import top.chengdongqing.weui.core.ui.components.cardlist.cartList
 import top.chengdongqing.weui.core.ui.components.input.WeInput
 import top.chengdongqing.weui.core.ui.components.input.WeTextarea
 import top.chengdongqing.weui.core.ui.components.loading.LoadMoreType
@@ -106,7 +107,9 @@ private fun ReadingSms() {
         }
     }
     WePopup(visible, title = "短信", onClose = { visible = false }) {
-        WeCardList(Modifier.fillMaxHeight(0.5f)) {
+        LazyColumn(modifier = Modifier
+            .cartList()
+            .fillMaxHeight(0.5f)) {
             items(messages) {
                 WeCardListItem(label = it.first, value = it.second)
             }
