@@ -2,11 +2,14 @@ package top.chengdongqing.weui.core.ui.components.picker
 
 import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import java.time.LocalTime
 
@@ -31,7 +34,75 @@ fun WeTimePicker(
         return
     }
 
-    var range by remember(start, end, type) {
+    var rangesSource by rememberRangesSource(start, end, type)
+    var values by rememberValues(rangesSource, value, start, end)
+    val ranges by rememberFinalRanges(rangesSource)
+
+    WePicker(
+        visible,
+        ranges,
+        values,
+        title = "选择时间",
+        onCancel = onCancel,
+        onColumnValueChange = { column, _, newValues ->
+            handleTimeColumnChange(rangesSource, newValues, column, start, end, type) {
+                rangesSource = it
+            }
+        }
+    ) {
+        values = it
+
+        val date = LocalTime.of(
+            rangesSource.first()[it.first()],
+            rangesSource.getOrNull(1)?.get(it[1]) ?: 0,
+            rangesSource.getOrNull(2)?.get(it[2]) ?: 0
+        )
+        onChange(date)
+    }
+}
+
+private fun handleTimeColumnChange(
+    ranges: Array<List<Int>>,
+    values: Array<Int>,
+    column: Int = 0,
+    start: LocalTime,
+    end: LocalTime,
+    type: TimeType,
+    onRangesChange: (Array<List<Int>>) -> Unit
+) {
+    if (type == TimeType.HOUR || column == 2) return
+
+    // 计算可选分钟
+    val minuteRange = when (values.first()) {
+        0 -> IntRange(start.minute, 59)
+        ranges.first().lastIndex -> IntRange(0, end.minute)
+        else -> IntRange(0, 59)
+    }
+    ranges[1] = minuteRange.toList()
+
+    // 如果精确到秒，就计算可选的秒
+    if (type == TimeType.SECOND) {
+        ranges[1].getOrNull(values[1])?.let {
+            ranges[2] = (if (values.first() == 0 && it == start.minute) {
+                IntRange(start.second, 59)
+            } else if (values.first() == ranges.first().lastIndex && it == end.minute) {
+                IntRange(0, end.second)
+            } else {
+                IntRange(0, 59)
+            }).toList()
+        }
+    }
+
+    onRangesChange(ranges.copyOf())
+}
+
+@Composable
+private fun rememberRangesSource(
+    start: LocalTime,
+    end: LocalTime,
+    type: TimeType
+): MutableState<Array<List<Int>>> {
+    return remember(start, end, type) {
         val options = arrayOf(
             IntRange(start.hour, end.hour).toList(),
             IntRange(0, 59).toList(),
@@ -45,11 +116,39 @@ fun WeTimePicker(
             }
         )
     }
-    var localValue by remember(range, value) {
-        val value1 = value ?: LocalTime.now()
-        val initialValue = if (value1.isBefore(start)) start
-        else if (value1.isAfter(end)) end
-        else value1
+}
+
+@Composable
+private fun rememberFinalRanges(ranges: Array<List<Int>>): State<Array<List<String>>> {
+    val units = remember { arrayOf("时", "分", "秒") }
+    val currentRanges by rememberUpdatedState(newValue = ranges)
+
+    return remember {
+        derivedStateOf {
+            currentRanges.mapIndexed { index, options ->
+                val unit = units[index]
+                options.map { it.toString() + unit }
+            }.toTypedArray()
+        }
+    }
+}
+
+@Composable
+private fun rememberValues(
+    range: Array<List<Int>>,
+    value: LocalTime?,
+    start: LocalTime,
+    end: LocalTime
+): MutableState<Array<Int>> {
+    return remember(range, value) {
+        val finalValue = value ?: LocalTime.now()
+        val initialValue = if (finalValue.isBefore(start)) {
+            start
+        } else if (finalValue.isAfter(end)) {
+            end
+        } else {
+            finalValue
+        }
 
         mutableStateOf(
             arrayOf(
@@ -59,55 +158,6 @@ fun WeTimePicker(
             )
         )
     }
-
-    WePicker(
-        visible,
-        title = "选择时间",
-        range = remember {
-            derivedStateOf {
-                val units = arrayOf("时", "分", "秒")
-                range.mapIndexed { listIndex, list ->
-                    val unit = units[listIndex]
-                    list.map { it.toString() + unit }
-                }.toTypedArray()
-            }
-        }.value,
-        value = localValue,
-        onColumnChange = { column, _, fullValue ->
-            if (type != TimeType.HOUR) {
-                range[1] = when (fullValue.first()) {
-                    0 -> IntRange(start.minute, 59)
-                    range.first().lastIndex -> IntRange(0, end.minute)
-                    else -> IntRange(0, 59)
-                }.toList()
-            }
-            if (type == TimeType.SECOND) {
-                range[1].getOrNull(fullValue[1])?.let {
-                    range[2] = (if (fullValue.first() == 0 && it == start.minute) {
-                        IntRange(start.second, 59)
-                    } else if (fullValue.first() == range.first().lastIndex && it == end.minute) {
-                        IntRange(0, end.second)
-                    } else {
-                        IntRange(0, 59)
-                    }).toList()
-                }
-            }
-            if (type != TimeType.HOUR && column != 2) {
-                range = range.copyOf()
-            }
-        },
-        onChange = {
-            localValue = it
-
-            val date = LocalTime.of(
-                range.first()[it.first()],
-                range.getOrNull(1)?.get(it[1]) ?: 0,
-                range.getOrNull(2)?.get(it[2]) ?: 0
-            )
-            onChange(date)
-        },
-        onCancel = onCancel
-    )
 }
 
 @Stable

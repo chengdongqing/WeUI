@@ -18,14 +18,13 @@ fun WeSingleColumnPicker(
 ) {
     WePicker(
         visible,
+        arrayOf(range),
+        arrayOf(value),
         title,
-        range = arrayOf(range),
-        value = arrayOf(value),
-        onChange = {
-            onChange(it.first())
-        },
-        onCancel = onCancel
-    )
+        onCancel
+    ) {
+        onChange(it.first())
+    }
 }
 
 @Stable

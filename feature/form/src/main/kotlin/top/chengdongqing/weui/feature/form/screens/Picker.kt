@@ -3,6 +3,7 @@ package top.chengdongqing.weui.feature.form.screens
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -11,8 +12,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import top.chengdongqing.weui.core.ui.components.button.ButtonType
 import top.chengdongqing.weui.core.ui.components.button.WeButton
 import top.chengdongqing.weui.core.ui.components.input.WeInput
+import top.chengdongqing.weui.core.ui.components.picker.DateType
+import top.chengdongqing.weui.core.ui.components.picker.TimeType
+import top.chengdongqing.weui.core.ui.components.picker.WePicker
 import top.chengdongqing.weui.core.ui.components.picker.rememberDatePickerState
 import top.chengdongqing.weui.core.ui.components.picker.rememberSingleColumnPickerState
 import top.chengdongqing.weui.core.ui.components.picker.rememberTimePickerState
@@ -25,12 +30,18 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 fun PickerScreen() {
-    WeScreen(title = "Picker", description = "滚动选择器") {
+    WeScreen(
+        title = "Picker",
+        description = "滚动选择器"
+    ) {
         DatePickDemo()
         Spacer(modifier = Modifier.height(40.dp))
         TimePickDemo()
         Spacer(modifier = Modifier.height(40.dp))
         CountryPickDemo()
+        Spacer(modifier = Modifier.height(40.dp))
+        CarPickDemo()
+        Spacer(modifier = Modifier.height(60.dp))
     }
 }
 
@@ -45,8 +56,20 @@ private fun DatePickDemo() {
         disabled = true
     )
     Spacer(modifier = Modifier.height(20.dp))
-    WeButton(text = "选择日期") {
+    WeButton(text = "选择年月日") {
         state.show(value) {
+            value = it
+        }
+    }
+    Spacer(modifier = Modifier.height(20.dp))
+    WeButton(text = "选择年月", type = ButtonType.PLAIN) {
+        state.show(value, type = DateType.MONTH) {
+            value = it
+        }
+    }
+    Spacer(modifier = Modifier.height(20.dp))
+    WeButton(text = "选择年", type = ButtonType.PLAIN) {
+        state.show(value, type = DateType.YEAR) {
             value = it
         }
     }
@@ -63,8 +86,20 @@ private fun TimePickDemo() {
         disabled = true
     )
     Spacer(modifier = Modifier.height(20.dp))
-    WeButton(text = "选择时间") {
+    WeButton(text = "选择时分秒") {
         picker.show(value) {
+            value = it
+        }
+    }
+    Spacer(modifier = Modifier.height(20.dp))
+    WeButton(text = "选择时分", type = ButtonType.PLAIN) {
+        picker.show(value, type = TimeType.MINUTE) {
+            value = it
+        }
+    }
+    Spacer(modifier = Modifier.height(20.dp))
+    WeButton(text = "选择时", type = ButtonType.PLAIN) {
+        picker.show(value, type = TimeType.HOUR) {
             value = it
         }
     }
@@ -102,5 +137,56 @@ private fun CountryPickDemo() {
         ) {
             value = it
         }
+    }
+}
+
+@Composable
+private fun CarPickDemo() {
+    var visible by remember { mutableStateOf(false) }
+    var values by remember { mutableStateOf(arrayOf(0, 0)) }
+
+    val sourceMap = remember {
+        arrayOf(
+            "小米" to listOf("SU7"),
+            "小鹏" to listOf("G9", "G6", "P7i"),
+            "理想" to listOf("Mega", "L9", "L8", "L7")
+        )
+    }
+    var tmpValues by remember { mutableStateOf(values) }
+    val ranges by remember {
+        derivedStateOf {
+            arrayOf(
+                sourceMap.map { it.first },
+                sourceMap[tmpValues.first()].second
+            )
+        }
+    }
+
+    WePicker(
+        visible,
+        ranges,
+        values,
+        title = "选择汽车",
+        onCancel = { visible = false },
+        onColumnValueChange = { _, _, newValues ->
+            tmpValues = newValues
+        }
+    ) {
+        values = it
+    }
+
+    WeInput(
+        value = remember(values) {
+            arrayOf(
+                ranges[0].getOrElse(values[0]) { 0 },
+                ranges[1].getOrElse(values[1]) { 0 }
+            ).joinToString(" ")
+        },
+        textAlign = TextAlign.Center,
+        disabled = true
+    )
+    Spacer(modifier = Modifier.height(20.dp))
+    WeButton(text = "选择汽车") {
+        visible = true
     }
 }

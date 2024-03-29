@@ -23,9 +23,9 @@ import top.chengdongqing.weui.core.utils.clickableWithoutRipple
 @Composable
 internal fun NavigationBar(navController: NavController, folders: MutableList<String>) {
     val levels = folders.size
-    val lazyListState = rememberLazyListState()
+    val listState = rememberLazyListState()
     LaunchedEffect(levels) {
-        lazyListState.animateScrollToItem(folders.lastIndex)
+        listState.animateScrollToItem(folders.lastIndex)
     }
 
     Row {
@@ -39,7 +39,7 @@ internal fun NavigationBar(navController: NavController, folders: MutableList<St
         }
         if (levels > 1) {
             FolderArrowIcon()
-            LazyRow(state = lazyListState) {
+            LazyRow(state = listState) {
                 folders.slice(1..folders.lastIndex).forEachIndexed { index, item ->
                     val label = item.slice(item.lastIndexOf("/") + 1..item.lastIndex)
                     val isActive = index + 2 == levels

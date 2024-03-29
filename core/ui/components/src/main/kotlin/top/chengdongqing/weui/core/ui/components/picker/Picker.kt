@@ -11,23 +11,22 @@ import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.Stable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,7 +39,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.flow.filter
 import top.chengdongqing.weui.core.ui.components.button.ButtonType
 import top.chengdongqing.weui.core.ui.components.button.WeButton
 import top.chengdongqing.weui.core.ui.components.popup.WePopup
@@ -50,14 +48,14 @@ import kotlin.math.roundToInt
 @Composable
 fun WePicker(
     visible: Boolean,
+    ranges: Array<List<String>>,
+    values: Array<Int>,
     title: String? = null,
-    range: Array<List<String>>,
-    value: Array<Int>,
-    onColumnChange: ((column: Int, value: Int, fullValue: Array<Int>) -> Unit)? = null,
-    onChange: (Array<Int>) -> Unit,
-    onCancel: () -> Unit
+    onCancel: () -> Unit,
+    onColumnValueChange: ((column: Int, value: Int, values: Array<Int>) -> Unit)? = null,
+    onValuesChange: (Array<Int>) -> Unit
 ) {
-    val localValue = remember(visible) { value.copyOf() }
+    val localValues = remember(visible) { values.copyOf() }
 
     WePopup(
         visible,
@@ -68,46 +66,38 @@ fun WePicker(
         onClose = onCancel
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            val indicatorColor = if (isSystemInDarkTheme()) Color(0xff202020) else Color(0xFFF7F7F7)
-
-            Box(modifier = Modifier
-                .height(280.dp)
-                .drawBehind {
-                    // 指示栏
-                    drawRoundRect(
-                        color = indicatorColor,
-                        topLeft = Offset(0f, size.height / 2 - 56.dp.toPx() / 2),
-                        size = Size(size.width, 56.dp.toPx()),
-                        cornerRadius = CornerRadius(6.dp.toPx())
+            Box(
+                modifier = Modifier
+                    .height(280.dp)
+                    .drawIndicator(
+                        if (isSystemInDarkTheme()) {
+                            Color(0xff202020)
+                        } else {
+                            Color(0xFFF7F7F7)
+                        }
                     )
-                }
             ) {
-                // 数据列表
+                // 可选列表
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    range.forEachIndexed { index, options ->
-                        PickerColumn(
-                            modifier = Modifier.weight(1f),
+                    ranges.forEachIndexed { index, options ->
+                        ColumnItem(
                             options = options,
-                            index = localValue[index]
+                            index = localValues[index]
                         ) {
-                            localValue[index] = it
-                            onColumnChange?.invoke(index, it, localValue)
+                            localValues[index] = it
+                            onColumnValueChange?.invoke(index, it, localValues.copyOf())
                         }
                     }
                 }
-                // 遮罩
-                PickerMask()
+                // 遮罩层
+                Mask()
             }
+
             Spacer(modifier = Modifier.height(56.dp))
-            Row {
-                WeButton(text = "取消", type = ButtonType.PLAIN, width = 144.dp) {
-                    onCancel()
-                }
-                Spacer(modifier = Modifier.width(20.dp))
-                WeButton(text = "确定", width = 144.dp) {
-                    onChange(localValue)
-                    onCancel()
-                }
+            // 操作栏
+            ActionBar(onCancel) {
+                onValuesChange(localValues)
+                onCancel()
             }
             Spacer(modifier = Modifier.height(20.dp))
         }
@@ -116,50 +106,50 @@ fun WePicker(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun PickerColumn(
-    modifier: Modifier,
+private fun RowScope.ColumnItem(
     options: List<String>,
     index: Int,
     onChange: (Int) -> Unit
 ) {
     val itemHeight = 56.dp
-    val context = LocalContext.current
+    val verticalPadding = remember { (280.dp - itemHeight) / 2 }
     val listState = rememberLazyListState(index)
-    val snapFlingBehavior = rememberSnapFlingBehavior(listState)
+    val context = LocalContext.current
 
     LaunchedEffect(listState) {
         snapshotFlow { listState.firstVisibleItemIndex }
-            .filter { it != index }
             .collect {
                 onChange(it)
-                context.vibrateShort()
+                if (it != index) {
+                    context.vibrateShort()
+                }
             }
     }
 
     LazyColumn(
         state = listState,
-        modifier = modifier,
-        contentPadding = PaddingValues(vertical = (280.dp - itemHeight) / 2),
+        modifier = Modifier.weight(1f),
+        contentPadding = PaddingValues(vertical = verticalPadding),
         horizontalAlignment = Alignment.CenterHorizontally,
-        flingBehavior = snapFlingBehavior
+        flingBehavior = rememberSnapFlingBehavior(listState)
     ) {
-        items(options.size) {
-            val item = options[it]
+        items(options) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(itemHeight),
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = item, color = MaterialTheme.colorScheme.onPrimary, fontSize = 17.sp)
+                Text(text = it, color = MaterialTheme.colorScheme.onPrimary, fontSize = 17.sp)
             }
         }
     }
 }
 
 @Composable
-private fun PickerMask() {
-    Column {
+private fun Mask() {
+    @Composable
+    fun ColumnScope.MaskItem(lightColors: List<Color>, darkColors: List<Color>) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -167,103 +157,59 @@ private fun PickerMask() {
                 .background(
                     Brush.verticalGradient(
                         colors = if (isSystemInDarkTheme()) {
-                            listOf(
-                                Color(25, 25, 25, (25 * 0.95).roundToInt()),
-                                Color(25, 25, 25, (25 * 0.6).roundToInt())
-                            )
+                            darkColors
                         } else {
-                            listOf(
-                                Color(255, 255, 255, (255 * 0.95).roundToInt()),
-                                Color(255, 255, 255, (255 * 0.6).roundToInt())
-                            )
-                        }
-                    )
-                )
-        )
-        Box(modifier = Modifier.height(56.dp))
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
-                .background(
-                    Brush.verticalGradient(
-                        colors = if (isSystemInDarkTheme()) {
-                            listOf(
-                                Color(25, 25, 25, (25 * 0.6).roundToInt()),
-                                Color(25, 25, 25, (25 * 0.95).roundToInt())
-                            )
-                        } else {
-                            listOf(
-                                Color(255, 255, 255, (255 * 0.6).roundToInt()),
-                                Color(255, 255, 255, (255 * 0.95).roundToInt())
-                            )
+                            lightColors
                         }
                     )
                 )
         )
     }
-}
 
-@Stable
-interface PickerState {
-    val visible: Boolean
-
-    fun show(
-        title: String? = null,
-        range: Array<List<String>>,
-        value: Array<Int>,
-        onColumnChange: ((column: Int, value: Int, fullValue: Array<Int>) -> Unit)? = null,
-        onChange: (Array<Int>) -> Unit
-    )
-
-    fun hide()
+    Column {
+        MaskItem(
+            lightColors = listOf(
+                Color(255, 255, 255, (255 * 0.95).roundToInt()),
+                Color(255, 255, 255, (255 * 0.6).roundToInt())
+            ),
+            darkColors = listOf(
+                Color(25, 25, 25, (25 * 0.95).roundToInt()),
+                Color(25, 25, 25, (25 * 0.6).roundToInt())
+            )
+        )
+        Box(modifier = Modifier.height(56.dp))
+        MaskItem(
+            lightColors = listOf(
+                Color(255, 255, 255, (255 * 0.6).roundToInt()),
+                Color(255, 255, 255, (255 * 0.95).roundToInt())
+            ),
+            darkColors = listOf(
+                Color(25, 25, 25, (25 * 0.6).roundToInt()),
+                Color(25, 25, 25, (25 * 0.95).roundToInt())
+            )
+        )
+    }
 }
 
 @Composable
-fun rememberPickerState(): PickerState {
-    val state = remember { PickerStateImpl() }
-
-    state.props?.let { props ->
-        WePicker(
-            visible = state.visible,
-            title = props.title,
-            range = props.range,
-            value = props.value,
-            onColumnChange = props.onColumnChange,
-            onChange = props.onChange,
-            onCancel = { state.hide() }
-        )
-    }
-
-    return state
+private fun Modifier.drawIndicator(color: Color) = this.drawBehind {
+    drawRoundRect(
+        color,
+        topLeft = Offset(0f, size.height / 2 - 56.dp.toPx() / 2),
+        size = Size(size.width, 56.dp.toPx()),
+        cornerRadius = CornerRadius(6.dp.toPx())
+    )
 }
 
-private class PickerStateImpl : PickerState {
-    override var visible by mutableStateOf(false)
-    var props by mutableStateOf<PickerProps?>(null)
-        private set
-
-    override fun show(
-        title: String?,
-        range: Array<List<String>>,
-        value: Array<Int>,
-        onColumnChange: ((column: Int, value: Int, fullValue: Array<Int>) -> Unit)?,
-        onChange: (Array<Int>) -> Unit
-    ) {
-        props = PickerProps(title, range, value, onColumnChange, onChange)
-        visible = true
-    }
-
-    override fun hide() {
-        visible = false
+@Composable
+private fun ActionBar(onCancel: () -> Unit, onConfirm: () -> Unit) {
+    Row {
+        WeButton(text = "取消", type = ButtonType.PLAIN, width = 144.dp) {
+            onCancel()
+        }
+        Spacer(modifier = Modifier.width(20.dp))
+        WeButton(text = "确定", width = 144.dp) {
+            onConfirm()
+        }
     }
 }
-
-@Suppress("ArrayInDataClass")
-private data class PickerProps(
-    val title: String?,
-    val range: Array<List<String>>,
-    val value: Array<Int>,
-    val onColumnChange: ((column: Int, value: Int, fullValue: Array<Int>) -> Unit)?,
-    val onChange: (Array<Int>) -> Unit
-)
