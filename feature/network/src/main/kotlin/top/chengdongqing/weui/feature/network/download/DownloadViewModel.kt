@@ -12,7 +12,7 @@ class DownloadViewModel : ViewModel() {
     }
 
     suspend fun downloadFile(filename: String): ImageBitmap? {
-        return downloadRepository.downloadFile(filename).body()?.byteStream()?.use {
+        return downloadRepository.downloadFile(filename)?.byteStream()?.use {
             BitmapFactory.decodeStream(it).asImageBitmap()
         }
     }

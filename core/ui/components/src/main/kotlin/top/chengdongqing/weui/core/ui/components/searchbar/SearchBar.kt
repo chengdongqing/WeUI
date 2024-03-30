@@ -26,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
@@ -40,7 +41,8 @@ import top.chengdongqing.weui.core.utils.clickableWithoutRipple
 fun WeSearchBar(
     value: String,
     modifier: Modifier = Modifier,
-    label: String = "搜索",
+    placeholder: String = "搜索",
+    disabled: Boolean = false,
     focused: Boolean? = null,
     onFocusChange: ((Boolean) -> Unit)? = null,
     onChange: (value: String) -> Unit
@@ -74,7 +76,8 @@ fun WeSearchBar(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxHeight()
-                .background(MaterialTheme.colorScheme.outline, RoundedCornerShape(4.dp))
+                .clip(RoundedCornerShape(6.dp))
+                .background(MaterialTheme.colorScheme.background)
         ) {
             if (finalFocused) {
                 BasicTextField(
@@ -106,7 +109,7 @@ fun WeSearchBar(
                             ) {
                                 if (value.isEmpty()) {
                                     Text(
-                                        text = label,
+                                        text = placeholder,
                                         color = MaterialTheme.colorScheme.onSecondary,
                                         fontSize = 16.sp
                                     )
@@ -119,7 +122,7 @@ fun WeSearchBar(
                 Row(
                     modifier = Modifier
                         .fillMaxSize()
-                        .clickableWithoutRipple {
+                        .clickableWithoutRipple(enabled = !disabled) {
                             setFocus(true)
                         },
                     verticalAlignment = Alignment.CenterVertically,
@@ -134,7 +137,7 @@ fun WeSearchBar(
                         tint = MaterialTheme.colorScheme.onSecondary
                     )
                     Text(
-                        text = label,
+                        text = placeholder,
                         color = MaterialTheme.colorScheme.onSecondary,
                         fontSize = 16.sp
                     )
@@ -145,6 +148,7 @@ fun WeSearchBar(
             Text(
                 text = "取消",
                 color = FontLinkColor,
+                fontSize = 16.sp,
                 modifier = Modifier
                     .clickableWithoutRipple {
                         setFocus(false)

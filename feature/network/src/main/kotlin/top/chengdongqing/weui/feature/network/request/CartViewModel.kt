@@ -10,7 +10,7 @@ class CartViewModel : ViewModel() {
         CartRepositoryImpl()
     }
 
-    suspend fun fetchRecommendProducts(): Result<List<RecommendItem>> {
+    suspend fun fetchRecommendProducts(): Result<List<RecommendItem>>? {
         return cartRepository.fetchRecommendProducts()
     }
 }

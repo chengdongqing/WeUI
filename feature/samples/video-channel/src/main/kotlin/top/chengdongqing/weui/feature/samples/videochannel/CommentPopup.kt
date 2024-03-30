@@ -52,9 +52,7 @@ internal fun CommentPopup(
 
     val density = LocalDensity.current
     val configuration = LocalConfiguration.current
-    val maxHeight = remember {
-        density.run { configuration.screenHeightDp.dp.toPx() * 0.7f }
-    }
+    val maxHeight = density.run { configuration.screenHeightDp.dp.toPx() * 0.7f }
     val currentHeight = remember(visible) { mutableFloatStateOf(maxHeight) }
     val animatedHeightDp by animateDpAsState(
         targetValue = if (visible) density.run { currentHeight.floatValue.toDp() } else 0.dp,

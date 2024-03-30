@@ -45,7 +45,7 @@ fun WeDatePicker(
         title = "选择日期",
         onCancel = onCancel,
         onColumnValueChange = { column, _, newValues ->
-            handleDateColumnChange(rangesSource, newValues, column, start, end, type) {
+            handleColumnChange(rangesSource, newValues, column, start, end, type) {
                 rangesSource = it
             }
         }
@@ -61,7 +61,7 @@ fun WeDatePicker(
     }
 }
 
-private fun handleDateColumnChange(
+private fun handleColumnChange(
     ranges: Array<List<Int>>,
     values: Array<Int>,
     column: Int = 0,

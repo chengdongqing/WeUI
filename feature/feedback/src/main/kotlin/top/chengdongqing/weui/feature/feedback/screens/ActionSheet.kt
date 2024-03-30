@@ -21,6 +21,7 @@ import top.chengdongqing.weui.core.ui.components.button.WeButton
 import top.chengdongqing.weui.core.ui.components.camera.rememberCameraLauncher
 import top.chengdongqing.weui.core.ui.components.mediapicker.rememberPickMediasLauncher
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
+import top.chengdongqing.weui.core.ui.components.toast.ToastIcon
 import top.chengdongqing.weui.core.ui.components.toast.rememberToastState
 import top.chengdongqing.weui.core.ui.theme.PrimaryColor
 
@@ -39,6 +40,7 @@ fun ActionSheetScreen() {
 private fun RequestPay() {
     val actionSheet = rememberActionSheetState()
     val toast = rememberToastState()
+
     val options = remember {
         listOf(
             ActionSheetItem("微信", color = PrimaryColor),
@@ -59,6 +61,7 @@ private fun RequestPay() {
 private fun MakeCall() {
     val actionSheet = rememberActionSheetState()
     val toast = rememberToastState()
+
     val options = remember {
         listOf(
             ActionSheetItem("视频通话", icon = {
@@ -89,8 +92,14 @@ private fun MakeCall() {
 
 @Composable
 private fun ShareToTimeline() {
-    val launchCamera = rememberCameraLauncher { _, _ -> }
-    val pickMedia = rememberPickMediasLauncher {}
+    val toast = rememberToastState()
+
+    val launchCamera = rememberCameraLauncher { _, _ ->
+        toast.show("发布成功", ToastIcon.SUCCESS)
+    }
+    val pickMedia = rememberPickMediasLauncher {
+        toast.show("发布成功", ToastIcon.SUCCESS)
+    }
 
     val actionSheet = rememberActionSheetState()
     val options = remember {

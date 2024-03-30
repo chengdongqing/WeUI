@@ -1,6 +1,7 @@
 package top.chengdongqing.weui.feature.location.data.repository
 
 import android.content.Context
+import androidx.datastore.preferences.core.edit
 import com.amap.api.maps.AMapUtils
 import com.amap.api.maps.model.LatLng
 import com.amap.api.services.core.AMapException
@@ -13,6 +14,8 @@ import com.amap.api.services.geocoder.RegeocodeResult
 import com.amap.api.services.poisearch.PoiResultV2
 import com.amap.api.services.poisearch.PoiSearchV2
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.feature.location.data.model.LocationItem
 import top.chengdongqing.weui.feature.location.utils.toLatLng
@@ -50,14 +53,12 @@ class LocationRepositoryImpl(private val context: Context) : LocationRepository 
     override suspend fun search(
         location: LatLng?,
         keyword: String,
-        category: String,
-        region: String,
         pageNum: Int,
         pageSize: Int,
         current: LatLng?
     ): List<LocationItem> = withContext(Dispatchers.IO) {
         // 构建搜索参数：关键字，类别，区域
-        val query = PoiSearchV2.Query(keyword, category, region).apply {
+        val query = PoiSearchV2.Query(keyword, "", "").apply {
             this.pageNum = pageNum
             this.pageSize = pageSize
         }
@@ -93,6 +94,25 @@ class LocationRepositoryImpl(private val context: Context) : LocationRepository 
                 override fun onPoiItemSearched(poiItem: PoiItemV2?, rCode: Int) {}
             })
             poiSearch.searchPOIAsyn()
+        }
+    }
+
+    override val currentLocation: Flow<LatLng?>
+        get() = context.locationDataStore.data
+            .map { preferences ->
+                val latitude = preferences[PreferencesKeys.LATITUDE]
+                val longitude = preferences[PreferencesKeys.LONGITUDE]
+                if (latitude != null && longitude != null) {
+                    LatLng(latitude, longitude)
+                } else {
+                    null
+                }
+            }
+
+    override suspend fun saveCurrentLocation(latLng: LatLng) {
+        context.locationDataStore.edit { preferences ->
+            preferences[PreferencesKeys.LATITUDE] = latLng.latitude
+            preferences[PreferencesKeys.LONGITUDE] = latLng.longitude
         }
     }
 }

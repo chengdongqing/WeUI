@@ -48,9 +48,7 @@ fun BoxScope.IndexBar(listState: LazyListState, groups: Map<Char, List<String>>)
     val density = LocalDensity.current
     val coroutineScope = rememberCoroutineScope()
     var heightPerIndex by remember { mutableFloatStateOf(0f) }
-    val dpHeightPerIndex = remember(heightPerIndex) {
-        with(density) { heightPerIndex.toDp() }
-    }
+    val dpHeightPerIndex = with(density) { heightPerIndex.toDp() }
     val indexes = remember { ('A'..'Z').toList() + '#' }
     var current by remember { mutableStateOf<Pair<Char, Int>?>(null) }
 

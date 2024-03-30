@@ -80,8 +80,11 @@ private class GalleryStateImpl(context: Context) : GalleryState {
     }
 
     override suspend fun LazyGridState.scrollToDate(targetDate: LocalDate) {
-        val index = dateToIndexMap[targetDate] ?: layoutInfo.totalItemsCount
-        scrollToItem(index)
+        val targetIndex = dateToIndexMap[targetDate] ?: run {
+            if (targetDate.isAfter(mediaGroups.keys.first())) 0
+            else layoutInfo.totalItemsCount
+        }
+        scrollToItem(targetIndex)
     }
 
     private val mediaRepository by lazy { LocalMediaRepositoryImpl(context) }

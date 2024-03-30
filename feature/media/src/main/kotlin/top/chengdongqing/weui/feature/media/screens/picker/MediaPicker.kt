@@ -97,7 +97,7 @@ fun MediaPickerScreen() {
 
         val density = LocalDensity.current
         val configuration = LocalConfiguration.current
-        val screenHeight = remember { density.run { configuration.screenHeightDp.dp.toPx() } }
+        val screenHeight = density.run { configuration.screenHeightDp.dp.toPx() }
         val bottomBarHeight = remember { mutableIntStateOf(0) }
         val currentItemHeight = remember { mutableIntStateOf(0) }
         val currentPositionY = remember { mutableFloatStateOf(0f) }

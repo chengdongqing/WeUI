@@ -37,6 +37,7 @@ fun FileUploadScreen(uploadViewModel: UploadViewModel = viewModel()) {
 
         val toast = rememberToastState()
         val coroutineScope = rememberCoroutineScope()
+
         val pickMedia = rememberPickMediasLauncher {
             uploading = true
             coroutineScope.launch {

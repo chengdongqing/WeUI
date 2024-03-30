@@ -6,15 +6,20 @@ import okhttp3.MultipartBody
 import top.chengdongqing.weui.feature.network.upload.data.model.UploadResult
 import top.chengdongqing.weui.feature.network.upload.retrofit.RetrofitManger
 import top.chengdongqing.weui.feature.network.upload.retrofit.UploadService
+import java.io.IOException
 
 class UploadRepositoryImpl : UploadRepository {
     private val uploadService by lazy {
         RetrofitManger.retrofit.create(UploadService::class.java)
     }
 
-    override suspend fun uploadFile(file: MultipartBody.Part): UploadResult {
+    override suspend fun uploadFile(file: MultipartBody.Part): UploadResult? {
         return withContext(Dispatchers.IO) {
-            uploadService.uploadFile(file)
+            try {
+                uploadService.uploadFile(file)
+            } catch (e: IOException) {
+                null
+            }
         }
     }
 }

@@ -59,7 +59,7 @@ class UploadViewModel(private val application: Application) : AndroidViewModel(a
                 val requestFile = file.asRequestBody(metadata.second.toMediaType())
                 val body = MultipartBody.Part.createFormData("file", metadata.first, requestFile)
 
-                uploadRepository.uploadFile(body).files.file
+                uploadRepository.uploadFile(body)?.files?.file
             } else {
                 null
             }

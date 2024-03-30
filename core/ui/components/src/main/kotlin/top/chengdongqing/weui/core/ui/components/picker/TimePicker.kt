@@ -45,7 +45,7 @@ fun WeTimePicker(
         title = "选择时间",
         onCancel = onCancel,
         onColumnValueChange = { column, _, newValues ->
-            handleTimeColumnChange(rangesSource, newValues, column, start, end, type) {
+            handleColumnChange(rangesSource, newValues, column, start, end, type) {
                 rangesSource = it
             }
         }
@@ -61,7 +61,7 @@ fun WeTimePicker(
     }
 }
 
-private fun handleTimeColumnChange(
+private fun handleColumnChange(
     ranges: Array<List<Int>>,
     values: Array<Int>,
     column: Int = 0,

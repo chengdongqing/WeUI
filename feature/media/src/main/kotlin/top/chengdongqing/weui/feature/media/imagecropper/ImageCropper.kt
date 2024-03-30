@@ -42,13 +42,11 @@ fun WeImageCropper(uri: Uri, onCancel: () -> Unit, onConfirm: (Uri) -> Unit) {
     val context = LocalContext.current
     val density = LocalDensity.current
     val configuration = LocalConfiguration.current
-    val screenSize = remember {
-        density.run {
-            Size(
-                width = configuration.screenWidthDp.dp.toPx(),
-                height = configuration.screenHeightDp.dp.toPx()
-            )
-        }
+    val screenSize = density.run {
+        Size(
+            width = configuration.screenWidthDp.dp.toPx(),
+            height = configuration.screenHeightDp.dp.toPx()
+        )
     }
     val coroutineScope = rememberCoroutineScope()
 

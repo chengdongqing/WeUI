@@ -47,7 +47,7 @@ fun HttpRequestScreen(viewModel: CartViewModel = viewModel()) {
                 val res = viewModel.fetchRecommendProducts()
                 loading = false
 
-                if (res.code == 200) {
+                if (res?.code == 200) {
                     val gson = GsonBuilder().setPrettyPrinting().create()
                     content = gson.toJson(res)
                 } else {

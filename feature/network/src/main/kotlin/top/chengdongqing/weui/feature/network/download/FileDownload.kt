@@ -12,6 +12,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
 import top.chengdongqing.weui.core.ui.components.button.WeButton
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
+import top.chengdongqing.weui.core.ui.components.toast.ToastIcon
+import top.chengdongqing.weui.core.ui.components.toast.rememberToastState
 
 @Composable
 fun FileDownloadScreen(downloadViewModel: DownloadViewModel = viewModel()) {
@@ -19,6 +21,7 @@ fun FileDownloadScreen(downloadViewModel: DownloadViewModel = viewModel()) {
         var bitmap by remember { mutableStateOf<ImageBitmap?>(null) }
         var downloading by remember { mutableStateOf(false) }
         val coroutineScope = rememberCoroutineScope()
+        val toast = rememberToastState()
 
         bitmap?.let {
             Image(bitmap = it, contentDescription = null)
@@ -28,7 +31,11 @@ fun FileDownloadScreen(downloadViewModel: DownloadViewModel = viewModel()) {
         ) {
             downloading = true
             coroutineScope.launch {
-                bitmap = downloadViewModel.downloadFile("section1.jpg")
+                bitmap = downloadViewModel.downloadFile("section1.jpg").also {
+                    if (it == null) {
+                        toast.show("下载失败", ToastIcon.FAIL)
+                    }
+                }
                 downloading = false
             }
         }

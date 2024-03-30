@@ -14,7 +14,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
@@ -64,7 +63,7 @@ private fun RollerItem(
     animationDuration: Int
 ) {
     val density = LocalDensity.current
-    val heightPerItem = remember { density.run { 35.dp.toPx().roundToInt() } }
+    val heightPerItem = density.run { 35.dp.toPx().roundToInt() }
     val scrollState = rememberScrollState(start * heightPerItem)
 
     // 滚动到目标位置
