@@ -6,10 +6,9 @@ import top.chengdongqing.weui.feature.system.address.repository.Address
 import top.chengdongqing.weui.feature.system.address.repository.AddressRepositoryImpl
 
 class AddressViewModel(application: Application) : AndroidViewModel(application) {
-    private val addressRepository by lazy {
-        AddressRepositoryImpl(application)
-    }
-    val addressList by lazy { addressRepository.addressList }
+    private val addressRepository = AddressRepositoryImpl(application)
+
+    val addressList = addressRepository.addressList
 
     suspend fun insert(address: Address) {
         return addressRepository.insert(address)

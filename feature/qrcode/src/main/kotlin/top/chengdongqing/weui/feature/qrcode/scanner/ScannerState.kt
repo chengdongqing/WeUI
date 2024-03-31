@@ -67,14 +67,12 @@ private class ScannerStateImpl(
     private val executor: ExecutorService,
     private val onChange: (List<Barcode>) -> Unit
 ) : ScannerState {
-    override val previewView by lazy {
-        PreviewView(context).apply {
-            layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-            )
-            keepScreenOn = true
-        }
+    override val previewView = PreviewView(context).apply {
+        layoutParams = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
+        keepScreenOn = true
     }
     override var isFlashOn by mutableStateOf(false)
 

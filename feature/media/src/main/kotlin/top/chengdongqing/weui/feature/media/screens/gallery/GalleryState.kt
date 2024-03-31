@@ -87,6 +87,6 @@ private class GalleryStateImpl(context: Context) : GalleryState {
         scrollToItem(targetIndex)
     }
 
-    private val mediaRepository by lazy { LocalMediaRepositoryImpl(context) }
+    private val mediaRepository = LocalMediaRepositoryImpl(context)
     private val dateToIndexMap = mutableMapOf<LocalDate, Int>()
 }

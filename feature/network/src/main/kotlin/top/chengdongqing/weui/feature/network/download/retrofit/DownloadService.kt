@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.feature.network.download.repository
+package top.chengdongqing.weui.feature.network.download.retrofit
 
 import okhttp3.ResponseBody
 import retrofit2.http.GET

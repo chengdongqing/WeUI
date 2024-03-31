@@ -9,7 +9,7 @@ import top.chengdongqing.weui.feature.samples.filebrowser.data.model.FileItem
 import top.chengdongqing.weui.feature.samples.filebrowser.data.repository.FileRepositoryImpl
 
 class FileListViewModel : ViewModel() {
-    private val fileRepository by lazy { FileRepositoryImpl() }
+    private val fileRepository = FileRepositoryImpl()
 
     var fileListResult by mutableStateOf<Result<List<FileItem>>>(Result.Loading)
         private set

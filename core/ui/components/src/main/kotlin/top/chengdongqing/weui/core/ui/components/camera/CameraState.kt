@@ -135,14 +135,12 @@ private class CameraStateImpl(
     private val coroutineScope: CoroutineScope,
     private val onCapture: (Uri, VisualMediaType) -> Unit
 ) : CameraState {
-    override val previewView by lazy {
-        PreviewView(context).apply {
-            layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-            )
-            keepScreenOn = true
-        }
+    override val previewView = PreviewView(context).apply {
+        layoutParams = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
+        keepScreenOn = true
     }
     override var isFlashOn by mutableStateOf(false)
     override var isRecording by mutableStateOf(false)
@@ -178,10 +176,17 @@ private class CameraStateImpl(
         val tempFile = File.createTempFile("IMG_", ".jpg").apply {
             deleteOnExit()
         }
-        val outputFileOptions = ImageCapture.OutputFileOptions.Builder(tempFile).build()
+
+        val metadata = ImageCapture.Metadata()
+        // 自拍时镜像处理
+        metadata.isReversedHorizontal = isUsingFrontCamera
+
+        val outputOptions = ImageCapture.OutputFileOptions.Builder(tempFile)
+            .setMetadata(metadata)
+            .build()
 
         imageCapture.takePicture(
-            outputFileOptions,
+            outputOptions,
             executor,
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
@@ -205,12 +210,12 @@ private class CameraStateImpl(
         val tempFile = File.createTempFile("VID_", ".mp4").apply {
             deleteOnExit()
         }
-        val outputFileOptions = FileOutputOptions.Builder(tempFile)
+        val outputOptions = FileOutputOptions.Builder(tempFile)
             .setDurationLimitMillis(milliseconds)
             .build()
 
         recordingInstance = videoCapture.output
-            .prepareRecording(context, outputFileOptions)
+            .prepareRecording(context, outputOptions)
             .withAudioEnabled()
             .start(executor) { event ->
                 when (event) {
