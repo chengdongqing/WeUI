@@ -45,6 +45,7 @@ fun WeSearchBar(
     disabled: Boolean = false,
     focused: Boolean? = null,
     onFocusChange: ((Boolean) -> Unit)? = null,
+    onClick: (() -> Unit)? = null,
     onChange: (value: String) -> Unit
 ) {
     var localFocused by remember { mutableStateOf(false) }
@@ -122,8 +123,11 @@ fun WeSearchBar(
                 Row(
                     modifier = Modifier
                         .fillMaxSize()
-                        .clickableWithoutRipple(enabled = !disabled) {
-                            setFocus(true)
+                        .clickableWithoutRipple {
+                            if (!disabled) {
+                                setFocus(true)
+                            }
+                            onClick?.invoke()
                         },
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center

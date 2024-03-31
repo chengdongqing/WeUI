@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -41,18 +40,26 @@ import com.amap.api.maps.AMapOptions
 import com.amap.api.maps.CameraUpdateFactory
 import com.amap.api.maps.MapView
 import com.amap.api.maps.MapsInitializer
+import com.amap.api.maps.model.LatLng
 import com.amap.api.maps.model.MyLocationStyle
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import top.chengdongqing.weui.core.ui.components.R
 import top.chengdongqing.weui.core.utils.isTrue
+import top.chengdongqing.weui.core.utils.showToast
 import top.chengdongqing.weui.feature.location.utils.createBitmapDescriptor
 import top.chengdongqing.weui.feature.location.utils.isLoaded
 import top.chengdongqing.weui.feature.location.utils.toLatLng
 
 @Composable
-fun AMap(modifier: Modifier = Modifier, state: AMapState = rememberAMapState()) {
+fun AMap(
+    modifier: Modifier = Modifier,
+    state: AMapState = rememberAMapState(),
+    controls: @Composable BoxScope.(AMap) -> Unit = {
+        LocationControl(it)
+    }
+) {
     val context = LocalContext.current
     // 处理生命周期
     LifecycleEffect(state.mapView)
@@ -66,12 +73,12 @@ fun AMap(modifier: Modifier = Modifier, state: AMapState = rememberAMapState()) 
             factory = { state.mapView },
             modifier = Modifier.fillMaxSize()
         )
-        LocationControl(map = state.map)
+        controls(state.map)
     }
 }
 
 @Composable
-private fun BoxScope.LocationControl(map: AMap) {
+fun BoxScope.LocationControl(map: AMap, onClick: ((LatLng) -> Unit)? = null) {
     val context = LocalContext.current
 
     Box(
@@ -87,11 +94,11 @@ private fun BoxScope.LocationControl(map: AMap) {
                             ?.isLoaded()
                             .isTrue()
                     ) {
-                        animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation.toLatLng(), 16f))
+                        val latLng = myLocation.toLatLng()
+                        animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16f))
+                        onClick?.invoke(latLng)
                     } else {
-                        Toast
-                            .makeText(context, "定位中...", Toast.LENGTH_SHORT)
-                            .show()
+                        context.showToast("定位中...")
                     }
                 }
             },

@@ -9,10 +9,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -26,7 +28,11 @@ enum class LoadMoreType {
 }
 
 @Composable
-fun WeLoadMore(modifier: Modifier = Modifier, type: LoadMoreType = LoadMoreType.LOADING) {
+fun WeLoadMore(
+    modifier: Modifier = Modifier,
+    type: LoadMoreType = LoadMoreType.LOADING,
+    listState: LazyListState? = null
+) {
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -43,6 +49,12 @@ fun WeLoadMore(modifier: Modifier = Modifier, type: LoadMoreType = LoadMoreType.
                     color = MaterialTheme.colorScheme.onSecondary,
                     fontSize = 14.sp
                 )
+
+                if (listState != null) {
+                    LaunchedEffect(Unit) {
+                        listState.scrollToItem(listState.layoutInfo.totalItemsCount)
+                    }
+                }
             }
 
             LoadMoreType.EMPTY_DATA -> {

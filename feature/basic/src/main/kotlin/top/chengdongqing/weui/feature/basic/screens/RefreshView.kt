@@ -25,7 +25,7 @@ fun RefreshViewScreen() {
                 addAll(List(30) { "${it + 1}" })
             }
         }
-        val loadMoreState = rememberLoadMoreState(listState) {
+        val loadMoreState = rememberLoadMoreState {
             delay(2000)
             listItems.addAll(List(30) { index -> "${listItems.size + index + 1}" })
         }
@@ -42,9 +42,9 @@ fun RefreshViewScreen() {
                 items(listItems, key = { it }) {
                     WeCardListItem(label = "第${it}行")
                 }
-                if (loadMoreState.isLoadingMore) {
-                    item {
-                        WeLoadMore()
+                item {
+                    if (loadMoreState.isLoadingMore) {
+                        WeLoadMore(listState = listState)
                     }
                 }
             }

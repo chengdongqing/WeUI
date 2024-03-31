@@ -3,6 +3,7 @@ package top.chengdongqing.weui.feature.location.picker
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.TweenSpec
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -14,6 +15,8 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -33,7 +36,9 @@ import top.chengdongqing.weui.core.ui.components.button.ButtonSize
 import top.chengdongqing.weui.core.ui.components.button.WeButton
 import top.chengdongqing.weui.core.utils.clickableWithoutRipple
 import top.chengdongqing.weui.feature.location.AMap
+import top.chengdongqing.weui.feature.location.LocationControl
 import top.chengdongqing.weui.feature.location.data.model.LocationItem
+import top.chengdongqing.weui.feature.location.picker.locationlist.SearchableLocationList
 import top.chengdongqing.weui.feature.location.rememberAMapState
 import top.chengdongqing.weui.feature.location.utils.createBitmapDescriptor
 
@@ -43,11 +48,16 @@ fun WeLocationPicker(
     onConfirm: (LocationItem) -> Unit
 ) {
     val mapState = rememberAMapState()
-    val state = rememberLocationPickerState(mapState.map)
+    val listState = rememberLazyListState()
+    val state = rememberLocationPickerState(mapState.map, listState)
 
     Column(modifier = Modifier.fillMaxSize()) {
         Box(modifier = Modifier.weight(1f)) {
-            AMap(state = mapState)
+            AMap(state = mapState) { map ->
+                LocationControl(map) {
+                    state.mapCenterLatLng = it
+                }
+            }
             TopBar(
                 hasSelected = state.selectedLocation != null,
                 onCancel
@@ -56,16 +66,18 @@ fun WeLocationPicker(
             }
             LocationMarker(state)
         }
-        BottomPanel(state)
+        Box(modifier = Modifier.background(MaterialTheme.colorScheme.surface)) {
+            SearchableLocationList(state, listState)
+        }
     }
 }
 
 @Composable
 private fun BoxScope.LocationMarker(state: LocationPickerState) {
-    if (!state.isSearchMode || state.selectedLocation == null) {
+    if (!state.isSearchMode) {
         val offsetY = remember { Animatable(0f) }
         val animationSpec = remember { TweenSpec<Float>(durationMillis = 300) }
-        LaunchedEffect(state.mapCenter) {
+        LaunchedEffect(state.mapCenterLatLng) {
             offsetY.animateTo(-10f, animationSpec)
             offsetY.animateTo(0f, animationSpec)
         }
@@ -77,7 +89,7 @@ private fun BoxScope.LocationMarker(state: LocationPickerState) {
                 .size(50.dp)
                 .offset(y = (-25).dp + offsetY.value.dp)
         )
-    } else {
+    } else if (state.selectedLocation != null) {
         val context = LocalContext.current
         DisposableEffect(state.selectedLocation) {
             val markerOptions = MarkerOptions().apply {

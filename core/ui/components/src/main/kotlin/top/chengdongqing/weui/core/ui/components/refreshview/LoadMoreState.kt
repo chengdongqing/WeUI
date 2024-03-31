@@ -1,6 +1,5 @@
 package top.chengdongqing.weui.core.ui.components.refreshview
 
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
@@ -28,19 +27,15 @@ interface LoadMoreState {
 }
 
 @Composable
-fun rememberLoadMoreState(
-    listState: LazyListState,
-    onReachBottom: suspend () -> Unit
-): LoadMoreState {
+fun rememberLoadMoreState(onReachBottom: suspend () -> Unit): LoadMoreState {
     val coroutineScope = rememberCoroutineScope()
 
     return remember {
-        LoadMoreStateImpl(listState, onReachBottom, coroutineScope)
+        LoadMoreStateImpl(onReachBottom, coroutineScope)
     }
 }
 
 private class LoadMoreStateImpl(
-    listState: LazyListState,
     onReachBottom: suspend () -> Unit,
     coroutineScope: CoroutineScope
 ) : LoadMoreState {
@@ -53,10 +48,7 @@ private class LoadMoreStateImpl(
             if (available.y < 0) {
                 coroutineScope.launch {
                     isLoadingMore = true
-                    launch {
-                        delay(100)
-                        listState.scrollToItem(listState.layoutInfo.totalItemsCount - 1)
-                    }
+                    delay(200)
                     onReachBottom()
                     isLoadingMore = false
                 }
