@@ -30,7 +30,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 import top.chengdongqing.weui.core.ui.components.actionsheet.ActionSheetItem
 import top.chengdongqing.weui.core.ui.components.actionsheet.rememberActionSheetState
@@ -44,7 +43,7 @@ import top.chengdongqing.weui.feature.system.address.repository.Address
 
 @Composable
 fun AddressList(
-    navController: NavController,
+    onNavigateToAddressForm: (id: Int?) -> Unit,
     addressViewModel: AddressViewModel = viewModel()
 ) {
     val context = LocalContext.current
@@ -62,15 +61,6 @@ fun AddressList(
         )
     }
 
-    fun navigateToForm(id: Int? = null) {
-        navController.navigate(buildString {
-            append("address_form")
-            if (id != null) {
-                append("?id=${id}")
-            }
-        })
-    }
-
     LazyColumn {
         items(addressList) { item ->
             AddressListItem(item,
@@ -78,7 +68,7 @@ fun AddressList(
                     actionSheet.show(actions) { action ->
                         when (action) {
                             0 -> {
-                                navigateToForm(item.id)
+                                onNavigateToAddressForm(item.id)
                             }
 
                             1 -> {
@@ -100,13 +90,14 @@ fun AddressList(
                             }
                         }
                     }
-                }) {
-                navigateToForm(item.id)
+                }
+            ) {
+                onNavigateToAddressForm(item.id)
             }
         }
         item {
             AddAddressButton {
-                navigateToForm()
+                onNavigateToAddressForm(null)
             }
         }
     }

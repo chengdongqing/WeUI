@@ -30,7 +30,11 @@ import top.chengdongqing.weui.core.ui.components.toast.rememberToastState
 
 @Composable
 fun HttpRequestScreen(viewModel: CartViewModel = viewModel()) {
-    WeScreen(title = "HttpRequest", description = "Http请求", scrollEnabled = false) {
+    WeScreen(
+        title = "HttpRequest",
+        description = "HTTP请求（OkHttp+Retrofit）",
+        scrollEnabled = false
+    ) {
         val toast = rememberToastState()
         val coroutineScope = rememberCoroutineScope()
         var content by remember { mutableStateOf<String?>(null) }

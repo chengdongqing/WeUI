@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -35,7 +36,7 @@ fun BarChartScreen() {
         containerColor = MaterialTheme.colorScheme.surface,
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        var dataSource by remember { mutableStateOf(buildData()) }
+        var dataSource by rememberSaveable { mutableStateOf(buildData()) }
         val (color, toggleColor) = rememberToggleState(
             defaultValue = PrimaryColor.copy(0.8f),
             reverseValue = WarningColor.copy(0.8f)

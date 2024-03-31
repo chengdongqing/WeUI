@@ -30,7 +30,14 @@ fun NavGraphBuilder.addSystemGraph(navController: NavController) {
         DownloaderScreen()
     }
     composable("database") {
-        DatabaseScreen(navController)
+        DatabaseScreen { addressId ->
+            navController.navigate(buildString {
+                append("address_form")
+                if (addressId != null) {
+                    append("?id=${addressId}")
+                }
+            })
+        }
     }
     composable("address_form?id={id}") {
         val id = it.arguments?.getString("id")?.toInt()

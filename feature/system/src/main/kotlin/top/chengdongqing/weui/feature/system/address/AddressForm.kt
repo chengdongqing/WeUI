@@ -39,7 +39,7 @@ fun AddressFormScreen(
         description = "${if (id == null) "新增" else "编辑"}收货地址"
     ) {
         val address = remember { mutableStateMapOf<String, String>() }
-        val hasAllEntered by remember {
+        val isAllFilled by remember {
             derivedStateOf {
                 address.filter { it.value.isNotEmpty() }.size == 3
             }
@@ -86,7 +86,7 @@ fun AddressFormScreen(
             WeButton(
                 text = "确定",
                 modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
-                disabled = !hasAllEntered
+                disabled = !isAllFilled
             ) {
                 val value = Address(
                     name = address["name"]!!,

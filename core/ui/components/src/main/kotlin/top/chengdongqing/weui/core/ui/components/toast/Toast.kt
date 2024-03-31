@@ -84,7 +84,7 @@ fun WeToast(
         mutableStateOf(visible)
     }
 
-    LaunchedEffect(visible, duration) {
+    LaunchedEffect(visible, duration, title) {
         if (visible && duration != Duration.INFINITE) {
             delay(duration)
             onClose()

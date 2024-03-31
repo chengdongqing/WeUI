@@ -107,6 +107,7 @@ fun rememberLocationPickerState(map: AMap, listState: LazyListState): LocationPi
         )
     }
 
+    // 恢复上次缓存的位置信息
     LaunchedEffect(currentLocation.value) {
         currentLocation.value?.let {
             if (state.mapCenterLatLng == null) {
@@ -131,6 +132,7 @@ private class LocationPickerStateImpl(
         set(value) {
             value?.let {
                 coroutineScope.launch {
+                    // 缓存到datastore，方便再次进入时快速获取定位
                     locationRepository.saveCurrentLocation(it)
                 }
             }
@@ -140,8 +142,14 @@ private class LocationPickerStateImpl(
         set(value) {
             _mapCenterLatLng = value
 
-            if (value != null && !isSearchMode) {
+            // 退出搜索模式
+            if (isSearchMode) {
+                isSearchMode = false
+            }
+            if (value != null) {
+                // 重置选中项
                 selectedIndex = 0
+                // 准备刷新
                 paging.startRefresh()
                 coroutineScope.launch {
                     // 获取地图中心点的位置信息，转为列表是方便和之后附近的位置列表合并
@@ -163,7 +171,9 @@ private class LocationPickerStateImpl(
             isListExpanded = value
 
             if (!value) {
+                // 重置搜索结果
                 pagingOfSearch.dataList = emptyList()
+                // 恢复地图视野
                 mapCenterLatLng?.let {
                     map.animateCamera(CameraUpdateFactory.newLatLngZoom(it, 16f))
                 }
@@ -234,7 +244,7 @@ private class LocationPickerStateImpl(
             mapCenterLatLng = it.coordinate
         }
         map.setOnMapTouchListener {
-            if (it.action == MotionEvent.ACTION_UP) {
+            if (it.action == MotionEvent.ACTION_UP && !isSearchMode) {
                 mapCenterLatLng = map.cameraPosition.target
             }
         }

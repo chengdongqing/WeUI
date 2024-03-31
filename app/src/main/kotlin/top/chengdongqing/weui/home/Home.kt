@@ -36,8 +36,6 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import top.chengdongqing.weui.R
 import top.chengdongqing.weui.core.ui.components.divider.WeDivider
 import top.chengdongqing.weui.core.ui.theme.FontColorDark
@@ -48,7 +46,7 @@ import top.chengdongqing.weui.home.data.model.MenuGroup
 import top.chengdongqing.weui.home.data.model.MenuItem
 
 @Composable
-fun HomeScreen(navController: NavHostController) {
+fun HomeScreen(onNavigateTo: (route: String) -> Unit) {
     var current by rememberSaveable { mutableStateOf<Int?>(null) }
 
     LazyColumn(
@@ -64,7 +62,7 @@ fun HomeScreen(navController: NavHostController) {
             MenuGroup(
                 item,
                 expanded = index == current,
-                navController
+                onNavigateTo
             ) {
                 current = if (current == index) null else index
             }
@@ -121,7 +119,7 @@ private fun HomeFooter() {
 private fun MenuGroup(
     group: MenuGroup,
     expanded: Boolean,
-    navController: NavController,
+    onNavigateTo: (route: String) -> Unit,
     onToggleExpand: () -> Unit
 ) {
     Column(
@@ -131,7 +129,7 @@ private fun MenuGroup(
     ) {
         MenuGroupHeader(group, expanded) {
             if (group.path != null) {
-                navController.navigate(group.path)
+                onNavigateTo(group.path)
             } else {
                 onToggleExpand()
             }
@@ -141,7 +139,7 @@ private fun MenuGroup(
                 Column {
                     val children = remember { group.children.sortedBy { it.label } }
                     children.forEachIndexed { index, item ->
-                        MenuGroupItem(item, navController)
+                        MenuGroupItem(item, onNavigateTo)
                         if (index < group.children.lastIndex) {
                             WeDivider(Modifier.padding(horizontal = 20.dp))
                         }
@@ -179,11 +177,11 @@ private fun MenuGroupHeader(group: MenuGroup, expanded: Boolean, onClick: () -> 
 }
 
 @Composable
-private fun MenuGroupItem(item: MenuItem, navController: NavController) {
+private fun MenuGroupItem(item: MenuItem, onNavigateTo: (route: String) -> Unit) {
     Row(
         Modifier
             .clickable {
-                navController.navigate(item.route)
+                onNavigateTo(item.route)
             }
             .padding(horizontal = 20.dp, vertical = 16.dp),
         verticalAlignment = Alignment.CenterVertically

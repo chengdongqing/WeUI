@@ -28,7 +28,7 @@ import java.io.File
 fun FileListScreen(
     path: String,
     fileViewModel: FileListViewModel = viewModel(),
-    navigateToFolder: (String) -> Unit
+    onNavigateTo: (String) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
     LaunchedEffect(path) {
@@ -43,8 +43,8 @@ fun FileListScreen(
     }) {
         FileList(
             fileListResult = fileViewModel.fileListResult,
-            navigateToFolder = {
-                navigateToFolder(it)
+            onNavigateTo = {
+                onNavigateTo(it)
             }
         ) {
             coroutineScope.launch {
@@ -57,7 +57,7 @@ fun FileListScreen(
 @Composable
 private fun FileList(
     fileListResult: Result<List<FileItem>>,
-    navigateToFolder: (String) -> Unit,
+    onNavigateTo: (String) -> Unit,
     onDeleted: () -> Unit
 ) {
     val context = LocalContext.current
@@ -88,7 +88,7 @@ private fun FileList(
                         FileListItem(
                             item,
                             onFolderClick = {
-                                navigateToFolder(item.path)
+                                onNavigateTo(item.path)
                             },
                             onFileClick = {
                                 context.openFile(File(item.path), item.mimeType)

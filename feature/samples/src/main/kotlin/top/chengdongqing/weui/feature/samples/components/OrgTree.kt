@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,7 +52,7 @@ fun WeOrgTree(dataSource: List<OrgNode>, isTopLevel: Boolean = true) {
             .drawHorizontalLine(dataSource, layoutCoordinates, lineColor, spacing)
     ) {
         dataSource.forEachIndexed { index, item ->
-            var expended by remember { mutableStateOf(item.children.isEmpty()) }
+            var expended by rememberSaveable { mutableStateOf(item.children.isEmpty()) }
 
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,

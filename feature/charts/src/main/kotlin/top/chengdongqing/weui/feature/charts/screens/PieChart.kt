@@ -5,7 +5,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.core.ui.components.button.ButtonType
@@ -25,7 +25,7 @@ fun PieChartScreen() {
         containerColor = MaterialTheme.colorScheme.surface,
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        var dataSource by remember { mutableStateOf(buildData()) }
+        var dataSource by rememberSaveable { mutableStateOf(buildData()) }
         val (ringWidth, toggleRingWidth) = rememberToggleState(
             defaultValue = 0.dp,
             reverseValue = 30.dp
