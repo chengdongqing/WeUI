@@ -165,14 +165,15 @@ private suspend fun Context.saveToAlbum(media: MediaItem): Boolean {
 
     return withContext(Dispatchers.IO) {
         try {
+            val contentUri = MediaStoreUtils.getContentUri(media.mediaType)
             val contentValues = MediaStoreUtils.createContentValues(
                 media.filename,
                 media.mediaType,
                 media.mimeType,
                 context
             )
-            val contentUri = MediaStoreUtils.getContentUri(media.mediaType)
-            context.contentResolver.apply {
+
+            contentResolver.apply {
                 insert(contentUri, contentValues)?.let { newMediaUri ->
                     openOutputStream(newMediaUri)?.use { outputStream ->
                         openInputStream(media.uri)?.use { inputStream ->

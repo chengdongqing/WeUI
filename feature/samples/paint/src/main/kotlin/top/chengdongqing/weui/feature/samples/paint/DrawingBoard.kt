@@ -16,15 +16,25 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.unit.IntSize
 
 @Composable
-internal fun DrawingBoard(paths: MutableList<StrokeItem>, color: Color, strokeWidth: Float) {
+fun DrawingBoard(
+    paths: MutableList<StrokeItem>,
+    color: Color,
+    strokeWidth: Float,
+    onSizeChange: (IntSize) -> Unit
+) {
     val currentPath = remember { mutableStateOf<Path?>(null) }
     val currentOffset = remember { mutableStateOf<Offset?>(null) }
 
     Canvas(
         modifier = Modifier
             .fillMaxSize()
+            .onSizeChanged {
+                onSizeChange(it)
+            }
             .background(Color.White)
             .pointerInput(color, strokeWidth) {
                 detectDragGestures(

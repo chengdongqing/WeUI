@@ -8,11 +8,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -21,6 +19,7 @@ import androidx.compose.material.icons.automirrored.outlined.KeyboardReturn
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Brush
 import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.Download
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -38,12 +37,13 @@ import androidx.compose.ui.zIndex
 import top.chengdongqing.weui.core.ui.theme.BackgroundColorLight
 
 @Composable
-internal fun DrawingTools(
+fun DrawingTools(
     color: Color,
     onColorChange: (Color) -> Unit,
     onWidthChange: (Float) -> Unit,
     onBack: () -> Unit,
-    onClear: () -> Unit
+    onClear: () -> Unit,
+    onSave: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -57,7 +57,7 @@ internal fun DrawingTools(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             MoreBrushes(color, onWidthChange)
-            MoreTools(onBack, onClear)
+            MoreTools(onBack, onClear, onSave)
         }
     }
 }
@@ -90,15 +90,20 @@ private fun MoreColors(onColorChange: (Color) -> Unit) {
 }
 
 @Composable
-private fun MoreTools(onRollback: () -> Unit, onClear: () -> Unit) {
+private fun MoreTools(
+    onBack: () -> Unit,
+    onClear: () -> Unit,
+    onSave: () -> Unit
+) {
     Row(
         modifier = Modifier
             .padding(top = 8.dp)
             .height(with(LocalDensity.current) { 196.toDp() }),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         IconButton(
-            onClick = onRollback,
+            onClick = onBack,
             modifier = Modifier.padding(vertical = 4.dp)
         ) {
             Icon(
@@ -106,7 +111,6 @@ private fun MoreTools(onRollback: () -> Unit, onClear: () -> Unit) {
                 contentDescription = "回退"
             )
         }
-        Spacer(modifier = Modifier.width(16.dp))
         IconButton(
             onClick = onClear,
             modifier = Modifier.padding(vertical = 4.dp)
@@ -114,6 +118,15 @@ private fun MoreTools(onRollback: () -> Unit, onClear: () -> Unit) {
             Icon(
                 imageVector = Icons.Outlined.Delete,
                 contentDescription = "清空"
+            )
+        }
+        IconButton(
+            onClick = onSave,
+            modifier = Modifier.padding(vertical = 4.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Download,
+                contentDescription = "保存"
             )
         }
     }

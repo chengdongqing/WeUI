@@ -43,6 +43,7 @@ import top.chengdongqing.weui.core.ui.theme.FontLinkColor
  * @param okColor 确定按钮颜色
  * @param onOk 确定事件
  * @param onCancel 取消事件
+ * @param onDismiss 关闭事件
  */
 @Composable
 fun WeDialog(
@@ -52,12 +53,11 @@ fun WeDialog(
     cancelText: String = "取消",
     okColor: Color = FontLinkColor,
     onOk: () -> Unit,
-    onCancel: (() -> Unit)? = null
+    onCancel: (() -> Unit)? = null,
+    onDismiss: () -> Unit
 ) {
     Dialog(
-        onDismissRequest = {
-            onCancel?.invoke()
-        },
+        onDismissRequest = onDismiss,
         properties = DialogProperties(
             usePlatformDefaultWidth = false
         )
@@ -198,7 +198,10 @@ fun rememberDialogState(): DialogState {
                             state.hide()
                         }
                     }
-                } else null
+                } else null,
+                onDismiss = {
+                    state.hide()
+                }
             )
         }
     }
