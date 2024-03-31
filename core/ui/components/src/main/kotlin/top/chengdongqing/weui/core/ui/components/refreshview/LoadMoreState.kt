@@ -27,15 +27,19 @@ interface LoadMoreState {
 }
 
 @Composable
-fun rememberLoadMoreState(onReachBottom: suspend () -> Unit): LoadMoreState {
+fun rememberLoadMoreState(
+    enabled: () -> Boolean = { true },
+    onReachBottom: suspend () -> Unit
+): LoadMoreState {
     val coroutineScope = rememberCoroutineScope()
 
     return remember {
-        LoadMoreStateImpl(onReachBottom, coroutineScope)
+        LoadMoreStateImpl(enabled, onReachBottom, coroutineScope)
     }
 }
 
 private class LoadMoreStateImpl(
+    enabled: () -> Boolean,
     onReachBottom: suspend () -> Unit,
     coroutineScope: CoroutineScope
 ) : LoadMoreState {
@@ -45,7 +49,7 @@ private class LoadMoreStateImpl(
             consumed: Velocity,
             available: Velocity
         ): Velocity {
-            if (available.y < 0) {
+            if (available.y < 0 && enabled()) {
                 coroutineScope.launch {
                     isLoadingMore = true
                     delay(200)

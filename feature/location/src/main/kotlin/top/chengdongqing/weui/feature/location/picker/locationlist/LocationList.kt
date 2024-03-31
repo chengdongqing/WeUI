@@ -40,7 +40,10 @@ fun LocationList(
     onSelect: (Int) -> Unit,
     onLoadMore: suspend () -> Unit
 ) {
-    val loadMoreState = rememberLoadMoreState(onLoadMore)
+    val loadMoreState = rememberLoadMoreState(
+        enabled = { !pagingState.isAllLoaded },
+        onLoadMore
+    )
 
     Box(modifier = Modifier.nestedScroll(loadMoreState.nestedScrollConnection)) {
         LazyColumn(state = listState, contentPadding = PaddingValues(bottom = 16.dp)) {
