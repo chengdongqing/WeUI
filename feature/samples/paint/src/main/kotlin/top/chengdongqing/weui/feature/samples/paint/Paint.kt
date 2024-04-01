@@ -3,7 +3,6 @@ package top.chengdongqing.weui.feature.samples.paint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Paint
-import android.graphics.PorterDuff
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -73,22 +72,11 @@ fun PaintScreen() {
                 },
                 onClear = { paths.clear() },
                 onSave = {
-                    if (paths.isEmpty()) {
+                    if (paths.isNotEmpty()) {
+                        onSave(paths, size, coroutineScope, toast, context)
+                    } else {
                         toast.show("画板为空", ToastIcon.FAIL)
-                        return@DrawingTools
                     }
-
-                    dialog.show(
-                        "请选择图片背景颜色",
-                        cancelText = "透明",
-                        okText = "白色",
-                        onCancel = {
-                            onSave(paths, size, coroutineScope, toast, context, true)
-                        },
-                        onOk = {
-                            onSave(paths, size, coroutineScope, toast, context, false)
-                        }
-                    )
                 }
             )
             DrawingBoard(paths, color, strokeWidth) {
@@ -103,8 +91,7 @@ private fun onSave(
     size: IntSize,
     coroutineScope: CoroutineScope,
     toast: ToastState,
-    context: Context,
-    transparent: Boolean
+    context: Context
 ) {
     // 创建和画板同样大小的bitmap
     val bitmap = Bitmap.createBitmap(
@@ -113,7 +100,7 @@ private fun onSave(
         Bitmap.Config.ARGB_8888
     )
     // 绘制轨迹到bitmap
-    drawToNativeCanvas(paths, bitmap, transparent)
+    drawToNativeCanvas(paths, bitmap)
 
     coroutineScope.launch {
         // 保存到相册
@@ -127,13 +114,9 @@ private fun onSave(
     }
 }
 
-private fun drawToNativeCanvas(paths: List<StrokeItem>, bitmap: Bitmap, transparent: Boolean) {
+private fun drawToNativeCanvas(paths: List<StrokeItem>, bitmap: Bitmap) {
     val canvas = android.graphics.Canvas(bitmap).apply {
-        if (transparent) {
-            drawColor(Color.White.toArgb(), PorterDuff.Mode.CLEAR)
-        } else {
-            drawColor(Color.White.toArgb())
-        }
+        drawColor(Color.White.toArgb())
     }
 
     paths.forEach { strokeItem ->

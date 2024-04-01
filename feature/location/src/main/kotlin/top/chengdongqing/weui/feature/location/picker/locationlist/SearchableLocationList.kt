@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -96,7 +97,12 @@ private fun ColumnScope.TopArrow(state: LocationPickerState) {
             .clickable { state.isListExpanded = false }
             .padding(horizontal = 12.dp)
     ) {
-        Icon(imageVector = Icons.Outlined.KeyboardArrowDown, contentDescription = null)
+        Icon(
+            imageVector = Icons.Outlined.KeyboardArrowDown,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSecondary,
+            modifier = Modifier.size(22.dp)
+        )
     }
 }
 
