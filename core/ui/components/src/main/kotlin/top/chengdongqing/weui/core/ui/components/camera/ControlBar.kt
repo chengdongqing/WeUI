@@ -44,7 +44,7 @@ internal fun ControlBar(state: CameraState) {
     ) {
         IconButton(
             enabled = !state.isUsingFrontCamera,
-            onClick = { state.toggleFlashState() },
+            onClick = { state.toggleFlash() },
             modifier = Modifier.alpha(if (state.isUsingFrontCamera) 0f else 1f)
         ) {
             Icon(
@@ -55,7 +55,7 @@ internal fun ControlBar(state: CameraState) {
         }
         CaptureButton(state)
         IconButton(onClick = {
-            state.toggleCameraSelector()
+            state.switchCamera()
         }) {
             Icon(
                 Icons.Filled.FlipCameraAndroid,

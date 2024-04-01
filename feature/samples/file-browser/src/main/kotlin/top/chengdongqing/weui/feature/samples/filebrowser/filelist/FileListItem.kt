@@ -1,6 +1,5 @@
 package top.chengdongqing.weui.feature.samples.filebrowser.filelist
 
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.compose.foundation.Image
@@ -26,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
@@ -170,19 +170,19 @@ private fun FileThumbnail(file: FileItem) {
         } else {
             if (file.isVisualMedia) {
                 val context = LocalContext.current
-                val thumbnail by produceState<Bitmap?>(initialValue = null) {
+                val thumbnail by produceState<ImageBitmap?>(initialValue = null) {
                     value = withContext(Dispatchers.IO) {
                         if (file.mimeType.startsWith("image")) {
                             BitmapFactory.decodeFile(file.path)
                         } else {
                             context.loadVideoThumbnail(Uri.parse(file.path))
-                        }
+                        }?.asImageBitmap()
                     }
                 }
 
                 thumbnail?.let {
                     Image(
-                        bitmap = it.asImageBitmap(),
+                        bitmap = it,
                         contentDescription = "文件",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier

@@ -26,5 +26,5 @@ fun Boolean.format(trueLabel: String = "是", falseLabel: String = "否") =
 
 fun Boolean?.isTrue(): Boolean = this == true
 
-fun Offset.toIntOffset() = IntOffset(this.x.roundToInt(), this.y.roundToInt())
-fun Size.toIntSize() = IntSize(this.width.roundToInt(), this.height.roundToInt())
+fun Offset.toIntOffset() = IntOffset(x.roundToInt(), y.roundToInt())
+fun Size.toIntSize() = IntSize(width.roundToInt(), height.roundToInt())

@@ -94,12 +94,12 @@ interface CameraState {
     /**
      * 切换闪光灯状态
      */
-    fun toggleFlashState()
+    fun toggleFlash()
 
     /**
      * 切换摄像头
      */
-    fun toggleCameraSelector()
+    fun switchCamera()
 }
 
 @Composable
@@ -260,7 +260,7 @@ private class CameraStateImpl(
         }
     }
 
-    override fun toggleFlashState() {
+    override fun toggleFlash() {
         isFlashOn = !isFlashOn
         camera?.let {
             if (it.cameraInfo.hasFlashUnit()) {
@@ -269,7 +269,7 @@ private class CameraStateImpl(
         }
     }
 
-    override fun toggleCameraSelector() {
+    override fun switchCamera() {
         isUsingFrontCamera = !isUsingFrontCamera
         isFlashOn = false
     }

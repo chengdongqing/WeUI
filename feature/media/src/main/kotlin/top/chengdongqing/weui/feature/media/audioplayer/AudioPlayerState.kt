@@ -96,17 +96,10 @@ fun rememberAudioPlayerState(): AudioPlayerState {
 
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
-    val state = remember {
+
+    return remember {
         AudioPlayerStateImpl(player, context, coroutineScope)
     }
-
-    DisposableEffect(Unit) {
-        onDispose {
-            player.release()
-        }
-    }
-
-    return state
 }
 
 private class AudioPlayerStateImpl(
@@ -223,6 +216,12 @@ private fun MediaPlayerLifecycle(player: MediaPlayer) {
 
         onDispose {
             lifecycle.removeObserver(lifecycleObserver)
+        }
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            player.release()
         }
     }
 }

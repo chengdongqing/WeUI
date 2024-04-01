@@ -23,7 +23,7 @@ import top.chengdongqing.weui.feature.media.imagecropper.rememberImageCropperLau
 
 @Composable
 fun ImageCropperScreen() {
-    WeScreen(title = "ImageCropper", description = "图片裁剪", scrollEnabled = false) {
+    WeScreen(title = "ImageCropper", description = "图片裁剪") {
         var croppedImage by remember { mutableStateOf<ImageBitmap?>(null) }
 
         val context = LocalContext.current

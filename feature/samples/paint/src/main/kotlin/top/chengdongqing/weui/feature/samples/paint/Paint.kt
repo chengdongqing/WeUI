@@ -23,16 +23,13 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.core.data.model.MediaType
-import top.chengdongqing.weui.core.ui.components.dialog.rememberDialogState
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
 import top.chengdongqing.weui.core.ui.components.toast.ToastIcon
-import top.chengdongqing.weui.core.ui.components.toast.ToastState
 import top.chengdongqing.weui.core.ui.components.toast.rememberToastState
 import top.chengdongqing.weui.core.utils.MediaStoreUtils
 import kotlin.time.Duration
@@ -48,11 +45,10 @@ fun PaintScreen() {
         var color by remember { mutableStateOf(Color.Black) }
         var strokeWidth by remember { mutableFloatStateOf(15f) }
         val paths = remember { mutableStateListOf<StrokeItem>() }
-
         var size by remember { mutableStateOf(IntSize(100, 100)) }
+
         val coroutineScope = rememberCoroutineScope()
         val context = LocalContext.current
-        val dialog = rememberDialogState()
         val toast = rememberToastState()
 
         Box(
@@ -73,7 +69,18 @@ fun PaintScreen() {
                 onClear = { paths.clear() },
                 onSave = {
                     if (paths.isNotEmpty()) {
-                        onSave(paths, size, coroutineScope, toast, context)
+                        toast.show(
+                            "处理中...",
+                            ToastIcon.LOADING,
+                            duration = Duration.INFINITE,
+                            mask = true
+                        )
+
+                        coroutineScope.launch {
+                            context.handleSave(paths, size)
+                            delay(200)
+                            toast.show("已保存到相册", ToastIcon.SUCCESS)
+                        }
                     } else {
                         toast.show("画板为空", ToastIcon.FAIL)
                     }
@@ -86,36 +93,26 @@ fun PaintScreen() {
     }
 }
 
-private fun onSave(
-    paths: List<StrokeItem>,
-    size: IntSize,
-    coroutineScope: CoroutineScope,
-    toast: ToastState,
-    context: Context
-) {
-    // 创建和画板同样大小的bitmap
-    val bitmap = Bitmap.createBitmap(
-        size.width,
-        size.height,
-        Bitmap.Config.ARGB_8888
-    )
-    // 绘制轨迹到bitmap
-    drawToNativeCanvas(paths, bitmap)
+private suspend fun Context.handleSave(paths: List<StrokeItem>, size: IntSize) =
+    withContext(Dispatchers.IO) {
+        // 创建和画板同样大小的位图
+        val bitmap = Bitmap.createBitmap(
+            size.width,
+            size.height,
+            Bitmap.Config.ARGB_8888
+        )
+        // 绘制轨迹到bitmap
+        bitmap.drawToNativeCanvas(paths)
 
-    coroutineScope.launch {
         // 保存到相册
-        toast.show("处理中...", ToastIcon.LOADING, duration = Duration.INFINITE)
-        context.saveToAlbum(
+        saveToAlbum(
             bitmap,
             "drawing_${System.currentTimeMillis()}.png"
         )
-        delay(200)
-        toast.show("已保存到相册", ToastIcon.SUCCESS)
     }
-}
 
-private fun drawToNativeCanvas(paths: List<StrokeItem>, bitmap: Bitmap) {
-    val canvas = android.graphics.Canvas(bitmap).apply {
+private fun Bitmap.drawToNativeCanvas(paths: List<StrokeItem>) {
+    val canvas = android.graphics.Canvas(this).apply {
         drawColor(Color.White.toArgb())
     }
 
@@ -131,23 +128,19 @@ private fun drawToNativeCanvas(paths: List<StrokeItem>, bitmap: Bitmap) {
     }
 }
 
-private suspend fun Context.saveToAlbum(bitmap: Bitmap, filename: String) {
-    val context = this
+private fun Context.saveToAlbum(bitmap: Bitmap, filename: String) {
+    val contentUri = MediaStoreUtils.getContentUri(MediaType.IMAGE)
+    val contentValues = MediaStoreUtils.createContentValues(
+        filename,
+        mediaType = MediaType.IMAGE,
+        mimeType = "image/png",
+        this
+    )
 
-    return withContext(Dispatchers.IO) {
-        val contentUri = MediaStoreUtils.getContentUri(MediaType.IMAGE)
-        val contentValues = MediaStoreUtils.createContentValues(
-            filename,
-            mediaType = MediaType.IMAGE,
-            mimeType = "image/png",
-            context
-        )
-
-        contentResolver.insert(contentUri, contentValues)?.let { uri ->
-            contentResolver.openOutputStream(uri)?.use { outputStream ->
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
-                MediaStoreUtils.finishPending(uri, context)
-            }
+    contentResolver.insert(contentUri, contentValues)?.let { uri ->
+        contentResolver.openOutputStream(uri)?.use { outputStream ->
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+            MediaStoreUtils.finishPending(uri, this)
         }
     }
 }

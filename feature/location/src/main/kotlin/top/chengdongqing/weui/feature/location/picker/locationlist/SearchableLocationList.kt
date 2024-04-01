@@ -34,7 +34,7 @@ import top.chengdongqing.weui.core.ui.components.searchbar.WeSearchBar
 import top.chengdongqing.weui.feature.location.picker.LocationPickerState
 
 @Composable
-internal fun SearchableLocationList(state: LocationPickerState, listState: LazyListState) {
+fun SearchableLocationList(state: LocationPickerState, listState: LazyListState) {
     val animatedHeightFraction by animateFloatAsState(
         targetValue = if (state.isListExpanded) 0.7f else 0.4f,
         label = "LocationListHeightAnimation"
