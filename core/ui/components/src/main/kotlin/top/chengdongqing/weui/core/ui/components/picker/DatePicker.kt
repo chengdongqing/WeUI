@@ -1,6 +1,5 @@
 package top.chengdongqing.weui.core.ui.components.picker
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
@@ -29,9 +28,8 @@ fun WeDatePicker(
     onCancel: () -> Unit,
     onChange: (LocalDate) -> Unit
 ) {
-    if (start.isAfter(end)) {
-        Log.e("WeDatePicker", "Invalid date range: start ($start) must be before end ($end)")
-        return
+    require(end.isAfter(start)) {
+        "Invalid date range: end ($end) must be after start ($start)"
     }
 
     var rangesSource by rememberRangesSource(start, end, type)

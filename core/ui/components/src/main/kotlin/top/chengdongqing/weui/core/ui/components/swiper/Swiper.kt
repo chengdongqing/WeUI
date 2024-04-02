@@ -5,6 +5,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -15,26 +16,26 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.launch
-import java.util.Timer
-import kotlin.concurrent.timerTask
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun <T> WeSwiper(
     options: List<T>,
     modifier: Modifier = Modifier,
-    pagerState: PagerState = rememberPagerState {
+    state: PagerState = rememberPagerState {
         options.size
     },
+    contentPadding: PaddingValues = PaddingValues(0.dp),
+    pageSpacing: Dp = 0.dp,
     autoplay: Boolean = true,
     interval: Long = 3000,
     indicator: (@Composable BoxScope.(count: Int, current: Int) -> Unit)? = { count, current ->
@@ -46,43 +47,28 @@ fun <T> WeSwiper(
                 .offset(y = (-10).dp)
         )
     },
-    content: @Composable (PagerScope.(T) -> Unit)
+    content: @Composable (PagerScope.(Int, T) -> Unit)
 ) {
     if (autoplay) {
-        AutoplayEffect(pagerState, interval)
+        LaunchedEffect(state.settledPage) {
+            delay(interval)
+            val targetPage = (state.currentPage + 1) % state.pageCount
+            state.animateScrollToPage(targetPage)
+        }
     }
 
     Box {
         HorizontalPager(
-            state = pagerState,
-            modifier = modifier,
-            pageSpacing = 20.dp
+            state,
+            modifier,
+            contentPadding,
+            pageSpacing = pageSpacing
         ) { index ->
-            content(options[index])
+            content(index, options[index])
         }
 
         if (indicator != null) {
-            indicator(options.size, pagerState.currentPage)
-        }
-    }
-}
-
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-private fun AutoplayEffect(pagerState: PagerState, interval: Long) {
-    val coroutineScope = rememberCoroutineScope()
-
-    DisposableEffect(pagerState.currentPage) {
-        val timer = Timer()
-        timer.schedule(timerTask {
-            coroutineScope.launch {
-                val targetPage = (pagerState.currentPage + 1) % pagerState.pageCount
-                pagerState.animateScrollToPage(targetPage)
-            }
-        }, interval, interval)
-
-        onDispose {
-            timer.cancel()
+            indicator(options.size, state.currentPage)
         }
     }
 }
