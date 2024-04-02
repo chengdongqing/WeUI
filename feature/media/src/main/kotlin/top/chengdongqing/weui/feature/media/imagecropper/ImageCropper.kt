@@ -32,7 +32,6 @@ import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.center
 import androidx.compose.ui.unit.toOffset
@@ -42,11 +41,11 @@ import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.core.ui.components.toast.ToastIcon
 import top.chengdongqing.weui.core.ui.components.toast.rememberToastState
 import top.chengdongqing.weui.core.utils.getFileProviderUri
+import top.chengdongqing.weui.core.utils.toIntOffset
 import top.chengdongqing.weui.core.utils.toIntSize
 import java.io.File
 import java.io.FileOutputStream
 import kotlin.math.max
-import kotlin.math.roundToInt
 import kotlin.time.Duration
 
 @Composable
@@ -76,10 +75,10 @@ fun WeImageCropper(uri: Uri, onCancel: () -> Unit, onConfirm: (Uri) -> Unit) {
         Canvas(
             modifier = Modifier
                 .fillMaxSize()
+                .background(Color.Black)
                 .onSizeChanged {
                     screenSize = it
                 }
-                .background(Color.Red)
                 .transformable(rememberTransformableState { zoomChange, panChange, _ ->
                     imageBitmap?.let { image ->
                         transform.value = transform.value.createNewTransform(
@@ -92,15 +91,14 @@ fun WeImageCropper(uri: Uri, onCancel: () -> Unit, onConfirm: (Uri) -> Unit) {
                 })
         ) {
             imageBitmap?.let {
-                rotate(degrees = animatedRotation) {
-                    scale(transform.value.scale) {
-                        drawImage(
-                            it,
-                            dstOffset = IntOffset(
-                                transform.value.offsetX.roundToInt(),
-                                transform.value.offsetY.roundToInt()
+                transform.value.apply {
+                    rotate(degrees = animatedRotation) {
+                        scale(scale) {
+                            drawImage(
+                                it,
+                                dstOffset = Offset(offsetX, offsetY).toIntOffset()
                             )
-                        )
+                        }
                     }
                 }
             }
@@ -138,18 +136,18 @@ fun WeImageCropper(uri: Uri, onCancel: () -> Unit, onConfirm: (Uri) -> Unit) {
 private fun TransformInitializeEffect(
     screenSize: IntSize,
     boxSize: IntSize,
-    imageBitmap: ImageBitmap?,
+    image: ImageBitmap?,
     transform: MutableState<ImageTransform>,
     onInit: (ImageTransform) -> Unit
 ) {
-    LaunchedEffect(boxSize, imageBitmap) {
-        if (screenSize != IntSize.Zero && boxSize != IntSize.Zero && imageBitmap != null) {
+    LaunchedEffect(boxSize, image) {
+        if (screenSize != IntSize.Zero && boxSize != IntSize.Zero && image != null) {
             val scale = max(
-                boxSize.width / imageBitmap.width.toFloat(),
-                boxSize.height / imageBitmap.height.toFloat()
+                boxSize.width / image.width.toFloat(),
+                boxSize.height / image.height.toFloat()
             )
-            val offsetX = (screenSize.width - imageBitmap.width) / 2f
-            val offsetY = (screenSize.height - imageBitmap.height) / 2f
+            val offsetX = (screenSize.width - image.width) / 2f
+            val offsetY = (screenSize.height - image.height) / 2f
 
             transform.value = ImageTransform(
                 scale = scale,
@@ -185,13 +183,10 @@ private fun ImageTransform.createNewTransform(
     )
     val newScale = (scale * zoomChange).coerceIn(minScale, 5f)
 
-    var newOffsetX = offsetX + panChange.x * newScale
-    var newOffsetY = offsetY + panChange.y * newScale
-
     return copy(
         scale = newScale,
-        offsetX = newOffsetX,
-        offsetY = newOffsetY
+        offsetX = offsetX + panChange.x,
+        offsetY = offsetY + panChange.y
     )
 }
 

@@ -53,7 +53,9 @@ internal fun BoxScope.ActionBar(
             )
         }
         IconButton(onClick = {
-            transform.value = transform.value.copy(rotation = transform.value.rotation - 90f)
+            transform.value = transform.value.copy(
+                rotation = transform.value.rotation - 90f
+            )
         }) {
             Icon(
                 imageVector = Icons.Outlined.Rotate90DegreesCcw,

@@ -27,10 +27,10 @@ internal fun BoxScope.CropperMask(onSizeChange: (Size) -> Unit) {
             canvas.saveLayer(bounds = Rect(offset = Offset.Zero, size = size), Paint())
             // 绘制遮罩
             drawRect(color = Color(0f, 0f, 0f, 0.4f))
-            // 绘制透明区域
+            // 露出裁剪框
             canvas.saveLayer(
                 bounds = Rect(
-                    offset = Offset(x = spacing, y = size.height / 2 - width / 2),
+                    offset = Offset(x = spacing, y = (size.height - width) / 2),
                     size = Size(width, width)
                 ),
                 paint = Paint().apply { blendMode = BlendMode.Clear }
@@ -38,7 +38,7 @@ internal fun BoxScope.CropperMask(onSizeChange: (Size) -> Unit) {
             canvas.restore()
         }
 
-        // 构造并绘制四个角的装饰
+        // 绘制四个角
         drawCorners(spacing, width)
     }
 }
