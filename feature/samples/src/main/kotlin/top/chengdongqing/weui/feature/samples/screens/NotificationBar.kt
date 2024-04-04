@@ -36,14 +36,7 @@ fun NotificationBarScreen() {
             WeNotificationBar(content)
         }
         Column {
-            Title("控制速度")
-            WeNotificationBar(
-                content,
-                scrollVelocity = 200.dp
-            )
-        }
-        Column {
-            Title("首尾间距")
+            Title("控制速度和首尾间距")
             WeNotificationBar(
                 content,
                 scrollSpacingFraction = 1f / 2f,

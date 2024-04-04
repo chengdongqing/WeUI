@@ -49,7 +49,7 @@ fun LocationList(
         LazyColumn(state = listState, contentPadding = PaddingValues(bottom = 16.dp)) {
             itemsIndexed(
                 pagingState.dataList,
-                key = { _, item -> item.name }
+                key = { _, item -> item.id ?: item.name }
             ) { index, item ->
                 LocationListItem(index == selectedIndex, item) {
                     onSelect(index)

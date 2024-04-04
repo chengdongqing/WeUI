@@ -85,7 +85,7 @@ interface LocationPickerState {
     suspend fun search(
         location: LatLng?,
         keyword: String = "",
-        pageNum: Int = 0,
+        pageNum: Int = 1,
         pageSize: Int = 10
     ): List<LocationItem>
 }
@@ -226,8 +226,8 @@ private class LocationPickerStateImpl(
             val startIndex = address.lastIndexOf(it.district)
             val name = address.slice(startIndex..address.lastIndex)
             LocationItem(
-                name,
-                address,
+                name = name,
+                address = address,
                 latLng = latLng
             )
         }

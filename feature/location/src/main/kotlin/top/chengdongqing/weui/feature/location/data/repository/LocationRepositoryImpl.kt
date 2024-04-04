@@ -74,6 +74,7 @@ class LocationRepositoryImpl(private val context: Context) : LocationRepository 
                     if (resultCode == AMapException.CODE_AMAP_SUCCESS && result?.query != null) {
                         val items = result.pois.map { poiItem ->
                             LocationItem(
+                                id = poiItem.poiId,
                                 name = poiItem.title,
                                 address = poiItem.adName,
                                 distance = if (current != null) {

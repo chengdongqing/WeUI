@@ -25,18 +25,21 @@ class PagingStateImpl<T>(
     initialLoading: Boolean = false
 ) : PagingState<T> {
     override var dataList by mutableStateOf<List<T>>(emptyList())
-    override var pageNumber by mutableIntStateOf(0)
+    override var pageNumber by mutableIntStateOf(1)
     override var isLoading by mutableStateOf(initialLoading)
     override var isAllLoaded by mutableStateOf(false)
 
     override fun startRefresh() {
         isLoading = true
-        pageNumber = 0
+        pageNumber = 1
     }
 
     override fun endRefresh(dataList: List<T>) {
         this.dataList = dataList
         isAllLoaded = dataList.size < pageSize
+        if (!isAllLoaded) {
+            pageNumber++
+        }
         isLoading = false
     }
 

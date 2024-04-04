@@ -74,11 +74,14 @@ fun SearchableLocationList(state: LocationPickerState, listState: LazyListState)
                     state.map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16f))
                 }
             ) {
-                if (!state.paging.isAllLoaded) {
+                if (!state.paging.isAllLoaded && !state.paging.isLoading) {
                     val pageNum = state.paging.startLoadMore()
                     state.search(state.mapCenterLatLng, pageNum = pageNum)
                         .apply {
-                            state.paging.endLoadMore(this)
+                            val filteredList = this.filter { item ->
+                                state.paging.dataList.none { it.name == item.name }
+                            }
+                            state.paging.endLoadMore(filteredList)
                         }
                 }
             }

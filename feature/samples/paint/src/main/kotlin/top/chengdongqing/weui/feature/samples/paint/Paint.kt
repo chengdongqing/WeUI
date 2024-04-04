@@ -78,6 +78,7 @@ fun PaintScreen() {
 
                         coroutineScope.launch {
                             context.handleSave(paths, size)
+                            toast.hide()
                             delay(200)
                             toast.show("已保存到相册", ToastIcon.SUCCESS)
                         }

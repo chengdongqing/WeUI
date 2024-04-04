@@ -82,14 +82,17 @@ fun SearchPanel(state: LocationPickerState) {
                 state.isListExpanded = false
             }
         ) {
-            if (!paging.isAllLoaded) {
+            if (!paging.isAllLoaded && !state.paging.isLoading) {
                 val pageNum = paging.startLoadMore()
                 state.search(
                     location = if (type == 0) state.currentLatLng else null,
                     keyword = keyword,
                     pageNum = pageNum
                 ).apply {
-                    paging.endLoadMore(this)
+                    val filteredList = this.filter { item ->
+                        paging.dataList.none { it.name == item.name }
+                    }
+                    paging.endLoadMore(filteredList)
                 }
             }
         }
