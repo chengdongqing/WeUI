@@ -75,11 +75,13 @@ internal fun CommentPopup(
                         handleDragStopped(currentHeight, maxHeight, onClose)
                     })
                 .nestedScroll(
-                    rememberNestedScrollConnection(
-                        currentHeight,
-                        maxHeight,
-                        onClose
-                    )
+                    remember(maxHeight) {
+                        CommentNestedScrollConnection(
+                            currentHeight,
+                            maxHeight,
+                            onClose
+                        )
+                    }
                 )
         ) {
             Box(
@@ -116,44 +118,39 @@ internal fun CommentPopup(
     }
 }
 
-@Composable
-private fun rememberNestedScrollConnection(
-    currentHeight: MutableFloatState,
-    maxHeight: Float,
-    onClose: () -> Unit
-): NestedScrollConnection {
-    return remember(maxHeight) {
-        object : NestedScrollConnection {
-            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-                if (source == NestedScrollSource.Drag && currentHeight.floatValue < maxHeight) {
-                    handleDrag(currentHeight, available.y, maxHeight)
-                    return available
-                } else {
-                    return Offset.Zero
-                }
-            }
-
-            override fun onPostScroll(
-                consumed: Offset,
-                available: Offset,
-                source: NestedScrollSource
-            ): Offset {
-                if (source == NestedScrollSource.Drag) {
-                    handleDrag(currentHeight, available.y, maxHeight)
-                    return available
-                } else {
-                    return Offset.Zero
-                }
-            }
-
-            override suspend fun onPostFling(
-                consumed: Velocity,
-                available: Velocity
-            ): Velocity {
-                handleDragStopped(currentHeight, maxHeight, onClose)
-                return available
-            }
+private class CommentNestedScrollConnection(
+    private val currentHeight: MutableFloatState,
+    private val maxHeight: Float,
+    private val onClose: () -> Unit
+) : NestedScrollConnection {
+    override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+        if (source == NestedScrollSource.Drag && currentHeight.floatValue < maxHeight) {
+            handleDrag(currentHeight, available.y, maxHeight)
+            return available
+        } else {
+            return Offset.Zero
         }
+    }
+
+    override fun onPostScroll(
+        consumed: Offset,
+        available: Offset,
+        source: NestedScrollSource
+    ): Offset {
+        if (source == NestedScrollSource.Drag) {
+            handleDrag(currentHeight, available.y, maxHeight)
+            return available
+        } else {
+            return Offset.Zero
+        }
+    }
+
+    override suspend fun onPostFling(
+        consumed: Velocity,
+        available: Velocity
+    ): Velocity {
+        handleDragStopped(currentHeight, maxHeight, onClose)
+        return available
     }
 }
 

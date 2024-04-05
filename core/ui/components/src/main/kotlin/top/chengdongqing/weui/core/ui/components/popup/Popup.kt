@@ -123,11 +123,13 @@ fun WePopup(
                     .then(
                         if (draggable) {
                             Modifier.nestedScroll(
-                                rememberNestedScrollConnection(
-                                    offsetY,
-                                    height,
-                                    onClose
-                                )
+                                remember(height) {
+                                    PopupNestedScrollConnection(
+                                        offsetY,
+                                        height,
+                                        onClose
+                                    )
+                                }
                             )
                         } else {
                             Modifier
@@ -224,44 +226,39 @@ private fun PopupTitle(title: String) {
     }
 }
 
-@Composable
-private fun rememberNestedScrollConnection(
-    offsetY: MutableIntState,
-    height: Int,
-    onClose: () -> Unit
-): NestedScrollConnection {
-    return remember(height) {
-        object : NestedScrollConnection {
-            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-                if (source == NestedScrollSource.Drag && offsetY.intValue > 0) {
-                    handleDrag(offsetY, available.y)
-                    return available
-                } else {
-                    return Offset.Zero
-                }
-            }
-
-            override fun onPostScroll(
-                consumed: Offset,
-                available: Offset,
-                source: NestedScrollSource
-            ): Offset {
-                if (source == NestedScrollSource.Drag) {
-                    handleDrag(offsetY, available.y)
-                    return available
-                } else {
-                    return Offset.Zero
-                }
-            }
-
-            override suspend fun onPostFling(
-                consumed: Velocity,
-                available: Velocity
-            ): Velocity {
-                handleDragStopped(offsetY, height, onClose)
-                return available
-            }
+private class PopupNestedScrollConnection(
+    private val offsetY: MutableIntState,
+    private val height: Int,
+    private val onClose: () -> Unit
+) : NestedScrollConnection {
+    override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+        if (source == NestedScrollSource.Drag && offsetY.intValue > 0) {
+            handleDrag(offsetY, available.y)
+            return available
+        } else {
+            return Offset.Zero
         }
+    }
+
+    override fun onPostScroll(
+        consumed: Offset,
+        available: Offset,
+        source: NestedScrollSource
+    ): Offset {
+        if (source == NestedScrollSource.Drag) {
+            handleDrag(offsetY, available.y)
+            return available
+        } else {
+            return Offset.Zero
+        }
+    }
+
+    override suspend fun onPostFling(
+        consumed: Velocity,
+        available: Velocity
+    ): Velocity {
+        handleDragStopped(offsetY, height, onClose)
+        return available
     }
 }
 

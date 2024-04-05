@@ -18,9 +18,8 @@ import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.State
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,21 +34,21 @@ import top.chengdongqing.weui.feature.location.picker.LocationPickerState
 
 @Composable
 fun SearchableLocationList(state: LocationPickerState, listState: LazyListState) {
-    val animatedHeightFraction by animateFloatAsState(
+    val animatedHeightFraction = animateFloatAsState(
         targetValue = if (state.isListExpanded) 0.7f else 0.4f,
         label = "LocationListHeightAnimation"
     )
-    val nestedScrollConnection = rememberNestedScrollConnection(
-        state.isListExpanded,
-        animatedHeightFraction
-    ) {
-        state.isListExpanded = it
+    val nestedScrollConnection = remember(state) {
+        LocationListNestedScrollConnection(
+            state,
+            animatedHeightFraction
+        )
     }
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(animatedHeightFraction)
+            .fillMaxHeight(animatedHeightFraction.value)
             .expandedStyle(state.isListExpanded)
             .background(MaterialTheme.colorScheme.surface)
             .nestedScroll(nestedScrollConnection)
@@ -130,37 +129,28 @@ private fun SearchInput(state: LocationPickerState) {
     ) {}
 }
 
-@Composable
-private fun rememberNestedScrollConnection(
-    expanded: Boolean,
-    heightFraction: Float,
-    onExpandChange: (Boolean) -> Unit
-): NestedScrollConnection {
-    val currentExpanded by rememberUpdatedState(newValue = expanded)
-    val currentHeightFraction by rememberUpdatedState(newValue = heightFraction)
-
-    return remember {
-        object : NestedScrollConnection {
-            override fun onPreScroll(
-                available: Offset,
-                source: NestedScrollSource
-            ): Offset {
-                if (available.y < 0 && !currentExpanded) {
-                    onExpandChange(true)
-                }
-                return if (currentHeightFraction == 0.7f) Offset.Zero else available
-            }
-
-            override fun onPostScroll(
-                consumed: Offset,
-                available: Offset,
-                source: NestedScrollSource
-            ): Offset {
-                if (available.y > 0 && currentExpanded) {
-                    onExpandChange(false)
-                }
-                return Offset.Zero
-            }
+private class LocationListNestedScrollConnection(
+    private val state: LocationPickerState,
+    private val heightFraction: State<Float>,
+) : NestedScrollConnection {
+    override fun onPreScroll(
+        available: Offset,
+        source: NestedScrollSource
+    ): Offset {
+        if (available.y < 0 && !state.isListExpanded) {
+            state.isListExpanded = true
         }
+        return if (heightFraction.value == 0.7f) Offset.Zero else available
+    }
+
+    override fun onPostScroll(
+        consumed: Offset,
+        available: Offset,
+        source: NestedScrollSource
+    ): Offset {
+        if (available.y > 0 && state.isListExpanded) {
+            state.isListExpanded = false
+        }
+        return Offset.Zero
     }
 }
