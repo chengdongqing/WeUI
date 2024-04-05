@@ -166,7 +166,7 @@ private fun handleDragStopped(
     maxHeight: Float,
     onClose: () -> Unit
 ) {
-    if (currentHeight.floatValue > maxHeight / 2) {
+    if (currentHeight.floatValue > maxHeight * 0.75) {
         currentHeight.floatValue = maxHeight
     } else {
         onClose()

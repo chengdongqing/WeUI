@@ -1,6 +1,6 @@
 [versions]
 # 核心库
-agp = "8.4.0-beta02"
+agp = "8.5.0-alpha03"
 datastore = "1.1.0-rc01"
 kotlin = "1.9.22"
 compose-bom = "2024.04.00"
