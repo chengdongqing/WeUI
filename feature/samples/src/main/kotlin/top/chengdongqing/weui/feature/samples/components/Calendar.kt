@@ -113,12 +113,8 @@ private fun Header(currentMonth: LocalDate, onMonthChange: (LocalDate) -> Unit) 
 
 @Composable
 private fun WeekDaysBar() {
-    val weekDays = remember {
-        arrayOf("日", "一", "二", "三", "四", "五", "六")
-    }
-
     Row {
-        weekDays.forEach {
+        WeekDays.forEach {
             Box(
                 modifier = Modifier
                     .weight(1f)
@@ -310,6 +306,7 @@ private class CalendarStateImpl(
     private var _currentMonth by mutableStateOf(initialDate)
 }
 
-private val Today = LocalDate.now()
 private const val TotalPage = 2000
 private const val InitialPage = 1000
+private val Today = LocalDate.now()
+private val WeekDays = arrayOf("日", "一", "二", "三", "四", "五", "六")
