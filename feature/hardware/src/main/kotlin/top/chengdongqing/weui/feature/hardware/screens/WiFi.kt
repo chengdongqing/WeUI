@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import top.chengdongqing.weui.core.ui.components.button.WeButton
-import top.chengdongqing.weui.core.ui.components.cardlist.cartList
+import top.chengdongqing.weui.core.ui.components.cardlist.cardList
 import top.chengdongqing.weui.core.ui.components.divider.WeDivider
 import top.chengdongqing.weui.core.ui.components.loading.LoadMoreType
 import top.chengdongqing.weui.core.ui.components.loading.WeLoadMore
@@ -85,7 +85,7 @@ fun WiFiScreen() {
 @Composable
 private fun WiFiList(wifiList: List<WiFiInfo>) {
     if (wifiList.isNotEmpty()) {
-        LazyColumn(modifier = Modifier.cartList()) {
+        LazyColumn(modifier = Modifier.cardList()) {
             itemsIndexed(wifiList) { index, wifi ->
                 WiFiListItem(wifi)
                 if (index < wifiList.lastIndex) {

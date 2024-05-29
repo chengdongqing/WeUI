@@ -30,7 +30,7 @@ import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.core.ui.components.button.ButtonType
 import top.chengdongqing.weui.core.ui.components.button.WeButton
 import top.chengdongqing.weui.core.ui.components.cardlist.WeCardListItem
-import top.chengdongqing.weui.core.ui.components.cardlist.cartList
+import top.chengdongqing.weui.core.ui.components.cardlist.cardList
 import top.chengdongqing.weui.core.ui.components.input.WeInput
 import top.chengdongqing.weui.core.ui.components.input.WeTextarea
 import top.chengdongqing.weui.core.ui.components.loading.LoadMoreType
@@ -108,7 +108,7 @@ private fun ReadingSms() {
     }
     WePopup(visible, title = "短信", onClose = { visible = false }) {
         LazyColumn(modifier = Modifier
-            .cartList()
+            .cardList()
             .fillMaxHeight(0.5f)) {
             items(messages) {
                 WeCardListItem(label = it.first, value = it.second)

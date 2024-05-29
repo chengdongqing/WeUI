@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import top.chengdongqing.weui.core.ui.components.cardlist.WeCardListItem
-import top.chengdongqing.weui.core.ui.components.cardlist.cartList
+import top.chengdongqing.weui.core.ui.components.cardlist.cardList
 import top.chengdongqing.weui.core.ui.components.contextmenu.contextMenu
 import top.chengdongqing.weui.core.ui.components.contextmenu.rememberContextMenuState
 import top.chengdongqing.weui.core.ui.components.dialog.rememberDialogState
@@ -30,7 +30,7 @@ fun ContextMenuScreen() {
             )
         }
 
-        LazyColumn(modifier = Modifier.cartList()) {
+        LazyColumn(modifier = Modifier.cardList()) {
             items(30) { index ->
                 Box(
                     modifier = Modifier

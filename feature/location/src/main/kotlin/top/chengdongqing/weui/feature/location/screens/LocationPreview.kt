@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 import com.amap.api.maps.model.LatLng
 import top.chengdongqing.weui.core.ui.components.button.WeButton
 import top.chengdongqing.weui.core.ui.components.cardlist.WeCardListItem
-import top.chengdongqing.weui.core.ui.components.cardlist.cartList
+import top.chengdongqing.weui.core.ui.components.cardlist.cardList
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
 import top.chengdongqing.weui.feature.location.data.model.LocationPreviewItem
 import top.chengdongqing.weui.feature.location.preview.previewLocation
@@ -29,7 +29,7 @@ fun LocationPreviewScreen() {
             )
         }
 
-        LazyColumn(modifier = Modifier.cartList()) {
+        LazyColumn(modifier = Modifier.cardList()) {
             item {
                 location.apply {
                     WeCardListItem(label = "纬度", value = latLng.latitude.toString())

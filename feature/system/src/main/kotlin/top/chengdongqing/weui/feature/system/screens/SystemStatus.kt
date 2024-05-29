@@ -20,14 +20,14 @@ import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.core.ui.components.button.ButtonType
 import top.chengdongqing.weui.core.ui.components.button.WeButton
 import top.chengdongqing.weui.core.ui.components.cardlist.WeCardListItem
-import top.chengdongqing.weui.core.ui.components.cardlist.cartList
+import top.chengdongqing.weui.core.ui.components.cardlist.cardList
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
 import top.chengdongqing.weui.core.utils.SetupStatusBarStyle
 
 @Composable
 fun SystemStatusScreen() {
     WeScreen(title = "SystemStatus", description = "系统状态，动态更新", scrollEnabled = false) {
-        LazyColumn(modifier = Modifier.cartList()) {
+        LazyColumn(modifier = Modifier.cardList()) {
             item {
                 NetworkInfoRows()
                 WeCardListItem("系统主题", if (isSystemInDarkTheme()) "深色" else "浅色")

@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import top.chengdongqing.weui.core.ui.components.button.WeButton
-import top.chengdongqing.weui.core.ui.components.cardlist.cartList
+import top.chengdongqing.weui.core.ui.components.cardlist.cardList
 import top.chengdongqing.weui.core.ui.components.divider.WeDivider
 import top.chengdongqing.weui.core.ui.components.loading.LoadMoreType
 import top.chengdongqing.weui.core.ui.components.loading.WeLoadMore
@@ -87,7 +87,7 @@ fun BluetoothScreen() {
 @Composable
 private fun BluetoothList(bluetoothList: List<BluetoothInfo>) {
     if (bluetoothList.isNotEmpty()) {
-        LazyColumn(modifier = Modifier.cartList()) {
+        LazyColumn(modifier = Modifier.cardList()) {
             itemsIndexed(bluetoothList, key = { _, item -> item.address }) { index, device ->
                 BluetoothListItem(device)
                 if (index < bluetoothList.lastIndex) {

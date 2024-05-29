@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.core.ui.components.button.WeButton
 import top.chengdongqing.weui.core.ui.components.cardlist.WeCardListItem
-import top.chengdongqing.weui.core.ui.components.cardlist.cartList
+import top.chengdongqing.weui.core.ui.components.cardlist.cardList
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
 import top.chengdongqing.weui.feature.location.data.model.LocationItem
 import top.chengdongqing.weui.feature.location.picker.rememberPickLocationLauncher
@@ -23,7 +23,7 @@ fun LocationPickerScreen() {
         var location by remember { mutableStateOf<LocationItem?>(null) }
 
         location?.apply {
-            LazyColumn(modifier = Modifier.cartList()) {
+            LazyColumn(modifier = Modifier.cardList()) {
                 item {
                     WeCardListItem(label = "纬度", value = latLng.latitude.toString())
                     WeCardListItem(label = "经度", value = latLng.longitude.toString())

@@ -43,7 +43,7 @@ import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import top.chengdongqing.weui.core.ui.components.button.ButtonType
 import top.chengdongqing.weui.core.ui.components.button.WeButton
-import top.chengdongqing.weui.core.ui.components.cardlist.cartList
+import top.chengdongqing.weui.core.ui.components.cardlist.cardList
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
 import top.chengdongqing.weui.core.utils.format
 import top.chengdongqing.weui.core.utils.formatDegree
@@ -118,7 +118,7 @@ private fun LocationInfo(location: Location, satelliteCount: Int) {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun SatelliteTable(groups: Map<String, List<SatelliteInfo>>) {
-    LazyColumn(modifier = Modifier.cartList(PaddingValues(top = 20.dp))) {
+    LazyColumn(modifier = Modifier.cardList(PaddingValues(top = 20.dp))) {
         groups.forEach { (type, list) ->
             stickyHeader(key = type) {
                 Column(modifier = Modifier.background(MaterialTheme.colorScheme.onBackground)) {

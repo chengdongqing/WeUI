@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.core.ui.components.button.ButtonType
 import top.chengdongqing.weui.core.ui.components.button.WeButton
 import top.chengdongqing.weui.core.ui.components.cardlist.WeCardListItem
-import top.chengdongqing.weui.core.ui.components.cardlist.cartList
+import top.chengdongqing.weui.core.ui.components.cardlist.cardList
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
 import top.chengdongqing.weui.core.utils.format
 import top.chengdongqing.weui.feature.hardware.utils.rememberSensorValues
@@ -44,7 +44,7 @@ fun GyroscopeScreen() {
                 fontSize = 10.sp
             )
             Spacer(modifier = Modifier.height(20.dp))
-            LazyColumn(modifier = Modifier.cartList()) {
+            LazyColumn(modifier = Modifier.cardList()) {
                 itemsIndexed(it) { index, value ->
                     WeCardListItem(
                         label = "${getAxisLabel(index)}轴",

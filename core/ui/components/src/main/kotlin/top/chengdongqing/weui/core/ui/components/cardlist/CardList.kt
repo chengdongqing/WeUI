@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.core.ui.components.divider.WeDivider
 
 @Composable
-fun Modifier.cartList(padding: PaddingValues = PaddingValues(horizontal = 16.dp)) = this
+fun Modifier.cardList(padding: PaddingValues = PaddingValues(horizontal = 16.dp)) = this
     .fillMaxWidth()
     .background(MaterialTheme.colorScheme.onBackground, RoundedCornerShape(8.dp))
     .padding(padding)

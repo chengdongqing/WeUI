@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import kotlinx.coroutines.delay
 import top.chengdongqing.weui.core.ui.components.cardlist.WeCardListItem
-import top.chengdongqing.weui.core.ui.components.cardlist.cartList
+import top.chengdongqing.weui.core.ui.components.cardlist.cardList
 import top.chengdongqing.weui.core.ui.components.loading.WeLoadMore
 import top.chengdongqing.weui.core.ui.components.refreshview.WeRefreshView
 import top.chengdongqing.weui.core.ui.components.refreshview.rememberLoadMoreState
@@ -38,7 +38,7 @@ fun RefreshViewScreen() {
                 listItems.addAll(List(30) { "${it + 1}" })
             }
         ) {
-            LazyColumn(state = listState, modifier = Modifier.cartList()) {
+            LazyColumn(state = listState, modifier = Modifier.cardList()) {
                 items(listItems, key = { it }) {
                     WeCardListItem(label = "第${it}行")
                 }

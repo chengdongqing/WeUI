@@ -37,7 +37,7 @@ import top.chengdongqing.weui.core.ui.components.button.ButtonSize
 import top.chengdongqing.weui.core.ui.components.button.ButtonType
 import top.chengdongqing.weui.core.ui.components.button.WeButton
 import top.chengdongqing.weui.core.ui.components.cardlist.WeCardListItem
-import top.chengdongqing.weui.core.ui.components.cardlist.cartList
+import top.chengdongqing.weui.core.ui.components.cardlist.cardList
 import top.chengdongqing.weui.core.ui.components.input.WeInput
 import top.chengdongqing.weui.core.ui.components.loading.LoadMoreType
 import top.chengdongqing.weui.core.ui.components.loading.WeLoadMore
@@ -141,7 +141,7 @@ private fun PhoneContactList() {
     WePopup(visible, title = "通讯录", onClose = { visible = false }) {
         LazyColumn(
             modifier = Modifier
-                .cartList()
+                .cardList()
                 .fillMaxHeight(0.5f)
         ) {
             items(contacts) {
@@ -216,7 +216,7 @@ fun PhoneCallLogList() {
     WePopup(visible, title = "通话记录", onClose = { visible = false }) {
         LazyColumn(
             modifier = Modifier
-                .cartList()
+                .cardList()
                 .fillMaxHeight(0.5f)
         ) {
             items(logs) {
