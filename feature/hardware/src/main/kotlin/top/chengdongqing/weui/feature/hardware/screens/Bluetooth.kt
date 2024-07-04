@@ -38,6 +38,8 @@ import top.chengdongqing.weui.core.ui.components.loading.LoadMoreType
 import top.chengdongqing.weui.core.ui.components.loading.WeLoadMore
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
 import top.chengdongqing.weui.core.utils.showToast
+import kotlin.math.max
+import kotlin.math.min
 
 @SuppressLint("MissingPermission")
 @OptIn(ExperimentalPermissionsApi::class)
@@ -197,15 +199,15 @@ private fun buildBluetoothInfo(device: BluetoothDevice, rssi: Int): BluetoothInf
     return BluetoothInfo(
         name = device.name,
         address = device.address,
-        rssi = "${rssi}dBm (${calculateSinglePercentage(rssi)}%)",
+        rssi = "${rssi}dBm (${calculateSingleStrength(rssi)}%)",
         type = determineBluetoothType(device.type),
         bondState = determineBluetoothBondState(device.bondState),
         uuids = device.uuids?.map { it.toString() }?.distinct() ?: listOf()
     )
 }
 
-private fun calculateSinglePercentage(rssi: Int): Int {
-    return ((rssi + 100) * 100) / 100
+private fun calculateSingleStrength(dBm: Int): Int {
+    return min(max(2 * (dBm + 100), 0), 100)
 }
 
 private fun determineBluetoothType(type: Int): String {

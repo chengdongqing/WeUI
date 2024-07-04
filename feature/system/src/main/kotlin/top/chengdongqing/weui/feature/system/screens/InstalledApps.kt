@@ -62,7 +62,10 @@ fun InstalledAppsScreen() {
         val context = LocalContext.current
         val appList = rememberInstalledApps()
 
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(20.dp)) {
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(20.dp),
+            contentPadding = PaddingValues(bottom = 16.dp)
+        ) {
             item {
                 if (appList.isNotEmpty()) {
                     ActionBar(context)

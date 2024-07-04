@@ -11,7 +11,6 @@ dependencies {
     implementation(libs.navigation.compose)
     implementation(libs.accompanist.permissions)
     implementation(libs.amap)
-    implementation(libs.amap.search)
     implementation(libs.bundles.datastore)
 
     implementation(project(":core:ui:theme"))
