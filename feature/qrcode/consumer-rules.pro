@@ -1,0 +1,3 @@
+-keep class com.google.mlkit.**  { *; }
+-keep enum com.google.mlkit.**  { *; }
+-keep interface com.google.mlkit.**  { *; }
