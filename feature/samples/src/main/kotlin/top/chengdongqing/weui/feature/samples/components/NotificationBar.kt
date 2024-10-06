@@ -1,7 +1,7 @@
 package top.chengdongqing.weui.feature.samples.components
 
-import androidx.compose.foundation.DefaultMarqueeVelocity
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.MarqueeDefaults
 import androidx.compose.foundation.MarqueeSpacing
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
@@ -32,7 +32,7 @@ fun WeNotificationBar(
     content: String,
     effect: NotificationBarEffect = NotificationBarEffect.SCROLL,
     scrollSpacingFraction: Float = 1f,
-    scrollVelocity: Dp = DefaultMarqueeVelocity,
+    scrollVelocity: Dp = MarqueeDefaults.Velocity,
     colors: NotificationBarColors = MaterialTheme.notificationBarColorScheme,
     padding: PaddingValues = if (effect == NotificationBarEffect.SCROLL) {
         PaddingValues(vertical = 12.dp)
@@ -57,7 +57,7 @@ fun WeNotificationBar(
             modifier = if (effect == NotificationBarEffect.SCROLL) {
                 Modifier.basicMarquee(
                     iterations = Int.MAX_VALUE,
-                    delayMillis = 0,
+                    repeatDelayMillis = 0,
                     initialDelayMillis = 0,
                     spacing = MarqueeSpacing.fractionOfContainer(scrollSpacingFraction),
                     velocity = scrollVelocity

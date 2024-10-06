@@ -52,16 +52,15 @@ fun rememberCameraLauncher(onChange: (Uri, VisualMediaType) -> Unit): (VisualMed
                 result.data?.getParcelableExtra("uri", Uri::class.java)
             } else {
                 @Suppress("DEPRECATION")
-                result.data?.getParcelableExtra("uri") as? Uri
-            }!!
-            val type = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                result.data?.getParcelableExtra("type", VisualMediaType::class.java)
-            } else {
-                @Suppress("DEPRECATION")
-                result.data?.getParcelableExtra("type") as? VisualMediaType
-            }!!
+                (result.data?.getParcelableExtra("uri"))
+            }
+            val type = result.data?.getStringExtra("type")?.let { typeName ->
+                VisualMediaType.valueOf(typeName)
+            }
 
-            onChange(uri, type)
+            uri?.let { type }?.let { type ->
+                onChange(uri, type)
+            }
         }
     }
 

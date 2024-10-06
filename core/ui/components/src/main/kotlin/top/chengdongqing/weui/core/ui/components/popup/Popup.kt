@@ -232,7 +232,7 @@ private class PopupNestedScrollConnection(
     private val onClose: () -> Unit
 ) : NestedScrollConnection {
     override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-        if (source == NestedScrollSource.Drag && offsetY.intValue > 0) {
+        if (source == NestedScrollSource.UserInput && offsetY.intValue > 0) {
             handleDrag(offsetY, available.y)
             return available
         } else {
@@ -245,7 +245,7 @@ private class PopupNestedScrollConnection(
         available: Offset,
         source: NestedScrollSource
     ): Offset {
-        if (source == NestedScrollSource.Drag) {
+        if (source == NestedScrollSource.UserInput) {
             handleDrag(offsetY, available.y)
             return available
         } else {

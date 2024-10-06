@@ -1,6 +1,7 @@
 package top.chengdongqing.weui.core.ui.components.swipeaction
 
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.splineBasedDecay
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -105,7 +106,11 @@ fun WeSwipeAction(
                     if (!isLabelStyle) RoundedCornerShape(8.dp) else RectangleShape
                 )
                 .padding(horizontal = 16.dp)
-                .anchoredDraggable(state, Orientation.Horizontal, reverseDirection = true),
+                .anchoredDraggable(
+                    state,
+                    reverseDirection = true,
+                    orientation = Orientation.Horizontal
+                ),
             contentAlignment = Alignment.CenterStart
         ) {
             content()
@@ -232,7 +237,8 @@ fun rememberSwipeActionState(
             // 速度阀值：即使没有超过位置阀值，一秒钟滑动多少个像素也能自动进入下一个锚点
             velocityThreshold = { density.run { 100.dp.toPx() } },
             // 切换状态的动画
-            animationSpec = tween()
+            snapAnimationSpec = tween(),
+            decayAnimationSpec = splineBasedDecay(density)
         )
     }
 

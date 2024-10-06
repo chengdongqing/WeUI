@@ -124,7 +124,7 @@ private class CommentNestedScrollConnection(
     private val onClose: () -> Unit
 ) : NestedScrollConnection {
     override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-        if (source == NestedScrollSource.Drag && currentHeight.floatValue < maxHeight) {
+        if (source == NestedScrollSource.UserInput && currentHeight.floatValue < maxHeight) {
             handleDrag(currentHeight, available.y, maxHeight)
             return available
         } else {
@@ -137,7 +137,7 @@ private class CommentNestedScrollConnection(
         available: Offset,
         source: NestedScrollSource
     ): Offset {
-        if (source == NestedScrollSource.Drag) {
+        if (source == NestedScrollSource.UserInput) {
             handleDrag(currentHeight, available.y, maxHeight)
             return available
         } else {
