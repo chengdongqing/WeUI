@@ -94,9 +94,9 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 room = { id = "androidx.room", version.ref = "room" }
 
 # Plugins defined by this project
-weui-android-compose-application = { id = "weui.android.compose.application", version = "unspecified" }
-weui-android-compose-library = { id = "weui.android.compose.library", version = "unspecified" }
-weui-android-room = { id = "weui.android.room", version = "unspecified" }
+weui-android-compose-application = { id = "weui.android.compose.application" }
+weui-android-compose-library = { id = "weui.android.compose.library" }
+weui-android-room = { id = "weui.android.room" }
 
 [bundles]
 camerax = ["camera-camera2", "camera-lifecycle", "camera-view"]

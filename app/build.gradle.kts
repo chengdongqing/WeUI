@@ -18,9 +18,6 @@ android {
 
         android {
             defaultConfig {
-                ndk {
-                    abiFilters.addAll(listOf("arm64-v8a")) // 暂仅支持64位ARM架构的设备（32位：armeabi-v7a）
-                }
             }
         }
     }
