@@ -7,7 +7,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.withFrameMillis
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -33,13 +35,22 @@ import kotlin.math.sin
 fun WeClock(
     zoneId: ZoneId = ZoneId.systemDefault(),
     borderColor: Color = MaterialTheme.colorScheme.outline,
-    scale: Float = 1f
+    scale: Float = 1f,
+    isSmoothSweep: Boolean = false // 是否启用流线扫秒
 ) {
-    val (currentTime, setCurrentTime) = remember { mutableLongStateOf(System.currentTimeMillis()) }
-    LaunchedEffect(Unit) {
+    val currentTimeState = remember { mutableLongStateOf(System.currentTimeMillis()) }
+    LaunchedEffect(isSmoothSweep) {
         while (isActive) {
-            delay(1000)
-            setCurrentTime(System.currentTimeMillis())
+            if (isSmoothSweep) {
+                // 随屏幕刷新率更新
+                withFrameMillis {
+                    currentTimeState.value = System.currentTimeMillis()
+                }
+            } else {
+                // 每秒更新一次
+                delay(1000)
+                currentTimeState.value = System.currentTimeMillis()
+            }
         }
     }
 
@@ -50,16 +61,31 @@ fun WeClock(
         modifier = Modifier
             .size(300.dp)
             .scale(scale)
-    ) {
-        val canvasSize = size.minDimension
-        val radius = canvasSize / 2
-        val center = Offset(x = radius, y = radius)
+            // 缓存静态内容
+            .drawWithCache {
+                onDrawWithContent {
+                    val canvasSize = size.minDimension
+                    val radius = canvasSize / 2
+                    val center = Offset(x = radius, y = radius)
 
-        drawClockFace(radius, borderColor, colors)
-        drawClockScales(radius, center, textMeasurer, colors)
-        drawClockIndicators(radius, center, currentTime, zoneId, colors)
-        drawIndicatorsLock(colors)
-    }
+                    // A. 绘制静态部分
+                    drawClockFace(radius, borderColor, colors)
+                    drawClockScales(radius, center, textMeasurer, colors)
+
+                    // B. 绘制动态部分
+                    // 这里会高频执行
+                    drawClockIndicators(
+                        radius,
+                        center,
+                        currentTimeState.longValue,
+                        zoneId,
+                        colors,
+                        isSmoothSweep
+                    )
+                    drawIndicatorsLock(colors)
+                }
+            }
+    ) { }
 }
 
 // 绘制圆盘和边框
@@ -131,16 +157,24 @@ private fun DrawScope.drawClockIndicators(
     center: Offset,
     currentTime: Long,
     zoneId: ZoneId,
-    colors: ClockColors
+    colors: ClockColors,
+    isSmoothSweep: Boolean
 ) {
     val time = Instant.ofEpochMilli(currentTime).atZone(zoneId).toLocalTime()
     val hours = time.hour % 12
     val minutes = time.minute
     val seconds = time.second
 
+    // 计算平滑偏移量
+    val millisOffset = if (isSmoothSweep) {
+        (currentTime % 1000) / 1000f
+    } else {
+        0f
+    }
+
     val hourAngle = (hours + minutes / 60f) * 30f - 90
     val minuteAngle = minutes * 6f - 90
-    val secondAngle = seconds * 6f - 90
+    val secondAngle = (seconds + millisOffset) * 6f - 90
 
     // 绘制时针
     drawLine(

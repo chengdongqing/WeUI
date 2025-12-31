@@ -32,7 +32,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import top.chengdongqing.weui.core.data.model.MediaItem
 import top.chengdongqing.weui.core.data.model.isVideo
 import top.chengdongqing.weui.core.ui.components.mediapreview.previewMedias

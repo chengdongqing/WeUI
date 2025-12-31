@@ -38,11 +38,11 @@ object VideoDataProvider {
             }
         ),
         VideoItem(
-            videoUrl = "https://xps02.xiaopeng.com/cms/material/video/2023/06-29/video_20230629100416_00416.mp4",
-            thumbnailUrl = "https://s.xiaopeng.com/xp-fe/mainsite/2023/g6/v1_5/p1-2.12.0.jpg",
-            duration = 57.seconds,
-            username = "小鹏汽车",
-            userAvatarUrl = "https://xps01.xiaopeng.com/cms/material/pic/2023/06-05/pic_20230605100914_45631.png",
+            videoUrl = "https://cdn.cnbj1.fds.api.mi-img.com/staticsfile/pc/about/struggle.mp4",
+            thumbnailUrl = "https://i1.mifile.cn/f/i/18/about/about_3.jpg",
+            duration = 6.minutes + 4.seconds,
+            username = "雷军",
+            userAvatarUrl = "https://img.youpin.mi-img.com/shopcenter/7a9796b0_60ce_4d49_a411_7fd70a63cf6d.png",
             content = "童年的一个午后，风吹树叶沙沙作响，村庄集齐了各种声音哄我睡觉，我躺在竹席上睡得很沉，然后做了一个好长好长的梦，梦见菜园里种满了瓜果蔬菜......",
             region = "广州",
             time = "10天前",

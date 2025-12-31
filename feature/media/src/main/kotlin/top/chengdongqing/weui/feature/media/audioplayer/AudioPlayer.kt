@@ -44,7 +44,7 @@ fun WeAudioPlayer(state: AudioPlayerState) {
 @Composable
 private fun PrimaryDuration(state: AudioPlayerState) {
     Text(
-        text = state.currentDuration.milliseconds.format(isFull = true),
+        text = state.positionMs.milliseconds.format(isFull = true),
         color = MaterialTheme.colorScheme.onPrimary,
         fontSize = 30.sp,
         fontWeight = FontWeight.Bold
@@ -54,21 +54,24 @@ private fun PrimaryDuration(state: AudioPlayerState) {
 @Composable
 private fun ProgressControl(state: AudioPlayerState) {
     WeSlider(
-        value = state.currentDuration.toFloat(),
-        range = 0f..state.totalDuration.toFloat()
+        value = state.progress,
+        range = 0f..state.durationMs.toFloat()
     ) {
         state.seekTo(it.roundToInt())
+        if (!state.isPlaying) {
+            state.play()
+        }
     }
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = state.currentDuration.milliseconds.format(),
+            text = state.positionMs.milliseconds.format(),
             color = MaterialTheme.colorScheme.onSecondary
         )
         Text(
-            text = state.totalDuration.milliseconds.format(),
+            text = state.durationMs.milliseconds.format(),
             color = MaterialTheme.colorScheme.onSecondary
         )
     }
@@ -82,11 +85,7 @@ private fun PlayControl(state: AudioPlayerState) {
             .clip(CircleShape)
             .background(MaterialTheme.colorScheme.onBackground)
             .clickable {
-                if (state.isPlaying) {
-                    state.pause()
-                } else {
-                    state.play()
-                }
+                state.toggle()
             },
         contentAlignment = Alignment.Center
     ) {

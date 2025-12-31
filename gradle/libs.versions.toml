@@ -1,37 +1,38 @@
 [versions]
 # 核心库
-agp = "8.7.0"
-datastore = "1.1.1"
-kotlin = "2.0.0"
-compose-bom = "2024.09.03"
+agp = "8.13.2"
+datastore = "1.2.0"
+kotlin = "2.3.0"
+ksp = "2.3.0"
+compose-bom = "2025.12.01"
 compose-compiler = "1.5.15"
-core-ktx = "1.13.1"
-lifecycle-runtime-ktx = "2.8.6"
-activity-compose = "1.9.2"
+core-ktx = "1.17.0"
+lifecycle-runtime-ktx = "2.10.0"
+activity-compose = "1.12.2"
 
 # 官方库
-accompanist-permissions = "0.34.0"
-biometric = "1.2.0-alpha05"
-camerax = "1.3.4"
-coil-compose = "2.6.0"
-material-icons-extended = "1.7.3"
-navigation-compose = "2.8.2"
-room = "2.6.1"
-ksp = "2.0.0-1.0.21"
-android-tools = "31.7.0"
-room-gradle-plugin = "2.6.1"
+accompanist-permissions = "0.37.3"
+biometric = "1.4.0-alpha05"
+camerax = "1.5.2"
+material-icons-extended = "1.7.8"
+navigation-compose = "2.9.6"
+room = "2.8.4"
+android-tools = "31.13.2"
+room-gradle-plugin = "2.8.4"
 # 测试相关
 junit = "4.13.2"
-androidx-test-ext-junit = "1.2.1"
-espresso-core = "3.6.1"
+androidx-test-ext-junit = "1.3.0"
+espresso-core = "3.7.0"
 
 # 三方库
 lunar = "1.6.3"
 pinyin = "0.4.0"
-reorderable = "0.9.6"
-retrofit = "2.11.0"
+retrofit = "3.0.0"
 mlkit = "17.3.0"
-zxing-core = "3.5.3"
+zxing-core = "3.5.4"
+amap-map-search = "10.1.600_loc6.5.1_sea9.7.4"
+coil = "3.3.0"
+foundation = "1.10.0"
 
 [libraries]
 # 核心库
@@ -69,12 +70,12 @@ androidx-test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "a
 
 # 三方库
 lunar = { module = "cn.6tail:lunar", version.ref = "lunar" } # 计算农历日期与节日
-coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil-compose" } # 支持异步加载图片
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" } # colil核心库
+coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" } # 加载网络图片
 pinyin = { module = "com.github.houbb:pinyin", version.ref = "pinyin" } # 汉字转拼音
-reorderable = { module = "org.burnoutcrew.composereorderable:reorderable", version.ref = "reorderable" } # 支持拖拽排序
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" } # 网络请求库
 retrofit-converter = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" } # 支持网络响应结果转为指定类对象
-amap = { module = "com.amap.api:3dmap-location-search", version = "latest.integration" } # 高德地图
+amap = { module = "com.amap.api:3dmap-location-search", version.ref = "amap-map-search" } # 高德地图
 zxing-core = { module = "com.google.zxing:core", version.ref = "zxing-core" } # 二维码生成/识别（效率低）
 mlkit-barcode-scanning = { module = "com.google.mlkit:barcode-scanning", version.ref = "mlkit" } # 二维码识别（基于机器学习）
 
@@ -84,6 +85,7 @@ android-tools-common = { group = "com.android.tools", name = "common", version.r
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 ksp-gradle-plugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 room-gradle-plugin = { group = "androidx.room", name = "room-gradle-plugin", version.ref = "room-gradle-plugin" }
+androidx-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundation" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }
@@ -94,9 +96,9 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 room = { id = "androidx.room", version.ref = "room" }
 
 # Plugins defined by this project
-weui-android-compose-application = { id = "weui.android.compose.application", version = "unspecified" }
-weui-android-compose-library = { id = "weui.android.compose.library", version = "unspecified" }
-weui-android-room = { id = "weui.android.room", version = "unspecified" }
+weui-android-compose-application = { id = "weui.android.compose.application" }
+weui-android-compose-library = { id = "weui.android.compose.library" }
+weui-android-room = { id = "weui.android.room" }
 
 [bundles]
 camerax = ["camera-camera2", "camera-lifecycle", "camera-view"]

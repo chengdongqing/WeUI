@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.IntSize
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import top.chengdongqing.weui.core.utils.detectTransformGesturesWithManualConsuming
 import top.chengdongqing.weui.core.utils.rememberLastState
 

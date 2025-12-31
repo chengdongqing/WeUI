@@ -27,7 +27,7 @@ class CameraActivity : ComponentActivity() {
                 WeCamera(type, onRevoked = { finish() }) { uri, type ->
                     val intent = Intent().apply {
                         putExtra("uri", uri)
-                        putExtra("type", type)
+                        putExtra("type", type.name)
                     }
                     setResult(RESULT_OK, intent)
                     finish()

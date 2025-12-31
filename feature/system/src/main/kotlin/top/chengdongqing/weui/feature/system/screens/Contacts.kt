@@ -26,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
@@ -43,7 +44,6 @@ import top.chengdongqing.weui.core.ui.components.loading.LoadMoreType
 import top.chengdongqing.weui.core.ui.components.loading.WeLoadMore
 import top.chengdongqing.weui.core.ui.components.popup.WePopup
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
-import top.chengdongqing.weui.core.ui.components.toast.rememberToastState
 import top.chengdongqing.weui.core.utils.DefaultDateTimeFormatter
 import top.chengdongqing.weui.core.utils.formatChinese
 import java.util.Date
@@ -69,46 +69,42 @@ private fun PhoneCall() {
     val context = LocalContext.current
     val callPermissionState = rememberPermissionState(Manifest.permission.CALL_PHONE)
     var number by remember { mutableStateOf("") }
-    val toast = rememberToastState()
 
     WeInput(
         value = number,
         placeholder = "请输入号码",
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
-    ) {
-        number = it
+    ) { newValue ->
+        // 过滤为纯数字
+        number = newValue.filter { it.isDigit() }
     }
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceAround
     ) {
         WeButton(
-            text = "打电话(直接拨打)",
+            text = "拨号(系统拨号盘)",
             type = ButtonType.PLAIN,
-            size = ButtonSize.MEDIUM
+            size = ButtonSize.MEDIUM,
+            width = Dp.Unspecified,
+            disabled = number.isEmpty()
         ) {
-            if (callPermissionState.status.isGranted) {
-                if (number.isEmpty()) {
-                    toast.show("请输入号码")
-                } else {
-                    val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:${number}"))
-                    context.startActivity(intent)
-                }
-            } else {
-                callPermissionState.launchPermissionRequest()
-            }
+            val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:${number}"))
+            context.startActivity(intent)
         }
         Spacer(modifier = Modifier.width(16.dp))
         WeButton(
-            text = "打电话(系统拨号盘)",
+            text = "拨号(直接拨打)",
             type = ButtonType.PLAIN,
-            size = ButtonSize.MEDIUM
+            size = ButtonSize.MEDIUM,
+            width = Dp.Unspecified,
+            disabled = number.isEmpty()
         ) {
-            if (number.isEmpty()) {
-                toast.show("请输入号码")
-            } else {
-                val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:${number}"))
+            if (callPermissionState.status.isGranted) {
+                val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:${number}"))
                 context.startActivity(intent)
+            } else {
+                callPermissionState.launchPermissionRequest()
             }
         }
     }

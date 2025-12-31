@@ -10,6 +10,7 @@ import android.os.Build
 import android.provider.Settings
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -101,22 +102,31 @@ private fun WiFiList(wifiList: List<WiFiInfo>) {
 @Composable
 private fun WiFiListItem(wifi: WiFiInfo) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(60.dp),
+        modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(text = wifi.name, color = MaterialTheme.colorScheme.onPrimary)
-            Spacer(modifier = Modifier.width(4.dp))
+        Column(modifier = Modifier.padding(vertical = 16.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                if (wifi.name.isNotEmpty()) {
+                    Text(text = wifi.name, color = MaterialTheme.colorScheme.onPrimary)
+                    Spacer(modifier = Modifier.width(4.dp))
+                }
+                Text(
+                    text = wifi.band,
+                    color = MaterialTheme.colorScheme.onSecondary,
+                    fontSize = 10.sp,
+                    modifier = Modifier
+                        .border(0.5.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(3.dp))
+                        .padding(horizontal = 3.dp)
+                )
+            }
+            Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = wifi.band,
+                text = "MAC地址：${wifi.id}",
                 color = MaterialTheme.colorScheme.onSecondary,
                 fontSize = 10.sp,
-                modifier = Modifier
-                    .border(0.5.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(3.dp))
-                    .padding(horizontal = 3.dp)
+                lineHeight = 14.sp
             )
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -142,6 +152,7 @@ private fun buildWiFiList(scanResultList: List<ScanResult>): List<WiFiInfo> {
     return scanResultList.sortedByDescending { it.level }
         .map { item ->
             WiFiInfo(
+                id = item.BSSID,
                 name = getSSID(item),
                 band = determineWifiBand(item.frequency),
                 level = "${calculateSignalLevel(item.level)}%",
@@ -187,6 +198,7 @@ private fun isWifiSecure(capabilities: String): Boolean {
 }
 
 private data class WiFiInfo(
+    val id: String,
     val name: String,
     val band: String,
     val level: String,

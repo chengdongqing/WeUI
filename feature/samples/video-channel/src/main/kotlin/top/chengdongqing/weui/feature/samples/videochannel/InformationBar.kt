@@ -26,7 +26,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import top.chengdongqing.weui.core.ui.theme.PlainColor
 import top.chengdongqing.weui.feature.samples.videochannel.data.model.VideoItem
 

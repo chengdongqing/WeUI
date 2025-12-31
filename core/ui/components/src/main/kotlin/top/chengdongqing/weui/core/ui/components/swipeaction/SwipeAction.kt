@@ -1,7 +1,5 @@
 package top.chengdongqing.weui.core.ui.components.swipeaction
 
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.splineBasedDecay
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -26,6 +24,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -222,24 +221,23 @@ fun rememberSwipeActionState(
     val startActionWidthPx = density.run { (actionItemWidth * startActionCount).toPx() }
     val endActionWidthPx = density.run { (actionItemWidth * endActionCount).toPx() }
 
+    // 定义锚点逻辑
+    val anchors = DraggableAnchors {
+        DragAnchor.Start at -startActionWidthPx
+        DragAnchor.Center at 0f
+        DragAnchor.End at endActionWidthPx
+    }
+
     val state = remember {
         AnchoredDraggableState(
-            // 初始状态
             initialValue,
-            // 设置每个锚点对应的位置（偏移量）
-            anchors = DraggableAnchors {
-                DragAnchor.Start at -startActionWidthPx
-                DragAnchor.Center at 0f
-                DragAnchor.End at endActionWidthPx
-            },
-            // 位置阀值：滑动多远距离自动进入该锚点
-            positionalThreshold = { totalDistance -> totalDistance * 0.5f },
-            // 速度阀值：即使没有超过位置阀值，一秒钟滑动多少个像素也能自动进入下一个锚点
-            velocityThreshold = { density.run { 100.dp.toPx() } },
-            // 切换状态的动画
-            snapAnimationSpec = tween(),
-            decayAnimationSpec = splineBasedDecay(density)
+            anchors
         )
+    }
+
+    // 若锚点变化则更新state
+    LaunchedEffect(anchors) {
+        state.updateAnchors(anchors)
     }
 
     return SwipeActionState(

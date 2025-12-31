@@ -9,7 +9,7 @@ android {
 dependencies {
     implementation(libs.navigation.compose)
     implementation(libs.coil.compose)
-    implementation(libs.reorderable)
+    implementation(libs.coil.network.okhttp)
     implementation(libs.lunar)
 
     implementation(project(":core:ui:theme"))
@@ -18,4 +18,5 @@ dependencies {
     implementation(project(":feature:samples:file-browser"))
     implementation(project(":feature:samples:video-channel"))
     implementation(project(":feature:samples:paint"))
+    implementation(libs.androidx.foundation)
 }

@@ -9,9 +9,8 @@ import androidx.compose.foundation.pager.PagerScope
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ScrollableTabRow
+import androidx.compose.material3.SecondaryScrollableTabRow
 import androidx.compose.material3.TabRowDefaults
-import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -46,12 +45,14 @@ fun WeTabView(
 private fun TabBar(pagerState: PagerState, options: List<String>) {
     val coroutineScope = rememberCoroutineScope()
 
-    ScrollableTabRow(
+    SecondaryScrollableTabRow(
         selectedTabIndex = pagerState.currentPage,
         edgePadding = 0.dp,
-        indicator = { tabPositions ->
+        indicator = {
             TabRowDefaults.SecondaryIndicator(
-                modifier = Modifier.tabIndicatorOffset(tabPositions[pagerState.currentPage]),
+                modifier = Modifier.tabIndicatorOffset(
+                    selectedTabIndex = pagerState.currentPage
+                ),
                 height = 2.5.dp,
                 color = MaterialTheme.colorScheme.primary
             )

@@ -41,9 +41,9 @@ import top.chengdongqing.weui.core.ui.components.button.WeButton
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
 
 @Composable
-fun DragSorterScreen() {
+fun ReorderableScreen() {
     WeScreen(
-        title = "DragSorter",
+        title = "Reorderable",
         description = "拖拽排序",
         scrollEnabled = false,
         padding = PaddingValues(horizontal = 16.dp)
@@ -55,15 +55,15 @@ fun DragSorterScreen() {
         }
         Spacer(modifier = Modifier.height(20.dp))
         if (isList) {
-            SortableList()
+            ReorderableList()
         } else {
-            SortableGrid()
+            ReorderableGrid()
         }
     }
 }
 
 @Composable
-private fun SortableList() {
+private fun ReorderableList() {
     val data = remember {
         mutableStateListOf<String>().apply {
             addAll(List(100) { "Item ${it + 1}" })
@@ -106,7 +106,7 @@ private fun SortableList() {
 }
 
 @Composable
-private fun SortableGrid() {
+private fun ReorderableGrid() {
     val data = remember {
         mutableStateListOf<String>().apply {
             addAll((List(100) { "Item ${it + 1}" }))

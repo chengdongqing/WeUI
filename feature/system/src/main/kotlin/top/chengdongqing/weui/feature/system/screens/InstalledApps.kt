@@ -77,6 +77,9 @@ fun InstalledAppsScreen() {
             items(appList) { app ->
                 AppItem(app, context)
             }
+            item {
+                Spacer(modifier = Modifier.height(20.dp))
+            }
         }
     }
 }
@@ -261,9 +264,9 @@ private fun rememberInstalledApps(): List<AppItem> {
                 val icon = resolveInfo.loadIcon(packageManager)
                 val packageName = resolveInfo.activityInfo.packageName
                 val packageInfo = packageManager.getPackageInfo(packageName, 0)
-                val versionName = packageInfo.versionName
+                val versionName = packageInfo.versionName ?: "0.0"
                 val lastModified = formatTime(packageInfo.lastUpdateTime)
-                val apkPath = packageInfo.applicationInfo.sourceDir
+                val apkPath = packageInfo.applicationInfo?.sourceDir ?: ""
                 val apkSize = formatFileSize(File(apkPath))
                 AppItem(
                     name,

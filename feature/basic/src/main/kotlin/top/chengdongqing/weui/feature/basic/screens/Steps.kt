@@ -119,6 +119,7 @@ fun StepsScreen() {
                     step = 0
                 }
             }
+            Spacer(modifier = Modifier.height(100.dp))
         }
     }
 }

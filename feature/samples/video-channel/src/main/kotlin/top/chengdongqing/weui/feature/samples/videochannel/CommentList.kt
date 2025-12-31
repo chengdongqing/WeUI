@@ -35,7 +35,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import top.chengdongqing.weui.core.ui.theme.FontLinkColor
 import top.chengdongqing.weui.core.utils.clickableWithoutRipple
 import top.chengdongqing.weui.feature.samples.videochannel.data.model.VideoComment

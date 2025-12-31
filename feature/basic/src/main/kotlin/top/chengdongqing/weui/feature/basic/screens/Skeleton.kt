@@ -83,5 +83,5 @@ private fun Content(isActive: Boolean) {
             WeSkeleton.RectangleLineShort(isActive)
         }
     }
-    Spacer(modifier = Modifier.height(48.dp))
+    Spacer(modifier = Modifier.height(100.dp))
 }

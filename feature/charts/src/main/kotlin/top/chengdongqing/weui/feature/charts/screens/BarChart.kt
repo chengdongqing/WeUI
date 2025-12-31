@@ -81,6 +81,7 @@ fun BarChartScreen() {
         WeButton(text = "切换最大柱宽", type = ButtonType.PLAIN) {
             toggleMaxBarWidth()
         }
+        Spacer(modifier = Modifier.height(20.dp))
     }
 }
 

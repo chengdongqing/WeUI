@@ -10,11 +10,11 @@ import top.chengdongqing.weui.feature.samples.screens.CubicBezierScreen
 import top.chengdongqing.weui.feature.samples.screens.DigitalKeyboardScreen
 import top.chengdongqing.weui.feature.samples.screens.DigitalRollerScreen
 import top.chengdongqing.weui.feature.samples.screens.DividingRuleScreen
-import top.chengdongqing.weui.feature.samples.screens.DragSorterScreen
 import top.chengdongqing.weui.feature.samples.screens.DropCardScreen
 import top.chengdongqing.weui.feature.samples.screens.IndexedListScreen
 import top.chengdongqing.weui.feature.samples.screens.NotificationBarScreen
 import top.chengdongqing.weui.feature.samples.screens.OrgTreeScreen
+import top.chengdongqing.weui.feature.samples.screens.ReorderableScreen
 import top.chengdongqing.weui.feature.samples.screens.SearchBarScreen
 import top.chengdongqing.weui.feature.samples.screens.SolarSystemScreen
 import top.chengdongqing.weui.feature.samples.videochannel.VideoChannelScreen
@@ -41,8 +41,8 @@ fun NavGraphBuilder.addSamplesGraph() {
     composable("indexed_list") {
         IndexedListScreen()
     }
-    composable("drag_sorter") {
-        DragSorterScreen()
+    composable("org/burnoutcrew/reorderable") {
+        ReorderableScreen()
     }
     composable("dividing_rule") {
         DividingRuleScreen()

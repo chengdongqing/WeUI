@@ -11,5 +11,5 @@ data class FileItem(
     val isVisualMedia: Boolean,
     val lastModified: String,
     val childrenCount: Int,
-    @DrawableRes val iconId: Int
+    @get:DrawableRes val iconId: Int
 )

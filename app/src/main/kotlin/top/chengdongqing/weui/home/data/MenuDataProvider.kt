@@ -79,7 +79,7 @@ internal object MenuDataProvider {
         MenuGroup(
             "网络服务", R.drawable.ic_nav_search,
             listOf(
-                MenuItem("HTTPRequest", "http_request"),
+                MenuItem("HttpRequest", "http_request"),
                 MenuItem("FileUpload", "file_upload"),
                 MenuItem("FileDownload", "file_download"),
                 MenuItem("WebSocket", "web_socket")
@@ -134,7 +134,7 @@ internal object MenuDataProvider {
                 MenuItem("FileBrowser", "file_browser"),
                 MenuItem("Paint", "paint"),
                 MenuItem("IndexedList", "indexed_list"),
-                MenuItem("DragSorter", "drag_sorter"),
+                MenuItem("Reorderable", "org/burnoutcrew/reorderable"),
                 MenuItem("DividingRule", "dividing_rule"),
                 MenuItem("OrgTree", "org_tree"),
                 MenuItem("DigitalRoller", "digital_roller"),

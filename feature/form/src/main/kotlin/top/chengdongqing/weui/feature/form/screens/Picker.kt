@@ -1,5 +1,6 @@
 package top.chengdongqing.weui.feature.form.screens
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
@@ -32,7 +33,8 @@ import java.time.format.DateTimeFormatter
 fun PickerScreen() {
     WeScreen(
         title = "Picker",
-        description = "滚动选择器"
+        description = "滚动选择器",
+        padding = PaddingValues(bottom = 100.dp)
     ) {
         DatePickDemo()
         Spacer(modifier = Modifier.height(40.dp))
@@ -41,7 +43,6 @@ fun PickerScreen() {
         CountryPickDemo()
         Spacer(modifier = Modifier.height(40.dp))
         CarPickDemo()
-        Spacer(modifier = Modifier.height(60.dp))
     }
 }
 
@@ -147,9 +148,9 @@ private fun CarPickDemo() {
 
     val sourceMap = remember {
         arrayOf(
-            "小米" to listOf("SU7"),
-            "小鹏" to listOf("G9", "G6", "P7i"),
-            "理想" to listOf("Mega", "L9", "L8", "L7")
+            "小米" to listOf("YU7", "SU7", "SU7 Ultra"),
+            "小鹏" to listOf("X9", "G9", "G7", "G6", "M03", "P7+", "P7"),
+            "理想" to listOf("MEGA", "i6", "i8", "L9", "L8", "L7", "L6")
         )
     }
     var tmpValues by remember { mutableStateOf(values) }
@@ -178,8 +179,8 @@ private fun CarPickDemo() {
     WeInput(
         value = remember(values) {
             arrayOf(
-                ranges[0].getOrElse(values[0]) { 0 },
-                ranges[1].getOrElse(values[1]) { 0 }
+                ranges[0].getOrNull(values[0]) ?: "",
+                ranges[1].getOrNull(values[1]) ?: ""
             ).joinToString(" ")
         },
         textAlign = TextAlign.Center,

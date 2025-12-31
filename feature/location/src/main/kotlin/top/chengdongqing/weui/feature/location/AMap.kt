@@ -1,7 +1,7 @@
 package top.chengdongqing.weui.feature.location
 
 import android.Manifest
-import android.content.ComponentCallbacks
+import android.content.ComponentCallbacks2
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Color
@@ -22,10 +22,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -61,11 +60,15 @@ fun AMap(
     }
 ) {
     val context = LocalContext.current
+    val mapSaveState = rememberSaveable { Bundle() }
+
     // 处理生命周期
-    LifecycleEffect(state.mapView)
+    LifecycleEffect(state.mapView, mapSaveState)
     // 处理定位权限
     PermissionHandler {
-        setLocationArrow(state.map, context)
+        if (mapSaveState.isEmpty) {
+            setLocationArrow(state.map, context)
+        }
     }
 
     Box(modifier) {
@@ -76,6 +79,7 @@ fun AMap(
         controls(state.map)
     }
 }
+
 
 @Composable
 fun BoxScope.LocationControl(map: AMap, onClick: ((LatLng) -> Unit)? = null) {
@@ -156,54 +160,72 @@ private fun PermissionHandler(onGranted: (() -> Unit)? = null) {
 }
 
 @Composable
-private fun LifecycleEffect(mapView: MapView) {
+private fun LifecycleEffect(mapView: MapView, mapSaveState: Bundle) {
     val context = LocalContext.current
-    val lifecycle = LocalLifecycleOwner.current.lifecycle
-    val previousState = remember { mutableStateOf(Lifecycle.Event.ON_CREATE) }
+    val lifecycleOwner = LocalLifecycleOwner.current
 
-    DisposableEffect(context, lifecycle, mapView) {
-        val mapLifecycleObserver = mapView.lifecycleObserver(previousState)
+    DisposableEffect(lifecycleOwner, mapView) {
+        val lifecycle = lifecycleOwner.lifecycle
         val callbacks = mapView.componentCallbacks()
 
-        lifecycle.addObserver(mapLifecycleObserver)
+        // 创建生命周期观察者
+        val observer = LifecycleEventObserver { _, event ->
+            when (event) {
+                Lifecycle.Event.ON_CREATE -> mapView.onCreate(mapSaveState)
+                // 恢复活跃
+                Lifecycle.Event.ON_RESUME -> {
+                    mapView.onResume()
+                    // 强制重绘，解决返回时偶尔黑屏
+                    mapView.postInvalidate()
+                }
+                // 挂起
+                Lifecycle.Event.ON_PAUSE -> {
+                    mapView.onSaveInstanceState(mapSaveState)
+                    mapView.onPause()
+                }
+
+                else -> {}
+            }
+        }
+
+        // 注册
+        lifecycle.addObserver(observer)
         context.registerComponentCallbacks(callbacks)
 
         onDispose {
-            lifecycle.removeObserver(mapLifecycleObserver)
+            // 销毁前保存一次，这里的销毁可能是屏幕旋转或主题切换导致
+            mapView.onSaveInstanceState(mapSaveState)
+
+            // 取消注册与彻底销毁
+            lifecycle.removeObserver(observer)
             context.unregisterComponentCallbacks(callbacks)
-        }
-    }
-    DisposableEffect(mapView) {
-        onDispose {
+
+            // 彻底清理地图
+            mapView.onPause()
             mapView.onDestroy()
             mapView.removeAllViews()
         }
     }
 }
 
-private fun MapView.lifecycleObserver(previousState: MutableState<Lifecycle.Event>): LifecycleEventObserver =
-    LifecycleEventObserver { _, event ->
-        when (event) {
-            Lifecycle.Event.ON_CREATE -> {
-                if (previousState.value != Lifecycle.Event.ON_STOP) {
-                    this.onCreate(Bundle())
-                }
-            }
-
-            Lifecycle.Event.ON_RESUME -> this.onResume()
-            Lifecycle.Event.ON_PAUSE -> this.onPause()
-
-            else -> {}
-        }
-        previousState.value = event
-    }
-
-private fun MapView.componentCallbacks(): ComponentCallbacks =
-    object : ComponentCallbacks {
+private fun MapView.componentCallbacks(): ComponentCallbacks2 =
+    object : ComponentCallbacks2 {
         override fun onConfigurationChanged(config: Configuration) {}
 
+        // 系统极度缺内存，无条件清理
+        @Suppress("OVERRIDE_DEPRECATION")
         override fun onLowMemory() {
+            // 这里能获取到2个this：1.componentCallbacks本身；2.MapView实例
+            // 直接用this是获取当前作用域；而this@componentCallbacks可以获取到componentCallbacks的作用域
             this@componentCallbacks.onLowMemory()
+        }
+
+        // 可精细控制，分等级
+        override fun onTrimMemory(level: Int) {
+            // 只要 UI 隐藏或者内存中度紧张，就让地图清理一下
+            if (level >= ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN) {
+                this@componentCallbacks.onLowMemory()
+            }
         }
     }
 

@@ -58,6 +58,7 @@ fun DigitalRollerScreen() {
         RadioCard(title = "保留小数", options = decimalOptions, value = decimals) {
             decimals = it
         }
+        Spacer(modifier = Modifier.height(40.dp))
     }
 }
 

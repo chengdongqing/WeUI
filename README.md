@@ -80,7 +80,7 @@ Notification（发送通知）
 ```
 网络服务
 ```
-HTTPRequest（网络请求）
+HttpRequest（网络请求）
 FileUpload（文件上传）
 FileDownload（文件下载）
 WebSocket（双向通信）
@@ -125,7 +125,7 @@ DropCard （滑走式卡片）
 FileBrowser （文件浏览器）
 Paint （画板）
 IndexedList（索引列表）
-DragSorter（拖拽排序）
+Reorderable（拖拽排序）
 DividingRule （刻度尺）
 OrgTree（组织机构树）
 DigitalRoller（数字滚轮）

@@ -10,7 +10,6 @@ dependencies {
     implementation(libs.accompanist.permissions)
     implementation(libs.navigation.compose)
     implementation(libs.coil.compose)
-    implementation(libs.reorderable)
 
     implementation(project(":core:ui:theme"))
     implementation(project(":core:ui:components"))

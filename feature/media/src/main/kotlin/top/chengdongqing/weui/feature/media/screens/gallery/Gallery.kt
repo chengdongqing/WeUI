@@ -28,7 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import top.chengdongqing.weui.core.data.model.MediaItem
 import top.chengdongqing.weui.core.data.model.isVideo
 import top.chengdongqing.weui.core.ui.components.loading.WeLoadMore

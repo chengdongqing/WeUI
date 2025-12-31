@@ -14,8 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.core.utils.clickableWithoutRipple
+import top.chengdongqing.weui.core.utils.vibrateShort
 
 /**
  * 开关
@@ -35,6 +37,7 @@ fun WeSwitch(
         animationSpec = tween(durationMillis = 100),
         label = "SwitchAnimation"
     )
+    val context = LocalContext.current
 
     Box(
         Modifier
@@ -50,6 +53,7 @@ fun WeSwitch(
             .alpha(if (disabled) 0.7f else 1f)
             .clickableWithoutRipple(!disabled) {
                 onChange?.invoke(!checked)
+                context.vibrateShort()
             }
     ) {
         Box(
