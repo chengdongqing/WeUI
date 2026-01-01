@@ -10,6 +10,7 @@ import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import top.chengdongqing.weui.core.utils.copyToFile
 import top.chengdongqing.weui.feature.network.upload.data.model.UploadResult
 import top.chengdongqing.weui.feature.network.upload.data.repository.UploadRepositoryImpl
 import java.io.File
@@ -47,7 +48,7 @@ class UploadViewModel(private val application: Application) : AndroidViewModel(a
                     val tempFile = File.createTempFile("uploadFile", null).apply {
                         deleteOnExit()
                     }
-                    inputStream.copyTo(tempFile.outputStream())
+                    inputStream.copyToFile(tempFile)
                     return@async tempFile
                 }
                 null

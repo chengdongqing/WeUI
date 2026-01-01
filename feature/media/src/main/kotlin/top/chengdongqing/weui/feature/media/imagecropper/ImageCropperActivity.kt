@@ -13,7 +13,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import top.chengdongqing.weui.core.ui.theme.WeUITheme
-import top.chengdongqing.weui.core.utils.SetupStatusBarStyle
+import top.chengdongqing.weui.core.utils.SetupFullscreen
 
 class ImageCropperActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,7 +27,7 @@ class ImageCropperActivity : ComponentActivity() {
                 intent.getParcelableExtra("uri")
             }!!
 
-            SetupStatusBarStyle(isDark = false)
+            SetupFullscreen()
             WeUITheme(darkTheme = true) {
                 WeImageCropper(uri, onCancel = { finish() }) {
                     val intent = Intent().apply {

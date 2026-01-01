@@ -7,18 +7,11 @@ import androidx.core.content.FileProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.io.InputStream
 
-fun deleteFile(file: File): Boolean {
-    if (file.isDirectory) {
-        // 如果是目录，递归删除其下的所有文件和子目录
-        file.listFiles()?.forEach { child ->
-            deleteFile(child)
-        }
-    }
-    // 删除文件或目录本身
-    return file.delete()
-}
-
+/**
+ * 计算文件大小
+ */
 suspend fun calculateFileSize(file: File): Long = withContext(Dispatchers.IO) {
     if (file.isFile) {
         // 如果是文件，直接返回其大小
@@ -38,11 +31,17 @@ suspend fun calculateFileSize(file: File): Long = withContext(Dispatchers.IO) {
     }
 }
 
+/**
+ * 格式化文件大小
+ */
 fun formatFileSize(file: File): String {
     val size = if (file.exists()) file.length() else 0
     return formatFileSize(size)
 }
 
+/**
+ * 格式化文件大小
+ */
 fun formatFileSize(size: Long): String {
     return when {
         size < 1024 -> "$size B"
@@ -52,25 +51,80 @@ fun formatFileSize(size: Long): String {
     }
 }
 
+/**
+ * 获取隔离的文件uri
+ */
 fun Context.getFileProviderUri(file: File): Uri {
     return FileProvider.getUriForFile(this, "$packageName.provider", file)
 }
 
-fun Context.shareFile(file: File, mimeType: String = "image/*") {
-    val sharingUri = getFileProviderUri(file)
+/**
+ * 分享文件
+ */
+fun Context.shareFile(file: File, mimeType: String) {
+    val uri = getFileProviderUri(file)
     val intent = Intent(Intent.ACTION_SEND).apply {
         this.type = mimeType
-        putExtra(Intent.EXTRA_STREAM, sharingUri)
+        putExtra(Intent.EXTRA_STREAM, uri)
+        // 授予临时访问权限
         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
     }
-    startActivity(intent)
+
+    startActivity(Intent.createChooser(intent, "分享文件"))
 }
 
+/**
+ * 打开文件
+ */
 fun Context.openFile(file: File, mimeType: String) {
     val uri = getFileProviderUri(file)
     val intent = Intent(Intent.ACTION_VIEW).apply {
         setDataAndType(uri, mimeType)
+        // 授予临时访问权限
         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
     }
-    startActivity(intent)
+
+    startActivity(Intent.createChooser(intent, "打开文件"))
+}
+
+
+/**
+ * 删除文件
+ */
+fun deleteFile(file: File): Boolean {
+    if (file.isDirectory) {
+        // 如果是目录，递归删除其下的所有文件和子目录
+        file.listFiles()?.forEach { child ->
+            deleteFile(child)
+        }
+    }
+    // 删除文件或目录本身
+    return file.delete()
+}
+
+/**
+ * 复制文件
+ */
+fun InputStream.copyToFile(destFile: File): Boolean {
+    return try {
+        destFile.outputStream().use { outputStream ->
+            copyTo(outputStream)
+        }
+        true
+    } catch (e: Exception) {
+        e.printStackTrace()
+        false
+    }
+}
+
+/**
+ * 获取文件扩展名
+ */
+fun String.getFileExtension(default: String = "jpg"): String {
+    val extension = substringAfterLast(".", "")
+    return if (extension.isEmpty()) {
+        ".$default"
+    } else {
+        ".$extension"
+    }
 }

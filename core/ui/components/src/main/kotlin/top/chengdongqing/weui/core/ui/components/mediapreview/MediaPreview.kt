@@ -41,6 +41,9 @@ import top.chengdongqing.weui.core.ui.components.videoplayer.WeVideoPlayer
 import top.chengdongqing.weui.core.ui.components.videoplayer.rememberVideoPlayerState
 import top.chengdongqing.weui.core.utils.MediaStoreUtils
 import top.chengdongqing.weui.core.utils.SetupFullscreen
+import top.chengdongqing.weui.core.utils.copyToFile
+import top.chengdongqing.weui.core.utils.copyUri
+import top.chengdongqing.weui.core.utils.getFileExtension
 import top.chengdongqing.weui.core.utils.shareFile
 import java.io.File
 import java.io.IOException
@@ -106,6 +109,27 @@ private fun BoxScope.ToolBar(medias: Array<MediaItem>, pagerState: PagerState) {
     val coroutineScope = rememberCoroutineScope()
     val media = medias[pagerState.currentPage]
 
+    /**
+     * 处理分享
+     */
+    fun handleShare() {
+        coroutineScope.launch(Dispatchers.IO) {
+            context.contentResolver.openInputStream(media.uri)?.use { inputStream ->
+                // 创建临时文件
+                val tempFile = File.createTempFile(
+                    "media_",
+                    media.filename.getFileExtension()
+                ).apply {
+                    deleteOnExit()
+                }
+                // 拷贝到临时文件
+                inputStream.copyToFile(tempFile)
+                // 调用系统分享
+                context.shareFile(tempFile, media.mimeType)
+            }
+        }
+    }
+
     Row(
         modifier = Modifier
             .align(Alignment.BottomEnd)
@@ -113,18 +137,7 @@ private fun BoxScope.ToolBar(medias: Array<MediaItem>, pagerState: PagerState) {
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         ActionIcon(imageVector = Icons.Outlined.Share, label = "分享") {
-            coroutineScope.launch(Dispatchers.IO) {
-                context.contentResolver.openInputStream(media.uri)?.use { inputStream ->
-                    val tempFile = File.createTempFile(
-                        "media_",
-                        media.filename.substringAfterLast(".")
-                    ).apply {
-                        deleteOnExit()
-                    }
-                    inputStream.copyTo(tempFile.outputStream())
-                    context.shareFile(tempFile, media.mimeType)
-                }
-            }
+            handleShare()
         }
         ActionIcon(imageVector = Icons.Outlined.Download, label = "保存") {
             coroutineScope.launch {
@@ -156,9 +169,10 @@ private fun ActionIcon(imageVector: ImageVector, label: String?, onClick: () -> 
     }
 }
 
+/**
+ * 保存媒体文件到相册
+ */
 private suspend fun Context.saveToAlbum(media: MediaItem): Boolean {
-    val context = this
-
     return withContext(Dispatchers.IO) {
         try {
             val contentUri = MediaStoreUtils.getContentUri(media.mediaType)
@@ -166,20 +180,24 @@ private suspend fun Context.saveToAlbum(media: MediaItem): Boolean {
                 media.filename,
                 media.mediaType,
                 media.mimeType,
-                context
+                this@saveToAlbum
             )
 
-            contentResolver.apply {
-                insert(contentUri, contentValues)?.let { newMediaUri ->
-                    openOutputStream(newMediaUri)?.use { outputStream ->
-                        openInputStream(media.uri)?.use { inputStream ->
-                            inputStream.copyTo(outputStream)
-                        }
-                    }
-                    MediaStoreUtils.finishPending(newMediaUri, context)
-                }
+            // 插入数据库记录（此时文件是 IS_PENDING = 1 状态）
+            val tempUri =
+                contentResolver.insert(contentUri, contentValues) ?: return@withContext false
+            // 拷贝数据流
+            val isSuccess = contentResolver.copyUri(media.uri, tempUri)
+
+            if (isSuccess) {
+                // 成功：解除挂起状态，让相册可见
+                MediaStoreUtils.finishPending(tempUri, this@saveToAlbum)
+                true
+            } else {
+                // 失败：删除数据库中的占位记录，防止相册出现空白文件
+                contentResolver.delete(tempUri, null)
+                false
             }
-            true
         } catch (e: IOException) {
             e.printStackTrace()
             false
