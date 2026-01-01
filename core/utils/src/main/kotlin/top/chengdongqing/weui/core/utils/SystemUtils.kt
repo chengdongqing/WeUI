@@ -14,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
+import java.io.File
 
 @Composable
 fun rememberStatusBarHeight(): Dp {
@@ -56,6 +57,20 @@ data class BatteryInfo(
     val isCharging: Boolean
 )
 
+/**
+ * 显示提示框
+ */
 fun Context.showToast(text: String) {
     Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+}
+
+/**
+ * 安装APK
+ */
+fun Context.installApk(apkPath: String) {
+    val tempFile = File.createTempFile("app_", ".apk").apply {
+        deleteOnExit()
+    }
+    File(apkPath).copyTo(tempFile, true)
+    openFile(tempFile, "application/vnd.android.package-archive")
 }

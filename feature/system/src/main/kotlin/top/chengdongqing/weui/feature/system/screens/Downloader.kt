@@ -23,6 +23,7 @@ import top.chengdongqing.weui.core.ui.components.button.WeButton
 import top.chengdongqing.weui.core.ui.components.input.WeInput
 import top.chengdongqing.weui.core.ui.components.input.WeTextarea
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
+import top.chengdongqing.weui.core.utils.installApk
 import top.chengdongqing.weui.core.utils.showToast
 
 @Composable
@@ -40,12 +41,12 @@ fun DownloaderScreen() {
         }
         Spacer(modifier = Modifier.height(20.dp))
         WeButton(text = "下载") {
-            download(context, name, url)
+            context.download(name, url)
         }
     }
 }
 
-private fun download(context: Context, name: String, url: String) {
+private fun Context.download(name: String, url: String) {
     val request = DownloadManager.Request(Uri.parse(url)).apply {
         setTitle(name)
         setDescription(url)
@@ -57,15 +58,15 @@ private fun download(context: Context, name: String, url: String) {
         setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
     }
     // 加入下载队列
-    val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+    val downloadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
     val downloadId = downloadManager.enqueue(request)
-    context.showToast("开始下载")
+    showToast("开始下载")
 
     // 注册广播接收器
     val receiver = DownloadBroadcastReceiver(downloadManager, downloadId)
     val filter = IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
     ContextCompat.registerReceiver(
-        context,
+        this,
         receiver,
         filter,
         ContextCompat.RECEIVER_EXPORTED
@@ -90,7 +91,7 @@ private class DownloadBroadcastReceiver(
                     val uri =
                         cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI))
                     if (uri.endsWith(".apk")) {
-                        installApk(context, uri)
+                        context.installApk(uri)
                     }
                 }
             }
