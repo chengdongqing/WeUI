@@ -8,14 +8,14 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,95 +30,94 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
-import top.chengdongqing.weui.core.utils.format
 import top.chengdongqing.weui.core.utils.generateColors
 import top.chengdongqing.weui.feature.charts.model.ChartData
+import top.chengdongqing.weui.feature.charts.model.PieChartLegendItem
 
 @Composable
 fun WePieChart(
     dataSource: List<ChartData>,
+    modifier: Modifier = Modifier,
     ringWidth: Dp = 0.dp,
     animationSpec: AnimationSpec<Float> = tween(durationMillis = 800),
-    formatter: (Float) -> String = { it.format() }
+    formatter: (Float) -> String = { it.toString() },
+    legendContent: @Composable ((List<PieChartLegendItem>) -> Unit)?
 ) {
-    // 数值之和
     val total = remember(dataSource) { dataSource.sumOf { it.value.toDouble() }.toFloat() }
-    // 随机颜色
     val colors = remember(dataSource.size) { generateColors(dataSource.size) }
-    // 每个数据项的动画实例
     val animatedSweepAngles = remember(dataSource.size) { dataSource.map { Animatable(0f) } }
 
+    // 计算图例所需的数据
+    val legendItems = remember(dataSource, colors, total) {
+        dataSource.mapIndexed { index, item ->
+            PieChartLegendItem(
+                label = item.label,
+                value = item.value,
+                color = item.color ?: colors[index],
+                percentage = if (total > 0f) item.value / total else 0f,
+                formattedValue = formatter(item.value)
+            )
+        }
+    }
+
     LaunchedEffect(dataSource) {
-        // 累计角度，用于计算每个动画的起始角度
         var accumulatedAngle = 0f
         dataSource.forEachIndexed { index, item ->
-            // 当前扇形的夹角度数
-            val targetAngle = item.value / total * 360f
-            // 当前扇形的结束角度
+            val targetAngle = if (total > 0) (item.value / total * 360f) else 0f
             val endAngle = accumulatedAngle + targetAngle
             launch {
-                animatedSweepAngles[index].animateTo(
-                    targetValue = endAngle,
-                    animationSpec = animationSpec
-                )
+                animatedSweepAngles[index].animateTo(endAngle, animationSpec)
             }
-            // 更新累计角度为下一个扇形计算起始角度
             accumulatedAngle += targetAngle
         }
     }
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
+    // 渲染饼图
+    PieFace(
+        modifier = modifier
             .aspectRatio(1f),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceAround
-    ) {
-        ChartLegends(dataSource, colors, formatter)
-        PieFace(animatedSweepAngles, dataSource, colors, ringWidth)
-    }
+        animatedSweepAngles = animatedSweepAngles,
+        legendItems = legendItems,
+        ringWidth = ringWidth
+    )
+
+    // 渲染图例
+    legendContent?.invoke(legendItems)
 }
 
 @Composable
 private fun PieFace(
+    modifier: Modifier,
     animatedSweepAngles: List<Animatable<Float, AnimationVector1D>>,
-    dataSource: List<ChartData>,
-    colors: List<Color>,
+    legendItems: List<PieChartLegendItem>,
     ringWidth: Dp
 ) {
-    Canvas(
-        modifier = Modifier
-            .fillMaxWidth(0.6f)
-            .aspectRatio(1f)
-    ) {
-        val innerRadius = if (ringWidth > 0.dp) {
-            ringWidth.toPx() / 2f
-        } else {
-            0f
-        }
+    Canvas(modifier = modifier) {
+        val strokeWidthPx = ringWidth.toPx()
+        val isDonut = strokeWidthPx > 0f // 环形图
         var startAngle = -90f
-        animatedSweepAngles.forEachIndexed { index, item ->
-            val sweepAngle =
-                item.value - (if (index > 0) animatedSweepAngles[index - 1].value else 0f)
-            if (innerRadius > 0f) {
-                // 绘制环形图
+
+        animatedSweepAngles.forEachIndexed { index, animatable ->
+            val currentTotalAngle = animatable.value
+            val previousTotalAngle = if (index > 0) animatedSweepAngles[index - 1].value else 0f
+            val sweepAngle = currentTotalAngle - previousTotalAngle
+
+            if (isDonut) {
                 drawArc(
-                    color = dataSource[index].color ?: colors[index],
+                    color = legendItems[index].color,
                     startAngle = startAngle,
                     sweepAngle = sweepAngle,
                     useCenter = false,
-                    topLeft = Offset(innerRadius, innerRadius),
-                    size = Size(size.width - 2 * innerRadius, size.height - 2 * innerRadius),
-                    style = Stroke(width = ringWidth.toPx())
+                    topLeft = Offset(strokeWidthPx / 2, strokeWidthPx / 2),
+                    size = Size(size.width - strokeWidthPx, size.height - strokeWidthPx),
+                    style = Stroke(width = strokeWidthPx)
                 )
             } else {
-                // 绘制饼图
                 drawArc(
-                    color = dataSource[index].color ?: colors[index],
+                    color = legendItems[index].color,
                     startAngle = startAngle,
                     sweepAngle = sweepAngle,
                     useCenter = true,
-                    topLeft = Offset.Zero,
                     size = size
                 )
             }
@@ -128,34 +127,27 @@ private fun PieFace(
 }
 
 @Composable
-private fun ChartLegends(
-    dataSource: List<ChartData>,
-    colors: List<Color>,
-    formatter: (Float) -> String
+fun DefaultChartLegend(
+    items: List<PieChartLegendItem>,
+    modifier: Modifier = Modifier
 ) {
-    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        dataSource.forEachIndexed { index, item ->
-            Column {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Box(
-                        modifier = Modifier
-                            .size(10.dp)
-                            .background(item.color ?: colors[index], CircleShape)
-                    )
-                    Text(
-                        text = item.label,
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        fontSize = 12.sp,
-                        lineHeight = 18.sp,
-                        modifier = Modifier.padding(start = 4.dp)
-                    )
-                }
+    FlowRow(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items.forEach { item ->
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(8.dp)
+                        .background(item.color, CircleShape)
+                )
+                Spacer(Modifier.width(4.dp))
                 Text(
-                    text = formatter(item.value),
-                    color = MaterialTheme.colorScheme.onSecondary,
-                    fontSize = 11.sp,
-                    lineHeight = 14.sp,
-                    modifier = Modifier.padding(start = 14.dp)
+                    text = "${item.label} (${item.formattedValue})",
+                    fontSize = 12.sp,
+                    color = Color.Gray
                 )
             }
         }

@@ -4,7 +4,6 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
-import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
@@ -12,7 +11,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -38,6 +36,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.net.toUri
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.core.ui.components.button.ButtonSize
@@ -98,7 +97,7 @@ private fun ActionBar(context: Context) {
         ) {
             val latitude = "37.7749"
             val longitude = "-122.4194"
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("geo:$latitude,$longitude"))
+            val intent = Intent(Intent.ACTION_VIEW, "geo:$latitude,$longitude".toUri())
             if (intent.resolveActivity(context.packageManager) != null) {
                 context.startActivity(intent)
             } else {
@@ -111,13 +110,12 @@ private fun ActionBar(context: Context) {
             size = ButtonSize.MEDIUM,
             width = 140.dp
         ) {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://weui.io"))
+            val intent = Intent(Intent.ACTION_VIEW, "https://weui.io".toUri())
             context.startActivity(intent)
         }
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun AppItem(app: AppItem, context: Context) {
     Row(verticalAlignment = Alignment.CenterVertically) {
