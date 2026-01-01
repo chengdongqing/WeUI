@@ -72,6 +72,7 @@ androidx-test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "a
 lunar = { module = "cn.6tail:lunar", version.ref = "lunar" } # 计算农历日期与节日
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" } # colil核心库
 coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" } # 加载网络图片
+coil-video = { module = "io.coil-kt.coil3:coil-video", version.ref = "coil" } # 加载视频帧
 pinyin = { module = "com.github.houbb:pinyin", version.ref = "pinyin" } # 汉字转拼音
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" } # 网络请求库
 retrofit-converter = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" } # 支持网络响应结果转为指定类对象

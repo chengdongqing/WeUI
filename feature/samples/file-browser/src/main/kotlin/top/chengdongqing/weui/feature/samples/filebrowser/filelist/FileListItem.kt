@@ -1,7 +1,5 @@
 package top.chengdongqing.weui.feature.samples.filebrowser.filelist
 
-import android.graphics.BitmapFactory
-import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
@@ -25,18 +23,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import coil3.compose.AsyncImage
 import top.chengdongqing.weui.core.ui.components.actionsheet.ActionSheetItem
 import top.chengdongqing.weui.core.ui.components.actionsheet.rememberActionSheetState
 import top.chengdongqing.weui.core.ui.components.cardlist.WeCardListItem
@@ -48,7 +42,6 @@ import top.chengdongqing.weui.core.utils.calculateFileSize
 import top.chengdongqing.weui.core.utils.deleteFile
 import top.chengdongqing.weui.core.utils.format
 import top.chengdongqing.weui.core.utils.formatFileSize
-import top.chengdongqing.weui.core.utils.loadVideoThumbnail
 import top.chengdongqing.weui.feature.samples.filebrowser.R
 import top.chengdongqing.weui.feature.samples.filebrowser.data.model.FileItem
 import java.io.File
@@ -148,53 +141,51 @@ internal fun FileListItem(
 
 @Composable
 private fun FileThumbnail(file: FileItem) {
-    @Composable
-    fun FileIcon() {
-        Image(
-            painter = painterResource(id = file.iconId),
-            contentDescription = "文件",
-            modifier = Modifier.size(38.dp)
-        )
-    }
-
     Box(
         modifier = Modifier.size(48.dp),
         contentAlignment = Alignment.Center
     ) {
-        if (file.isDirectory) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_folder),
-                contentDescription = "文件夹",
-                modifier = Modifier.matchParentSize()
-            )
-        } else {
-            if (file.isVisualMedia) {
-                val context = LocalContext.current
-                val thumbnail by produceState<ImageBitmap?>(initialValue = null) {
-                    value = withContext(Dispatchers.IO) {
-                        if (file.mimeType.startsWith("image")) {
-                            BitmapFactory.decodeFile(file.path)
-                        } else {
-                            context.loadVideoThumbnail(Uri.parse(file.path))
-                        }?.asImageBitmap()
-                    }
-                }
+        when {
+            file.isDirectory -> {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_folder),
+                    contentDescription = "文件夹",
+                    modifier = Modifier.matchParentSize()
+                )
+            }
 
-                thumbnail?.let {
-                    Image(
-                        bitmap = it,
-                        contentDescription = "文件",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .size(38.dp)
-                            .clip(RoundedCornerShape(6.dp))
-                    )
-                } ?: FileIcon()
-            } else {
-                FileIcon()
+            file.isVisualMedia -> {
+                VisualMediaThumbnail(file)
+            }
+
+            else -> {
+                FileDefaultIcon(file.iconId)
             }
         }
     }
+}
+
+@Composable
+private fun VisualMediaThumbnail(file: FileItem) {
+    AsyncImage(
+        model = file.path,
+        contentDescription = null,
+        modifier = Modifier
+            .size(38.dp)
+            .clip(RoundedCornerShape(6.dp)),
+        contentScale = ContentScale.Crop,
+        error = painterResource(file.iconId),
+        placeholder = painterResource(file.iconId)
+    )
+}
+
+@Composable
+private fun FileDefaultIcon(iconId: Int) {
+    Image(
+        painter = painterResource(id = iconId),
+        contentDescription = "文件",
+        modifier = Modifier.size(38.dp)
+    )
 }
 
 @Composable
