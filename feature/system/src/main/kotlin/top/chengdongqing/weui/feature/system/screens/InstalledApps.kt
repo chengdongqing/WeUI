@@ -64,7 +64,6 @@ fun InstalledAppsScreen() {
         padding = PaddingValues(0.dp),
         scrollEnabled = false
     ) {
-        val context = LocalContext.current
         val appList = rememberInstalledApps()
 
         LazyColumn(
@@ -73,7 +72,7 @@ fun InstalledAppsScreen() {
         ) {
             item {
                 if (appList.isNotEmpty()) {
-                    ActionBar(context)
+                    ActionBar()
                 } else {
                     WeLoadMore()
                 }
@@ -88,7 +87,9 @@ fun InstalledAppsScreen() {
 }
 
 @Composable
-private fun ActionBar(context: Context) {
+private fun ActionBar() {
+    val context = LocalContext.current
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceAround

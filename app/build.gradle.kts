@@ -7,8 +7,8 @@ android {
     defaultConfig {
         applicationId = "top.chengdongqing.weui"
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 20260101
+        versionName = "2026.01.01"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
