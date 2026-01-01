@@ -1,6 +1,5 @@
 package top.chengdongqing.weui.feature.samples.components.indexedlist
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -32,7 +31,7 @@ import top.chengdongqing.weui.core.utils.PinyinUtils.groupByFirstLetter
 fun WeIndexedList(labels: List<String>) {
     val listState = rememberLazyListState()
     var loading by remember { mutableStateOf(false) }
-    val groups by produceState<Map<Char, List<String>>>(initialValue = emptyMap(), key1 = labels) {
+    val groups by produceState(initialValue = emptyMap(), key1 = labels) {
         loading = true
         value = groupByFirstLetter(labels).toSortedMap { a, b -> if (a != '#') a - b else 1 }
         loading = false
@@ -52,7 +51,6 @@ fun WeIndexedList(labels: List<String>) {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 private fun LazyListScope.indexGroups(groups: Map<Char, List<String>>) {
     groups.forEach { (letter, list) ->
         stickyHeader {

@@ -1,6 +1,5 @@
 package top.chengdongqing.weui.core.ui.components.swipeaction
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.AnchoredDraggableState
@@ -62,7 +61,6 @@ data class SwipeActionItem(
     val icon: ImageVector? = null
 )
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun WeSwipeAction(
     startOptions: List<SwipeActionItem>? = null,
@@ -208,7 +206,6 @@ private fun ActionItem(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun rememberSwipeActionState(
     initialValue: DragAnchor = DragAnchor.Center,
@@ -247,7 +244,6 @@ fun rememberSwipeActionState(
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 data class SwipeActionState(
     val draggableState: AnchoredDraggableState<DragAnchor>,
     val actionItemWidthPx: Float,

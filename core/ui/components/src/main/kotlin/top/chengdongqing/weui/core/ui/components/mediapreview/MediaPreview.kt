@@ -1,7 +1,6 @@
 package top.chengdongqing.weui.core.ui.components.mediapreview
 
 import android.content.Context
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -46,7 +45,6 @@ import top.chengdongqing.weui.core.utils.shareFile
 import java.io.File
 import java.io.IOException
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun WeMediaPreview(medias: Array<MediaItem>, current: Int = 0) {
     val pagerState = rememberPagerState(current) { medias.size }
@@ -62,7 +60,6 @@ fun WeMediaPreview(medias: Array<MediaItem>, current: Int = 0) {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun MediaPager(medias: Array<MediaItem>, pagerState: PagerState) {
     HorizontalPager(
@@ -102,7 +99,6 @@ private fun BoxScope.PagerInfo(total: Int, current: Int) {
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun BoxScope.ToolBar(medias: Array<MediaItem>, pagerState: PagerState) {
     val context = LocalContext.current

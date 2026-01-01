@@ -1,7 +1,6 @@
 package top.chengdongqing.weui.feature.samples.videochannel
 
 import android.net.Uri
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,7 +25,6 @@ import top.chengdongqing.weui.core.utils.SetupStatusBarStyle
 import top.chengdongqing.weui.feature.samples.videochannel.data.VideoDataProvider
 import top.chengdongqing.weui.feature.samples.videochannel.data.model.VideoItem
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun VideoChannelScreen() {
     val videoList = remember {

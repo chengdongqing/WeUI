@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
@@ -30,7 +29,6 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import top.chengdongqing.weui.core.ui.components.loading.WeLoading
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WeRefreshView(
     modifier: Modifier = Modifier,
@@ -81,7 +79,6 @@ fun WeRefreshView(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 private fun getRefreshingTips(isRefreshing: Boolean, state: PullToRefreshState): String {
     return when {
         isRefreshing -> "刷新中..."

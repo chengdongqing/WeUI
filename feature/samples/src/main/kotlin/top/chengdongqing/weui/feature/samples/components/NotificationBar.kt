@@ -1,6 +1,5 @@
 package top.chengdongqing.weui.feature.samples.components
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.MarqueeDefaults
 import androidx.compose.foundation.MarqueeSpacing
 import androidx.compose.foundation.background
@@ -26,7 +25,6 @@ enum class NotificationBarEffect {
     WRAP
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun WeNotificationBar(
     content: String,

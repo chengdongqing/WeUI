@@ -15,7 +15,6 @@
  */
 package org.burnoutcrew.reorderable
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.lazy.LazyItemScope
@@ -25,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.zIndex
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LazyItemScope.ReorderableItem(
     reorderableState: ReorderableState<*>,
@@ -44,7 +42,6 @@ fun LazyItemScope.ReorderableItem(
     content
 )
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LazyGridItemScope.ReorderableItem(
     reorderableState: ReorderableState<*>,

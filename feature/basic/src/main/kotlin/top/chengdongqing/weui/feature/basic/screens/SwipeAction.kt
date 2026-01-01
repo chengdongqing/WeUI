@@ -1,6 +1,5 @@
 package top.chengdongqing.weui.feature.basic.screens
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.animateTo
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -97,7 +96,6 @@ private fun IconStyleDemo(options: List<SwipeActionItem>, toast: ToastState) {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun ControllableDemo(options: List<SwipeActionItem>, toast: ToastState) {
     val options1 = remember { options.slice(1..2) }

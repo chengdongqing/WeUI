@@ -1,6 +1,5 @@
 package top.chengdongqing.weui.feature.basic.screens
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,7 +14,6 @@ import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
 import top.chengdongqing.weui.core.ui.components.tabview.WeTabView
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TabViewScreen() {
     WeScreen(

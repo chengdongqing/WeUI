@@ -1,6 +1,5 @@
 package top.chengdongqing.weui.core.ui.components.tabview
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -20,7 +19,6 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import top.chengdongqing.weui.core.utils.clickableWithoutRipple
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun WeTabView(
     options: List<String>,
@@ -40,7 +38,6 @@ fun WeTabView(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun TabBar(pagerState: PagerState, options: List<String>) {
     val coroutineScope = rememberCoroutineScope()

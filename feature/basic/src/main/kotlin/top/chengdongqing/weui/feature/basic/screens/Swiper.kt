@@ -1,7 +1,6 @@
 package top.chengdongqing.weui.feature.basic.screens
 
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -25,7 +24,6 @@ import top.chengdongqing.weui.core.ui.components.button.WeButton
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
 import top.chengdongqing.weui.core.ui.components.swiper.WeSwiper
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SwiperScreen() {
     WeScreen(title = "Swiper", description = "滑动视图") {

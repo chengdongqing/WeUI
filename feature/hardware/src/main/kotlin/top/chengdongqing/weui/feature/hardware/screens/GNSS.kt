@@ -11,7 +11,6 @@ import android.location.LocationManager
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -115,7 +114,6 @@ private fun LocationInfo(location: Location, satelliteCount: Int) {
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun SatelliteTable(groups: Map<String, List<SatelliteInfo>>) {
     LazyColumn(modifier = Modifier.cardList(PaddingValues(top = 20.dp))) {

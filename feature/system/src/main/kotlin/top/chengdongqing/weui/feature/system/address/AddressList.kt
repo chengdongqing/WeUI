@@ -1,6 +1,5 @@
 package top.chengdongqing.weui.feature.system.address
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
@@ -103,7 +102,6 @@ fun AddressList(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun AddressListItem(address: Address, onLongClick: () -> Unit, onClick: () -> Unit) {
     Column(

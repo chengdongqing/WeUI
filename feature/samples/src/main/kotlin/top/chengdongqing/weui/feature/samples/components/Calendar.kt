@@ -1,9 +1,7 @@
 package top.chengdongqing.weui.feature.samples.components
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
@@ -49,7 +47,6 @@ import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun WeCalendar(state: CalendarState = rememberCalendarState()) {
     Column {
@@ -131,7 +128,6 @@ private fun WeekDaysBar() {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalLayoutApi::class)
 @Composable
 private fun DaysGrid(pagerState: PagerState) {
     HorizontalPager(state = pagerState) { page ->
@@ -250,7 +246,6 @@ interface CalendarState {
      */
     val currentMonth: LocalDate
 
-    @OptIn(ExperimentalFoundationApi::class)
     val pagerState: PagerState
 
     /**
@@ -266,7 +261,6 @@ interface CalendarState {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun rememberCalendarState(initialDate: LocalDate = Today): CalendarState {
     val coroutineScope = rememberCoroutineScope()
@@ -283,7 +277,6 @@ fun rememberCalendarState(initialDate: LocalDate = Today): CalendarState {
     return state
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 private class CalendarStateImpl(
     initialDate: LocalDate,
     override val pagerState: PagerState,
