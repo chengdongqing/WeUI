@@ -9,7 +9,6 @@ android {
 dependencies {
     implementation(libs.accompanist.permissions)
     implementation(libs.pinyin)
-    implementation(libs.amap)
 
     implementation(project(":core:data:model"))
     implementation(project(":core:ui:theme"))

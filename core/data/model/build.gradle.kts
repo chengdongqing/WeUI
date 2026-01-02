@@ -6,7 +6,3 @@ plugins {
 android {
     namespace = "top.chengdongqing.weui.core.data.model"
 }
-
-dependencies {
-    implementation(libs.amap)
-}
