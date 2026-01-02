@@ -28,8 +28,8 @@ fun WeDatePicker(
     onCancel: () -> Unit,
     onChange: (LocalDate) -> Unit
 ) {
-    require(end.isAfter(start)) {
-        "Invalid date range: end ($end) must be after start ($start)"
+    require(end.isAfter(start) || end == start) {
+        "Invalid date range: end ($end) must be after or equal start ($start)"
     }
 
     var rangesSource by rememberRangesSource(start, end, type)

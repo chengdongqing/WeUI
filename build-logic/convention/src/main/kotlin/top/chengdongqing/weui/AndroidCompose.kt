@@ -18,6 +18,9 @@ internal fun Project.configureAndroidCompose(
             minSdk = 24
         }
         compileOptions {
+            // 开启脱糖支持
+            isCoreLibraryDesugaringEnabled = true
+
             sourceCompatibility = JavaVersion.VERSION_21
             targetCompatibility = JavaVersion.VERSION_21
         }
@@ -51,6 +54,7 @@ internal fun Project.configureAndroidCompose(
             add("androidTestImplementation", libs.findLibrary("ui.test.junit4").get())
             add("debugImplementation", libs.findLibrary("ui.tooling").get())
             add("debugImplementation", libs.findLibrary("ui.test.manifest").get())
+            add("coreLibraryDesugaring", libs.findLibrary("android.desugarJdkLibs").get())
         }
     }
 

@@ -11,7 +11,6 @@ import top.chengdongqing.weui.feature.hardware.screens.GNSSScreen
 import top.chengdongqing.weui.feature.hardware.screens.GyroscopeScreen
 import top.chengdongqing.weui.feature.hardware.screens.HygrothermographScreen
 import top.chengdongqing.weui.feature.hardware.screens.InfraredScreen
-import top.chengdongqing.weui.feature.hardware.screens.NFCScreen
 import top.chengdongqing.weui.feature.hardware.screens.ScreenScreen
 import top.chengdongqing.weui.feature.hardware.screens.VibrationScreen
 import top.chengdongqing.weui.feature.hardware.screens.WiFiScreen
@@ -31,9 +30,6 @@ fun NavGraphBuilder.addHardwareGraph() {
     }
     composable("bluetooth") {
         BluetoothScreen()
-    }
-    composable("nfc") {
-        NFCScreen()
     }
     composable("gnss") {
         GNSSScreen()

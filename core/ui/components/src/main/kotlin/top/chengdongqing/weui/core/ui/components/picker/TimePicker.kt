@@ -28,8 +28,8 @@ fun WeTimePicker(
     onCancel: () -> Unit,
     onChange: (LocalTime) -> Unit
 ) {
-    require(end.isAfter(start)) {
-        "Invalid time range: end ($end) must be after start ($start)"
+    require(end.isAfter(start) || end == start) {
+        "Invalid time range: end ($end) must be after or equal start ($start)"
     }
 
     var rangesSource by rememberRangesSource(start, end, type)

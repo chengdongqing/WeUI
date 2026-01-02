@@ -19,6 +19,7 @@ navigation-compose = "2.9.6"
 room = "2.8.4"
 android-tools = "31.13.2"
 room-gradle-plugin = "2.8.4"
+desugar_jdk_libs = "2.1.5"
 # 测试相关
 junit = "4.13.2"
 androidx-test-ext-junit = "1.3.0"
@@ -57,6 +58,7 @@ room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" } # room支
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" } # room支持根据注解自动生成对应实现
 datastore-core = { module = "androidx.datastore:datastore-core", version.ref = "datastore" }
 datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+android-desugarJdkLibs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" } # 官方脱糖库，对低版本支持Java 8+ API
 # 调试相关
 ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" } # 支持compose组件预览

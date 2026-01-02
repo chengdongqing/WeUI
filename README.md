@@ -49,8 +49,6 @@ Camera（相机，拍照+录视频）
 MediaPicker（媒体选择器）
 AudioRecorder（录音）
 AudioPlayer（音频播放）
-LivePlayer（直播拉流，待完善）
-LivePusher（直播推流，待完善）
 Gallery（相册）
 ImageCropper（图片裁剪）
 PanoramicImage（全景图片）
@@ -90,9 +88,8 @@ WebSocket（双向通信）
 Screen（屏幕）
 Flashlight（闪光灯）
 Vibration（震动）
-WiFi
+WiFi（无线局域网）
 Bluetooth（蓝牙）
-NFC（近场通信，待完善）
 GNSS（全球卫星导航系统）
 Infrared（红外线）
 Gyroscope（陀螺仪）

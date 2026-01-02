@@ -9,19 +9,11 @@ import top.chengdongqing.weui.feature.media.screens.camera.CameraScreen
 import top.chengdongqing.weui.feature.media.screens.gallery.GalleryScreen
 import top.chengdongqing.weui.feature.media.screens.image.ImageCropperScreen
 import top.chengdongqing.weui.feature.media.screens.image.PanoramicImageScreen
-import top.chengdongqing.weui.feature.media.screens.live.LivePlayerScreen
-import top.chengdongqing.weui.feature.media.screens.live.LivePusherScreen
 import top.chengdongqing.weui.feature.media.screens.picker.MediaPickerScreen
 
 fun NavGraphBuilder.addMediaGraph(navController: NavController) {
     composable("camera") {
         CameraScreen()
-    }
-    composable("live_pusher") {
-        LivePusherScreen()
-    }
-    composable("live_player") {
-        LivePlayerScreen()
     }
     composable("media_picker") {
         MediaPickerScreen()
