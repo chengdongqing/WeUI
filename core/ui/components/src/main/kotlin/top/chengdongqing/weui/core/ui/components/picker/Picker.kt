@@ -35,13 +35,13 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.core.ui.components.button.ButtonType
 import top.chengdongqing.weui.core.ui.components.button.WeButton
 import top.chengdongqing.weui.core.ui.components.popup.WePopup
-import top.chengdongqing.weui.core.utils.vibrateShort
 import kotlin.math.roundToInt
 
 @Composable
@@ -112,14 +112,14 @@ private fun RowScope.ColumnItem(
     val itemHeight = 56.dp
     val verticalPadding = remember { (280.dp - itemHeight) / 2 }
     val listState = rememberLazyListState(index)
-    val context = LocalContext.current
+    val haptic = LocalHapticFeedback.current
 
     LaunchedEffect(listState) {
         snapshotFlow { listState.firstVisibleItemIndex }
             .collect {
                 onChange(it)
                 if (it != index) {
-                    context.vibrateShort()
+                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
                 }
             }
     }

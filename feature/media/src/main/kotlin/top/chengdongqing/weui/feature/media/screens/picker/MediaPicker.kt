@@ -13,10 +13,12 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -29,12 +31,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableFloatState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,14 +45,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.layout.positionInRoot
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -67,11 +69,53 @@ import top.chengdongqing.weui.core.ui.components.mediapicker.rememberPickMediasL
 import top.chengdongqing.weui.core.ui.components.mediapreview.previewMedias
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
 import top.chengdongqing.weui.core.ui.theme.DangerColorLight
-import top.chengdongqing.weui.core.utils.detectDragGesturesAfterLongPressWithoutConsume
 import top.chengdongqing.weui.feature.media.R
 
 @Composable
 fun MediaPickerScreen() {
+    // 基础状态
+    val data = rememberSaveable { mutableStateOf<List<MediaItem>>(emptyList()) }
+    val windowInfo = LocalWindowInfo.current
+    val screenHeight = windowInfo.containerSize.height
+    val density = LocalDensity.current
+    val navigationBarsHeight = WindowInsets.navigationBars.getBottom(density)
+    val bottomBarHeight = remember { mutableIntStateOf(0) }
+    val gridTopOffset = remember { mutableIntStateOf(0) }
+
+    // 重新排序状态
+    val state = rememberReorderableLazyGridState(
+        canDragOver = { p1, _ -> p1.key != -1 },
+        onMove = { from, to ->
+            data.value = data.value.toMutableList().apply {
+                add(to.index, removeAt(from.index))
+            }
+        }
+    )
+
+    // 计算是否进入删除感应区
+    val isReadyToRemove by remember {
+        derivedStateOf {
+            val draggingIndex = state.draggingItemIndex ?: return@derivedStateOf false
+            val layoutInfo = state.gridState.layoutInfo.visibleItemsInfo
+                .firstOrNull { it.index == draggingIndex } ?: return@derivedStateOf false
+
+            // 实时计算被拖拽图片底部Y坐标
+            val currentBottomY =
+                gridTopOffset.intValue + layoutInfo.offset.y + state.draggingItemTop + layoutInfo.size.height
+
+            // 判定条件：底部超过了（屏幕高度 - 导航栏高度 - 删除拦高度）
+            currentBottomY >= (screenHeight - navigationBarsHeight - bottomBarHeight.intValue)
+        }
+    }
+
+    // 处理删除
+    val pickerState = rememberMediaPickerReorderState(state) { item ->
+        data.value = data.value.filter { it.uri != item.uri }
+    }
+    LaunchedEffect(state.draggingItemIndex, isReadyToRemove) {
+        pickerState.update(isReadyToRemove, data.value)
+    }
+
     WeScreen(
         title = "MediaPicker",
         description = "媒体选择器",
@@ -79,48 +123,29 @@ fun MediaPickerScreen() {
         padding = PaddingValues(0.dp),
         scrollEnabled = false
     ) {
-        val data = rememberSaveable { mutableStateOf<List<MediaItem>>(emptyList()) }
-        val state = rememberReorderableLazyGridState(onMove = { from, to ->
-            data.value = data.value.toMutableList().apply {
-                add(to.index, removeAt(from.index))
-            }
-        }, canDragOver = { p1, _ ->
-            p1.key != -1
-        })
-        val pickMedia = rememberPickMediasLauncher {
-            it.forEach { item ->
-                if (!data.value.contains(item)) {
-                    data.value += item
+        val pickMedia = rememberPickMediasLauncher { items ->
+            val currentList = data.value.toMutableList()
+            items.forEach {
+                if (!data.value.contains(it)) {
+                    currentList.add(it)
                 }
             }
+            data.value = currentList
         }
 
-        val density = LocalDensity.current
-        val configuration = LocalConfiguration.current
-        val screenHeight = density.run { configuration.screenHeightDp.dp.toPx() }
-        val bottomBarHeight = remember { mutableIntStateOf(0) }
-        val currentItemHeight = remember { mutableIntStateOf(0) }
-        val currentPositionY = remember { mutableFloatStateOf(0f) }
-
         Box {
+            // 图片列表
             PictureGrid(
                 state,
                 data,
-                screenHeight,
-                currentItemHeight,
-                currentPositionY,
-                bottomBarHeight,
-                pickMedia
+                gridTopOffset,
+                onChooseMedia = pickMedia
             )
 
-            val isReady by remember {
-                derivedStateOf {
-                    screenHeight - currentPositionY.floatValue - currentItemHeight.intValue <= bottomBarHeight.intValue
-                }
-            }
+            // 底部删除栏
             BottomDeleteBar(
                 visible = state.draggingItemIndex != null,
-                isReady
+                isReady = isReadyToRemove
             ) {
                 bottomBarHeight.intValue = it
             }
@@ -132,10 +157,7 @@ fun MediaPickerScreen() {
 private fun PictureGrid(
     state: ReorderableLazyGridState,
     data: MutableState<List<MediaItem>>,
-    screenHeight: Float,
-    currentItemHeight: MutableIntState,
-    currentPositionY: MutableFloatState,
-    bottomBarHeight: MutableIntState,
+    gridTopOffset: MutableIntState,
     onChooseMedia: (type: VisualMediaType, count: Int) -> Unit
 ) {
     val context = LocalContext.current
@@ -149,35 +171,20 @@ private fun PictureGrid(
         modifier = Modifier
             .fillMaxSize()
             .reorderable(state)
+            .onGloballyPositioned {
+                gridTopOffset.intValue = it.positionInRoot().y.toInt()
+            },
     ) {
         itemsIndexed(data.value, key = { _, item -> item.uri }) { index, item ->
             ReorderableItem(state, key = item.uri) { isDragging ->
                 val elevation by animateDpAsState(if (isDragging) 16.dp else 0.dp, label = "")
-                var positionY by remember { mutableFloatStateOf(0f) }
 
                 Box(
                     modifier = Modifier
                         .aspectRatio(1f)
-                        .onSizeChanged {
-                            if (currentItemHeight.intValue == 0) {
-                                currentItemHeight.intValue = it.height
-                            }
-                        }
-                        .onGloballyPositioned {
-                            positionY = it.positionInRoot().y
-                        }
                         .shadow(elevation)
                         .background(MaterialTheme.colorScheme.onSurface)
                         .detectReorderAfterLongPress(state)
-                        .pointerInput(Unit) {
-                            detectDragGesturesAfterLongPressWithoutConsume(onDragEnd = {
-                                if (positionY >= screenHeight - currentItemHeight.intValue - bottomBarHeight.intValue) {
-                                    data.value -= item
-                                }
-                            }) { _, _ ->
-                                currentPositionY.floatValue = positionY
-                            }
-                        }
                         .clickable { context.previewMedias(data.value, index) }
                 ) {
                     AsyncImage(
@@ -205,6 +212,15 @@ private fun BoxScope.BottomDeleteBar(
     isReady: Boolean,
     onHeightChange: (Int) -> Unit
 ) {
+    val haptic = LocalHapticFeedback.current
+
+    // 触发震动反馈
+    LaunchedEffect(isReady) {
+        if (isReady) {
+            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+        }
+    }
+
     AnimatedVisibility(
         visible,
         modifier = Modifier.align(Alignment.BottomCenter),
@@ -262,5 +278,42 @@ private fun PlusButton(onClick: () -> Unit) {
             tint = MaterialTheme.colorScheme.onSecondary,
             modifier = Modifier.size(40.dp)
         )
+    }
+}
+
+@Composable
+fun rememberMediaPickerReorderState(
+    reorderableState: ReorderableLazyGridState,
+    onRemove: (MediaItem) -> Unit
+): MediaPickerReorderState {
+    return remember(reorderableState) {
+        MediaPickerReorderState(reorderableState, onRemove)
+    }
+}
+
+class MediaPickerReorderState(
+    val reorderableState: ReorderableLazyGridState,
+    private val onRemove: (MediaItem) -> Unit
+) {
+    var draggingItem by mutableStateOf<MediaItem?>(null)
+        private set
+
+    private var isSettledReadyToDelete = false
+
+    fun update(isReady: Boolean, data: List<MediaItem>) {
+        val currentIndex = reorderableState.draggingItemIndex
+        if (currentIndex != null) {
+            // 拖拽中：同步状态
+            draggingItem = data.getOrNull(currentIndex)
+            isSettledReadyToDelete = isReady
+        } else {
+            // 拖拽结束：结算
+            if (isSettledReadyToDelete && draggingItem != null) {
+                onRemove(draggingItem!!)
+            }
+            // 重置
+            draggingItem = null
+            isSettledReadyToDelete = false
+        }
     }
 }
