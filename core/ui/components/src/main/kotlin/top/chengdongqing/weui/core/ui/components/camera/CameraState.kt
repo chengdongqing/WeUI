@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.camera.core.AspectRatio
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.FocusMeteringAction
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
@@ -30,16 +31,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import top.chengdongqing.weui.core.data.model.VisualMediaType
 import top.chengdongqing.weui.core.utils.getFileProviderUri
 import top.chengdongqing.weui.core.utils.rememberSingleThreadExecutor
 import java.io.File
 import java.util.concurrent.ExecutorService
+import java.util.concurrent.TimeUnit
 import kotlin.time.Duration.Companion.seconds
 
 @Stable
@@ -75,6 +80,11 @@ interface CameraState {
     val videoProgress: Float
 
     /**
+     * 当前对焦位置
+     */
+    val focusPoint: Offset?
+
+    /**
      * 更新相机
      */
     fun updateCamera()
@@ -103,6 +113,11 @@ interface CameraState {
      * 切换摄像头
      */
     fun switchCamera()
+
+    /**
+     * 对焦
+     */
+    fun focus(offset: Offset)
 
     /**
      * 释放资源
@@ -160,10 +175,15 @@ private class CameraStateImpl(
         keepScreenOn = true
     }
     override var isFlashOn by mutableStateOf(false)
+        private set
     override var isRecording by mutableStateOf(false)
+        private set
     override var isUsingFrontCamera by mutableStateOf(false)
+        private set
     override val videoProgress
         get() = progressAnimate.value
+    override var focusPoint by mutableStateOf<Offset?>(null)
+        private set
 
     override fun updateCamera() {
         // 构建预览用例
@@ -303,6 +323,29 @@ private class CameraStateImpl(
         updateCamera()
     }
 
+    override fun focus(offset: Offset) {
+        val factory = previewView.meteringPointFactory
+        // 将屏幕坐标转换为相机坐标点
+        val point = factory.createPoint(offset.x, offset.y)
+
+        // 构建对焦动作
+        val action = FocusMeteringAction.Builder(point, FocusMeteringAction.FLAG_AF)
+            // 5秒后自动取消对焦锁定
+            .setAutoCancelDuration(5, TimeUnit.SECONDS)
+            .build()
+
+        // 执行物理对焦
+        camera?.cameraControl?.startFocusAndMetering(action)
+
+        // 更新 UI 状态并自动隐藏
+        focusPoint = offset
+        focusJob?.cancel()
+        focusJob = coroutineScope.launch {
+            delay(2000) // 2秒后对焦框消失
+            focusPoint = null
+        }
+    }
+
     override fun release() {
         try {
             recordingInstance?.stop()
@@ -337,4 +380,5 @@ private class CameraStateImpl(
     }
     private val progressAnimate by lazy { Animatable(0f) }
     private var recordingInstance: Recording? = null
+    private var focusJob: Job? = null
 }
