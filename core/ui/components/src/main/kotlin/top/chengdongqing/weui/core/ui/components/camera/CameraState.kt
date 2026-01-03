@@ -85,6 +85,16 @@ interface CameraState {
     val focusPoint: Offset?
 
     /**
+     * 支持的变焦档位
+     */
+    val availableZoomSteps: List<Float>
+
+    /**
+     * 当前的变焦档位
+     */
+    val currentZoom: Float
+
+    /**
      * 更新相机
      */
     fun updateCamera()
@@ -118,6 +128,11 @@ interface CameraState {
      * 对焦
      */
     fun focus(offset: Offset)
+
+    /**
+     * 设置变焦倍数
+     */
+    fun setZoom(step: Float)
 
     /**
      * 释放资源
@@ -184,6 +199,10 @@ private class CameraStateImpl(
         get() = progressAnimate.value
     override var focusPoint by mutableStateOf<Offset?>(null)
         private set
+    override var availableZoomSteps by mutableStateOf(listOf(1f))
+        private set
+    override var currentZoom by mutableStateOf(1f)
+        private set
 
     override fun updateCamera() {
         // 构建预览用例
@@ -208,9 +227,36 @@ private class CameraStateImpl(
                 imageCapture,
                 videoCapture
             )
+
+            camera?.cameraInfo?.zoomState?.observe(lifecycleOwner) { state ->
+                currentZoom = state.zoomRatio
+                minZoom = state.minZoomRatio
+                maxZoom = state.maxZoomRatio
+
+                // 动态生成档位
+                availableZoomSteps = calculatePhysicalSteps(state.minZoomRatio, state.maxZoomRatio)
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    private fun calculatePhysicalSteps(min: Float, max: Float): List<Float> {
+        val steps = mutableListOf<Float>()
+
+        // 如果支持超广角 (min < 1.0)
+        if (min < 1f) steps.add(min)
+        // 默认 1.0
+        steps.add(1f)
+        // 动态探测长焦
+        val potentialTelephotos = listOf(2f, 5f, 10f)
+        potentialTelephotos.forEach {
+            if (it <= max && it > 1f) {
+                steps.add(it)
+            }
+        }
+
+        return steps.distinct().sorted()
     }
 
     override fun takePhoto(onError: ((ImageCaptureException) -> Unit)?) {
@@ -320,6 +366,7 @@ private class CameraStateImpl(
     override fun switchCamera() {
         isUsingFrontCamera = !isUsingFrontCamera
         isFlashOn = false
+        currentZoom = 1f
         updateCamera()
     }
 
@@ -344,6 +391,15 @@ private class CameraStateImpl(
             delay(2000) // 2秒后对焦框消失
             focusPoint = null
         }
+    }
+
+    override fun setZoom(step: Float) {
+        currentZoom = step
+
+        // 安全检查
+        val targetRatio = step.coerceIn(minZoom, maxZoom)
+        // 执行变焦
+        camera?.cameraControl?.setZoomRatio(targetRatio)
     }
 
     override fun release() {
@@ -381,4 +437,6 @@ private class CameraStateImpl(
     private val progressAnimate by lazy { Animatable(0f) }
     private var recordingInstance: Recording? = null
     private var focusJob: Job? = null
+    private var minZoom: Float = 0f
+    private var maxZoom: Float = 0f
 }
