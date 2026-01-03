@@ -3,13 +3,15 @@ package top.chengdongqing.weui.core.ui.components.camera
 import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
-import android.util.Rational
 import android.view.ViewGroup
+import androidx.camera.core.AspectRatio
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
+import androidx.camera.core.resolutionselector.AspectRatioStrategy
+import androidx.camera.core.resolutionselector.ResolutionSelector
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.video.FileOutputOptions
 import androidx.camera.video.Recorder
@@ -21,6 +23,7 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -100,6 +103,11 @@ interface CameraState {
      * 切换摄像头
      */
     fun switchCamera()
+
+    /**
+     * 释放资源
+     */
+    fun release()
 }
 
 @Composable
@@ -108,12 +116,12 @@ fun rememberCameraState(
     maxVideoDuration: Long = 15,
     onCapture: (Uri, VisualMediaType) -> Unit
 ): CameraState {
-    val context = LocalContext.current
+    val context = LocalContext.current.applicationContext
     val lifecycleOwner = LocalLifecycleOwner.current
     val executor = rememberSingleThreadExecutor()
     val coroutineScope = rememberCoroutineScope()
 
-    return remember {
+    val state = remember {
         CameraStateImpl(
             context,
             lifecycleOwner,
@@ -124,6 +132,15 @@ fun rememberCameraState(
             onCapture
         )
     }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            state.release()
+            executor.shutdown()
+        }
+    }
+
+    return state
 }
 
 private class CameraStateImpl(
@@ -149,9 +166,13 @@ private class CameraStateImpl(
         get() = progressAnimate.value
 
     override fun updateCamera() {
-        val preview = Preview.Builder().build().also { preview ->
-            preview.setSurfaceProvider(previewView.surfaceProvider)
-        }
+        // 构建预览用例
+        val preview = Preview.Builder()
+            .setResolutionSelector(resolutionSelector)
+            .build()
+            .apply {
+                surfaceProvider = previewView.surfaceProvider
+            }
         val cameraSelector = if (isUsingFrontCamera) {
             CameraSelector.DEFAULT_FRONT_CAMERA
         } else {
@@ -235,6 +256,13 @@ private class CameraStateImpl(
                     }
 
                     is VideoRecordEvent.Finalize -> {
+                        // 无论成功失败，显式停止动画
+                        coroutineScope.launch {
+                            if (progressAnimate.isRunning) {
+                                progressAnimate.stop()
+                            }
+                        }
+
                         if (event.hasError()) {
                             event.cause?.printStackTrace()
                             onError?.invoke(event.cause)
@@ -272,16 +300,37 @@ private class CameraStateImpl(
     override fun switchCamera() {
         isUsingFrontCamera = !isUsingFrontCamera
         isFlashOn = false
+        updateCamera()
+    }
+
+    override fun release() {
+        try {
+            recordingInstance?.stop()
+            recordingInstance = null
+            cameraProvider.unbindAll()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     private val cameraProvider: ProcessCameraProvider by lazy {
         ProcessCameraProvider.getInstance(context).get()
     }
+    private val resolutionSelector = ResolutionSelector.Builder()
+        .setAspectRatioStrategy(
+            // 定义比例策略：首选 16:9，如果不支持，则找最接近的
+            AspectRatioStrategy(
+                AspectRatio.RATIO_16_9,
+                AspectRatioStrategy.FALLBACK_RULE_AUTO
+            )
+        )
+        .build()
     private var camera by mutableStateOf<Camera?>(null)
     private val imageCapture: ImageCapture by lazy {
-        ImageCapture.Builder().build().apply {
-            setCropAspectRatio(Rational(9, 16))
-        }
+        ImageCapture.Builder()
+            .setResolutionSelector(resolutionSelector)
+            .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
+            .build()
     }
     private val videoCapture: VideoCapture<Recorder> by lazy {
         VideoCapture.withOutput(Recorder.Builder().build())
