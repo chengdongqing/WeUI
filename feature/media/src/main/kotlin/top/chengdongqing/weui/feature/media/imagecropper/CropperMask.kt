@@ -7,13 +7,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.PathFillType
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -21,22 +19,25 @@ internal fun BoxScope.CropperMask(onSizeChange: (Size) -> Unit) {
     Canvas(modifier = Modifier.matchParentSize()) {
         val spacing = 25.dp.toPx()
         val width = size.width - spacing * 2
-        onSizeChange(Size(width, width))
+        val rectSize = Size(width, width)
+        val rectOffset = Offset(x = spacing, y = (size.height - width) / 2)
+        onSizeChange(rectSize)
 
-        drawIntoCanvas { canvas ->
-            canvas.saveLayer(bounds = Rect(offset = Offset.Zero, size = size), Paint())
-            // 绘制遮罩
-            drawRect(color = Color(0f, 0f, 0f, 0.4f))
-            // 露出裁剪框
-            canvas.saveLayer(
-                bounds = Rect(
-                    offset = Offset(x = spacing, y = (size.height - width) / 2),
-                    size = Size(width, width)
-                ),
-                paint = Paint().apply { blendMode = BlendMode.Clear }
-            )
-            canvas.restore()
+        // 构建遮罩路径
+        val combinedPath = Path().apply {
+            // 添加全屏矩形
+            addRect(Rect(Offset.Zero, size))
+            // 添加中间裁剪框矩形
+            addRect(Rect(rectOffset, rectSize))
+            // 设置填充类型为 EvenOdd (奇偶填充)
+            // 重叠的部分（中间框）就会被“挖空”
+            fillType = PathFillType.EvenOdd
         }
+        // 绘制路径
+        drawPath(
+            path = combinedPath,
+            color = Color.Black.copy(alpha = 0.4f)
+        )
 
         // 绘制四个角
         drawCorners(spacing, width)
