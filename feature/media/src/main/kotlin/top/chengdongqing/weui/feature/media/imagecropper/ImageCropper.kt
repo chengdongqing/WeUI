@@ -41,12 +41,12 @@ import kotlin.time.Duration
 @Composable
 fun WeImageCropper(
     uri: Uri,
+    state: CropperState = rememberCropperState(),
     onCancel: () -> Unit,
     onConfirm: (Uri) -> Unit
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    val state = rememberCropperState()
     val toast = rememberToastState()
     val imageBitmap by context.loadImageBitmap(uri)
 

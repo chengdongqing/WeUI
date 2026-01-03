@@ -7,8 +7,8 @@ android {
 }
 
 dependencies {
-    implementation(libs.coil.compose)
-    implementation(libs.coil.network.okhttp)
+    implementation(libs.bundles.coil)
+    implementation(libs.coil.zoomable)
     implementation(libs.bundles.camerax)
     implementation(libs.accompanist.permissions)
 

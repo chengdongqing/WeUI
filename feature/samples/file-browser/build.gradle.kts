@@ -10,8 +10,7 @@ dependencies {
     implementation(libs.lifecycle.viewmodel.compose)
     implementation(libs.accompanist.permissions)
     implementation(libs.navigation.compose)
-    implementation(libs.coil.compose)
-    implementation(libs.coil.video)
+    implementation(libs.bundles.coil)
 
     implementation(project(":core:ui:theme"))
     implementation(project(":core:ui:components"))

@@ -8,8 +8,7 @@ android {
 
 dependencies {
     implementation(libs.navigation.compose)
-    implementation(libs.coil.compose)
-    implementation(libs.coil.network.okhttp)
+    implementation(libs.bundles.coil)
     implementation(libs.lunar)
 
     implementation(project(":core:ui:theme"))

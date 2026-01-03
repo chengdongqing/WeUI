@@ -9,7 +9,7 @@ android {
 dependencies {
     implementation(libs.accompanist.permissions)
     implementation(libs.navigation.compose)
-    implementation(libs.coil.compose)
+    implementation(libs.bundles.coil)
 
     implementation(project(":core:ui:theme"))
     implementation(project(":core:ui:components"))

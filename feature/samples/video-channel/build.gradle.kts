@@ -7,8 +7,7 @@ android {
 }
 
 dependencies {
-    implementation(libs.coil.compose)
-    implementation(libs.coil.network.okhttp)
+    implementation(libs.bundles.coil)
 
     implementation(project(":core:ui:theme"))
     implementation(project(":core:ui:components"))
