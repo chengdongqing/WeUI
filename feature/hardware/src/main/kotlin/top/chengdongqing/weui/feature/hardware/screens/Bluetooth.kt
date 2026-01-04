@@ -1,7 +1,6 @@
 package top.chengdongqing.weui.feature.hardware.screens
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
@@ -23,8 +22,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -34,14 +37,11 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import top.chengdongqing.weui.core.ui.components.button.WeButton
 import top.chengdongqing.weui.core.ui.components.cardlist.cardList
 import top.chengdongqing.weui.core.ui.components.divider.WeDivider
-import top.chengdongqing.weui.core.ui.components.loading.LoadMoreType
-import top.chengdongqing.weui.core.ui.components.loading.WeLoadMore
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
+import top.chengdongqing.weui.core.utils.dbmToPercentage
 import top.chengdongqing.weui.core.utils.showToast
-import kotlin.math.max
-import kotlin.math.min
+import top.chengdongqing.weui.feature.hardware.components.DiscoveryLoading
 
-@SuppressLint("MissingPermission")
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun BluetoothScreen() {
@@ -66,6 +66,12 @@ fun BluetoothScreen() {
         val bluetoothAdapter = bluetoothManager?.adapter
         val launchBluetooth = rememberBluetoothLauncher()
         val bluetoothList = rememberBluetoothDevices()
+        val sortedList by remember {
+            derivedStateOf {
+                bluetoothList.sortedByDescending { it.percentage }
+            }
+        }
+        val (observing, setObserving) = remember { mutableStateOf(false) }
 
         WeButton(text = "扫描蓝牙") {
             if (permissionState.allPermissionsGranted) {
@@ -76,13 +82,17 @@ fun BluetoothScreen() {
                 } else {
                     bluetoothList.clear()
                     bluetoothAdapter.startDiscovery()
+                    setObserving(true)
                 }
             } else {
                 permissionState.launchMultiplePermissionRequest()
             }
         }
-        Spacer(modifier = Modifier.height(40.dp))
-        BluetoothList(bluetoothList)
+
+        if (observing) {
+            Spacer(modifier = Modifier.height(40.dp))
+            BluetoothList(sortedList)
+        }
     }
 }
 
@@ -90,7 +100,7 @@ fun BluetoothScreen() {
 private fun BluetoothList(bluetoothList: List<BluetoothInfo>) {
     if (bluetoothList.isNotEmpty()) {
         LazyColumn(modifier = Modifier.cardList()) {
-            itemsIndexed(bluetoothList, key = { _, item -> item.address }) { index, device ->
+            itemsIndexed(bluetoothList, key = { _, item -> item.mac }) { index, device ->
                 BluetoothListItem(device)
                 if (index < bluetoothList.lastIndex) {
                     WeDivider()
@@ -98,7 +108,7 @@ private fun BluetoothList(bluetoothList: List<BluetoothInfo>) {
             }
         }
     } else {
-        WeLoadMore(type = LoadMoreType.ALL_LOADED)
+        DiscoveryLoading("正在扫描蓝牙设备...")
     }
 }
 
@@ -113,8 +123,8 @@ private fun BluetoothListItem(bluetooth: BluetoothInfo) {
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = buildString {
-                appendLine("信号强度：${bluetooth.rssi}")
-                appendLine("MAC地址：${bluetooth.address}")
+                appendLine("信号强度：${bluetooth.rssi}dBm （${bluetooth.percentage}%）")
+                appendLine("MAC地址：${bluetooth.mac}")
                 appendLine("蓝牙类型：${bluetooth.type}")
                 append("绑定状态：${bluetooth.bondState}")
             },
@@ -126,20 +136,24 @@ private fun BluetoothListItem(bluetooth: BluetoothInfo) {
 }
 
 @Composable
-private fun rememberBluetoothDevices(): MutableList<BluetoothInfo> {
+private fun rememberBluetoothDevices(): SnapshotStateList<BluetoothInfo> {
     val context = LocalContext.current
     val bluetoothList = remember { mutableStateListOf<BluetoothInfo>() }
 
     DisposableEffect(Unit) {
-        val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
-        val receiver = BluetoothBroadcastReceiver {
+        val filter = IntentFilter().apply {
+            addAction(BluetoothDevice.ACTION_FOUND)
+            addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED)
+        }
+
+        val receiver = BluetoothBroadcastReceiver { info ->
             val index = bluetoothList.indexOfFirst { item ->
-                item.address == it.address
+                item.mac == info.mac
             }
             if (index == -1) {
-                bluetoothList.add(it)
+                bluetoothList.add(info)
             } else {
-                bluetoothList[index] = it
+                bluetoothList[index] = info
             }
         }
         context.registerReceiver(receiver, filter)
@@ -171,7 +185,6 @@ private fun rememberBluetoothLauncher(): () -> Unit {
 
 private class BluetoothBroadcastReceiver(val onFound: (info: BluetoothInfo) -> Unit) :
     BroadcastReceiver() {
-    @SuppressLint("MissingPermission")
     override fun onReceive(context: Context, intent: Intent) {
         when (intent.action) {
             BluetoothDevice.ACTION_FOUND -> {
@@ -187,30 +200,28 @@ private class BluetoothBroadcastReceiver(val onFound: (info: BluetoothInfo) -> U
                     }
                 if (device?.name?.isNotEmpty() == true) {
                     val rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE)
-                    onFound(buildBluetoothInfo(device, rssi.toInt()))
+                    onFound(device.buildBluetoothInfo(rssi.toInt()))
                 }
             }
         }
     }
 }
 
-@SuppressLint("MissingPermission")
-private fun buildBluetoothInfo(device: BluetoothDevice, rssi: Int): BluetoothInfo {
+private fun BluetoothDevice.buildBluetoothInfo(rssi: Int): BluetoothInfo {
     return BluetoothInfo(
-        name = device.name,
-        address = device.address,
-        rssi = "${rssi}dBm (${calculateSingleStrength(rssi)}%)",
-        type = determineBluetoothType(device.type),
-        bondState = determineBluetoothBondState(device.bondState),
-        uuids = device.uuids?.map { it.toString() }?.distinct() ?: listOf()
+        name = this.name,
+        mac = this.address,
+        type = getBluetoothType(this.type),
+        bondState = getBluetoothBondState(this.bondState),
+        rssi = rssi,
+        percentage = dbmToPercentage(rssi)
     )
 }
 
-private fun calculateSingleStrength(dBm: Int): Int {
-    return min(max(2 * (dBm + 100), 0), 100)
-}
-
-private fun determineBluetoothType(type: Int): String {
+/**
+ * 获取蓝牙类型
+ */
+private fun getBluetoothType(type: Int): String {
     return when (type) {
         BluetoothDevice.DEVICE_TYPE_CLASSIC -> "经典蓝牙"
         BluetoothDevice.DEVICE_TYPE_LE -> "低功耗蓝牙"
@@ -219,7 +230,10 @@ private fun determineBluetoothType(type: Int): String {
     }
 }
 
-private fun determineBluetoothBondState(type: Int): String {
+/**
+ * 获取蓝牙绑定状态
+ */
+private fun getBluetoothBondState(type: Int): String {
     return when (type) {
         BluetoothDevice.BOND_NONE -> "未绑定"
         BluetoothDevice.BOND_BONDED -> "已绑定"
@@ -229,10 +243,10 @@ private fun determineBluetoothBondState(type: Int): String {
 }
 
 private data class BluetoothInfo(
-    val name: String,
-    val address: String,
-    val rssi: String,
-    val type: String,
-    val bondState: String,
-    val uuids: List<String>
+    val name: String,       // 设备名称
+    val mac: String,    // mac地址
+    val type: String,       // 蓝牙类型
+    val bondState: String,  // 绑定状态
+    val rssi: Int,          // 信号强度（dBm）
+    val percentage: Int    // 信号强度（百分比）
 )

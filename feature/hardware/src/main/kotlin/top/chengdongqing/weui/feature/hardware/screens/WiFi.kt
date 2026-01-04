@@ -1,7 +1,6 @@
 package top.chengdongqing.weui.feature.hardware.screens
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.net.wifi.ScanResult
@@ -34,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -41,12 +41,11 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import top.chengdongqing.weui.core.ui.components.button.WeButton
 import top.chengdongqing.weui.core.ui.components.cardlist.cardList
 import top.chengdongqing.weui.core.ui.components.divider.WeDivider
-import top.chengdongqing.weui.core.ui.components.loading.LoadMoreType
-import top.chengdongqing.weui.core.ui.components.loading.WeLoadMore
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
+import top.chengdongqing.weui.core.utils.dbmToPercentage
 import top.chengdongqing.weui.core.utils.showToast
+import top.chengdongqing.weui.feature.hardware.components.DiscoveryLoading
 
-@SuppressLint("MissingPermission")
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun WiFiScreen() {
@@ -63,13 +62,15 @@ fun WiFiScreen() {
                 )
             }
         )
+        val (observing, setObserving) = remember { mutableStateOf(false) }
 
         WeButton(text = "扫描Wi-Fi") {
             if (permissionState.allPermissionsGranted) {
                 if (wifiManager == null) {
                     context.showToast("此设备不支持Wi-Fi")
                 } else if (wifiManager.isWifiEnabled) {
-                    wifiList = buildWiFiList(wifiManager.scanResults)
+                    wifiList = wifiManager.scanResults.buildWiFiList()
+                    setObserving(true)
                 } else {
                     context.showToast("Wi-Fi未开启")
                     context.startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
@@ -78,8 +79,11 @@ fun WiFiScreen() {
                 permissionState.launchMultiplePermissionRequest()
             }
         }
-        Spacer(modifier = Modifier.height(40.dp))
-        WiFiList(wifiList)
+
+        if (observing) {
+            Spacer(modifier = Modifier.height(40.dp))
+            WiFiList(wifiList)
+        }
     }
 }
 
@@ -95,7 +99,7 @@ private fun WiFiList(wifiList: List<WiFiInfo>) {
             }
         }
     } else {
-        WeLoadMore(type = LoadMoreType.ALL_LOADED)
+        DiscoveryLoading("正在扫描Wi-Fi...")
     }
 }
 
@@ -108,8 +112,12 @@ private fun WiFiListItem(wifi: WiFiInfo) {
     ) {
         Column(modifier = Modifier.padding(vertical = 16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                if (wifi.name.isNotEmpty()) {
-                    Text(text = wifi.name, color = MaterialTheme.colorScheme.onPrimary)
+                if (wifi.ssid.isNotEmpty()) {
+                    Text(
+                        text = wifi.ssid,
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        fontWeight = FontWeight.Bold
+                    )
                     Spacer(modifier = Modifier.width(4.dp))
                 }
                 Text(
@@ -123,45 +131,51 @@ private fun WiFiListItem(wifi: WiFiInfo) {
             }
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "MAC地址：${wifi.id}",
+                text = buildString {
+                    appendLine("信号强度：${wifi.rssi}dBm （${wifi.percentage}%）")
+                    appendLine("MAC地址：${wifi.mac}")
+                    appendLine("加密类型：${wifi.security}")
+                    appendLine("技术标准：${wifi.generation}")
+                    append("中心频率：${wifi.frequency}MHz")
+                },
                 color = MaterialTheme.colorScheme.onSecondary,
                 fontSize = 10.sp,
                 lineHeight = 14.sp
             )
         }
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            if (wifi.secure) {
-                Icon(
-                    imageVector = Icons.Filled.Lock,
-                    contentDescription = "加密",
-                    modifier = Modifier.size(20.dp),
-                    tint = MaterialTheme.colorScheme.onSecondary
-                )
-            }
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = wifi.level,
-                color = MaterialTheme.colorScheme.onPrimary,
-                fontSize = 14.sp
+
+        if (wifi.isProtected) {
+            Icon(
+                imageVector = Icons.Filled.Lock,
+                contentDescription = "加密",
+                modifier = Modifier.size(20.dp),
+                tint = MaterialTheme.colorScheme.onSecondary
             )
         }
     }
 }
 
-private fun buildWiFiList(scanResultList: List<ScanResult>): List<WiFiInfo> {
-    return scanResultList.sortedByDescending { it.level }
-        .map { item ->
+private fun List<ScanResult>.buildWiFiList(): List<WiFiInfo> {
+    return this.sortedByDescending { it.level }
+        .map { result ->
             WiFiInfo(
-                id = item.BSSID,
-                name = getSSID(item),
-                band = determineWifiBand(item.frequency),
-                level = "${calculateSignalLevel(item.level)}%",
-                secure = isWifiSecure(item.capabilities)
+                ssid = getWifiSSID(result),
+                mac = result.BSSID,
+                frequency = result.frequency,
+                rssi = result.level,
+                percentage = dbmToPercentage(result.level, minDbm = -90),
+                band = getWifiBand(result.frequency),
+                isProtected = isWifiProtected(result.capabilities),
+                security = getWifiSecurity(result.capabilities),
+                generation = getWifiGeneration(result)
             )
         }
 }
 
-private fun getSSID(wifi: ScanResult): String {
+/**
+ * 获取Wi-Fi名称
+ */
+private fun getWifiSSID(wifi: ScanResult): String {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         wifi.wifiSsid?.bytes?.decodeToString() ?: ""
     } else {
@@ -170,7 +184,10 @@ private fun getSSID(wifi: ScanResult): String {
     }
 }
 
-private fun determineWifiBand(frequency: Int): String {
+/**
+ * 获取Wi-Fi频段
+ */
+private fun getWifiBand(frequency: Int): String {
     return when (frequency) {
         in 2400..2500 -> "2.4G"
         in 4900..5900 -> "5G"
@@ -179,28 +196,77 @@ private fun determineWifiBand(frequency: Int): String {
     }
 }
 
-private fun calculateSignalLevel(rssi: Int, numLevels: Int = 100): Int {
-    val minRssi = -100
-    val maxRssi = -55
-    if (rssi <= minRssi) {
-        return 0
-    } else if (rssi >= maxRssi) {
-        return numLevels - 1
-    } else {
-        val inputRange = (maxRssi - minRssi).toFloat()
-        val outputRange = (numLevels - 1).toFloat()
-        return ((rssi - minRssi).toFloat() * outputRange / inputRange).toInt()
-    }
-}
-
-private fun isWifiSecure(capabilities: String): Boolean {
+/**
+ * 判断是否加密
+ */
+private fun isWifiProtected(capabilities: String): Boolean {
     return capabilities.contains("WEP") || capabilities.contains("PSK") || capabilities.contains("EAP")
 }
 
+/**
+ * 获取Wi-Fi安全性
+ */
+private fun getWifiSecurity(capabilities: String?): String {
+    if (capabilities == null) return "未知"
+    val cap = capabilities.uppercase()
+
+    return when {
+        // WPA3 系列
+        cap.contains("SUITE-B-192") -> "WPA3-Enterprise (192-bit)"
+        cap.contains("SAE") && cap.contains("EAP") -> "WPA3-Enterprise"
+        cap.contains("SAE") -> "WPA3-Personal"
+        // WPA2 系列
+        cap.contains("EAP") && cap.contains("WPA2") -> "WPA2-Enterprise"
+        cap.contains("PSK") && cap.contains("WPA2") -> {
+            // 很多设备在过渡期会显示为 WPA2/WPA3
+            if (cap.contains("SAE")) "WPA2/WPA3-Personal" else "WPA2-Personal"
+        }
+        // 旧协议
+        cap.contains("WEP") -> "WEP"
+        // 开放
+        !cap.contains("WPA") && !cap.contains("WEP") && !cap.contains("EAP") -> "开放"
+        else -> "加密"
+    }
+}
+
+/**
+ * 获取技术标准
+ */
+private fun getWifiGeneration(scanResult: ScanResult): String {
+    // 优先使用官方 API (Android 11+)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        return when (scanResult.wifiStandard) {
+            ScanResult.WIFI_STANDARD_LEGACY -> "Wi-Fi 1/2/3"
+            ScanResult.WIFI_STANDARD_11N -> "Wi-Fi 4"
+            ScanResult.WIFI_STANDARD_11AC -> "Wi-Fi 5"
+            ScanResult.WIFI_STANDARD_11AX -> "Wi-Fi 6"
+            // Android 14+ 支持 Wi-Fi 7
+            8 -> "Wi-Fi 7"
+            else -> "Wi-Fi"
+        }
+    }
+
+    // 兼容旧版本 (Android 10 及以下) - 通过特征字符串推断
+    val cap = scanResult.capabilities.uppercase()
+    return when {
+        // VHT = Very High Throughput (802.11ac / Wi-Fi 5)
+        cap.contains("VHT") -> "Wi-Fi 5"
+        // HT = High Throughput (802.11n / Wi-Fi 4)
+        cap.contains("HT") -> "Wi-Fi 4"
+        // 5GHz 频段即便没识别出 HT，大概率也是 Wi-Fi 4 以上
+        scanResult.frequency > 4900 -> "Wi-Fi 4/5"
+        else -> "Wi-Fi 3"
+    }
+}
+
 private data class WiFiInfo(
-    val id: String,
-    val name: String,
-    val band: String,
-    val level: String,
-    val secure: Boolean
+    val ssid: String,       // Wi-Fi名称
+    val mac: String,        // MAC 地址
+    val frequency: Int,     // 频率 (MHz)
+    val rssi: Int,          // 信号强度 (dBm)
+    val percentage: Int,    // 信号强度（百分比）
+    val band: String,       // 频段
+    val isProtected: Boolean, // 是否加密
+    val security: String,    // 安全性
+    val generation: String   // 技术标准
 )

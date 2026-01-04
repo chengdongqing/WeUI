@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
@@ -77,11 +76,8 @@ private fun Gallery() {
     ) {
         state.mediaGroups.forEach { (date, items) ->
             val title = date.format(DateTimeFormatter.ofPattern(ChineseDateWeekFormatter))
-            item(
-                key = date,
-                span = { GridItemSpan(maxLineSpan) }
-            ) {
-                MediaGroupTitle(title)
+            stickyHeader(title) {
+                GroupTitle(title)
             }
             itemsIndexed(items) { index, item ->
                 MediaItem(item) {
@@ -93,16 +89,22 @@ private fun Gallery() {
 }
 
 @Composable
-private fun MediaGroupTitle(title: String) {
-    Text(
-        text = title,
-        color = MaterialTheme.colorScheme.onPrimary,
-        fontSize = 14.sp,
-        fontWeight = FontWeight.Bold,
+private fun GroupTitle(title: String) {
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp, horizontal = 12.dp)
-    )
+            .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.95f))
+    ) {
+        Text(
+            text = title,
+            color = MaterialTheme.colorScheme.onPrimary,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp, horizontal = 12.dp)
+        )
+    }
 }
 
 @Composable
