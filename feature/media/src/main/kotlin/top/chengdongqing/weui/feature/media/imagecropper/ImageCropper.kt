@@ -152,12 +152,12 @@ private fun Context.loadImageBitmap(uri: Uri): State<ImageBitmap?> {
 }
 
 private fun Context.createImageUri(bitmap: Bitmap, quality: Int = 100): Uri {
-    val tempFile = File.createTempFile("cropped_", ".webp").apply {
+    val tempFile = File.createTempFile("cropped_", ".jpg").apply {
         deleteOnExit()
     }
 
     FileOutputStream(tempFile).use { outputStream ->
-        bitmap.compress(Bitmap.CompressFormat.WEBP_LOSSLESS, quality, outputStream)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream)
     }
 
     return getFileProviderUri(tempFile)

@@ -7,6 +7,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import top.chengdongqing.weui.core.ui.components.cardlist.WeCardListItem
 import top.chengdongqing.weui.core.ui.components.cardlist.cardList
+import top.chengdongqing.weui.core.ui.components.contextmenu.WeContextMenu
 import top.chengdongqing.weui.core.ui.components.contextmenu.contextMenu
 import top.chengdongqing.weui.core.ui.components.contextmenu.rememberContextMenuState
 import top.chengdongqing.weui.core.ui.components.dialog.rememberDialogState
@@ -23,12 +24,7 @@ fun ContextMenuScreen() {
             listOf("标为未读", "置顶该聊天", "不显示该聊天", "删除该聊天")
         }
         val dialog = rememberDialogState()
-        val contextMenuState = rememberContextMenuState { listIndex, menuIndex ->
-            dialog.show(
-                title = "你点击了第${listIndex + 1}项的“${menus[menuIndex]}”",
-                onCancel = null
-            )
-        }
+        val contextMenuState = rememberContextMenuState()
 
         LazyColumn(modifier = Modifier.cardList()) {
             items(30) { index ->
@@ -41,6 +37,13 @@ fun ContextMenuScreen() {
                     WeCardListItem(label = "第${index + 1}项")
                 }
             }
+        }
+
+        WeContextMenu(contextMenuState) { listIndex, menuIndex ->
+            dialog.show(
+                title = "你点击了第${listIndex + 1}项的“${menus[menuIndex]}”",
+                onCancel = null
+            )
         }
     }
 }
