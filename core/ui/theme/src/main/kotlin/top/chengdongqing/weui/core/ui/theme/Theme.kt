@@ -1,6 +1,7 @@
 package top.chengdongqing.weui.core.ui.theme
 
 import android.app.Activity
+import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
@@ -18,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.PlatformTextStyle
@@ -66,8 +68,17 @@ fun WeUITheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
+            // 设置状态栏的背景颜色为透明
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+                @Suppress("DEPRECATION")
+                window.statusBarColor = Color.Transparent.toArgb()
+            }
             val insetsController = WindowCompat.getInsetsController(window, view)
+            // 设置状态栏图标/文字的颜色模式
             insetsController.isAppearanceLightStatusBars = darkStatusBar
+            // App 的布局是否“避让”系统窗口（如状态栏和导航栏）
+            // 设置为 false 表示 App 内容会延伸到状态栏和导航栏的正下方（即沉浸式）
+            WindowCompat.setDecorFitsSystemWindows(window, false)
         }
     }
 
@@ -77,6 +88,7 @@ fun WeUITheme(
     ) {
         CompositionLocalProvider(
             LocalTextStyle provides TextStyle(
+                // 避免文本自带边距
                 platformStyle = PlatformTextStyle(false)
             )
         ) {

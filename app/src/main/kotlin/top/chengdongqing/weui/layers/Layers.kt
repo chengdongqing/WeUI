@@ -1,8 +1,8 @@
 package top.chengdongqing.weui.layers
 
-import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -44,7 +44,7 @@ fun LayersScreen() {
 
         val progress by animateFloatAsState(
             targetValue = if (expanded) 1f else 0f,
-            animationSpec = spring(dampingRatio = 0.8f, stiffness = Spring.StiffnessLow),
+            animationSpec = tween(durationMillis = 500, easing = FastOutSlowInEasing),
             label = "layers"
         )
 
