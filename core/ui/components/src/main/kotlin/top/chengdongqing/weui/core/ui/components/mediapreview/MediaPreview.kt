@@ -1,6 +1,5 @@
 package top.chengdongqing.weui.core.ui.components.mediapreview
 
-import android.app.Activity
 import android.content.Context
 import androidx.compose.animation.core.SnapSpec
 import androidx.compose.foundation.background
@@ -24,6 +23,7 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,6 +47,7 @@ import top.chengdongqing.weui.core.utils.MediaStoreUtils
 import top.chengdongqing.weui.core.utils.SetupFullscreen
 import top.chengdongqing.weui.core.utils.copyToFile
 import top.chengdongqing.weui.core.utils.copyUri
+import top.chengdongqing.weui.core.utils.findActivity
 import top.chengdongqing.weui.core.utils.getFileExtension
 import top.chengdongqing.weui.core.utils.shareFile
 import java.io.File
@@ -69,7 +70,10 @@ fun WeMediaPreview(medias: Array<MediaItem>, current: Int = 0) {
 
 @Composable
 private fun MediaPager(medias: Array<MediaItem>, pagerState: PagerState) {
-    val activity = LocalContext.current.applicationContext as Activity
+    val context = LocalContext.current
+    val activity = remember(context) {
+        context.findActivity()
+    }
 
     HorizontalPager(
         state = pagerState,
@@ -95,7 +99,7 @@ private fun MediaPager(medias: Array<MediaItem>, pagerState: PagerState) {
                 val zoomableState = rememberZoomableState()
 
                 ImagePreview(media.uri, zoomableState) {
-                    activity.finish()
+                    activity?.finish()
                 }
 
                 // 滑到另一页后重置当前页的缩放状态

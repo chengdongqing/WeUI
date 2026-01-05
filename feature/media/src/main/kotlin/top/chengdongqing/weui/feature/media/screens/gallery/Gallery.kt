@@ -64,24 +64,25 @@ private fun Gallery() {
 
     if (state.isLoading) {
         WeLoadMore()
-    }
-    FilterBar(gridState, state)
-    LazyVerticalGrid(
-        state = gridState,
-        columns = GridCells.Adaptive(100.dp),
-        contentPadding = PaddingValues(bottom = 60.dp),
-        horizontalArrangement = Arrangement.spacedBy(2.dp),
-        verticalArrangement = Arrangement.spacedBy(2.dp),
-        modifier = Modifier.background(MaterialTheme.colorScheme.surface)
-    ) {
-        state.mediaGroups.forEach { (date, items) ->
-            val title = date.format(DateTimeFormatter.ofPattern(ChineseDateWeekFormatter))
-            stickyHeader(title) {
-                GroupTitle(title)
-            }
-            itemsIndexed(items) { index, item ->
-                MediaItem(item) {
-                    context.previewMedias(items, index)
+    } else {
+        FilterBar(gridState, state)
+        LazyVerticalGrid(
+            state = gridState,
+            columns = GridCells.Adaptive(100.dp),
+            contentPadding = PaddingValues(bottom = 60.dp),
+            horizontalArrangement = Arrangement.spacedBy(2.dp),
+            verticalArrangement = Arrangement.spacedBy(2.dp),
+            modifier = Modifier.background(MaterialTheme.colorScheme.surface)
+        ) {
+            state.mediaGroups.forEach { (date, items) ->
+                val title = date.format(DateTimeFormatter.ofPattern(ChineseDateWeekFormatter))
+                stickyHeader(title) {
+                    GroupTitle(title)
+                }
+                itemsIndexed(items, key = { _, item -> item.uri }) { index, item ->
+                    MediaItem(item) {
+                        context.previewMedias(items, index)
+                    }
                 }
             }
         }

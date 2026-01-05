@@ -1,6 +1,8 @@
 package top.chengdongqing.weui.core.utils
 
+import android.app.Activity
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.BatteryManager
@@ -73,4 +75,16 @@ fun Context.installApk(apkPath: String) {
     }
     File(apkPath).copyTo(tempFile, true)
     openFile(tempFile, "application/vnd.android.package-archive")
+}
+
+/**
+ * 寻找Activity
+ */
+fun Context.findActivity(): Activity? {
+    var context = this
+    while (context is ContextWrapper) {
+        if (context is Activity) return context
+        context = context.baseContext
+    }
+    return null
 }

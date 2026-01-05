@@ -64,10 +64,8 @@ internal fun FilterBar(gridState: LazyGridState, state: GalleryState) {
                         end = LocalDate.now()
                     ) {
                         value = it
-                        with(state) {
-                            coroutineScope.launch {
-                                gridState.scrollToDate(it)
-                            }
+                        coroutineScope.launch {
+                            gridState.scrollToDate(state, it)
                         }
                     }
                 }
@@ -88,4 +86,12 @@ internal fun FilterBar(gridState: LazyGridState, state: GalleryState) {
             )
         }
     }
+}
+
+/**
+ * 滚动到指定日期
+ */
+private suspend fun LazyGridState.scrollToDate(state: GalleryState, targetDate: LocalDate) {
+    val index = state.getIndexForDate(targetDate)
+    animateScrollToItem(index)
 }
