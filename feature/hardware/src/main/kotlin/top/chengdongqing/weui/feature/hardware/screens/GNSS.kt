@@ -11,13 +11,16 @@ import android.location.LocationManager
 import android.os.Build
 import android.os.Handler
 import android.os.HandlerThread
+import android.os.Looper
 import android.provider.Settings
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -36,6 +39,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -48,6 +52,7 @@ import top.chengdongqing.weui.core.ui.components.button.ButtonType
 import top.chengdongqing.weui.core.ui.components.button.WeButton
 import top.chengdongqing.weui.core.ui.components.cardlist.cardList
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
+import top.chengdongqing.weui.core.ui.components.tabview.WeTabView
 import top.chengdongqing.weui.core.utils.dbHzToPercentage
 import top.chengdongqing.weui.core.utils.format
 import top.chengdongqing.weui.core.utils.formatDegree
@@ -57,7 +62,7 @@ import top.chengdongqing.weui.feature.hardware.components.DiscoveryLoading
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun GNSSScreen() {
-    WeScreen(title = "GNSS", description = "全球导航卫星系统", scrollEnabled = false) {
+    WeScreen(title = "GNSS", description = "全球卫星导航系统", scrollEnabled = false) {
         val context = LocalContext.current
         val permissionState = rememberPermissionState(Manifest.permission.ACCESS_FINE_LOCATION)
         val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -67,7 +72,7 @@ fun GNSSScreen() {
         val groups by remember {
             derivedStateOf {
                 // 根据类型分组
-                satelliteList.groupBy { it.constellationType }.mapValues { (_, value) ->
+                satelliteList.groupBy { it.constellationTypeName }.mapValues { (_, value) ->
                     // 根据编号排序
                     value.sortedBy { it.svid }
                 }
@@ -95,9 +100,23 @@ fun GNSSScreen() {
             if (groups.isEmpty()) {
                 DiscoveryLoading("正在搜寻卫星信号...")
             } else {
-                LocationInfo(location, satelliteList.size)
+                val tabs = remember {
+                    listOf("卫星列表", "星盘图", "更多")
+                }
+
                 Spacer(modifier = Modifier.height(20.dp))
-                SatelliteTable(groups)
+                WeTabView(
+                    options = tabs,
+                    modifier = Modifier.padding(PaddingValues(top = 10.dp)),
+                    containerColor = Color.Transparent
+                ) { index ->
+                    Spacer(modifier = Modifier.height(20.dp))
+                    when (index) {
+                        0 -> SatelliteTable(groups)
+                        1 -> GnssSkyView(satelliteList)
+                        2 -> LocationInfo(location, satelliteList.size)
+                    }
+                }
             }
         }
     }
@@ -105,27 +124,36 @@ fun GNSSScreen() {
 
 @Composable
 private fun LocationInfo(location: Location?, satelliteCount: Int) {
-    Spacer(modifier = Modifier.height(20.dp))
-    Text(
-        text = buildString {
-            appendLine("卫星数量：${satelliteCount}颗")
-            location?.let {
-                val latitude = location.latitude.format(6)
-                val longitude = location.longitude.format(6)
-                appendLine("坐标：$latitude, $longitude")
-                appendLine("海拔：${location.altitude.format()}m, 精度：${location.accuracy.format()}m")
-            }
-        },
-        color = MaterialTheme.colorScheme.onPrimary,
-        fontSize = 12.sp,
-        textAlign = TextAlign.Center,
-        lineHeight = 20.sp
-    )
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .cardList(),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = buildString {
+                appendLine("卫星数量：${satelliteCount}颗")
+                location?.let {
+                    val latitude = location.latitude.format(6)
+                    val longitude = location.longitude.format(6)
+                    appendLine("坐标：$latitude, $longitude")
+                    appendLine("海拔：${location.altitude.format()}m, 精度：${location.accuracy.format()}m")
+                }
+            },
+            color = MaterialTheme.colorScheme.onPrimary,
+            textAlign = TextAlign.Center,
+            lineHeight = 30.sp
+        )
+    }
 }
 
 @Composable
 private fun SatelliteTable(groups: Map<String, List<SatelliteInfo>>) {
-    LazyColumn(modifier = Modifier.cardList(PaddingValues(top = 20.dp))) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .cardList(PaddingValues(top = 20.dp))
+    ) {
         groups.forEach { (type, list) ->
             stickyHeader(type) {
                 Column(
@@ -275,30 +303,29 @@ private class SatelliteStatusCallback(
         val count = status.satelliteCount
         val satelliteMap = mutableMapOf<String, SatelliteInfo>()
 
-        // 过滤 + 转换数据
         for (index in 0 until count) {
             val cn0 = status.getCn0DbHz(index)
             if (cn0 <= 0f) continue // 过滤无信号
-
             val svid = status.getSvid(index)
             val type = status.getConstellationType(index)
             val key = "${type}_$svid" // 构建唯一标识
-
             satelliteMap[key] = status.buildSatelliteInfo(key, svid, type, cn0, index)
         }
 
-        // 移除已经消失的
-        satelliteList.removeIf { it.key !in satelliteMap.keys }
+        Handler(Looper.getMainLooper()).post {
+            // 移除已经消失的
+            satelliteList.removeIf { it.key !in satelliteMap.keys }
 
-        // 更新或添加
-        satelliteMap.forEach { (svid, info) ->
-            val index = satelliteList.indexOfFirst { it.key == svid }
-            if (index != -1) {
-                if (satelliteList[index] != info) {
-                    satelliteList[index] = info
+            // 更新或添加
+            satelliteMap.forEach { (svid, info) ->
+                val index = satelliteList.indexOfFirst { it.key == svid }
+                if (index != -1) {
+                    if (satelliteList[index] != info) {
+                        satelliteList[index] = info
+                    }
+                } else {
+                    satelliteList.add(info)
                 }
-            } else {
-                satelliteList.add(info)
             }
         }
     }
@@ -320,7 +347,8 @@ private fun GnssStatus.buildSatelliteInfo(
 
     return SatelliteInfo(
         key,
-        constellationType = getSatelliteType(type),
+        constellationType = type,
+        constellationTypeName = SatelliteType.getById(type).fullName,
         svid = svid,
         azimuthDegrees = formatDegree(getAzimuthDegrees(index)),
         elevationDegrees = formatDegree(getElevationDegrees(index)),
@@ -380,24 +408,32 @@ private fun getSatelliteBand(constellationType: Int, frequency: Float): String {
 }
 
 /**
- * 获取星座类型
+ * 星座配置
  */
-private fun getSatelliteType(constellationType: Int): String {
-    return when (constellationType) {
-        GnssStatus.CONSTELLATION_BEIDOU -> "北斗（中国）"
-        GnssStatus.CONSTELLATION_GPS -> "GPS（美国）"
-        GnssStatus.CONSTELLATION_GLONASS -> "GLONASS（俄罗斯）"
-        GnssStatus.CONSTELLATION_GALILEO -> "GALILEO（欧盟）"
-        GnssStatus.CONSTELLATION_QZSS -> "QZSS（日本）"
-        GnssStatus.CONSTELLATION_IRNSS -> "IRNSS（印度）"
-        GnssStatus.CONSTELLATION_SBAS -> "SBAS（地面导航增强系统）"
-        else -> "未知"
+enum class SatelliteType(
+    val typeId: Int,
+    val fullName: String,
+    val shortName: String,
+    val color: Color
+) {
+    BEIDOU(GnssStatus.CONSTELLATION_BEIDOU, "北斗（中国）", "北斗", Color(0xFFFF4D4D)),
+    GPS(GnssStatus.CONSTELLATION_GPS, "GPS（美国）", "GPS", Color(0xFF4DFF4D)),
+    GLONASS(GnssStatus.CONSTELLATION_GLONASS, "GLONASS（俄罗斯）", "GLO", Color(0xFFFFD700)),
+    GALILEO(GnssStatus.CONSTELLATION_GALILEO, "GALILEO（欧盟）", "GAL", Color(0xFF4D94FF)),
+    QZSS(GnssStatus.CONSTELLATION_QZSS, "QZSS（日本）", "QZSS", Color(0xFFFF69B4)),
+    IRNSS(GnssStatus.CONSTELLATION_IRNSS, "IRNSS（印度）", "IRNSS", Color(0xFFA020F0)),
+    SBAS(GnssStatus.CONSTELLATION_SBAS, "SBAS（导航增强系统）", "SBAS", Color(0xFF00FFFF)),
+    UNKNOWN(-1, "未知", "未知", Color.White);
+
+    companion object {
+        fun getById(id: Int) = entries.find { it.typeId == id } ?: UNKNOWN
     }
 }
 
-private data class SatelliteInfo(
+data class SatelliteInfo(
     val key: String,                // 唯一标识
-    val constellationType: String,  // 星座类型
+    val constellationType: Int,  // 星座类型
+    val constellationTypeName: String,
     val svid: Int,                  // 卫星编号（Space Vehicle Identification：航天器识别号）
     val azimuthDegrees: String,     // 方位角
     val elevationDegrees: String,   // 高度角

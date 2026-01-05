@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
@@ -22,16 +23,20 @@ import top.chengdongqing.weui.core.utils.clickableWithoutRipple
 @Composable
 fun WeTabView(
     options: List<String>,
+    modifier: Modifier = Modifier,
     pagerState: PagerState = rememberPagerState {
         options.size
     },
+    containerColor: Color = TabRowDefaults.secondaryContainerColor,
     content: @Composable PagerScope.(Int) -> Unit
 ) {
     Column {
-        TabBar(pagerState, options)
+        TabBar(pagerState, options, containerColor)
         HorizontalPager(
             state = pagerState,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .then(modifier)
         ) { index ->
             content(index)
         }
@@ -39,11 +44,12 @@ fun WeTabView(
 }
 
 @Composable
-private fun TabBar(pagerState: PagerState, options: List<String>) {
+private fun TabBar(pagerState: PagerState, options: List<String>, containerColor: Color) {
     val coroutineScope = rememberCoroutineScope()
 
     SecondaryScrollableTabRow(
         selectedTabIndex = pagerState.currentPage,
+        containerColor = containerColor,
         edgePadding = 0.dp,
         indicator = {
             TabRowDefaults.SecondaryIndicator(
@@ -65,14 +71,14 @@ private fun TabBar(pagerState: PagerState, options: List<String>) {
                 } else {
                     MaterialTheme.colorScheme.onSecondary
                 },
-                fontSize = 17.sp,
+                fontSize = 15.sp,
                 modifier = Modifier
                     .clickableWithoutRipple {
                         coroutineScope.launch {
                             pagerState.animateScrollToPage(index)
                         }
                     }
-                    .padding(horizontal = 32.dp, vertical = 16.dp)
+                    .padding(horizontal = 26.dp, vertical = 14.dp)
             )
         }
     }
