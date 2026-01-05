@@ -1,9 +1,7 @@
 package top.chengdongqing.weui.core.utils
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 
@@ -18,17 +16,4 @@ fun <T> rememberToggleState(defaultValue: T, reverseValue: T): Pair<MutableState
     }
 
     return Pair(state, toggleValue)
-}
-
-@Composable
-fun <T> rememberLastState(value: T): State<T> {
-    val last = remember { mutableStateOf(value) }
-    val (old, setOld) = remember { mutableStateOf(value) }
-
-    LaunchedEffect(value) {
-        last.value = old
-        setOld(value)
-    }
-
-    return last
 }

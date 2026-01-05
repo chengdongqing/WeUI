@@ -13,8 +13,8 @@ dependencies {
     implementation(libs.bundles.camerax)
     implementation(libs.zxing.core)
 
-    implementation(project(":core:data:model"))
-    implementation(project(":core:ui:theme"))
-    implementation(project(":core:ui:components"))
-    implementation(project(":core:utils"))
+    implementation(projects.core.data.model)
+    implementation(projects.core.ui.theme)
+    implementation(projects.core.ui.components)
+    implementation(projects.core.utils)
 }

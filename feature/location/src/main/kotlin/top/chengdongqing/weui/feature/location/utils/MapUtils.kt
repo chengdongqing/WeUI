@@ -2,13 +2,14 @@ package top.chengdongqing.weui.feature.location.utils
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.location.Location
 import android.net.Uri
 import android.os.Build
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.createBitmap
+import androidx.core.net.toUri
 import com.amap.api.maps.model.BitmapDescriptor
 import com.amap.api.maps.model.BitmapDescriptorFactory
 import com.amap.api.maps.model.LatLng
@@ -27,20 +28,20 @@ fun Context.navigateToLocation(
 ) {
     val uri: Uri = when (mapType) {
         MapType.AMAP -> {
-            Uri.parse("amapuri://route/plan?dlat=${location.latitude}&dlon=${location.longitude}&dname=$name")
+            "amapuri://route/plan?dlat=${location.latitude}&dlon=${location.longitude}&dname=$name".toUri()
         }
 
         MapType.BAIDU -> {
             val encodedName = URLEncoder.encode(name, "UTF-8")
-            Uri.parse("baidumap://map/direction?destination=latlng:${location.latitude},${location.longitude}|name:$encodedName")
+            "baidumap://map/direction?destination=latlng:${location.latitude},${location.longitude}|name:$encodedName".toUri()
         }
 
         MapType.TENCENT -> {
-            Uri.parse("qqmap://map/routeplan?to=$name&tocoord=${location.latitude},${location.longitude}")
+            "qqmap://map/routeplan?to=$name&tocoord=${location.latitude},${location.longitude}".toUri()
         }
 
         MapType.GOOGLE -> {
-            Uri.parse("google.navigation:q=${location.latitude},${location.longitude}")
+            "google.navigation:q=${location.latitude},${location.longitude}".toUri()
         }
     }
 
@@ -66,11 +67,7 @@ fun createBitmapDescriptor(
     val drawable = ContextCompat.getDrawable(context, iconId) ?: return null
     val originalWidth = width ?: drawable.intrinsicWidth
     val originalHeight = height ?: drawable.intrinsicHeight
-    val bitmap = Bitmap.createBitmap(
-        originalWidth,
-        originalHeight,
-        Bitmap.Config.ARGB_8888
-    )
+    val bitmap = createBitmap(originalWidth, originalHeight)
     val canvas = Canvas(bitmap)
 
     // 旋转

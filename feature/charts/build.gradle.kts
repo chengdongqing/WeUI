@@ -9,7 +9,7 @@ android {
 dependencies {
     implementation(libs.navigation.compose)
 
-    implementation(project(":core:ui:theme"))
-    implementation(project(":core:ui:components"))
-    implementation(project(":core:utils"))
+    implementation(projects.core.ui.theme)
+    implementation(projects.core.ui.components)
+    implementation(projects.core.utils)
 }

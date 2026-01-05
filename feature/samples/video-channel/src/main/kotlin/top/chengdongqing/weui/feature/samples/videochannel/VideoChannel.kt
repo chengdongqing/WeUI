@@ -1,6 +1,5 @@
 package top.chengdongqing.weui.feature.samples.videochannel
 
-import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,6 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import top.chengdongqing.weui.core.ui.components.videoplayer.WeVideoPlayer
 import top.chengdongqing.weui.core.ui.components.videoplayer.rememberVideoPlayerState
 import top.chengdongqing.weui.core.ui.theme.BackgroundColorDark
@@ -51,7 +51,7 @@ fun VideoChannelScreen() {
 @Composable
 private fun VideoItem(video: VideoItem) {
     Column {
-        val state = rememberVideoPlayerState(videoSource = Uri.parse(video.videoUrl))
+        val state = rememberVideoPlayerState(videoSource = video.videoUrl.toUri())
         WeVideoPlayer(state, modifier = Modifier.weight(1f))
 
         Box {

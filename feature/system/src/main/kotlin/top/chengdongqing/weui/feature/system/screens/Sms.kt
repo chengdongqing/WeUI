@@ -3,7 +3,6 @@ package top.chengdongqing.weui.feature.system.screens
 import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.provider.Telephony.Sms
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -21,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -73,7 +73,7 @@ private fun WritingSms() {
             if (number.isEmpty() || content.isEmpty()) {
                 toast.show("请正确输入")
             } else {
-                val intent = Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:$number")).apply {
+                val intent = Intent(Intent.ACTION_SENDTO, "smsto:$number".toUri()).apply {
                     putExtra("sms_body", content)
                 }
                 context.startActivity(intent)
@@ -107,9 +107,11 @@ private fun ReadingSms() {
         }
     }
     WePopup(visible, title = "短信", onClose = { visible = false }) {
-        LazyColumn(modifier = Modifier
-            .cardList()
-            .fillMaxHeight(0.5f)) {
+        LazyColumn(
+            modifier = Modifier
+                .cardList()
+                .fillMaxHeight(0.5f)
+        ) {
             items(messages) {
                 WeCardListItem(label = it.first, value = it.second)
             }

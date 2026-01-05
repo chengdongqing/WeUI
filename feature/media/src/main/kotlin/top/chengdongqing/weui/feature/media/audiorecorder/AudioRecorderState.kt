@@ -114,7 +114,7 @@ private class AudioRecorderStateImpl(
         tempFile = File.createTempFile("RCD_", ".aac").apply {
             deleteOnExit()
         }
-        recorder.setOutputFile(tempFile)
+        recorder.setOutputFile(tempFile?.absolutePath)
         recorder.prepare()
     }
 

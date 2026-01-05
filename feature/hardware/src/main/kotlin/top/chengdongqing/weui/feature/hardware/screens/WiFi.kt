@@ -1,6 +1,7 @@
 package top.chengdongqing.weui.feature.hardware.screens
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.net.wifi.ScanResult
@@ -46,6 +47,7 @@ import top.chengdongqing.weui.core.utils.dbmToPercentage
 import top.chengdongqing.weui.core.utils.showToast
 import top.chengdongqing.weui.feature.hardware.components.DiscoveryLoading
 
+@SuppressLint("MissingPermission")
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun WiFiScreen() {
@@ -240,8 +242,7 @@ private fun getWifiGeneration(scanResult: ScanResult): String {
             ScanResult.WIFI_STANDARD_11N -> "Wi-Fi 4"
             ScanResult.WIFI_STANDARD_11AC -> "Wi-Fi 5"
             ScanResult.WIFI_STANDARD_11AX -> "Wi-Fi 6"
-            // Android 14+ 支持 Wi-Fi 7
-            8 -> "Wi-Fi 7"
+            ScanResult.WIFI_STANDARD_11BE -> "Wi-Fi 7"
             else -> "Wi-Fi"
         }
     }

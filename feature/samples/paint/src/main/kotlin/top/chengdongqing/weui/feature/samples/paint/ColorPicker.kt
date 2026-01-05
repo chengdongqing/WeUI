@@ -35,8 +35,8 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.core.utils.toIntOffset
 import kotlin.random.Random
@@ -44,7 +44,7 @@ import android.graphics.Color as AndroidColor
 
 @Composable
 fun ColorPicker(onColorChange: (Color) -> Unit) {
-    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+    val screenWidth = LocalWindowInfo.current.containerDpSize.width
     val screenWidthInPx = with(LocalDensity.current) { screenWidth.toPx() }
     var activeColor by remember { mutableStateOf(Red) }
 

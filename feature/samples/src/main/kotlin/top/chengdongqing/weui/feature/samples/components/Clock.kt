@@ -44,12 +44,12 @@ fun WeClock(
             if (isSmoothSweep) {
                 // 随屏幕刷新率更新
                 withFrameMillis {
-                    currentTimeState.value = System.currentTimeMillis()
+                    currentTimeState.longValue = System.currentTimeMillis()
                 }
             } else {
                 // 每秒更新一次
                 delay(1000)
-                currentTimeState.value = System.currentTimeMillis()
+                currentTimeState.longValue = System.currentTimeMillis()
             }
         }
     }

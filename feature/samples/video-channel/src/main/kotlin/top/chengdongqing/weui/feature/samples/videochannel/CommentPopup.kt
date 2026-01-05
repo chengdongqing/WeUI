@@ -32,8 +32,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
@@ -51,8 +51,8 @@ internal fun CommentPopup(
     }
 
     val density = LocalDensity.current
-    val configuration = LocalConfiguration.current
-    val maxHeight = density.run { configuration.screenHeightDp.dp.toPx() * 0.7f }
+    val containerSize = LocalWindowInfo.current.containerSize
+    val maxHeight = containerSize.height * 0.7f
     val currentHeight = remember(visible) { mutableFloatStateOf(maxHeight) }
     val animatedHeightDp by animateDpAsState(
         targetValue = if (visible) density.run { currentHeight.floatValue.toDp() } else 0.dp,

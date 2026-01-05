@@ -27,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -201,7 +202,7 @@ private class CameraStateImpl(
         private set
     override var availableZoomSteps by mutableStateOf(listOf(1f))
         private set
-    override var currentZoom by mutableStateOf(1f)
+    override var currentZoom by mutableFloatStateOf(1f)
         private set
 
     override fun updateCamera() {

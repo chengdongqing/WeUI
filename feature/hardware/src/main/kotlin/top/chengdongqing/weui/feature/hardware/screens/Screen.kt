@@ -117,6 +117,6 @@ private fun getScreenBrightness(context: Context): Float {
 
 private fun setScreenBrightness(window: Window, brightness: Float) {
     window.attributes = window.attributes.apply {
-        screenBrightness = if (brightness > 1 || brightness < 0) -1f else brightness
+        screenBrightness = if (brightness !in 0.0..1.0) -1f else brightness
     }
 }

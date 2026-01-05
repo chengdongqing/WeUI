@@ -1,6 +1,7 @@
 package top.chengdongqing.weui.feature.media.imagecropper
 
 import android.graphics.Bitmap
+import android.graphics.Bitmap.createBitmap
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.IntSize
 import kotlin.math.max
@@ -97,8 +98,7 @@ internal fun calculateOffsetRange(
  * 将当前屏幕上的视觉变换应用到原始 Bitmap 上，裁剪出目标区域
  */
 internal fun Bitmap.crop(state: CropperState): Bitmap {
-    val result =
-        Bitmap.createBitmap(state.boxSize.width, state.boxSize.height, Bitmap.Config.ARGB_8888)
+    val result = createBitmap(state.boxSize.width, state.boxSize.height, Bitmap.Config.ARGB_8888)
     val canvas = android.graphics.Canvas(result)
 
     val boxLeft = (state.screenSize.width - state.boxSize.width) / 2f

@@ -35,7 +35,6 @@ import kotlin.math.absoluteValue
 import kotlin.math.min
 import kotlin.math.sign
 
-
 abstract class ReorderableState<T>(
     private val scope: CoroutineScope,
     private val maxScrollPerFrame: Float,

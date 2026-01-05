@@ -42,8 +42,8 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -179,9 +179,11 @@ private fun ProductItem(onAddToCart: (Offset) -> Unit) {
 
 @Composable
 private fun BoxScope.ShoppingBag(align: Alignment, onPositioned: (Offset) -> Unit) {
+    val containerDpSize = LocalWindowInfo.current.containerDpSize
+
     Box(
         modifier = Modifier
-            .offset(y = (-LocalConfiguration.current.screenHeightDp * 0.3).dp)
+            .offset(y = (-containerDpSize.height.value * 0.3).dp)
             .padding(horizontal = 16.dp)
             .size(46.dp)
             .align(align)

@@ -11,11 +11,11 @@ dependencies {
     implementation(libs.bundles.coil)
     implementation(libs.lunar)
 
-    implementation(project(":core:ui:theme"))
-    implementation(project(":core:ui:components"))
-    implementation(project(":core:utils"))
-    implementation(project(":feature:samples:file-browser"))
-    implementation(project(":feature:samples:video-channel"))
-    implementation(project(":feature:samples:paint"))
+    implementation(projects.core.ui.theme)
+    implementation(projects.core.ui.components)
+    implementation(projects.core.utils)
+    implementation(projects.feature.samples.fileBrowser)
+    implementation(projects.feature.samples.videoChannel)
+    implementation(projects.feature.samples.paint)
     implementation(libs.androidx.foundation)
 }

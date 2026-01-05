@@ -20,7 +20,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import kotlin.math.abs
@@ -92,8 +92,8 @@ private fun <T> CardItem(
     onDrop: () -> Unit,
     content: @Composable () -> Unit
 ) {
-    val screenWidth = LocalConfiguration.current.screenWidthDp
-    val targetOffset = (screenWidth * 3)
+    val screenWidth = LocalWindowInfo.current.containerDpSize.width.value
+    val targetOffset = screenWidth * 3
     val animatedOffset = remember(key) {
         Animatable(Offset(0f, 0f), offsetConverter)
     }
@@ -120,9 +120,9 @@ private fun <T> CardItem(
                                     animatedOffset.animateTo(Offset(0f, 0f), tween(400))
                                 } else {
                                     val endValue = if (animatedOffset.targetValue.x > 0) {
-                                        targetOffset.toFloat()
+                                        targetOffset
                                     } else {
-                                        -targetOffset.toFloat()
+                                        -targetOffset
                                     }
                                     animatedOffset.animateTo(
                                         Offset(endValue, animatedOffset.value.y),

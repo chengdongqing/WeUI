@@ -69,7 +69,7 @@ fun WeMediaPreview(medias: Array<MediaItem>, current: Int = 0) {
 
 @Composable
 private fun MediaPager(medias: Array<MediaItem>, pagerState: PagerState) {
-    val activity = LocalContext.current as Activity
+    val activity = LocalContext.current.applicationContext as Activity
 
     HorizontalPager(
         state = pagerState,
@@ -214,7 +214,7 @@ private suspend fun Context.saveToAlbum(media: MediaItem): Boolean {
                 true
             } else {
                 // 失败：删除数据库中的占位记录，防止相册出现空白文件
-                contentResolver.delete(tempUri, null)
+                contentResolver.delete(tempUri, null, null)
                 false
             }
         } catch (e: IOException) {

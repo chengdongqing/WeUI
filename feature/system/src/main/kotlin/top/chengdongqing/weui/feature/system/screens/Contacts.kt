@@ -3,7 +3,6 @@ package top.chengdongqing.weui.feature.system.screens
 import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.provider.CallLog
 import android.provider.ContactsContract
 import android.text.format.DateFormat
@@ -28,6 +27,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -89,7 +89,7 @@ private fun PhoneCall() {
             width = Dp.Unspecified,
             disabled = number.isEmpty()
         ) {
-            val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:${number}"))
+            val intent = Intent(Intent.ACTION_DIAL, "tel:${number}".toUri())
             context.startActivity(intent)
         }
         Spacer(modifier = Modifier.width(16.dp))
@@ -101,7 +101,7 @@ private fun PhoneCall() {
             disabled = number.isEmpty()
         ) {
             if (callPermissionState.status.isGranted) {
-                val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:${number}"))
+                val intent = Intent(Intent.ACTION_CALL, "tel:${number}".toUri())
                 context.startActivity(intent)
             } else {
                 callPermissionState.launchPermissionRequest()

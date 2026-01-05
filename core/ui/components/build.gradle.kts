@@ -12,8 +12,8 @@ dependencies {
     implementation(libs.bundles.camerax)
     implementation(libs.accompanist.permissions)
 
-    implementation(project(":core:ui:theme"))
-    implementation(project(":core:data:model"))
-    implementation(project(":core:data:repository"))
-    implementation(project(":core:utils"))
+    implementation(projects.core.ui.theme)
+    implementation(projects.core.data.model)
+    implementation(projects.core.data.repository)
+    implementation(projects.core.utils)
 }

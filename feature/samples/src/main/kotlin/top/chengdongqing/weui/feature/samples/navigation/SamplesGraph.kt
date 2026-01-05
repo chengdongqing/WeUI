@@ -41,7 +41,7 @@ fun NavGraphBuilder.addSamplesGraph() {
     composable("indexed_list") {
         IndexedListScreen()
     }
-    composable("org/burnoutcrew/reorderable") {
+    composable("reorderable") {
         ReorderableScreen()
     }
     composable("dividing_rule") {

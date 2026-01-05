@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.createBitmap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -97,11 +98,7 @@ fun PaintScreen() {
 private suspend fun Context.handleSave(paths: List<StrokeItem>, size: IntSize) =
     withContext(Dispatchers.IO) {
         // 创建和画板同样大小的位图
-        val bitmap = Bitmap.createBitmap(
-            size.width,
-            size.height,
-            Bitmap.Config.ARGB_8888
-        )
+        val bitmap = createBitmap(size.width, size.height)
         // 绘制轨迹到bitmap
         bitmap.drawToNativeCanvas(paths)
 

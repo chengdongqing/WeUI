@@ -10,8 +10,8 @@ dependencies {
     implementation(libs.navigation.compose)
     implementation(libs.bundles.retrofit)
 
-    implementation(project(":core:ui:theme"))
-    implementation(project(":core:ui:components"))
-    implementation(project(":core:utils"))
-    implementation(project(":core:data:model"))
+    implementation(projects.core.ui.theme)
+    implementation(projects.core.ui.components)
+    implementation(projects.core.utils)
+    implementation(projects.core.data.model)
 }

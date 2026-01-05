@@ -9,8 +9,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.core.ui.components.button.ButtonType
 import top.chengdongqing.weui.core.ui.components.button.WeButton
@@ -53,12 +52,8 @@ fun QrCodeGeneratorScreen() {
 
 @Composable
 private fun rememberScreenWidth(fraction: Float = 0.6f): Int {
-    val density = LocalDensity.current
-    val configuration = LocalConfiguration.current
-
+    val containerSize = LocalWindowInfo.current.containerSize
     return remember {
-        with(density) {
-            (configuration.screenWidthDp * fraction).dp.toPx().roundToInt()
-        }
+        (containerSize.width * fraction).roundToInt()
     }
 }

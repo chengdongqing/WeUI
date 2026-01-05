@@ -19,7 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import kotlinx.coroutines.delay
@@ -32,7 +32,7 @@ fun LayersScreen() {
         title = "WeUI页面层级",
         description = "用于规范WeUI页面元素所属层级、层级顺序及组合规范。"
     ) {
-        val width = LocalConfiguration.current.screenWidthDp.dp / 2
+        val width = LocalWindowInfo.current.containerDpSize.width / 2
         var expanded by remember { mutableStateOf(false) }
         val transition = updateTransition(targetState = expanded, label = "layers_transition")
 

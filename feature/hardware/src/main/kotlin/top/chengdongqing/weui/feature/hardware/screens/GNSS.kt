@@ -1,6 +1,7 @@
 package top.chengdongqing.weui.feature.hardware.screens
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.location.GnssStatus
@@ -207,6 +208,7 @@ private fun SatelliteTableRow(columns: List<String>, isHeader: Boolean = false) 
     }
 }
 
+@SuppressLint("MissingPermission")
 @Composable
 private fun rememberSatelliteList(
     locationManager: LocationManager,
@@ -309,7 +311,12 @@ private fun GnssStatus.buildSatelliteInfo(
     cn0: Float,
     index: Int
 ): SatelliteInfo {
-    val frequency = getCarrierFrequencyHz(index) / 1_000_000f // 载波频率
+    // 载波频率
+    val frequency = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        getCarrierFrequencyHz(index) / 1_000_000f
+    } else {
+        0f
+    }
 
     return SatelliteInfo(
         key,

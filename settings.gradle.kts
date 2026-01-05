@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 pluginManagement {
     includeBuild("build-logic")
     repositories {
@@ -14,7 +16,11 @@ dependencyResolutionManagement {
     }
 }
 
+// 开启类型安全项目访问器
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 rootProject.name = "WeUI"
+
 include(":app")
 include(":core:ui:theme")
 include(":core:ui:components")

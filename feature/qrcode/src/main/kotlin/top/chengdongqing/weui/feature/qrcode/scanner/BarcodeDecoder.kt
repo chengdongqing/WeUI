@@ -2,6 +2,8 @@ package top.chengdongqing.weui.feature.qrcode.scanner
 
 import android.content.Context
 import android.net.Uri
+import androidx.annotation.OptIn
+import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
@@ -12,6 +14,7 @@ import com.google.mlkit.vision.common.InputImage
 internal class BarcodeAnalyzer(
     private val onChange: (List<Barcode>) -> Unit
 ) : ImageAnalysis.Analyzer {
+    @OptIn(ExperimentalGetImage::class)
     override fun analyze(imageProxy: ImageProxy) {
         val mediaImage = imageProxy.image ?: return
         val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)

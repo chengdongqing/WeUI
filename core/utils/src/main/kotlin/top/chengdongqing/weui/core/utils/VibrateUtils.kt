@@ -37,11 +37,11 @@ fun Context.vibrateLong() {
 
 /**
  * 底层震动实现
+ *
+ * @param milliseconds 震动时长
+ * @param amplitude 震幅
  */
-private fun Context.vibrateRaw(
-    milliseconds: Long,
-    amplitude: Int = VibrationEffect.DEFAULT_AMPLITUDE
-) {
+private fun Context.vibrateRaw(milliseconds: Long, amplitude: Int) {
     val v = vibrator
     when {
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.O -> {

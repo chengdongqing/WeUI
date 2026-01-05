@@ -15,7 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.core.ui.components.button.ButtonType
 import top.chengdongqing.weui.core.ui.components.button.WeButton
@@ -46,6 +46,7 @@ fun BarChartScreen() {
             reverseValue = 30
         )
         var scrollable by remember { mutableStateOf(false) }
+        val containerDpSize = LocalWindowInfo.current.containerDpSize
 
         Box(
             modifier = if (scrollable) {
@@ -59,7 +60,7 @@ fun BarChartScreen() {
                 color = color.value,
                 barWidthRange = 2..maxBarWidth.value,
                 modifier = if (scrollable) {
-                    Modifier.width((LocalConfiguration.current.screenWidthDp * 3).dp)
+                    Modifier.width((containerDpSize.width.value * 3).dp)
                 } else {
                     Modifier
                 }

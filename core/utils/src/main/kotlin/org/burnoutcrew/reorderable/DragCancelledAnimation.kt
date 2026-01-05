@@ -31,12 +31,6 @@ interface DragCancelledAnimation {
     val offset: Offset
 }
 
-class NoDragCancelledAnimation : DragCancelledAnimation {
-    override suspend fun dragCancelled(position: ItemPosition, offset: Offset) {}
-    override val position: ItemPosition? = null
-    override val offset: Offset = Offset.Zero
-}
-
 class SpringDragCancelledAnimation(private val stiffness: Float = Spring.StiffnessMediumLow) :
     DragCancelledAnimation {
     private val animatable = Animatable(Offset.Zero, Offset.VectorConverter)

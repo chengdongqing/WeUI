@@ -6,7 +6,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.net.Uri
 import android.os.Environment
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -19,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import top.chengdongqing.weui.core.ui.components.button.WeButton
 import top.chengdongqing.weui.core.ui.components.input.WeInput
 import top.chengdongqing.weui.core.ui.components.input.WeTextarea
@@ -47,7 +47,7 @@ fun DownloaderScreen() {
 }
 
 private fun Context.download(name: String, url: String) {
-    val request = DownloadManager.Request(Uri.parse(url)).apply {
+    val request = DownloadManager.Request(url.toUri()).apply {
         setTitle(name)
         setDescription(url)
         // 设置保存位置

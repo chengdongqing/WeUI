@@ -20,7 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -40,7 +40,7 @@ internal fun BoxScope.ScannerDecoration() {
 
 @Composable
 private fun BoxScope.ScanningAnimation() {
-    val screenHeight = LocalConfiguration.current.screenHeightDp
+    val screenHeight = LocalWindowInfo.current.containerDpSize.height.value
     val transition = rememberInfiniteTransition(label = "")
     val offsetY by transition.animateFloat(
         initialValue = 0.2f,

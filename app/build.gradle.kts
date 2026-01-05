@@ -15,12 +15,8 @@ android {
             useSupportLibrary = true
         }
 
-        android {
-            defaultConfig {
-                ndk {
-                    abiFilters.addAll(listOf("arm64-v8a")) // 暂仅支持64位ARM架构的设备（32位：armeabi-v7a）
-                }
-            }
+        ndk {
+            abiFilters.addAll(listOf("arm64-v8a"))
         }
     }
 
@@ -54,18 +50,18 @@ android {
 dependencies {
     implementation(libs.navigation.compose)
 
-    implementation(project(":core:ui:theme"))
-    implementation(project(":core:ui:components"))
-    implementation(project(":core:utils"))
-    implementation(project(":feature:basic"))
-    implementation(project(":feature:form"))
-    implementation(project(":feature:feedback"))
-    implementation(project(":feature:media"))
-    implementation(project(":feature:network"))
-    implementation(project(":feature:charts"))
-    implementation(project(":feature:hardware"))
-    implementation(project(":feature:location"))
-    implementation(project(":feature:qrcode"))
-    implementation(project(":feature:system"))
-    implementation(project(":feature:samples"))
+    implementation(projects.core.ui.theme)
+    implementation(projects.core.ui.components)
+    implementation(projects.core.utils)
+    implementation(projects.feature.basic)
+    implementation(projects.feature.form)
+    implementation(projects.feature.feedback)
+    implementation(projects.feature.media)
+    implementation(projects.feature.network)
+    implementation(projects.feature.charts)
+    implementation(projects.feature.hardware)
+    implementation(projects.feature.location)
+    implementation(projects.feature.qrcode)
+    implementation(projects.feature.system)
+    implementation(projects.feature.samples)
 }

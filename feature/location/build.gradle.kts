@@ -13,7 +13,7 @@ dependencies {
     implementation(libs.bundles.datastore)
     implementation(files("${rootProject.projectDir}/libs/AMap3DMap_11.1.060_AMapSearch_9.7.4_AMapLocation_11.1.060_20251229.aar"))
 
-    implementation(project(":core:ui:theme"))
-    implementation(project(":core:ui:components"))
-    implementation(project(":core:utils"))
+    implementation(projects.core.ui.theme)
+    implementation(projects.core.ui.components)
+    implementation(projects.core.utils)
 }

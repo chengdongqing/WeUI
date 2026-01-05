@@ -29,17 +29,18 @@ class UploadViewModel(private val application: Application) : AndroidViewModel(a
                     MediaStore.Files.FileColumns.SIZE,
                     MediaStore.Files.FileColumns.MIME_TYPE
                 )
-                application.contentResolver.query(uri, projection, null, null)?.use { cursor ->
-                    val nameColumn = cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME)
-                    val mimeTypeColumn =
-                        cursor.getColumnIndex(MediaStore.Files.FileColumns.MIME_TYPE)
+                application.contentResolver.query(uri, projection, null, null, null)
+                    ?.use { cursor ->
+                        val nameColumn = cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME)
+                        val mimeTypeColumn =
+                            cursor.getColumnIndex(MediaStore.Files.FileColumns.MIME_TYPE)
 
-                    if (cursor.moveToFirst()) {
-                        val fileName = cursor.getString(nameColumn)
-                        val mimeType = cursor.getString(mimeTypeColumn)
-                        return@async fileName to mimeType
+                        if (cursor.moveToFirst()) {
+                            val fileName = cursor.getString(nameColumn)
+                            val mimeType = cursor.getString(mimeTypeColumn)
+                            return@async fileName to mimeType
+                        }
                     }
-                }
                 null
             }
             // 构建临时文件

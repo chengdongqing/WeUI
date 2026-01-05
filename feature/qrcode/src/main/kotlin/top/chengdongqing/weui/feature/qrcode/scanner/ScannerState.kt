@@ -80,7 +80,7 @@ private class ScannerStateImpl(
         val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
         val cameraProvider = cameraProviderFuture.get()
         val preview = Preview.Builder().build().also {
-            it.setSurfaceProvider(previewView.surfaceProvider)
+            it.surfaceProvider = previewView.surfaceProvider
         }
         val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
         val barcodeAnalyzer = BarcodeAnalyzer { barcodes ->

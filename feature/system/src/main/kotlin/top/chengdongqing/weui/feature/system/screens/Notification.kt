@@ -33,8 +33,8 @@ fun NotificationScreen() {
 
         WeButton(text = "发送通知") {
             if (permissionState?.status?.isGranted.isTrue() || permissionState == null) {
-                createNotificationChannel(context, channelId, channelName)
-                sendNotification(context, channelId, "测试标题", "测试内容")
+                context.createNotificationChannel(channelId, channelName)
+                context.sendNotification(channelId, "测试标题", "测试内容")
             } else {
                 permissionState.launchPermissionRequest()
             }
@@ -42,25 +42,33 @@ fun NotificationScreen() {
     }
 }
 
+/**
+ * 发送通知
+ */
 @SuppressLint("MissingPermission")
-private fun sendNotification(context: Context, channelId: String, title: String, content: String) {
-    val builder = NotificationCompat.Builder(context, channelId)
+private fun Context.sendNotification(channelId: String, title: String, content: String) {
+    val builder = NotificationCompat.Builder(this, channelId)
         .setSmallIcon(R.drawable.ic_logo) // 设置通知小图标
         .setContentTitle(title) // 设置通知标题
         .setContentText(content) // 设置通知内容
         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
-    NotificationManagerCompat.from(context).apply {
+    NotificationManagerCompat.from(this).apply {
         notify(System.currentTimeMillis().toInt(), builder.build())
     }
 }
 
-private fun createNotificationChannel(context: Context, channelId: String, channelName: String) {
+/**
+ * 创建通知通道
+ */
+private fun Context.createNotificationChannel(channelId: String, channelName: String) {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
+
     val importance = NotificationManager.IMPORTANCE_DEFAULT
     val channel = NotificationChannel(channelId, channelName, importance).apply {
         description = "测试通道"
     }
     val notificationManager =
-        context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     notificationManager.createNotificationChannel(channel)
 }

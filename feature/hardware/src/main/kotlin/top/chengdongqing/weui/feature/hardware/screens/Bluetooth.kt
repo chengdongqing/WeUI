@@ -1,6 +1,7 @@
 package top.chengdongqing.weui.feature.hardware.screens
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
@@ -42,6 +43,7 @@ import top.chengdongqing.weui.core.utils.dbmToPercentage
 import top.chengdongqing.weui.core.utils.showToast
 import top.chengdongqing.weui.feature.hardware.components.DiscoveryLoading
 
+@SuppressLint("MissingPermission")
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun BluetoothScreen() {
@@ -183,6 +185,7 @@ private fun rememberBluetoothLauncher(): () -> Unit {
     }
 }
 
+@SuppressLint("MissingPermission")
 private class BluetoothBroadcastReceiver(val onFound: (info: BluetoothInfo) -> Unit) :
     BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
@@ -207,6 +210,7 @@ private class BluetoothBroadcastReceiver(val onFound: (info: BluetoothInfo) -> U
     }
 }
 
+@SuppressLint("MissingPermission")
 private fun BluetoothDevice.buildBluetoothInfo(rssi: Int): BluetoothInfo {
     return BluetoothInfo(
         name = this.name,
