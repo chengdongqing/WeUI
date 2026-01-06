@@ -24,27 +24,35 @@ object MediaStoreUtils {
      * 创建 MediaStore 插入所需的 ContentValues
      * 核心逻辑：设置文件名、路径并开启 [android.provider.MediaStore.MediaColumns.IS_PENDING] 状态
      */
+    fun Context.createContentValues(
+        filename: String,
+        mimeType: String,
+        mediaType: MediaType,
+    ): ContentValues {
+        val directory = when (mediaType) {
+            MediaType.IMAGE -> Environment.DIRECTORY_PICTURES
+            MediaType.VIDEO -> Environment.DIRECTORY_MOVIES
+            MediaType.AUDIO -> Environment.DIRECTORY_MUSIC
+            MediaType.RECORDING -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                Environment.DIRECTORY_RECORDINGS
+            } else {
+                Environment.DIRECTORY_MUSIC
+            }
+        }
+        val appName = getString(R.string.app_name)
+        val relativePath = "$directory/$appName"
+
+        return createContentValues(filename, mimeType, relativePath)
+    }
+
     fun createContentValues(
         filename: String,
-        mediaType: MediaType,
         mimeType: String,
-        context: Context
+        relativePath: String,
     ): ContentValues =
         ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
             put(MediaStore.MediaColumns.MIME_TYPE, mimeType)
-            val directory = when (mediaType) {
-                MediaType.IMAGE -> Environment.DIRECTORY_PICTURES
-                MediaType.VIDEO -> Environment.DIRECTORY_MOVIES
-                MediaType.AUDIO -> Environment.DIRECTORY_MUSIC
-                MediaType.RECORDING -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    Environment.DIRECTORY_RECORDINGS
-                } else {
-                    Environment.DIRECTORY_MUSIC
-                }
-            }
-            val appName = context.getString(R.string.app_name)
-            val relativePath = "$directory/$appName"
             put(MediaStore.MediaColumns.RELATIVE_PATH, relativePath)
             put(MediaStore.MediaColumns.IS_PENDING, 1)
         }
@@ -52,11 +60,11 @@ object MediaStoreUtils {
     /**
      * 文件写入完成后，取消挂起状态，使媒体文件在相册中可见
      */
-    fun finishPending(uri: Uri, context: Context) {
+    fun Context.finishPending(uri: Uri) {
         val contentValues = ContentValues().apply {
             put(MediaStore.MediaColumns.IS_PENDING, 0)
         }
-        context.contentResolver.update(uri, contentValues, null, null)
+        contentResolver.update(uri, contentValues, null, null)
     }
 
     /**

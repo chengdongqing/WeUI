@@ -33,6 +33,8 @@ import top.chengdongqing.weui.core.ui.components.screen.WeScreen
 import top.chengdongqing.weui.core.ui.components.toast.ToastIcon
 import top.chengdongqing.weui.core.ui.components.toast.rememberToastState
 import top.chengdongqing.weui.core.utils.MediaStoreUtils
+import top.chengdongqing.weui.core.utils.MediaStoreUtils.createContentValues
+import top.chengdongqing.weui.core.utils.MediaStoreUtils.finishPending
 import kotlin.time.Duration
 
 @Composable
@@ -127,18 +129,17 @@ private fun Bitmap.drawToNativeCanvas(paths: List<StrokeItem>) {
 }
 
 private fun Context.saveToAlbum(bitmap: Bitmap, filename: String) {
-    val contentUri = MediaStoreUtils.getContentUri(MediaType.IMAGE)
-    val contentValues = MediaStoreUtils.createContentValues(
+    val contentValues = createContentValues(
         filename,
-        mediaType = MediaType.IMAGE,
         mimeType = "image/png",
-        this
+        mediaType = MediaType.IMAGE
     )
 
+    val contentUri = MediaStoreUtils.getContentUri(MediaType.IMAGE)
     contentResolver.insert(contentUri, contentValues)?.let { uri ->
         contentResolver.openOutputStream(uri)?.use { outputStream ->
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
-            MediaStoreUtils.finishPending(uri, this)
+            finishPending(uri)
         }
     }
 }

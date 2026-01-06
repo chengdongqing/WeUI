@@ -1,6 +1,5 @@
 package top.chengdongqing.weui.feature.system.screens
 
-import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
@@ -25,6 +24,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.rememberCoroutineScope
@@ -43,16 +43,19 @@ import androidx.core.net.toUri
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import top.chengdongqing.weui.core.data.model.MimeTypes
 import top.chengdongqing.weui.core.ui.components.button.ButtonSize
 import top.chengdongqing.weui.core.ui.components.button.ButtonType
 import top.chengdongqing.weui.core.ui.components.button.WeButton
 import top.chengdongqing.weui.core.ui.components.loading.WeLoadMore
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
-import top.chengdongqing.weui.core.utils.copyToFile
+import top.chengdongqing.weui.core.utils.MediaStoreUtils.createContentValues
+import top.chengdongqing.weui.core.utils.MediaStoreUtils.finishPending
+import top.chengdongqing.weui.core.utils.copyToStream
 import top.chengdongqing.weui.core.utils.formatFileSize
 import top.chengdongqing.weui.core.utils.formatTime
 import top.chengdongqing.weui.core.utils.installApk
-import top.chengdongqing.weui.core.utils.shareFile
+import top.chengdongqing.weui.core.utils.shareContent
 import top.chengdongqing.weui.core.utils.showToast
 import java.io.File
 
@@ -64,7 +67,7 @@ fun InstalledAppsScreen() {
         padding = PaddingValues(0.dp),
         scrollEnabled = false
     ) {
-        val appList = rememberInstalledApps()
+        val appList by produceInstalledApps()
 
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(20.dp),
@@ -156,9 +159,8 @@ private fun AppItem(app: AppItem) {
                     }
                 },
                 onShare = {
-                    coroutineScope.launch {
-                        context.shareAppApk(app.apkPath, app.name)
-                    }
+                    val file = File(app.apkPath)
+                    context.shareContent(file, "application/vnd.android.package-archive")
                 },
                 onInstall = {
                     context.installApk(app.apkPath)
@@ -242,30 +244,6 @@ private fun RowScope.AppIcon(app: AppItem) {
 }
 
 /**
- * 分享指定包名的 APK
- */
-private suspend fun Context.shareAppApk(apkPath: String, appName: String) {
-    withContext(Dispatchers.IO) {
-        try {
-            val tempFile = File(externalCacheDir, "$appName.apk").apply {
-                deleteOnExit()
-            }
-            val sourceFile = File(apkPath)
-            sourceFile.inputStream().copyToFile(tempFile)
-
-            withContext(Dispatchers.Main) {
-                shareFile(tempFile, "application/vnd.android.package-archive")
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            withContext(Dispatchers.Main) {
-                showToast("分享失败")
-            }
-        }
-    }
-}
-
-/**
  * 拷贝文件到公共文件夹
  */
 private suspend fun Context.copyFileToPublicDirectory(
@@ -273,56 +251,68 @@ private suspend fun Context.copyFileToPublicDirectory(
     destinationFileName: String,
     targetDirectory: String = Environment.DIRECTORY_DOWNLOADS
 ) {
-    showToast("开始复制")
+    val sourceFile = File(sourceFilePath)
+    if (!sourceFile.exists()) {
+        showToast("源文件不存在")
+        return
+    }
 
     withContext(Dispatchers.IO) {
         try {
-            val sourceFile = File(sourceFilePath)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                val values = ContentValues().apply {
-                    put(MediaStore.MediaColumns.DISPLAY_NAME, destinationFileName)
-                    put(
-                        MediaStore.MediaColumns.MIME_TYPE,
-                        "application/vnd.android.package-archive"
-                    )
-                    put(MediaStore.MediaColumns.RELATIVE_PATH, targetDirectory)
-                }
+                val contentValues = createContentValues(
+                    filename = destinationFileName,
+                    mimeType = MimeTypes.APK,
+                    relativePath = targetDirectory
+                )
 
-                contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values)?.let {
-                    contentResolver.openOutputStream(it)?.use { output ->
-                        sourceFile.inputStream().use { input ->
-                            input.copyTo(output)
-                            withContext(Dispatchers.Main) {
-                                showToast("复制成功")
-                            }
-                        }
+                val contentUri = MediaStore.Downloads.EXTERNAL_CONTENT_URI
+                val targetUri =
+                    contentResolver.insert(contentUri, contentValues) ?: return@withContext
+                val outputStream = contentResolver.openOutputStream(targetUri) ?: return@withContext
+                val isSuccess = sourceFile.inputStream().copyToStream(outputStream)
+
+                if (isSuccess) {
+                    // 成功：解除挂起状态
+                    finishPending(targetUri)
+                    withContext(Dispatchers.Main) {
+                        showToast("已保存至下载目录")
+                    }
+                } else {
+                    // 失败：删除数据库中的占位记录
+                    contentResolver.delete(targetUri, null, null)
+                    withContext(Dispatchers.Main) {
+                        showToast("操作失败")
                     }
                 }
             } else {
-                val destinationFile = File(
-                    Environment.getExternalStoragePublicDirectory(targetDirectory),
-                    destinationFileName
-                )
-                if (sourceFile.inputStream().copyToFile(destinationFile)) {
-                    withContext(Dispatchers.Main) {
-                        showToast("复制成功")
+                // Android 9 及以下逻辑
+                val targetDir = Environment.getExternalStoragePublicDirectory(targetDirectory)
+                if (!targetDir.exists()) targetDir.mkdirs()
+
+                val destFile = File(targetDir, destinationFileName)
+                sourceFile.inputStream().use { input ->
+                    destFile.outputStream().use { output ->
+                        input.copyTo(output)
                     }
                 }
+                withContext(Dispatchers.Main) { showToast("复制成功") }
             }
         } catch (e: Exception) {
+            e.printStackTrace()
             withContext(Dispatchers.Main) {
-                showToast("复制失败: ${e.message}")
+                showToast("操作失败")
             }
         }
     }
 }
 
 @Composable
-private fun rememberInstalledApps(): List<AppItem> {
+private fun produceInstalledApps(): State<List<AppItem>> {
     val context = LocalContext.current
     val packageManager = context.packageManager
 
-    val appList by produceState(initialValue = emptyList()) {
+    return produceState(initialValue = emptyList()) {
         value = withContext(Dispatchers.IO) {
             val intent = Intent(Intent.ACTION_MAIN, null).apply {
                 addCategory(Intent.CATEGORY_LAUNCHER)
@@ -350,8 +340,6 @@ private fun rememberInstalledApps(): List<AppItem> {
             }
         }
     }
-
-    return appList
 }
 
 private data class AppItem(

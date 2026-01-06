@@ -44,13 +44,12 @@ import top.chengdongqing.weui.core.ui.components.videoplayer.VideoPlayerDefaults
 import top.chengdongqing.weui.core.ui.components.videoplayer.WeVideoPlayer
 import top.chengdongqing.weui.core.ui.components.videoplayer.rememberVideoPlayerState
 import top.chengdongqing.weui.core.utils.MediaStoreUtils
+import top.chengdongqing.weui.core.utils.MediaStoreUtils.createContentValues
+import top.chengdongqing.weui.core.utils.MediaStoreUtils.finishPending
 import top.chengdongqing.weui.core.utils.SetupFullscreen
-import top.chengdongqing.weui.core.utils.copyToFile
 import top.chengdongqing.weui.core.utils.copyUri
 import top.chengdongqing.weui.core.utils.findActivity
-import top.chengdongqing.weui.core.utils.getFileExtension
-import top.chengdongqing.weui.core.utils.shareFile
-import java.io.File
+import top.chengdongqing.weui.core.utils.shareContent
 import java.io.IOException
 
 @Composable
@@ -132,27 +131,6 @@ private fun BoxScope.ToolBar(medias: Array<MediaItem>, pagerState: PagerState) {
     val coroutineScope = rememberCoroutineScope()
     val media = medias[pagerState.currentPage]
 
-    /**
-     * 处理分享
-     */
-    fun handleShare() {
-        coroutineScope.launch(Dispatchers.IO) {
-            context.contentResolver.openInputStream(media.uri)?.use { inputStream ->
-                // 创建临时文件
-                val tempFile = File.createTempFile(
-                    "media_",
-                    media.filename.getFileExtension()
-                ).apply {
-                    deleteOnExit()
-                }
-                // 拷贝到临时文件
-                inputStream.copyToFile(tempFile)
-                // 调用系统分享
-                context.shareFile(tempFile, media.mimeType)
-            }
-        }
-    }
-
     Row(
         modifier = Modifier
             .align(Alignment.BottomEnd)
@@ -160,7 +138,7 @@ private fun BoxScope.ToolBar(medias: Array<MediaItem>, pagerState: PagerState) {
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         ActionIcon(imageVector = Icons.Outlined.Share, label = "分享") {
-            handleShare()
+            context.shareContent(media.uri, media.mimeType, "分享媒体文件")
         }
         ActionIcon(imageVector = Icons.Outlined.Download, label = "保存") {
             coroutineScope.launch {
@@ -199,11 +177,10 @@ private suspend fun Context.saveToAlbum(media: MediaItem): Boolean {
     return withContext(Dispatchers.IO) {
         try {
             val contentUri = MediaStoreUtils.getContentUri(media.mediaType)
-            val contentValues = MediaStoreUtils.createContentValues(
+            val contentValues = createContentValues(
                 media.filename,
-                media.mediaType,
                 media.mimeType,
-                this@saveToAlbum
+                media.mediaType
             )
 
             // 插入数据库记录（此时文件是 IS_PENDING = 1 状态）
@@ -214,7 +191,7 @@ private suspend fun Context.saveToAlbum(media: MediaItem): Boolean {
 
             if (isSuccess) {
                 // 成功：解除挂起状态，让相册可见
-                MediaStoreUtils.finishPending(tempUri, this@saveToAlbum)
+                finishPending(tempUri)
                 true
             } else {
                 // 失败：删除数据库中的占位记录，防止相册出现空白文件

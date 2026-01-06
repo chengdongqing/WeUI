@@ -8,6 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.InputStream
+import java.io.OutputStream
 
 /**
  * 计算文件大小
@@ -61,16 +62,20 @@ fun Context.getFileProviderUri(file: File): Uri {
 /**
  * 分享文件
  */
-fun Context.shareFile(file: File, mimeType: String) {
-    val uri = getFileProviderUri(file)
+fun Context.shareContent(content: Any, mimeType: String, title: String = "分享文件") {
+    val shareUri: Uri = when (content) {
+        is File -> getFileProviderUri(content)
+        is Uri -> content
+        else -> throw IllegalArgumentException("不支持的内容类型: ${content::class.java}")
+    }
+
     val intent = Intent(Intent.ACTION_SEND).apply {
-        this.type = mimeType
-        putExtra(Intent.EXTRA_STREAM, uri)
+        type = mimeType
+        putExtra(Intent.EXTRA_STREAM, shareUri)
         // 授予临时访问权限
         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
     }
-
-    startActivity(Intent.createChooser(intent, "分享文件"))
+    startActivity(Intent.createChooser(intent, title))
 }
 
 /**
@@ -107,8 +112,10 @@ fun deleteFile(file: File): Boolean {
  */
 fun InputStream.copyToFile(destFile: File): Boolean {
     return try {
-        destFile.outputStream().use { outputStream ->
-            copyTo(outputStream)
+        this.use { input ->
+            destFile.outputStream().use { output ->
+                input.copyTo(output)
+            }
         }
         true
     } catch (e: Exception) {
@@ -117,14 +124,16 @@ fun InputStream.copyToFile(destFile: File): Boolean {
     }
 }
 
-/**
- * 获取文件扩展名
- */
-fun String.getFileExtension(default: String = "jpg"): String {
-    val extension = substringAfterLast(".", "")
-    return if (extension.isEmpty()) {
-        ".$default"
-    } else {
-        ".$extension"
+fun InputStream.copyToStream(outputStream: OutputStream): Boolean {
+    return try {
+        this.use { input ->
+            outputStream.use { output ->
+                input.copyTo(output)
+            }
+        }
+        true
+    } catch (e: Exception) {
+        e.printStackTrace()
+        false
     }
 }
