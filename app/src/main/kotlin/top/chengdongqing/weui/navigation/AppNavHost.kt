@@ -3,6 +3,7 @@ package top.chengdongqing.weui.navigation
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -11,7 +12,6 @@ import top.chengdongqing.weui.feature.charts.navigation.addChartGraph
 import top.chengdongqing.weui.feature.feedback.navigation.addFeedbackGraph
 import top.chengdongqing.weui.feature.form.navigation.addFormGraph
 import top.chengdongqing.weui.feature.hardware.navigation.addHardwareGraph
-import top.chengdongqing.weui.feature.location.navigation.addLocationGraph
 import top.chengdongqing.weui.feature.media.navigation.addMediaGraph
 import top.chengdongqing.weui.feature.network.navigation.addNetworkGraph
 import top.chengdongqing.weui.feature.qrcode.navigation.addQrCodeGraph
@@ -23,6 +23,7 @@ import top.chengdongqing.weui.layers.LayersScreen
 @Composable
 fun AppNavHost() {
     val navController = rememberNavController()
+    val locationNav = remember { LocationNavImpl() }
 
     NavHost(
         navController,
@@ -66,11 +67,13 @@ fun AppNavHost() {
         addHardwareGraph()
         addChartGraph()
         addQrCodeGraph()
-        addLocationGraph()
         addSamplesGraph()
         composable("layers") {
             LayersScreen()
         }
+
+        // 动态添加地图模块
+        locationNav.addLocationGraph(this)
     }
 }
 
