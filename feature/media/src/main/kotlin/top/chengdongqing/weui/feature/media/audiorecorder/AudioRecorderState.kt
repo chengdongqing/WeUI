@@ -111,9 +111,7 @@ private class AudioRecorderStateImpl(
         }
 
         // 保存到临时文件
-        tempFile = File.createTempFile("RCD_", ".aac").apply {
-            deleteOnExit()
-        }
+        tempFile = File.createTempFile("RCD_", ".aac")
         recorder.setOutputFile(tempFile?.absolutePath)
         recorder.prepare()
     }

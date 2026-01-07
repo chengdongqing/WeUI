@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.Dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import top.chengdongqing.weui.core.data.model.MimeTypes
 import java.io.File
 
 @Composable
@@ -68,17 +67,6 @@ data class BatteryInfo(
  */
 fun Context.showToast(text: String) {
     Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
-}
-
-/**
- * 安装APK
- */
-fun Context.installApk(apkPath: String) {
-    val tempFile = File.createTempFile("app_", ".apk").apply {
-        deleteOnExit()
-    }
-    File(apkPath).copyTo(tempFile, true)
-    openFile(tempFile, MimeTypes.APK)
 }
 
 /**

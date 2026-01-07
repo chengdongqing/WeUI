@@ -54,7 +54,7 @@ import top.chengdongqing.weui.core.utils.MediaStoreUtils.finishPending
 import top.chengdongqing.weui.core.utils.copyToStream
 import top.chengdongqing.weui.core.utils.formatFileSize
 import top.chengdongqing.weui.core.utils.formatTime
-import top.chengdongqing.weui.core.utils.installApk
+import top.chengdongqing.weui.core.utils.openFile
 import top.chengdongqing.weui.core.utils.shareContent
 import top.chengdongqing.weui.core.utils.showToast
 import java.io.File
@@ -159,11 +159,17 @@ private fun AppItem(app: AppItem) {
                     }
                 },
                 onShare = {
-                    val file = File(app.apkPath)
-                    context.shareContent(file, "application/vnd.android.package-archive")
+                    context.shareContent(
+                        content = File(app.apkPath),
+                        mimeType = MimeTypes.APK
+                    )
                 },
                 onInstall = {
-                    context.installApk(app.apkPath)
+                    context.openFile(
+                        file = File(app.apkPath),
+                        mimeType = MimeTypes.APK,
+                        showChooser = false
+                    )
                 }
             )
         }

@@ -46,9 +46,7 @@ class UploadViewModel(private val application: Application) : AndroidViewModel(a
             // 构建临时文件
             val deferredFile = async {
                 application.contentResolver.openInputStream(uri)?.use { inputStream ->
-                    val tempFile = File.createTempFile("uploadFile", null).apply {
-                        deleteOnExit()
-                    }
+                    val tempFile = File.createTempFile("uploadFile", null)
                     inputStream.copyToFile(tempFile)
                     return@async tempFile
                 }

@@ -23,7 +23,6 @@ import top.chengdongqing.weui.core.ui.components.button.WeButton
 import top.chengdongqing.weui.core.ui.components.input.WeInput
 import top.chengdongqing.weui.core.ui.components.input.WeTextarea
 import top.chengdongqing.weui.core.ui.components.screen.WeScreen
-import top.chengdongqing.weui.core.utils.installApk
 import top.chengdongqing.weui.core.utils.showToast
 
 @Composable
@@ -88,11 +87,6 @@ private class DownloadBroadcastReceiver(
                 val status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
                 if (status == DownloadManager.STATUS_SUCCESSFUL) {
                     context.showToast("下载完成")
-                    val uri =
-                        cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI))
-                    if (uri.endsWith(".apk")) {
-                        context.installApk(uri)
-                    }
                 }
             }
             cursor.close()

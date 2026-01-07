@@ -152,9 +152,7 @@ private fun Context.loadImageBitmap(uri: Uri): State<ImageBitmap?> {
 }
 
 private fun Context.createImageUri(bitmap: Bitmap, quality: Int = 100): Uri {
-    val tempFile = File.createTempFile("cropped_", ".jpg").apply {
-        deleteOnExit()
-    }
+    val tempFile = File.createTempFile("cropped_", ".jpg")
 
     FileOutputStream(tempFile).use { outputStream ->
         bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream)

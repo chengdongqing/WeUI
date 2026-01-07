@@ -261,9 +261,7 @@ private class CameraStateImpl(
     }
 
     override fun takePhoto(onError: ((ImageCaptureException) -> Unit)?) {
-        val tempFile = File.createTempFile("IMG_", ".jpg").apply {
-            deleteOnExit()
-        }
+        val tempFile = File.createTempFile("IMG_", ".jpg")
 
         val metadata = ImageCapture.Metadata()
         // 自拍时镜像处理
@@ -295,9 +293,7 @@ private class CameraStateImpl(
         isRecording = true
 
         val milliseconds = maxVideoDuration.seconds.inWholeMilliseconds
-        val tempFile = File.createTempFile("VID_", ".mp4").apply {
-            deleteOnExit()
-        }
+        val tempFile = File.createTempFile("VID_", ".mp4")
         val outputOptions = FileOutputOptions.Builder(tempFile)
             .setDurationLimitMillis(milliseconds)
             .build()

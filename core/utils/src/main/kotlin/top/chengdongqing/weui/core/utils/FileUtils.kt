@@ -81,7 +81,7 @@ fun Context.shareContent(content: Any, mimeType: String, title: String = "分享
 /**
  * 打开文件
  */
-fun Context.openFile(file: File, mimeType: String) {
+fun Context.openFile(file: File, mimeType: String, showChooser: Boolean = true) {
     val uri = getFileProviderUri(file)
     val intent = Intent(Intent.ACTION_VIEW).apply {
         setDataAndType(uri, mimeType)
@@ -89,9 +89,14 @@ fun Context.openFile(file: File, mimeType: String) {
         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
     }
 
-    startActivity(Intent.createChooser(intent, "打开文件"))
-}
+    val finalIntent = if (showChooser) {
+        Intent.createChooser(intent, "打开文件")
+    } else {
+        intent
+    }
 
+    startActivity(finalIntent)
+}
 
 /**
  * 删除文件
