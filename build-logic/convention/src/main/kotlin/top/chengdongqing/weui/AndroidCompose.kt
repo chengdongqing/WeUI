@@ -9,49 +9,34 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 internal fun Project.configureAndroidCompose(
-    commonExtension: CommonExtension<*, *, *, *, *, *>,
+    commonExtension: CommonExtension
 ) {
     commonExtension.apply {
         compileSdk = 36
 
-        defaultConfig {
+        defaultConfig.apply {
             minSdk = 24
         }
-        compileOptions {
+        compileOptions.apply {
             // 开启脱糖支持
             isCoreLibraryDesugaringEnabled = true
 
             sourceCompatibility = JavaVersion.VERSION_21
             targetCompatibility = JavaVersion.VERSION_21
         }
-        buildFeatures {
+        buildFeatures.apply {
             compose = true
-        }
-        composeOptions {
-            kotlinCompilerExtensionVersion = libs.findVersion("compose-compiler").get().toString()
+            resValues = true
         }
 
         dependencies {
             val bom = libs.findLibrary("compose-bom").get()
-            add("implementation", platform(bom))
 
-            listOf(
-                "core.ktx",
-                "lifecycle.runtime.ktx",
-                "activity.compose",
-                "ui",
-                "ui.graphics",
-                "ui.tooling.preview",
-                "material3",
-                "material.icons.extended"
-            ).forEach { alias ->
-                add("implementation", libs.findLibrary(alias).get())
-            }
+            add("implementation", platform(bom))
+            add("implementation", libs.findBundle("compose.ui").get())
             add("testImplementation", libs.findLibrary("junit").get())
-            add("androidTestImplementation", libs.findLibrary("androidx.test.ext.junit").get())
-            add("androidTestImplementation", libs.findLibrary("espresso.core").get())
             add("androidTestImplementation", platform(bom))
-            add("androidTestImplementation", libs.findLibrary("ui.test.junit4").get())
+            add("androidTestImplementation", libs.findBundle("compose.test").get())
             add("debugImplementation", libs.findLibrary("ui.tooling").get())
             add("debugImplementation", libs.findLibrary("ui.test.manifest").get())
             add("coreLibraryDesugaring", libs.findLibrary("android.desugarJdkLibs").get())
