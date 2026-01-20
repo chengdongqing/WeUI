@@ -6,19 +6,19 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 object PinyinUtils {
-    suspend fun groupByFirstLetter(labels: List<String>): Map<Char, List<String>> =
-        withContext(Dispatchers.IO) {
+    suspend fun groupByInitial(labels: List<String>): Map<Char, List<String>> =
+        withContext(Dispatchers.Default) {
             val groupedCities = mutableMapOf<Char, MutableList<String>>()
 
             labels.forEach { label ->
                 val firstChar = label.first()
-                val firstLetter = if (firstChar.isChinese()) {
+                val initial = if (firstChar.isChinese()) {
                     PinyinHelper.toPinyin(label, PinyinStyleEnum.FIRST_LETTER).first()
                 } else {
                     firstChar
                 }.uppercaseChar()
-                if (firstLetter in 'A'..'Z') {
-                    groupedCities.getOrPut(firstLetter) { mutableListOf() }.add(label)
+                if (initial in 'A'..'Z') {
+                    groupedCities.getOrPut(initial) { mutableListOf() }.add(label)
                 } else {
                     groupedCities.getOrPut('#') { mutableListOf() }.add(label)
                 }

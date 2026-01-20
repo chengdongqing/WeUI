@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.core.ui.components.divider.WeDivider
 import top.chengdongqing.weui.core.ui.components.loading.WeLoading
-import top.chengdongqing.weui.core.utils.PinyinUtils.groupByFirstLetter
+import top.chengdongqing.weui.core.utils.PinyinUtils.groupByInitial
 
 @Composable
 fun WeIndexedList(labels: List<String>) {
@@ -33,7 +33,7 @@ fun WeIndexedList(labels: List<String>) {
     var loading by remember { mutableStateOf(false) }
     val groups by produceState(initialValue = emptyMap(), key1 = labels) {
         loading = true
-        value = groupByFirstLetter(labels).toSortedMap { a, b -> if (a != '#') a - b else 1 }
+        value = groupByInitial(labels).toSortedMap { a, b -> if (a != '#') a - b else 1 }
         loading = false
     }
 
@@ -52,10 +52,10 @@ fun WeIndexedList(labels: List<String>) {
 }
 
 private fun LazyListScope.indexGroups(groups: Map<Char, List<String>>) {
-    groups.forEach { (letter, list) ->
+    groups.forEach { (initial, list) ->
         stickyHeader {
             Text(
-                text = letter.toString(),
+                text = initial.toString(),
                 color = MaterialTheme.colorScheme.onSecondary,
                 fontSize = 13.sp,
                 modifier = Modifier

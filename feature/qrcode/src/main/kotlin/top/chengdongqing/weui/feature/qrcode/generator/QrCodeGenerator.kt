@@ -18,8 +18,11 @@ import android.graphics.Color as AndroidColor
 @Composable
 fun WeQrCodeGenerator(content: String, size: Int, color: Color = Color.Black) {
     val bitmap = produceState<ImageBitmap?>(initialValue = null, key1 = content, key2 = size) {
-        value = withContext(Dispatchers.IO) {
+        value = try {
             generateQrCode(content, size, color.toArgb()).asImageBitmap()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
         }
     }
 
@@ -28,15 +31,16 @@ fun WeQrCodeGenerator(content: String, size: Int, color: Color = Color.Black) {
     }
 }
 
-private fun generateQrCode(content: String, size: Int, color: Int): Bitmap {
-    val hints = mapOf(EncodeHintType.MARGIN to 0)
-    val bitMatrix = QRCodeWriter().encode(content, BarcodeFormat.QR_CODE, size, size, hints)
-    val pixels = IntArray(size * size) { pos ->
-        if (bitMatrix.get(pos % size, pos / size)) {
-            color
-        } else {
-            AndroidColor.TRANSPARENT
+private suspend fun generateQrCode(content: String, size: Int, color: Int): Bitmap =
+    withContext(Dispatchers.Default) {
+        val hints = mapOf(EncodeHintType.MARGIN to 0)
+        val bitMatrix = QRCodeWriter().encode(content, BarcodeFormat.QR_CODE, size, size, hints)
+        val pixels = IntArray(size * size) { pos ->
+            if (bitMatrix.get(pos % size, pos / size)) {
+                color
+            } else {
+                AndroidColor.TRANSPARENT
+            }
         }
+        Bitmap.createBitmap(pixels, size, size, Bitmap.Config.ARGB_8888)
     }
-    return Bitmap.createBitmap(pixels, size, size, Bitmap.Config.ARGB_8888)
-}

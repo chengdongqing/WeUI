@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.PopupProperties
 import kotlinx.coroutines.delay
 import top.chengdongqing.weui.core.utils.toIntOffset
 
@@ -72,7 +73,8 @@ fun WeContextMenu(
 
     Popup(
         offset = layout.offset,
-        onDismissRequest = { isVisible = false }
+        onDismissRequest = { isVisible = false },
+        properties = PopupProperties(focusable = true)
     ) {
         val animationSpec = tween<Float>(durationMillis = 150, easing = LinearOutSlowInEasing)
 
