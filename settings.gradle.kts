@@ -11,6 +11,7 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        mavenLocal()  // 本地 Maven，用于解析高德 AAR
         google()
         mavenCentral()
     }

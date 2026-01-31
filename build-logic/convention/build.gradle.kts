@@ -39,5 +39,9 @@ gradlePlugin {
             id = "$prefix.android.room"
             implementationClass = "AndroidRoomConventionPlugin"
         }
+        register("androidMavenPublish") {
+            id = "$prefix.android.maven.publish"
+            implementationClass = "AndroidMavenPublishConventionPlugin"
+        }
     }
 }

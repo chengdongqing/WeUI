@@ -84,4 +84,23 @@ dependencies {
 
     // 仅全量版包含地图模块
     "fullImplementation"(projects.feature.location)
+
+    // // 先运行 ./gradlew publishToMavenLocal
+    // // 然后可以使用本地 Maven 发布的库
+    // val weuiVersion = "2026.01.01"
+    // implementation("top.chengdongqing.weui:core-ui-theme:$weuiVersion")
+    // implementation("top.chengdongqing.weui:core-ui-components:$weuiVersion")
+    // implementation("top.chengdongqing.weui:core-utils:$weuiVersion")
+    // implementation("top.chengdongqing.weui:feature-basic:$weuiVersion")
+    // implementation("top.chengdongqing.weui:feature-form:$weuiVersion")
+    // implementation("top.chengdongqing.weui:feature-media:$weuiVersion")
+    // implementation("top.chengdongqing.weui:feature-feedback:$weuiVersion")
+    // implementation("top.chengdongqing.weui:feature-system:$weuiVersion")
+    // implementation("top.chengdongqing.weui:feature-network:$weuiVersion")
+    // implementation("top.chengdongqing.weui:feature-hardware:$weuiVersion")
+    // implementation("top.chengdongqing.weui:feature-charts:$weuiVersion")
+    // implementation("top.chengdongqing.weui:feature-qrcode:$weuiVersion")
+    // implementation("top.chengdongqing.weui:feature-samples:$weuiVersion")
+
+    // "fullImplementation"("top.chengdongqing.weui:feature-location:$weuiVersion")
 }

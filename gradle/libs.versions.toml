@@ -100,6 +100,7 @@ room = { id = "androidx.room", version.ref = "room" }
 weui-android-compose-application = { id = "weui.android.compose.application" }
 weui-android-compose-library = { id = "weui.android.compose.library" }
 weui-android-room = { id = "weui.android.room" }
+weui-android-maven-publish = { id = "weui.android.maven.publish" }
 
 [bundles]
 compose-ui = [
