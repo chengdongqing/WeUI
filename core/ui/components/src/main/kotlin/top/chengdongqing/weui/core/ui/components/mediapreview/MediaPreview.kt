@@ -1,6 +1,7 @@
 package top.chengdongqing.weui.core.ui.components.mediapreview
 
 import android.content.Context
+import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.core.SnapSpec
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -23,7 +24,6 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,7 +48,6 @@ import top.chengdongqing.weui.core.utils.MediaStoreUtils.createContentValues
 import top.chengdongqing.weui.core.utils.MediaStoreUtils.finishPending
 import top.chengdongqing.weui.core.utils.SetupFullscreen
 import top.chengdongqing.weui.core.utils.copyUri
-import top.chengdongqing.weui.core.utils.findActivity
 import top.chengdongqing.weui.core.utils.shareContent
 import java.io.IOException
 
@@ -69,10 +68,7 @@ fun WeMediaPreview(medias: Array<MediaItem>, current: Int = 0) {
 
 @Composable
 private fun MediaPager(medias: Array<MediaItem>, pagerState: PagerState) {
-    val context = LocalContext.current
-    val activity = remember(context) {
-        context.findActivity()
-    }
+    val activity = LocalActivity.current
 
     HorizontalPager(
         state = pagerState,

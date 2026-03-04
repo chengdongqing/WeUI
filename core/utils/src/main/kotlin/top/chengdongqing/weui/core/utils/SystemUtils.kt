@@ -1,8 +1,6 @@
 package top.chengdongqing.weui.core.utils
 
-import android.app.Activity
 import android.content.Context
-import android.content.ContextWrapper
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.BatteryManager
@@ -67,18 +65,6 @@ data class BatteryInfo(
  */
 fun Context.showToast(text: String) {
     Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
-}
-
-/**
- * 寻找Activity
- */
-fun Context.findActivity(): Activity? {
-    var context = this
-    while (context is ContextWrapper) {
-        if (context is Activity) return context
-        context = context.baseContext
-    }
-    return null
 }
 
 /**

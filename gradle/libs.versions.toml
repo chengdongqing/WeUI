@@ -1,23 +1,23 @@
 [versions]
 # 核心库
-agp = "9.0.0"
-kotlin = "2.3.0"
+agp = "9.1.0"
+kotlin = "2.3.10"
 ksp = "2.3.4"
-composeBom = "2026.01.00"
+composeBom = "2026.02.01"
 coreKtx = "1.17.0"
 lifecycleRuntimeKtx = "2.10.0"
-activityCompose = "1.12.2"
+activityCompose = "1.12.4"
 
 # 官方库
-foundation = "1.10.1"
+foundation = "1.10.4"
 accompanistPermissions = "0.37.3"
 biometric = "1.4.0-alpha05"
-camerax = "1.5.2"
+camerax = "1.5.3"
 materialIconsExtended = "1.7.8"
-navigationCompose = "2.9.6"
+navigationCompose = "2.9.7"
 room = "2.8.4"
 datastore = "1.2.0"
-androidTools = "32.0.0"
+androidTools = "32.1.0"
 roomGradlePlugin = "2.8.4"
 desugarJdkLibs = "2.1.5"
 # 测试相关
@@ -31,7 +31,7 @@ pinyin = "0.4.0"
 retrofit = "3.0.0"
 mlkit = "17.3.0"
 zxing = "3.5.4"
-coil = "3.3.0"
+coil = "3.4.0"
 coilZoomable = "0.18.0"
 
 [libraries]
