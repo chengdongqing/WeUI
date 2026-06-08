@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.screens
+package top.chengdongqing.weui.charts.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,23 +13,24 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import top.chengdongqing.weui.charts.components.DefaultChartLegend
+import top.chengdongqing.weui.charts.components.WePieChart
+import top.chengdongqing.weui.charts.model.ChartData
 import top.chengdongqing.weui.components.ButtonType
-import top.chengdongqing.weui.components.DefaultChartLegend
 import top.chengdongqing.weui.components.WeButton
-import top.chengdongqing.weui.components.WePieChart
 import top.chengdongqing.weui.components.WeScreen
-import top.chengdongqing.weui.data.model.ChartData
 import top.chengdongqing.weui.utils.format
 import top.chengdongqing.weui.utils.randomInt
 import top.chengdongqing.weui.utils.rememberToggleState
 
 @Composable
-fun PieChartScreen() {
+fun PieChartScreen(onBack: () -> Unit) {
     WeScreen(
         title = "PieChart",
         description = "饼图",
         containerColor = MaterialTheme.colorScheme.surface,
-        verticalArrangement = Arrangement.spacedBy(20.dp)
+        verticalArrangement = Arrangement.spacedBy(20.dp),
+        onBack = onBack
     ) {
         val dataSource = rememberSaveable { mutableStateOf(buildData()) }
         val (ringWidth, toggleRingWidth) = rememberToggleState(

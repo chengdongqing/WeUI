@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.components
+package top.chengdongqing.weui.charts.components
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationSpec
@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
-import top.chengdongqing.weui.data.model.ChartData
+import top.chengdongqing.weui.charts.model.ChartData
 import top.chengdongqing.weui.utils.format
 
 @Composable

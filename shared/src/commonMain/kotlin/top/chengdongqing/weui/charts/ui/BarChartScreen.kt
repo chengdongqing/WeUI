@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.screens
+package top.chengdongqing.weui.charts.ui
 
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -17,11 +17,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
+import top.chengdongqing.weui.charts.components.WeBarChart
+import top.chengdongqing.weui.charts.model.ChartData
 import top.chengdongqing.weui.components.ButtonType
-import top.chengdongqing.weui.components.WeBarChart
 import top.chengdongqing.weui.components.WeButton
 import top.chengdongqing.weui.components.WeScreen
-import top.chengdongqing.weui.data.model.ChartData
 import top.chengdongqing.weui.theme.PrimaryColor
 import top.chengdongqing.weui.theme.WarningColor
 import top.chengdongqing.weui.utils.format
@@ -29,12 +29,13 @@ import top.chengdongqing.weui.utils.randomFloat
 import top.chengdongqing.weui.utils.rememberToggleState
 
 @Composable
-fun BarChartScreen() {
+fun BarChartScreen(onBack: () -> Unit) {
     WeScreen(
         title = "BarChart",
         description = "柱状图",
         containerColor = MaterialTheme.colorScheme.surface,
-        verticalArrangement = Arrangement.spacedBy(20.dp)
+        verticalArrangement = Arrangement.spacedBy(20.dp),
+        onBack = onBack
     ) {
         var dataSource by rememberSaveable { mutableStateOf(buildData()) }
         val (color, toggleColor) = rememberToggleState(

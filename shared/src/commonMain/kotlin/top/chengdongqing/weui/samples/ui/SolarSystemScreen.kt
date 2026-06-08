@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.screens
+package top.chengdongqing.weui.samples.ui
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.aspectRatio
@@ -34,12 +34,13 @@ import kotlin.math.sin
 import kotlin.time.Clock
 
 @Composable
-fun SolarSystemScreen() {
+fun SolarSystemScreen(onBack: () -> Unit) {
     WeUITheme(darkTheme = true) {
         WeScreen(
             title = "SolarSystem",
             description = "太阳系动画",
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = MaterialTheme.colorScheme.surface,
+            onBack = onBack
         ) {
             // 图片资源
             val sunImage = imageResource(Res.drawable.solar_system_sun)

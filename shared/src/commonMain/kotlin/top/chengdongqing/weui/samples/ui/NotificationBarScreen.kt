@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.screens
+package top.chengdongqing.weui.samples.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,12 +17,13 @@ import top.chengdongqing.weui.components.WeNotificationBar
 import top.chengdongqing.weui.components.WeScreen
 
 @Composable
-fun NotificationBarScreen() {
+fun NotificationBarScreen(onBack: () -> Unit) {
     WeScreen(
         title = "NotificationBar",
         description = "通知栏",
         padding = PaddingValues(0.dp),
-        verticalArrangement = Arrangement.spacedBy(40.dp)
+        verticalArrangement = Arrangement.spacedBy(40.dp),
+        onBack = onBack
     ) {
         val content = remember {
             buildString {

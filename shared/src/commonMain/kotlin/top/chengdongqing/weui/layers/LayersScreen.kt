@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.screens
+package top.chengdongqing.weui.layers
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -35,10 +35,11 @@ import top.chengdongqing.weui.utils.weClickable
 import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
-fun LayersScreen() {
+fun LayersScreen(onBack: () -> Unit) {
     WeScreen(
         title = "WeUI页面层级",
-        description = "用于规范WeUI页面元素所属层级、层级顺序及组合规范。"
+        description = "用于规范WeUI页面元素所属层级、层级顺序及组合规范。",
+        onBack = onBack
     ) {
         val width = LocalWindowInfo.current.containerDpSize.width / 2
         var expanded by remember { mutableStateOf(false) }

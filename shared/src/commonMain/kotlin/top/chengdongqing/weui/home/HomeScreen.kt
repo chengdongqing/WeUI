@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.overscroll
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -36,13 +35,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation3.runtime.NavKey
 import org.jetbrains.compose.resources.painterResource
 import top.chengdongqing.weui.components.WeDivider
-import top.chengdongqing.weui.data.model.MenuGroup
-import top.chengdongqing.weui.data.model.MenuGroups
-import top.chengdongqing.weui.data.model.MenuItem
+import top.chengdongqing.weui.navigation.MenuGroups
+import top.chengdongqing.weui.navigation.MenuItem
 import top.chengdongqing.weui.theme.InvertColorMatrix
-import top.chengdongqing.weui.theme.rememberBounceOverscrollEffect
 import top.chengdongqing.weui.utils.weClickable
 import weui_kmp.shared.generated.resources.Res
 import weui_kmp.shared.generated.resources.ic_arrow_right
@@ -50,26 +48,23 @@ import weui_kmp.shared.generated.resources.ic_footer_link
 import weui_kmp.shared.generated.resources.ic_logo
 
 @Composable
-fun HomeScreen(onNavigateTo: (route: String) -> Unit) {
+fun HomeScreen(onNavigateToScreen: (key: NavKey) -> Unit) {
     var current by rememberSaveable { mutableStateOf<Int?>(null) }
-    val overscrollEffect = rememberBounceOverscrollEffect()
 
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
-            .overscroll(overscrollEffect)
             .statusBarsPadding()
-            .padding(horizontal = 16.dp),
-        overscrollEffect = overscrollEffect
+            .padding(horizontal = 16.dp)
     ) {
         item { HomeHeader() }
         itemsIndexed(MenuGroups) { index, item ->
             MenuGroup(
                 item,
                 expanded = index == current,
-                onNavigateTo
+                onNavigateToScreen
             ) {
                 current = if (current == index) null else index
             }
@@ -124,9 +119,9 @@ private fun HomeFooter() {
 
 @Composable
 private fun MenuGroup(
-    group: MenuGroup,
+    group: MenuItem,
     expanded: Boolean,
-    onNavigateTo: (route: String) -> Unit,
+    onNavigateToScreen: (key: NavKey) -> Unit,
     onToggleExpand: () -> Unit
 ) {
     Column(
@@ -135,8 +130,8 @@ private fun MenuGroup(
             .background(MaterialTheme.colorScheme.onBackground)
     ) {
         MenuGroupHeader(group, expanded) {
-            if (group.path != null) {
-                onNavigateTo(group.path)
+            if (group.navKey != null) {
+                onNavigateToScreen(group.navKey)
             } else {
                 onToggleExpand()
             }
@@ -146,7 +141,7 @@ private fun MenuGroup(
                 Column {
                     val children = remember { group.children.sortedBy { it.label } }
                     children.forEachIndexed { index, item ->
-                        MenuGroupItem(item, onNavigateTo)
+                        MenuGroupItem(item, onNavigateToScreen)
                         if (index < group.children.lastIndex) {
                             WeDivider(Modifier.padding(horizontal = 20.dp))
                         }
@@ -158,7 +153,7 @@ private fun MenuGroup(
 }
 
 @Composable
-private fun MenuGroupHeader(group: MenuGroup, expanded: Boolean, onClick: () -> Unit) {
+private fun MenuGroupHeader(group: MenuItem, expanded: Boolean, onClick: () -> Unit) {
     Row(
         Modifier
             .alpha(if (expanded) 0.5f else 1f)
@@ -167,28 +162,35 @@ private fun MenuGroupHeader(group: MenuGroup, expanded: Boolean, onClick: () -> 
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = group.title,
+            text = group.label,
             color = MaterialTheme.homeColorScheme.fontColor,
             fontSize = 17.sp,
             modifier = Modifier.weight(1f)
         )
-        Image(
-            painter = painterResource(group.iconId),
-            contentDescription = null,
-            colorFilter = if (MaterialTheme.homeColorScheme.iconColor != Color.Unspecified) ColorFilter.tint(
-                MaterialTheme.homeColorScheme.iconColor
-            ) else null,
-            modifier = Modifier.size(30.dp)
-        )
+        group.iconRes?.let {
+            Image(
+                painter = painterResource(it),
+                contentDescription = null,
+                colorFilter = if (MaterialTheme.homeColorScheme.iconColor != Color.Unspecified) ColorFilter.tint(
+                    MaterialTheme.homeColorScheme.iconColor
+                ) else null,
+                modifier = Modifier.size(30.dp)
+            )
+        }
     }
 }
 
 @Composable
-private fun MenuGroupItem(item: MenuItem, onNavigateTo: (route: String) -> Unit) {
+private fun MenuGroupItem(
+    item: MenuItem,
+    onNavigateToScreen: (key: NavKey) -> Unit
+) {
     Row(
         Modifier
             .clickable {
-                onNavigateTo(item.route)
+                item.navKey?.let {
+                    onNavigateToScreen(it)
+                }
             }
             .padding(horizontal = 20.dp, vertical = 16.dp),
         verticalAlignment = Alignment.CenterVertically

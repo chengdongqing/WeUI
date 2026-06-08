@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.screens
+package top.chengdongqing.weui.samples.ui
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -16,11 +16,12 @@ import weui_kmp.shared.generated.resources.Res
 import weui_kmp.shared.generated.resources.panoramic_yosemite_park
 
 @Composable
-fun PanoramicImageScreen() {
+fun PanoramicImageScreen(onBack: () -> Unit) {
     WeScreen(
         title = "PanoramicImage",
         description = "全景图片",
-        padding = PaddingValues(0.dp)
+        padding = PaddingValues(0.dp),
+        onBack = onBack
     ) {
         val image = imageResource(Res.drawable.panoramic_yosemite_park)
         val (scrollStep, toggleScrollStep) = rememberToggleState(

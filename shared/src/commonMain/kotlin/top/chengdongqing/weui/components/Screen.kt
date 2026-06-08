@@ -1,6 +1,7 @@
 package top.chengdongqing.weui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,6 +23,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.jetbrains.compose.resources.painterResource
+import weui_kmp.shared.generated.resources.Res
+import weui_kmp.shared.generated.resources.ic_back_circle_filled
 
 /**
  * 页面组件
@@ -43,6 +48,7 @@ fun WeScreen(
     scrollEnabled: Boolean = true,
     horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
     verticalArrangement: Arrangement.Vertical = Arrangement.Top,
+    onBack: () -> Unit,
     content: @Composable ColumnScope.() -> Unit
 ) {
     Column(
@@ -58,7 +64,17 @@ fun WeScreen(
                 }
             )
     ) {
-        Column(Modifier.padding(40.dp)) {
+        Column(
+            modifier = Modifier.padding(horizontal = 40.dp)
+                .padding(bottom = 40.dp, top = 10.dp)
+        ) {
+            Icon(
+                painter = painterResource(Res.drawable.ic_back_circle_filled),
+                contentDescription = "go back",
+                modifier = Modifier.clickable(onClick = onBack),
+                tint = MaterialTheme.colorScheme.onPrimary
+            )
+            Spacer(Modifier.height(12.dp))
             Text(
                 text = title,
                 color = MaterialTheme.colorScheme.onPrimary,

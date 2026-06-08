@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.screens
+package top.chengdongqing.weui.charts.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
@@ -11,24 +11,25 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import top.chengdongqing.weui.charts.components.WeLineChart
+import top.chengdongqing.weui.charts.model.ChartData
+import top.chengdongqing.weui.charts.model.LineChartData
 import top.chengdongqing.weui.components.ButtonType
 import top.chengdongqing.weui.components.WeButton
-import top.chengdongqing.weui.components.WeLineChart
 import top.chengdongqing.weui.components.WeScreen
-import top.chengdongqing.weui.data.model.ChartData
-import top.chengdongqing.weui.data.model.LineChartData
 import top.chengdongqing.weui.theme.PrimaryColor
 import top.chengdongqing.weui.theme.WarningColor
 import top.chengdongqing.weui.utils.format
 import top.chengdongqing.weui.utils.randomFloat
 
 @Composable
-fun LineChartScreen() {
+fun LineChartScreen(onBack: () -> Unit) {
     WeScreen(
         title = "LineChart",
         description = "折线图",
         containerColor = MaterialTheme.colorScheme.surface,
-        verticalArrangement = Arrangement.spacedBy(20.dp)
+        verticalArrangement = Arrangement.spacedBy(20.dp),
+        onBack = onBack
     ) {
         var dataSource by rememberSaveable {
             mutableStateOf(

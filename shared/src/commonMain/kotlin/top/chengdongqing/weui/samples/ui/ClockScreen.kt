@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.screens
+package top.chengdongqing.weui.samples.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,12 +26,13 @@ import top.chengdongqing.weui.theme.BorderColorLight
 import top.chengdongqing.weui.theme.PrimaryColor
 
 @Composable
-fun ClockScreen() {
+fun ClockScreen(onBack: () -> Unit) {
     WeScreen(
         title = "Clock",
         description = "时钟",
         padding = PaddingValues(bottom = 100.dp),
-        verticalArrangement = Arrangement.spacedBy(40.dp)
+        verticalArrangement = Arrangement.spacedBy(40.dp),
+        onBack = onBack
     ) {
         var isSmoothSweep by remember { mutableStateOf(false) }
 

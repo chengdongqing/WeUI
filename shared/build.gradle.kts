@@ -1,3 +1,4 @@
+import androidx.room3.gradle.RoomExtension
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -6,6 +7,8 @@ plugins {
     alias(libs.plugins.androidMultiplatformLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.room)
+    alias(libs.plugins.ksp)
 }
 
 kotlin {
@@ -62,6 +65,8 @@ kotlin {
 
             implementation(libs.kotlinx.datetime)
             implementation(libs.compose.material.icons.extended)
+            implementation(libs.navigation.ui)
+            implementation(libs.room.runtime)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -74,4 +79,8 @@ kotlin {
 
 dependencies {
     androidRuntimeClasspath(libs.compose.uiTooling)
+}
+
+configure<RoomExtension> {
+    schemaDirectory("$projectDir/schemas")
 }
