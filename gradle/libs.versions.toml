@@ -19,6 +19,7 @@ material3 = "1.11.0-alpha07"
 material-icons-extended = "1.7.3"
 navigation = "1.1.1"
 room = "3.0.0-alpha06"
+sqlite = "2.7.0-alpha06"
 ksp = "2.3.4"
 
 [libraries]
@@ -47,6 +48,8 @@ lifecycle-viewmodel-navigation3 = { module = "org.jetbrains.androidx.lifecycle:l
 navigation-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "navigation" }
 room-runtime = { module = "androidx.room3:room3-runtime", version.ref = "room" }
 room-compiler = { module = "androidx.room3:room3-compiler", version.ref = "room" }
+androidx-sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
+androidx-sqlite-web = { module = "androidx.sqlite:sqlite-web", version.ref = "sqlite" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

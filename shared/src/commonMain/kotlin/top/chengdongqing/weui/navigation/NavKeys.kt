@@ -10,6 +10,15 @@ data object HomeNavKey : NavKey
 data object LayersNavKey : NavKey
 
 @Serializable
+sealed interface SystemNavKey {
+    @Serializable
+    data object AddressList : NavKey
+
+    @Serializable
+    data class AddressDetail(val addressId: Int?) : NavKey
+}
+
+@Serializable
 sealed interface ChartsNavKey {
     @Serializable
     data object Bar : NavKey

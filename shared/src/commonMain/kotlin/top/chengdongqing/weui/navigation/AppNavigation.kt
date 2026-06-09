@@ -16,6 +16,7 @@ import top.chengdongqing.weui.charts.navigation.chartsNavEntries
 import top.chengdongqing.weui.home.HomeScreen
 import top.chengdongqing.weui.layers.LayersScreen
 import top.chengdongqing.weui.samples.navigation.samplesNavEntries
+import top.chengdongqing.weui.system.navigation.systemNavEntries
 
 @Composable
 fun AppNavigation() {
@@ -45,6 +46,8 @@ fun AppNavigation() {
             entry<LayersNavKey> {
                 LayersScreen(onBack = goBack)
             }
+
+            systemNavEntries(backStack = backStack, onBack = goBack)
             chartsNavEntries(onBack = goBack)
             samplesNavEntries(onBack = goBack)
         }

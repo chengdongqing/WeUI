@@ -58,19 +58,6 @@ val MenuGroups = listOf(
             MenuItem("AudioRecorder", LayersNavKey),
             MenuItem("AudioPlayer", LayersNavKey),
             MenuItem("Gallery", LayersNavKey),
-            MenuItem("ImageCropper", LayersNavKey),
-            MenuItem("PanoramicImage", LayersNavKey)
-        )
-    ),
-    MenuItem(
-        label = "媒体组件",
-        iconRes = Res.drawable.ic_nav_search,
-        children = listOf(
-            MenuItem("Camera", LayersNavKey),
-            MenuItem("MediaPicker", LayersNavKey),
-            MenuItem("AudioRecorder", LayersNavKey),
-            MenuItem("AudioPlayer", LayersNavKey),
-            MenuItem("Gallery", LayersNavKey),
             MenuItem("ImageCropper", LayersNavKey)
         )
     ),
@@ -95,7 +82,7 @@ val MenuGroups = listOf(
             MenuItem("CalendarEvents", LayersNavKey),
             MenuItem("DeviceInfo", LayersNavKey),
             MenuItem("Downloader", LayersNavKey),
-            MenuItem("Database", LayersNavKey),
+            MenuItem("Database", SystemNavKey.AddressList),
             MenuItem("SystemStatus", LayersNavKey),
             MenuItem("SMS", LayersNavKey),
             MenuItem("InstalledApps", LayersNavKey),
