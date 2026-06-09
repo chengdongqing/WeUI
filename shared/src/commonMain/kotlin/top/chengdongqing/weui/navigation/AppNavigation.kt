@@ -4,6 +4,9 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
+import androidx.compose.material3.adaptive.navigation3.ListDetailSceneStrategy
+import androidx.compose.material3.adaptive.navigation3.rememberListDetailSceneStrategy
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
@@ -18,6 +21,7 @@ import top.chengdongqing.weui.layers.LayersScreen
 import top.chengdongqing.weui.samples.navigation.samplesNavEntries
 import top.chengdongqing.weui.system.navigation.systemNavEntries
 
+@OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun AppNavigation() {
     val backStack = remember {
@@ -34,16 +38,24 @@ fun AppNavigation() {
         entryDecorators = listOf(
             rememberSaveableStateHolderNavEntryDecorator()
         ),
+        sceneStrategies = listOf(
+            rememberListDetailSceneStrategy()
+        ),
         transitionSpec = { createEnterTransition() },
         popTransitionSpec = { createExitTransition() },
         predictivePopTransitionSpec = { createExitTransition() },
         entryProvider = entryProvider {
-            entry<HomeNavKey> {
+            entry<HomeNavKey>(
+                metadata = ListDetailSceneStrategy.listPane()
+            ) {
                 HomeScreen {
+                    backStack.removeAll { key -> key !is HomeNavKey }
                     backStack.add(it)
                 }
             }
-            entry<LayersNavKey> {
+            entry<LayersNavKey>(
+                metadata = ListDetailSceneStrategy.detailPane()
+            ) {
                 LayersScreen(onBack = goBack)
             }
 
