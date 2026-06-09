@@ -14,7 +14,11 @@ kotlin {
 
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
-        browser()
+        browser {
+            commonWebpackConfig {
+                devtool = null
+            }
+        }
         binaries.executable()
     }
 

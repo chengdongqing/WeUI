@@ -1,0 +1,51 @@
+/* @preserve
+	2022-09-16
+	
+	The author disclaims copyright to this source code.  In place of a
+	legal notice, here is a blessing:
+	
+	*   May you do good and not evil.
+	*   May you find forgiveness for yourself and forgive others.
+	*   May you share freely, never taking more than you give.
+	
+	***********************************************************************
+	
+	A Worker which manages asynchronous OPFS handles on behalf of a
+	synchronous API which controls it via a combination of Worker
+	messages, SharedArrayBuffer, and Atomics. It is the asynchronous
+	counterpart of the API defined in sqlite3-vfs-opfs.js.
+	
+	Highly indebted to:
+	
+	https://github.com/rhashimoto/wa-sqlite/blob/master/src/examples/OriginPrivateFileSystemVFS.js
+	
+	for demonstrating how to use the OPFS APIs.
+	
+	This file is to be loaded as a Worker. It does not have any direct
+	access to the sqlite3 JS/WASM bits, so any bits which it needs (most
+	notably SQLITE_xxx integer codes) have to be imported into it via an
+	initialization process.
+	
+	This file represents an implementation detail of a larger piece of
+	code, and not a public interface. Its details may change at any time
+	and are not intended to be used by any client-level code.
+	
+	2022-11-27: Chrome v108 changes some async methods to synchronous, as
+	documented at:
+	
+	https://developer.chrome.com/blog/sync-methods-for-accesshandles/
+	
+	Firefox v111 and Safari 16.4, both released in March 2023, also
+	include this.
+	
+	We cannot change to the sync forms at this point without breaking
+	clients who use Chrome v104-ish or higher. truncate(), getSize(),
+	flush(), and close() are now (as of v108) synchronous. Calling them
+	with an "await", as we have to for the async forms, is still legal
+	with the sync forms but is superfluous. Calling the async forms with
+	theFunc().then(...) is not compatible with the change to
+	synchronous, but we do do not use those APIs that way. i.e. we don't
+	_need_ to change anything for this, but at some point (after Chrome
+	versions (approximately) 104-107 are extinct) we should change our
+	usage of those methods to remove the "await".
+	*/
