@@ -65,7 +65,8 @@ fun WeScreen(
             )
     ) {
         Column(
-            modifier = Modifier.padding(horizontal = 40.dp)
+            modifier = Modifier
+                .padding(horizontal = 40.dp)
                 .padding(bottom = 40.dp, top = 10.dp)
         ) {
             Icon(

@@ -5,18 +5,11 @@ import androidx.compose.material3.adaptive.navigation3.ListDetailSceneStrategy
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import top.chengdongqing.weui.navigation.SamplesNavKey
-import top.chengdongqing.weui.samples.ui.ClockScreen
 import top.chengdongqing.weui.samples.ui.NotificationBarScreen
 import top.chengdongqing.weui.samples.ui.PanoramicImageScreen
-import top.chengdongqing.weui.samples.ui.SolarSystemScreen
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 fun EntryProviderScope<NavKey>.samplesNavEntries(onBack: () -> Unit) {
-    entry<SamplesNavKey.Clock>(
-        metadata = ListDetailSceneStrategy.detailPane()
-    ) {
-        ClockScreen(onBack)
-    }
     entry<SamplesNavKey.NotificationBar>(
         metadata = ListDetailSceneStrategy.detailPane()
     ) {
@@ -26,10 +19,5 @@ fun EntryProviderScope<NavKey>.samplesNavEntries(onBack: () -> Unit) {
         metadata = ListDetailSceneStrategy.detailPane()
     ) {
         PanoramicImageScreen(onBack)
-    }
-    entry<SamplesNavKey.SolarSystem>(
-        metadata = ListDetailSceneStrategy.detailPane()
-    ) {
-        SolarSystemScreen(onBack)
     }
 }

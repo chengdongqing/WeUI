@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.samples.ui
+package top.chengdongqing.weui.animation.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

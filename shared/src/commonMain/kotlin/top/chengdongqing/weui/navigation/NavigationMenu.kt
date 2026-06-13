@@ -148,7 +148,6 @@ val MenuGroups = listOf(
         iconRes = Res.drawable.ic_nav_search,
         children = listOf(
             MenuItem("Calendar", LayersNavKey),
-            MenuItem("Clock", SamplesNavKey.Clock),
             MenuItem("DropCard", LayersNavKey),
             MenuItem("SearchBar", LayersNavKey),
             MenuItem("FileBrowser", LayersNavKey),
@@ -162,8 +161,20 @@ val MenuGroups = listOf(
             MenuItem("CubicBezier", LayersNavKey),
             MenuItem("NotificationBar", SamplesNavKey.NotificationBar),
             MenuItem("PanoramicImage", SamplesNavKey.PanoramicImage),
-            MenuItem("VideoChannel", LayersNavKey),
-            MenuItem("SolarSystem", SamplesNavKey.SolarSystem)
+            MenuItem("VideoChannel", LayersNavKey)
+        )
+    ),
+    MenuItem(
+        label = "动画效果",
+        iconRes = Res.drawable.ic_nav_nav,
+        children = listOf(
+            MenuItem("Clock", AnimationNavKey.Clock),
+            MenuItem("SolarSystem", AnimationNavKey.SolarSystem),
+            MenuItem("Fibonacci", AnimationNavKey.Fibonacci),
+            MenuItem("RoseCurve", AnimationNavKey.RoseCurve),
+            MenuItem("SymmetryParticle", AnimationNavKey.SymmetryParticle),
+            MenuItem("RadialParticle", AnimationNavKey.RadialParticle),
+            MenuItem("Constellation", AnimationNavKey.Constellation)
         )
     ),
     MenuItem(

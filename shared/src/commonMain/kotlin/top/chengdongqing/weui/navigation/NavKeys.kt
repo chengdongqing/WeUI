@@ -33,14 +33,32 @@ sealed interface ChartsNavKey {
 @Serializable
 sealed interface SamplesNavKey {
     @Serializable
-    data object Clock : NavKey
-
-    @Serializable
     data object NotificationBar : NavKey
 
     @Serializable
     data object PanoramicImage : NavKey
+}
+
+@Serializable
+sealed interface AnimationNavKey {
+    @Serializable
+    data object Clock : NavKey
 
     @Serializable
     data object SolarSystem : NavKey
+
+    @Serializable
+    data object Fibonacci : NavKey
+
+    @Serializable
+    data object RoseCurve : NavKey
+
+    @Serializable
+    data object SymmetryParticle : NavKey
+
+    @Serializable
+    data object RadialParticle : NavKey
+
+    @Serializable
+    data object Constellation : NavKey
 }

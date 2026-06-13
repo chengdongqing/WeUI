@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
@@ -30,20 +28,16 @@ import weui_kmp.shared.generated.resources.ic_loading
  */
 @Composable
 fun WeLoading(size: Dp = 16.dp, color: Color = Color.Unspecified, isRotating: Boolean = true) {
-    val angle by if (isRotating) {
-        val transition = rememberInfiniteTransition(label = "")
-        transition.animateFloat(
-            initialValue = 0f,
-            targetValue = 360f,
-            animationSpec = infiniteRepeatable(
-                tween(durationMillis = 1000, easing = LinearEasing),
-                RepeatMode.Restart
-            ),
-            label = "WeLoadingAnimation"
-        )
-    } else {
-        remember { mutableFloatStateOf(0f) }
-    }
+    val transition = rememberInfiniteTransition(label = "")
+    val angle by transition.animateFloat(
+        initialValue = 0f,
+        targetValue = if (isRotating) 360f else 0f,
+        animationSpec = infiniteRepeatable(
+            tween(durationMillis = 1000, easing = LinearEasing),
+            RepeatMode.Restart
+        ),
+        label = "WeLoadingAnimation"
+    )
 
     Icon(
         painter = painterResource(Res.drawable.ic_loading),

@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.samples.ui
+package top.chengdongqing.weui.animation.ui
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.aspectRatio
