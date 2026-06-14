@@ -10,6 +10,24 @@ data object HomeNavKey : NavKey
 data object LayersNavKey : NavKey
 
 @Serializable
+sealed interface BasicNavKey {
+    @Serializable
+    data object Badge : NavKey
+
+    @Serializable
+    data object Loading : NavKey
+
+    @Serializable
+    data object LoadMore : NavKey
+
+    @Serializable
+    data object Progress : NavKey
+
+    @Serializable
+    data object RefreshView : NavKey
+}
+
+@Serializable
 sealed interface SystemNavKey {
     @Serializable
     data object AddressList : NavKey

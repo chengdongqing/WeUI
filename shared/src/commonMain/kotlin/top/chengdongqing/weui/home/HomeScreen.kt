@@ -56,7 +56,7 @@ fun HomeScreen(
     onNavigateToScreen: (key: NavKey) -> Unit
 ) {
     val menuTree by viewModel.menuTree.collectAsStateWithLifecycle()
-    val expandedIndex by viewModel.expandedIndex
+    val expandedIndex by viewModel.expandedIndex.collectAsStateWithLifecycle()
 
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -74,10 +74,7 @@ fun HomeScreen(
             MenuGroup(
                 group = group,
                 expanded = index == expandedIndex,
-                onToggleExpand = {
-                    val targetIndex = if (expandedIndex == index) null else index
-                    viewModel.setExpandedIndex(targetIndex)
-                },
+                onToggleExpand = { viewModel.setExpandedIndex(index) },
                 onNavigateToScreen = onNavigateToScreen
             )
         }

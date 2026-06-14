@@ -1,11 +1,9 @@
 package top.chengdongqing.weui.home
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.update
 import top.chengdongqing.weui.navigation.MenuItem
 import top.chengdongqing.weui.navigation.MenuTreeData
 
@@ -14,19 +12,24 @@ class HomeViewModel : ViewModel() {
     private val _menuTree = MutableStateFlow(emptyList<MenuItem>())
     val menuTree = _menuTree.asStateFlow()
 
-    private val _expandedIndex = mutableStateOf<Int?>(null)
-    val expandedIndex = _expandedIndex
+    private val _expandedIndex = MutableStateFlow<Int?>(null)
+    val expandedIndex = _expandedIndex.asStateFlow()
 
     init {
-        viewModelScope.launch {
-            _menuTree.value = MenuTreeData.map { group ->
-                group.children?.sortedBy { it.label }
-                group
+        loadData()
+    }
+
+    private fun loadData() {
+        _menuTree.update {
+            MenuTreeData.map { group ->
+                group.copy(children = group.children?.sortedBy { it.label })
             }
         }
     }
 
-    fun setExpandedIndex(index: Int?) {
-        _expandedIndex.value = index
+    fun setExpandedIndex(index: Int) {
+        _expandedIndex.update {
+            if (it == index) null else index
+        }
     }
 }

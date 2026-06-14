@@ -16,6 +16,7 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import top.chengdongqing.weui.animation.navigation.animationNavEntries
+import top.chengdongqing.weui.basic.navigation.basicNavEntries
 import top.chengdongqing.weui.charts.navigation.chartsNavEntries
 import top.chengdongqing.weui.home.HomeScreen
 import top.chengdongqing.weui.layers.LayersScreen
@@ -60,6 +61,7 @@ fun AppNavigation() {
                 LayersScreen(onBack = goBack)
             }
 
+            basicNavEntries(onBack = goBack)
             systemNavEntries(backStack = backStack, onBack = goBack)
             chartsNavEntries(onBack = goBack)
             samplesNavEntries(onBack = goBack)
