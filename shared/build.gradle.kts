@@ -51,12 +51,15 @@ kotlin {
     sourceSets {
         androidMain.dependencies {
             implementation(libs.compose.uiToolingPreview)
+            implementation(libs.coil.video)
+            implementation(libs.pinyin)
         }
         iosMain.dependencies {
             implementation(libs.androidx.sqlite.bundled)
         }
         jvmMain.dependencies {
             implementation(libs.androidx.sqlite.bundled)
+            implementation(libs.pinyin)
         }
         commonMain.dependencies {
             implementation(libs.compose.runtime)
@@ -68,12 +71,14 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+            implementation(libs.lifecycle.viewmodel.navigation3)
 
             implementation(libs.kotlinx.datetime)
             implementation(libs.compose.material.icons.extended)
             implementation(libs.navigation.ui)
             implementation(libs.room.runtime)
-            implementation(libs.bundles.coil)
+            implementation(libs.coil.compose)
+            implementation(libs.coil.network)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

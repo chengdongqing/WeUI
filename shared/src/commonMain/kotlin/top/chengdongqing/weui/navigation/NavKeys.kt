@@ -73,6 +73,27 @@ sealed interface SamplesNavKey {
 
     @Serializable
     data object PanoramicImage : NavKey
+
+    @Serializable
+    data object CubicBezier : NavKey
+
+    @Serializable
+    data object DigitalKeyboard : NavKey
+
+    @Serializable
+    data object DigitalRoller : NavKey
+
+    @Serializable
+    data object DividingRule : NavKey
+
+    @Serializable
+    data object DropCard : NavKey
+
+    @Serializable
+    data object OrgTree : NavKey
+
+    @Serializable
+    data object IndexedList : NavKey
 }
 
 @Serializable

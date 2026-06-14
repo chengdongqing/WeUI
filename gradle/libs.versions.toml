@@ -24,6 +24,7 @@ sqlite = "2.7.0-alpha06"
 ksp = "2.3.4"
 coil = "3.5.0"
 coilZoomable = "0.19.0"
+pinyin = "0.4.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -55,9 +56,10 @@ room-compiler = { module = "androidx.room3:room3-compiler", version.ref = "room"
 androidx-sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
 androidx-sqlite-web = { module = "androidx.sqlite:sqlite-web", version.ref = "sqlite" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" } # colil核心库
-coil-network = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" } # 加载网络图片
+coil-network = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" } # 加载网络图片
 coil-video = { module = "io.coil-kt.coil3:coil-video", version.ref = "coil" } # 加载视频帧
 coil-zoomable = { module = "me.saket.telephoto:zoomable-image-coil3", version.ref = "coilZoomable" } # 图片缩放/加载大图
+pinyin = { module = "com.github.houbb:pinyin", version.ref = "pinyin" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -68,6 +70,3 @@ kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 room = { id = "androidx.room3", version.ref = "room" }
-
-[bundles]
-coil = ["coil-compose", "coil-network", "coil-video"]

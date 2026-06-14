@@ -107,19 +107,19 @@ private data class ButtonColors(
 
 @Composable
 private fun colorSchemeOf(type: ButtonType, enabled: Boolean): ButtonColors {
-    val isDarkTheme = isSystemInDarkTheme()
+    val isDark = isSystemInDarkTheme()
 
     return when (type) {
         ButtonType.Primary -> ButtonColors(
             if (enabled) GreenPrimary else {
-                if (isDarkTheme) {
+                if (isDark) {
                     Color(0xFF373737)
                 } else {
                     Color(0xFFDEDEDE)
                 }
             },
             if (enabled) Color.White else {
-                if (isDarkTheme) {
+                if (isDark) {
                     Color(0xFFBBBBBB).copy(alpha = 0.4f)
                 } else {
                     Color(0xFFBBBBBB)
@@ -127,13 +127,13 @@ private fun colorSchemeOf(type: ButtonType, enabled: Boolean): ButtonColors {
             }
         )
 
-        ButtonType.Danger -> if (isDarkTheme) {
+        ButtonType.Danger -> if (isDark) {
             ButtonColors(RedDanger, TextPrimaryDark)
         } else {
             ButtonColors(Color.Black.copy(0.05f), RedDanger)
         }
 
-        ButtonType.Plain -> if (isDarkTheme) {
+        ButtonType.Plain -> if (isDark) {
             ButtonColors(Color.White.copy(0.1f), TextPrimaryDark)
         } else {
             ButtonColors(Color.Black.copy(0.05f), TextPrimaryLight)
