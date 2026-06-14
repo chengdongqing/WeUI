@@ -1,7 +1,7 @@
 package top.chengdongqing.weui.system.address.repository
 
 import kotlinx.coroutines.flow.Flow
-import top.chengdongqing.weui.getRoomDatabaseBuilder
+import top.chengdongqing.weui.util.getRoomDatabaseBuilder
 
 class AddressRepositoryImpl : AddressRepository {
     private val database by lazy {

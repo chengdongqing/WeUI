@@ -19,14 +19,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -35,42 +30,60 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation3.runtime.NavKey
 import org.jetbrains.compose.resources.painterResource
 import top.chengdongqing.weui.components.WeDivider
-import top.chengdongqing.weui.navigation.MenuGroups
 import top.chengdongqing.weui.navigation.MenuItem
 import top.chengdongqing.weui.theme.InvertColorMatrix
-import top.chengdongqing.weui.utils.weClickable
+import top.chengdongqing.weui.theme.WeTheme
+import top.chengdongqing.weui.util.weClickable
 import weui_kmp.shared.generated.resources.Res
 import weui_kmp.shared.generated.resources.ic_arrow_right
 import weui_kmp.shared.generated.resources.ic_footer_link
 import weui_kmp.shared.generated.resources.ic_logo
 
 @Composable
-fun HomeScreen(onNavigateToScreen: (key: NavKey) -> Unit) {
-    var current by rememberSaveable { mutableStateOf<Int?>(null) }
+fun HomeScreen(
+    viewModel: HomeViewModel = viewModel(factory = viewModelFactory {
+        initializer {
+            HomeViewModel()
+        }
+    }),
+    onNavigateToScreen: (key: NavKey) -> Unit
+) {
+    val menuTree by viewModel.menuTree.collectAsStateWithLifecycle()
+    val expandedIndex by viewModel.expandedIndex
 
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            .background(WeTheme.colorScheme.background)
             .statusBarsPadding()
             .padding(horizontal = 16.dp)
     ) {
-        item { HomeHeader() }
-        itemsIndexed(MenuGroups) { index, item ->
-            MenuGroup(
-                item,
-                expanded = index == current,
-                onNavigateToScreen
-            ) {
-                current = if (current == index) null else index
-            }
-        }
         item {
-            Spacer(Modifier.height(60.dp))
+            HomeHeader()
+        }
+
+        itemsIndexed(menuTree) { index, group ->
+            MenuGroup(
+                group = group,
+                expanded = index == expandedIndex,
+                onToggleExpand = {
+                    val targetIndex = if (expandedIndex == index) null else index
+                    viewModel.setExpandedIndex(targetIndex)
+                },
+                onNavigateToScreen = onNavigateToScreen
+            )
+        }
+
+        item {
+            Spacer(modifier = Modifier.height(60.dp))
             HomeFooter()
         }
     }
@@ -78,19 +91,23 @@ fun HomeScreen(onNavigateToScreen: (key: NavKey) -> Unit) {
 
 @Composable
 private fun HomeHeader() {
-    Column(Modifier.padding(40.dp)) {
+    val isDark = isSystemInDarkTheme()
+
+    Column(modifier = Modifier.padding(40.dp)) {
         Image(
             painter = painterResource(Res.drawable.ic_logo),
             contentDescription = "WeUI",
-            colorFilter = if (MaterialTheme.homeColorScheme.iconColor != Color.Unspecified) ColorFilter.tint(
-                MaterialTheme.homeColorScheme.iconColor
-            ) else null,
+            colorFilter = if (isDark) {
+                ColorFilter.tint(Color.White.copy(0.8f))
+            } else {
+                null
+            },
             modifier = Modifier.height(21.dp)
         )
         Spacer(modifier = Modifier.height(19.dp))
         Text(
             text = "WeUI 是一套同微信原生视觉体验一致的基础样式库，由微信官方设计团队为微信内网页和微信小程序量身设计，令用户的使用感知更加统一。",
-            color = MaterialTheme.homeColorScheme.headerColor,
+            color = WeTheme.colorScheme.textSecondary,
             fontSize = 14.sp
         )
     }
@@ -98,6 +115,8 @@ private fun HomeHeader() {
 
 @Composable
 private fun HomeFooter() {
+    val isDark = isSystemInDarkTheme()
+
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -107,7 +126,7 @@ private fun HomeFooter() {
         Image(
             painter = painterResource(Res.drawable.ic_footer_link),
             contentDescription = null,
-            colorFilter = if (MaterialTheme.homeColorScheme.iconColor != Color.Unspecified) {
+            colorFilter = if (isDark) {
                 ColorFilter.colorMatrix(InvertColorMatrix)
             } else {
                 null
@@ -121,27 +140,31 @@ private fun HomeFooter() {
 private fun MenuGroup(
     group: MenuItem,
     expanded: Boolean,
-    onNavigateToScreen: (key: NavKey) -> Unit,
-    onToggleExpand: () -> Unit
+    onToggleExpand: () -> Unit,
+    onNavigateToScreen: (key: NavKey) -> Unit
 ) {
     Column(
-        Modifier
+        modifier = Modifier
             .clip(RoundedCornerShape(4.dp))
-            .background(MaterialTheme.colorScheme.onBackground)
+            .background(WeTheme.colorScheme.surface)
     ) {
-        MenuGroupHeader(group, expanded) {
+        MenuGroupHeader(
+            group = group,
+            expanded = expanded
+        ) {
             if (group.navKey != null) {
                 onNavigateToScreen(group.navKey)
             } else {
                 onToggleExpand()
             }
         }
+
         if (group.children != null) {
             AnimatedVisibility(visible = expanded) {
                 Column {
-                    val children = remember { group.children.sortedBy { it.label } }
-                    children.forEachIndexed { index, item ->
+                    group.children.forEachIndexed { index, item ->
                         MenuGroupItem(item, onNavigateToScreen)
+
                         if (index < group.children.lastIndex) {
                             WeDivider(Modifier.padding(horizontal = 20.dp))
                         }
@@ -153,7 +176,13 @@ private fun MenuGroup(
 }
 
 @Composable
-private fun MenuGroupHeader(group: MenuItem, expanded: Boolean, onClick: () -> Unit) {
+private fun MenuGroupHeader(
+    group: MenuItem,
+    expanded: Boolean,
+    onClick: () -> Unit
+) {
+    val isDark = isSystemInDarkTheme()
+
     Row(
         Modifier
             .alpha(if (expanded) 0.5f else 1f)
@@ -163,17 +192,20 @@ private fun MenuGroupHeader(group: MenuItem, expanded: Boolean, onClick: () -> U
     ) {
         Text(
             text = group.label,
-            color = MaterialTheme.homeColorScheme.fontColor,
+            color = WeTheme.colorScheme.textPrimary,
             fontSize = 17.sp,
             modifier = Modifier.weight(1f)
         )
+
         group.iconRes?.let {
             Image(
                 painter = painterResource(it),
                 contentDescription = null,
-                colorFilter = if (MaterialTheme.homeColorScheme.iconColor != Color.Unspecified) ColorFilter.tint(
-                    MaterialTheme.homeColorScheme.iconColor
-                ) else null,
+                colorFilter = if (isDark) {
+                    ColorFilter.tint(Color.White.copy(0.8f))
+                } else {
+                    null
+                },
                 modifier = Modifier.size(30.dp)
             )
         }
@@ -197,30 +229,14 @@ private fun MenuGroupItem(
     ) {
         Text(
             text = item.label,
-            color = MaterialTheme.homeColorScheme.fontColor,
+            color = WeTheme.colorScheme.textPrimary,
             fontSize = 17.sp,
             modifier = Modifier.weight(1f)
         )
         Icon(
             painter = painterResource(Res.drawable.ic_arrow_right),
             contentDescription = null,
-            tint = MaterialTheme.homeColorScheme.arrowColor
+            tint = WeTheme.colorScheme.textSecondary
         )
     }
 }
-
-private data class HomeColors(
-    val iconColor: Color,
-    val headerColor: Color,
-    val fontColor: Color,
-    val arrowColor: Color
-)
-
-private val MaterialTheme.homeColorScheme: HomeColors
-    @Composable
-    get() = HomeColors(
-        iconColor = if (isSystemInDarkTheme()) Color.White.copy(0.8f) else Color.Unspecified,
-        headerColor = colorScheme.onSecondary,
-        fontColor = colorScheme.onPrimary,
-        arrowColor = colorScheme.onSecondary
-    )

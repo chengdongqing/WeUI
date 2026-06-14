@@ -94,7 +94,7 @@ fun AddressFormScreen(
             WeButton(
                 text = "确定",
                 modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
-                disabled = !isAllFilled
+                enabled = isAllFilled
             ) {
                 val value = Address(
                     name = address["name"]!!,
@@ -104,10 +104,10 @@ fun AddressFormScreen(
                 coroutineScope.launch {
                     if (id == null) {
                         addressViewModel.insert(value)
-                        toast.show("添加成功", ToastIcon.SUCCESS)
+                        toast.show("添加成功", ToastIcon.Success)
                     } else {
                         addressViewModel.update(value.copy(id = id))
-                        toast.show("修改成功", ToastIcon.SUCCESS)
+                        toast.show("修改成功", ToastIcon.Success)
                     }
                     delay(1000.milliseconds)
 

@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,25 +21,26 @@ import top.chengdongqing.weui.charts.model.ChartData
 import top.chengdongqing.weui.components.ButtonType
 import top.chengdongqing.weui.components.WeButton
 import top.chengdongqing.weui.components.WeScreen
-import top.chengdongqing.weui.theme.PrimaryColor
-import top.chengdongqing.weui.theme.WarningColor
-import top.chengdongqing.weui.utils.format
-import top.chengdongqing.weui.utils.randomFloat
-import top.chengdongqing.weui.utils.rememberToggleState
+import top.chengdongqing.weui.theme.GreenPrimary
+import top.chengdongqing.weui.theme.WeTheme
+import top.chengdongqing.weui.theme.YellowWarning
+import top.chengdongqing.weui.util.format
+import top.chengdongqing.weui.util.randomFloat
+import top.chengdongqing.weui.util.rememberToggleState
 
 @Composable
 fun BarChartScreen(onBack: () -> Unit) {
     WeScreen(
         title = "BarChart",
         description = "柱状图",
-        containerColor = MaterialTheme.colorScheme.surface,
+        containerColor = WeTheme.colorScheme.surface,
         verticalArrangement = Arrangement.spacedBy(20.dp),
         onBack = onBack
     ) {
         var dataSource by rememberSaveable { mutableStateOf(buildData()) }
         val (color, toggleColor) = rememberToggleState(
-            defaultValue = PrimaryColor.copy(0.8f),
-            reverseValue = WarningColor.copy(0.8f)
+            defaultValue = GreenPrimary.copy(0.8f),
+            reverseValue = YellowWarning.copy(0.8f)
         )
         val (maxBarWidth, toggleMaxBarWidth) = rememberToggleState(
             defaultValue = 20,
@@ -73,14 +73,14 @@ fun BarChartScreen(onBack: () -> Unit) {
         WeButton(text = "更新数据") {
             dataSource = buildData(if (scrollable) 24 else 6)
         }
-        WeButton(text = "切换颜色", type = ButtonType.DANGER) {
+        WeButton(text = "切换颜色", type = ButtonType.Danger) {
             toggleColor()
         }
-        WeButton(text = "切换横向滚动", type = ButtonType.PLAIN) {
+        WeButton(text = "切换横向滚动", type = ButtonType.Plain) {
             dataSource = buildData(if (scrollable) 6 else 24)
             scrollable = !scrollable
         }
-        WeButton(text = "切换最大柱宽", type = ButtonType.PLAIN) {
+        WeButton(text = "切换最大柱宽", type = ButtonType.Plain) {
             toggleMaxBarWidth()
         }
         Spacer(modifier = Modifier.height(20.dp))

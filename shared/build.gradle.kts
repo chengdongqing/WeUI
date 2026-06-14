@@ -88,10 +88,7 @@ kotlin {
 
 dependencies {
     androidRuntimeClasspath(libs.compose.uiTooling)
-    add("kspJvm", libs.room.compiler)
-    add("kspWasmJs", libs.room.compiler)
-    add("kspIosArm64", libs.room.compiler)
-    add("kspIosSimulatorArm64", libs.room.compiler)
+    ksp(libs.room.compiler)
 }
 
 room3 {

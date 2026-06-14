@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import top.chengdongqing.weui.charts.model.ChartData
 import top.chengdongqing.weui.charts.model.PieChartLegendItem
-import top.chengdongqing.weui.utils.generateColors
+import top.chengdongqing.weui.util.generateColors
 
 @Composable
 fun WePieChart(

@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
@@ -27,6 +26,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import top.chengdongqing.weui.theme.WeTheme
 
 data class ActionSheetItem(
     val label: String,
@@ -66,7 +66,7 @@ fun WeActionSheet(
                 ) {
                     Text(
                         text = it,
-                        color = MaterialTheme.colorScheme.onSecondary,
+                        color = WeTheme.colorScheme.surface,
                         fontSize = 12.sp
                     )
                 }
@@ -99,14 +99,14 @@ fun WeActionSheet(
                         }
                         Text(
                             text = item.label,
-                            color = item.color ?: MaterialTheme.colorScheme.onPrimary,
+                            color = item.color ?: WeTheme.colorScheme.textPrimary,
                             fontSize = 17.sp
                         )
                     }
                     item.description?.let {
                         Text(
                             text = it,
-                            color = MaterialTheme.colorScheme.onSecondary,
+                            color = WeTheme.colorScheme.textSecondary,
                             fontSize = 12.sp
                         )
                     }
@@ -117,7 +117,7 @@ fun WeActionSheet(
                 modifier = Modifier
                     .height(8.dp)
                     .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.outline)
+                    .background(WeTheme.colorScheme.divider)
             )
 
             Column(
@@ -132,7 +132,7 @@ fun WeActionSheet(
             ) {
                 Text(
                     text = "取消",
-                    color = MaterialTheme.colorScheme.onPrimary,
+                    color = WeTheme.colorScheme.textPrimary,
                     fontSize = 17.sp
                 )
             }

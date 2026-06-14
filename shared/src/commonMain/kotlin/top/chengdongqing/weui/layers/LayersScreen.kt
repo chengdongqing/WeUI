@@ -20,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Color
@@ -31,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import kotlinx.coroutines.delay
 import top.chengdongqing.weui.components.WeScreen
-import top.chengdongqing.weui.utils.weClickable
+import top.chengdongqing.weui.util.weClickable
 import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
@@ -58,7 +59,9 @@ fun LayersScreen(onBack: () -> Unit) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .weClickable { expanded = !expanded }
+                .weClickable {
+                    expanded = !expanded
+                }
                 .padding(top = 150.dp),
             contentAlignment = Alignment.TopCenter
         ) {
@@ -84,13 +87,13 @@ fun LayersScreen(onBack: () -> Unit) {
                                 drawContent()
                             }
                         }
-                        .then(
+                        .composed {
                             if (item.hasBorder) {
-                                Modifier.border(1.dp, Color.hsl(0f, 0f, 0.8f, 0.5f))
+                                this.border(1.dp, Color.hsl(0f, 0f, 0.8f, 0.5f))
                             } else {
-                                Modifier.background(item.color)
+                                this.background(item.color)
                             }
-                        ),
+                        },
                     contentAlignment = Alignment.BottomCenter
                 ) {
                     // 标题（展开后显示）

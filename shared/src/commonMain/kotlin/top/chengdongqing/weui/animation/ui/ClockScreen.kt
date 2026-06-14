@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -22,8 +21,9 @@ import kotlinx.datetime.TimeZone
 import top.chengdongqing.weui.components.WeClock
 import top.chengdongqing.weui.components.WeScreen
 import top.chengdongqing.weui.components.WeSwitch
-import top.chengdongqing.weui.theme.BorderColorLight
-import top.chengdongqing.weui.theme.PrimaryColor
+import top.chengdongqing.weui.theme.DividerLight
+import top.chengdongqing.weui.theme.GreenPrimary
+import top.chengdongqing.weui.theme.WeTheme
 
 @Composable
 fun ClockScreen(onBack: () -> Unit) {
@@ -42,7 +42,7 @@ fun ClockScreen(onBack: () -> Unit) {
         ) {
             Text(
                 text = "流线扫秒",
-                color = MaterialTheme.colorScheme.onSecondary,
+                color = WeTheme.colorScheme.textSecondary,
                 fontSize = 14.sp
             )
             WeSwitch(isSmoothSweep) {
@@ -62,7 +62,7 @@ fun ClockScreen(onBack: () -> Unit) {
                 Spacer(modifier = Modifier.height(20.dp))
                 Text(
                     text = item.name,
-                    color = MaterialTheme.colorScheme.onSecondary,
+                    color = WeTheme.colorScheme.textSecondary,
                     fontSize = 14.sp
                 )
             }
@@ -71,9 +71,9 @@ fun ClockScreen(onBack: () -> Unit) {
 }
 
 private val timeZoneList = listOf(
-    TimeZoneItem("上海（中国）", "Asia/Shanghai", BorderColorLight),
+    TimeZoneItem("上海（中国）", "Asia/Shanghai", DividerLight),
     TimeZoneItem("耶路撒冷（以色列）", "Asia/Jerusalem", Color.Yellow),
-    TimeZoneItem("阿姆斯特丹（荷兰）", "Europe/Amsterdam", PrimaryColor),
+    TimeZoneItem("阿姆斯特丹（荷兰）", "Europe/Amsterdam", GreenPrimary),
     TimeZoneItem("洛杉矶（美国）", "America/Los_Angeles", Color.Magenta),
     TimeZoneItem("悉尼（澳大利亚）", "Australia/Sydney", Color.Cyan),
     TimeZoneItem("奥克兰（新西兰）", "Pacific/Auckland", Color.DarkGray)

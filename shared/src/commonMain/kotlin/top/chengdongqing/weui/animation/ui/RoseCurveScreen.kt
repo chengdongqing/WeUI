@@ -8,13 +8,13 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import top.chengdongqing.weui.components.WeScreen
+import top.chengdongqing.weui.theme.GreenPrimary
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -27,8 +27,6 @@ fun RoseCurveScreen(onBack: () -> Unit) {
         targetValue = 10f,
         animationSpec = infiniteRepeatable(tween(5000), RepeatMode.Reverse)
     )
-
-    val primaryColor = MaterialTheme.colorScheme.primary
 
     WeScreen(
         title = "RoseCurve",
@@ -53,7 +51,7 @@ fun RoseCurveScreen(onBack: () -> Unit) {
             }
             drawPath(
                 path = path,
-                color = primaryColor,
+                color = GreenPrimary,
                 style = Stroke(width = 3f)
             )
         }

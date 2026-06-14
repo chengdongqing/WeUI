@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -48,7 +47,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import kotlinx.coroutines.delay
-import top.chengdongqing.weui.utils.weClickable
+import top.chengdongqing.weui.theme.WeTheme
+import top.chengdongqing.weui.util.weClickable
 import kotlin.math.roundToInt
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -137,7 +137,7 @@ fun WePopup(
                         }
                     )
                     .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
-                    .background(MaterialTheme.colorScheme.onBackground)
+                    .background(WeTheme.colorScheme.surface)
                     .weClickable { }
                     .padding(padding)
                     .onSizeChanged {
@@ -203,7 +203,7 @@ private fun DraggableLine() {
             modifier = Modifier
                 .size(40.dp, 4.dp)
                 .background(
-                    MaterialTheme.colorScheme.outline,
+                    WeTheme.colorScheme.divider,
                     RoundedCornerShape(2.dp)
                 )
         )
@@ -220,7 +220,7 @@ private fun PopupTitle(title: String) {
     ) {
         Text(
             text = title,
-            color = MaterialTheme.colorScheme.onPrimary,
+            color = WeTheme.colorScheme.textPrimary,
             fontSize = 17.sp,
             fontWeight = FontWeight.Bold
         )

@@ -3,7 +3,6 @@ package top.chengdongqing.weui.animation.ui
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableLongState
@@ -22,9 +21,10 @@ import androidx.compose.ui.unit.toIntSize
 import kotlinx.coroutines.isActive
 import org.jetbrains.compose.resources.imageResource
 import top.chengdongqing.weui.components.WeScreen
+import top.chengdongqing.weui.theme.StatusBarAppearanceEffect
 import top.chengdongqing.weui.theme.WeUITheme
-import top.chengdongqing.weui.utils.toIntOffset
-import top.chengdongqing.weui.utils.toRadians
+import top.chengdongqing.weui.util.toIntOffset
+import top.chengdongqing.weui.util.toRadians
 import weui_kmp.shared.generated.resources.Res
 import weui_kmp.shared.generated.resources.solar_system_earth
 import weui_kmp.shared.generated.resources.solar_system_moon
@@ -35,11 +35,13 @@ import kotlin.time.Clock
 
 @Composable
 fun SolarSystemScreen(onBack: () -> Unit) {
-    WeUITheme(darkTheme = true) {
+    StatusBarAppearanceEffect(isDark = false)
+
+    WeUITheme(isDark = true) {
         WeScreen(
             title = "SolarSystem",
             description = "太阳系动画",
-            containerColor = MaterialTheme.colorScheme.surface,
+            containerColor = Color.Black,
             onBack = onBack
         ) {
             // 图片资源

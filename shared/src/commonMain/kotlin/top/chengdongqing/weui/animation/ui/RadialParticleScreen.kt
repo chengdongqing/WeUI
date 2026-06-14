@@ -4,7 +4,6 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -19,6 +18,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.IntSize
 import kotlinx.coroutines.isActive
 import top.chengdongqing.weui.components.WeScreen
+import top.chengdongqing.weui.theme.GreenPrimary
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -42,8 +42,6 @@ fun RadialParticleScreen(onBack: () -> Unit) {
         }
     }
 
-    val primaryColor = MaterialTheme.colorScheme.primary
-
     WeScreen(
         title = "RadialParticle",
         description = "径向粒子",
@@ -58,7 +56,7 @@ fun RadialParticleScreen(onBack: () -> Unit) {
         ) {
             animState.balls.forEach { ball ->
                 drawCircle(
-                    color = primaryColor,
+                    color = GreenPrimary,
                     radius = ball.radius,
                     center = Offset(ball.x, ball.y)
                 )

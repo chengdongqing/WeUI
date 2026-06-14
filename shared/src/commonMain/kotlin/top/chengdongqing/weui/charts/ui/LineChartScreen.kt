@@ -3,7 +3,6 @@ package top.chengdongqing.weui.charts.ui
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,17 +16,18 @@ import top.chengdongqing.weui.charts.model.LineChartData
 import top.chengdongqing.weui.components.ButtonType
 import top.chengdongqing.weui.components.WeButton
 import top.chengdongqing.weui.components.WeScreen
-import top.chengdongqing.weui.theme.PrimaryColor
-import top.chengdongqing.weui.theme.WarningColor
-import top.chengdongqing.weui.utils.format
-import top.chengdongqing.weui.utils.randomFloat
+import top.chengdongqing.weui.theme.GreenPrimary
+import top.chengdongqing.weui.theme.WeTheme
+import top.chengdongqing.weui.theme.YellowWarning
+import top.chengdongqing.weui.util.format
+import top.chengdongqing.weui.util.randomFloat
 
 @Composable
 fun LineChartScreen(onBack: () -> Unit) {
     WeScreen(
         title = "LineChart",
         description = "折线图",
-        containerColor = MaterialTheme.colorScheme.surface,
+        containerColor = WeTheme.colorScheme.surface,
         verticalArrangement = Arrangement.spacedBy(20.dp),
         onBack = onBack
     ) {
@@ -36,7 +36,7 @@ fun LineChartScreen(onBack: () -> Unit) {
                 listOf(
                     LineChartData(
                         buildData(6),
-                        PrimaryColor.copy(0.8f)
+                        GreenPrimary.copy(0.8f)
                     )
                 )
             )
@@ -53,32 +53,32 @@ fun LineChartScreen(onBack: () -> Unit) {
                 add(
                     LineChartData(
                         buildData(),
-                        PrimaryColor.copy(0.8f)
+                        GreenPrimary.copy(0.8f)
                     )
                 )
                 if (dataSource.size == 2) {
                     add(
                         LineChartData(
                             buildData(),
-                            WarningColor.copy(0.8f)
+                            YellowWarning.copy(0.8f)
                         )
                     )
                 }
             }
         }
-        WeButton(text = "切换数量", type = ButtonType.PLAIN) {
+        WeButton(text = "切换数量", type = ButtonType.Plain) {
             dataSource = buildList {
                 add(
                     LineChartData(
                         buildData(),
-                        PrimaryColor.copy(0.8f)
+                        GreenPrimary.copy(0.8f)
                     )
                 )
                 if (dataSource.size == 1) {
                     add(
                         LineChartData(
                             buildData(),
-                            WarningColor.copy(0.8f)
+                            YellowWarning.copy(0.8f)
                         )
                     )
                 }

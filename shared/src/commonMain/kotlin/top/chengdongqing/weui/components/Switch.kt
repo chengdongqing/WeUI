@@ -8,7 +8,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.style.ExperimentalFoundationStyleApi
 import androidx.compose.foundation.style.Style
 import androidx.compose.foundation.style.styleable
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -17,7 +16,8 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import top.chengdongqing.weui.utils.weClickable
+import top.chengdongqing.weui.theme.WeTheme
+import top.chengdongqing.weui.util.weClickable
 
 /**
  * 开关
@@ -40,8 +40,8 @@ fun WeSwitch(
     )
     val haptic = LocalHapticFeedback.current
 
-    val primaryColor = MaterialTheme.colorScheme.primary
-    val outlineColor = MaterialTheme.colorScheme.outline
+    val primaryColor = WeTheme.colorScheme.primary
+    val outlineColor = WeTheme.colorScheme.divider
 
     Box(
         modifier = Modifier

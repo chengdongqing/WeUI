@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,21 +17,22 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import top.chengdongqing.weui.theme.WeTheme
 
 enum class NotificationBarEffect {
-    ELLIPSIS,
-    SCROLL,
-    WRAP
+    Ellipsis,
+    Scroll,
+    Wrap
 }
 
 @Composable
 fun WeNotificationBar(
     content: String,
-    effect: NotificationBarEffect = NotificationBarEffect.SCROLL,
+    effect: NotificationBarEffect = NotificationBarEffect.Scroll,
     scrollSpacingFraction: Float = 1f,
     scrollVelocity: Dp = MarqueeDefaults.Velocity,
-    colors: NotificationBarColors = MaterialTheme.notificationBarColorScheme,
-    padding: PaddingValues = if (effect == NotificationBarEffect.SCROLL) {
+    colors: NotificationBarColors = WeTheme.notificationBarColorScheme,
+    padding: PaddingValues = if (effect == NotificationBarEffect.Scroll) {
         PaddingValues(vertical = 12.dp)
     } else {
         PaddingValues(horizontal = 16.dp, vertical = 12.dp)
@@ -49,10 +49,10 @@ fun WeNotificationBar(
             text = content,
             color = colors.contentColor,
             fontSize = 13.sp,
-            maxLines = if (effect == NotificationBarEffect.WRAP) Int.MAX_VALUE else 1,
-            softWrap = effect == NotificationBarEffect.WRAP,
-            overflow = if (effect == NotificationBarEffect.ELLIPSIS) TextOverflow.Ellipsis else TextOverflow.Visible,
-            modifier = if (effect == NotificationBarEffect.SCROLL) {
+            maxLines = if (effect == NotificationBarEffect.Wrap) Int.MAX_VALUE else 1,
+            softWrap = effect == NotificationBarEffect.Wrap,
+            overflow = if (effect == NotificationBarEffect.Ellipsis) TextOverflow.Ellipsis else TextOverflow.Visible,
+            modifier = if (effect == NotificationBarEffect.Scroll) {
                 Modifier.basicMarquee(
                     iterations = Int.MAX_VALUE,
                     repeatDelayMillis = 0,
@@ -72,9 +72,9 @@ data class NotificationBarColors(
     val contentColor: Color
 )
 
-val MaterialTheme.notificationBarColorScheme: NotificationBarColors
+val WeTheme.notificationBarColorScheme: NotificationBarColors
     @Composable
     get() = NotificationBarColors(
-        containerColor = colorScheme.errorContainer,
-        contentColor = colorScheme.error
+        containerColor = Color(red = 249, green = 222, blue = 220),
+        contentColor = colorScheme.danger
     )

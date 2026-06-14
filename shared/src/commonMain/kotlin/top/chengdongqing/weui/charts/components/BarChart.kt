@@ -8,7 +8,6 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -27,7 +26,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import top.chengdongqing.weui.charts.model.ChartData
-import top.chengdongqing.weui.utils.format
+import top.chengdongqing.weui.theme.WeTheme
+import top.chengdongqing.weui.util.format
 
 @Composable
 fun WeBarChart(
@@ -35,13 +35,13 @@ fun WeBarChart(
     modifier: Modifier = Modifier,
     height: Dp = 300.dp,
     barWidthRange: IntRange = 2..20,
-    color: Color = MaterialTheme.colorScheme.primary.copy(0.8f),
+    color: Color = WeTheme.colorScheme.primary.copy(0.8f),
     animationSpec: AnimationSpec<Float> = tween(durationMillis = 800),
     formatter: (Float) -> String = { it.format() }
 ) {
     val textMeasurer = rememberTextMeasurer()
     // 刻度颜色
-    val labelColor = MaterialTheme.colorScheme.onSecondary
+    val labelColor = WeTheme.colorScheme.textSecondary
     // 数据最大值
     val maxValue = remember(dataSource) { dataSource.maxOfOrNull { it.value } ?: 1f }
     // 每个数据项的动画实例

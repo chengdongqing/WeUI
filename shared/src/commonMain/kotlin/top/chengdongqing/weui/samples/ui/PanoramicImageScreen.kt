@@ -11,7 +11,7 @@ import top.chengdongqing.weui.components.ButtonType
 import top.chengdongqing.weui.components.WeButton
 import top.chengdongqing.weui.components.WePanoramicImage
 import top.chengdongqing.weui.components.WeScreen
-import top.chengdongqing.weui.utils.rememberToggleState
+import top.chengdongqing.weui.util.rememberToggleState
 import weui_kmp.shared.generated.resources.Res
 import weui_kmp.shared.generated.resources.panoramic_yosemite_park
 
@@ -31,7 +31,7 @@ fun PanoramicImageScreen(onBack: () -> Unit) {
 
         WePanoramicImage(image, scrollStep.value)
         Spacer(modifier = Modifier.height(40.dp))
-        WeButton(text = "切换滚动速度", type = ButtonType.PLAIN) {
+        WeButton(text = "切换滚动速度", type = ButtonType.Plain) {
             toggleScrollStep()
         }
     }

@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,6 +17,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.components.WeDivider
+import top.chengdongqing.weui.theme.WeTheme
 
 @Composable
 fun WeTextarea(
@@ -43,7 +43,7 @@ fun WeTextarea(
             if (label?.isNotEmpty() == true) {
                 Text(
                     text = label,
-                    color = MaterialTheme.colorScheme.onPrimary,
+                    color = WeTheme.colorScheme.textPrimary,
                     fontSize = 16.sp,
                     modifier = Modifier.width(labelWidth)
                 )
@@ -63,11 +63,11 @@ fun WeTextarea(
                 modifier = Modifier.weight(1f),
                 readOnly = disabled,
                 textStyle = TextStyle(
-                    color = MaterialTheme.colorScheme.onPrimary,
+                    color = WeTheme.colorScheme.textPrimary,
                     fontSize = 16.sp
                 ),
                 minLines = 3,
-                cursorBrush = SolidColor(MaterialTheme.colorScheme.primary)
+                cursorBrush = SolidColor(WeTheme.colorScheme.primary)
             ) { innerTextField ->
                 Box {
                     innerTextField()
@@ -75,7 +75,7 @@ fun WeTextarea(
                     if (localValue.isEmpty() && placeholder?.isNotEmpty() == true) {
                         Text(
                             text = placeholder,
-                            color = MaterialTheme.colorScheme.onSecondary,
+                            color = WeTheme.colorScheme.textSecondary,
                             fontSize = 16.sp
                         )
                     }
@@ -83,7 +83,7 @@ fun WeTextarea(
                     max?.let {
                         Text(
                             text = "${localValue.length}/$it",
-                            color = MaterialTheme.colorScheme.onSecondary,
+                            color = WeTheme.colorScheme.textSecondary,
                             fontSize = 14.sp,
                             modifier = Modifier.align(Alignment.BottomEnd)
                         )

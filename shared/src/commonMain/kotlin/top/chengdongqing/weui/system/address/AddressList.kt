@@ -15,7 +15,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AddCircleOutline
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -37,11 +36,11 @@ import top.chengdongqing.weui.components.WeDivider
 import top.chengdongqing.weui.components.rememberActionSheetState
 import top.chengdongqing.weui.components.rememberDialogState
 import top.chengdongqing.weui.components.rememberToastState
-import top.chengdongqing.weui.getClipboard
-import top.chengdongqing.weui.getRoomDatabaseBuilder
 import top.chengdongqing.weui.system.address.repository.Address
 import top.chengdongqing.weui.system.address.repository.AddressRepositoryImpl
-import top.chengdongqing.weui.theme.FontLinkColor
+import top.chengdongqing.weui.theme.PurpleLink
+import top.chengdongqing.weui.theme.WeTheme
+import top.chengdongqing.weui.util.getClipboard
 
 @Composable
 fun AddressList(
@@ -81,7 +80,7 @@ fun AddressList(
                                 dialog.show(title = "确定删除该地址吗？") {
                                     coroutineScope.launch {
                                         addressViewModel.delete(item)
-                                        toast.show("删除成功", ToastIcon.SUCCESS)
+                                        toast.show("删除成功", ToastIcon.Success)
                                     }
                                 }
                             }
@@ -94,7 +93,7 @@ fun AddressList(
                                         append("详细地址: ${item.addressDetail}")
                                     }
                                     getClipboard().setClipboardData(toSetData)
-                                    toast.show("已复制", ToastIcon.SUCCESS)
+                                    toast.show("已复制", ToastIcon.Success)
                                 }
                             }
                         }
@@ -125,13 +124,13 @@ private fun AddressListItem(address: Address, onLongClick: () -> Unit, onClick: 
     ) {
         Text(
             text = "${address.name}  ${address.phone}",
-            color = MaterialTheme.colorScheme.onPrimary,
+            color = WeTheme.colorScheme.textPrimary,
             fontSize = 17.sp
         )
         Spacer(modifier = Modifier.height(6.dp))
         Text(
             text = address.addressDetail,
-            color = MaterialTheme.colorScheme.onSecondary,
+            color = WeTheme.colorScheme.textSecondary,
             fontSize = 14.sp,
             overflow = TextOverflow.Ellipsis
         )
@@ -154,9 +153,9 @@ private fun AddAddressButton(onClick: () -> Unit) {
             imageVector = Icons.Outlined.AddCircleOutline,
             contentDescription = null,
             modifier = Modifier.size(27.dp),
-            tint = FontLinkColor
+            tint = PurpleLink
         )
         Spacer(modifier = Modifier.width(8.dp))
-        Text(text = "添加地址", color = FontLinkColor, fontSize = 17.sp)
+        Text(text = "添加地址", color = PurpleLink, fontSize = 17.sp)
     }
 }

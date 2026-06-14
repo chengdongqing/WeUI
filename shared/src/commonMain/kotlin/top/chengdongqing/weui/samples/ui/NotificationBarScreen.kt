@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -15,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import top.chengdongqing.weui.components.NotificationBarEffect
 import top.chengdongqing.weui.components.WeNotificationBar
 import top.chengdongqing.weui.components.WeScreen
+import top.chengdongqing.weui.theme.WeTheme
 
 @Composable
 fun NotificationBarScreen(onBack: () -> Unit) {
@@ -48,14 +48,14 @@ fun NotificationBarScreen(onBack: () -> Unit) {
             Title("单行展示")
             WeNotificationBar(
                 content,
-                effect = NotificationBarEffect.ELLIPSIS
+                effect = NotificationBarEffect.Ellipsis
             )
         }
         Column {
             Title("多行展示")
             WeNotificationBar(
                 content,
-                effect = NotificationBarEffect.WRAP
+                effect = NotificationBarEffect.Wrap
             )
         }
     }
@@ -65,7 +65,7 @@ fun NotificationBarScreen(onBack: () -> Unit) {
 private fun Title(title: String) {
     Text(
         text = title,
-        color = MaterialTheme.colorScheme.onSecondary,
+        color = WeTheme.colorScheme.textSecondary,
         modifier = Modifier.padding(start = 20.dp)
     )
     Spacer(modifier = Modifier.height(10.dp))

@@ -20,7 +20,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.toIntSize
 import kotlinx.coroutines.isActive
-import top.chengdongqing.weui.utils.toIntOffset
+import top.chengdongqing.weui.util.toIntOffset
 
 @Composable
 fun WePanoramicImage(image: ImageBitmap, scrollStep: Float = 0.75f) {

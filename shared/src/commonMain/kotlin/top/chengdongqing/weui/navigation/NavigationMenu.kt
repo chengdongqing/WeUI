@@ -17,7 +17,7 @@ data class MenuItem(
     val children: List<MenuItem>? = null
 )
 
-val MenuGroups = listOf(
+val MenuTreeData = listOf(
     MenuItem(
         label = "基础组件",
         iconRes = Res.drawable.ic_nav_layout,

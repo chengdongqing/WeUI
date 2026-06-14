@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,7 +24,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.components.WeDivider
-import top.chengdongqing.weui.utils.weClickable
+import top.chengdongqing.weui.theme.WeTheme
+import top.chengdongqing.weui.util.weClickable
 
 @Composable
 fun WeInput(
@@ -48,7 +48,7 @@ fun WeInput(
             if (label?.isNotEmpty() == true) {
                 Text(
                     text = label,
-                    color = MaterialTheme.colorScheme.onPrimary,
+                    color = WeTheme.colorScheme.textPrimary,
                     fontSize = 16.sp,
                     modifier = Modifier.width(labelWidth)
                 )
@@ -65,7 +65,7 @@ fun WeInput(
                 readOnly = disabled,
                 singleLine = true,
                 textStyle = TextStyle(
-                    color = MaterialTheme.colorScheme.onPrimary,
+                    color = WeTheme.colorScheme.textPrimary,
                     fontSize = 16.sp,
                     textAlign = textAlign
                 ),
@@ -73,7 +73,7 @@ fun WeInput(
                 keyboardActions = keyboardActions,
                 visualTransformation = if (keyboardOptions.keyboardType == KeyboardType.Password)
                     PasswordVisualTransformation() else VisualTransformation.None,
-                cursorBrush = SolidColor(MaterialTheme.colorScheme.primary)
+                cursorBrush = SolidColor(WeTheme.colorScheme.primary)
             ) { innerTextField ->
                 Box(
                     modifier = Modifier
@@ -91,7 +91,7 @@ fun WeInput(
                     if (localValue.isEmpty() && placeholder?.isNotEmpty() == true) {
                         Text(
                             text = placeholder,
-                            color = MaterialTheme.colorScheme.onSecondary,
+                            color = WeTheme.colorScheme.textSecondary,
                             fontSize = 16.sp
                         )
                     }

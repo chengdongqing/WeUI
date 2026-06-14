@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
@@ -30,7 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import top.chengdongqing.weui.theme.FontLinkColor
+import top.chengdongqing.weui.theme.PurpleLink
+import top.chengdongqing.weui.theme.WeTheme
 
 /**
  * 对话框
@@ -50,7 +50,7 @@ fun WeDialog(
     content: String? = null,
     okText: String = "确定",
     cancelText: String = "取消",
-    okColor: Color = FontLinkColor,
+    okColor: Color = PurpleLink,
     onOk: () -> Unit,
     onCancel: (() -> Unit)? = null,
     onDismiss: () -> Unit
@@ -65,7 +65,7 @@ fun WeDialog(
             modifier = Modifier
                 .clip(RoundedCornerShape(12.dp))
                 .fillMaxWidth(0.8f)
-                .background(MaterialTheme.colorScheme.onBackground)
+                .background(WeTheme.colorScheme.surface)
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -81,7 +81,7 @@ fun WeDialog(
                             start = 24.dp,
                             end = 24.dp
                         ),
-                    color = MaterialTheme.colorScheme.onPrimary,
+                    color = WeTheme.colorScheme.textPrimary,
                     fontSize = 17.sp,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center
@@ -92,7 +92,7 @@ fun WeDialog(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 24.dp),
-                        color = MaterialTheme.colorScheme.onSecondary,
+                        color = WeTheme.colorScheme.textSecondary,
                         fontSize = 17.sp,
                         textAlign = TextAlign.Center
                     )
@@ -114,7 +114,7 @@ fun WeDialog(
                         ) {
                             Text(
                                 text = cancelText,
-                                color = MaterialTheme.colorScheme.onPrimary,
+                                color = WeTheme.colorScheme.textPrimary,
                                 fontSize = 17.sp,
                                 fontWeight = FontWeight.Bold
                             )
@@ -122,7 +122,7 @@ fun WeDialog(
                         Box(
                             modifier = Modifier
                                 .size(0.5.dp, 56.dp)
-                                .background(MaterialTheme.colorScheme.outline)
+                                .background(WeTheme.colorScheme.divider)
                         )
                     }
                     Box(
@@ -160,7 +160,7 @@ interface DialogState {
         content: String? = null,
         okText: String = "确定",
         cancelText: String = "取消",
-        okColor: Color = FontLinkColor,
+        okColor: Color = PurpleLink,
         closeOnAction: Boolean = true,
         onCancel: (() -> Unit)? = {},
         onOk: (() -> Unit)? = null

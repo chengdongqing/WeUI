@@ -15,15 +15,16 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.painterResource
+import top.chengdongqing.weui.theme.WeTheme
 import weui_kmp.shared.generated.resources.Res
 import weui_kmp.shared.generated.resources.ic_back_circle_filled
 
@@ -44,7 +45,7 @@ fun WeScreen(
     title: String,
     description: String,
     padding: PaddingValues = PaddingValues(16.dp),
-    containerColor: Color = MaterialTheme.colorScheme.background,
+    containerColor: Color = WeTheme.colorScheme.background,
     scrollEnabled: Boolean = true,
     horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
     verticalArrangement: Arrangement.Vertical = Arrangement.Top,
@@ -52,17 +53,17 @@ fun WeScreen(
     content: @Composable ColumnScope.() -> Unit
 ) {
     Column(
-        Modifier
+        modifier = Modifier
             .fillMaxSize()
             .background(containerColor)
             .statusBarsPadding()
-            .then(
+            .composed {
                 if (scrollEnabled) {
-                    Modifier.verticalScroll(rememberScrollState())
+                    this.verticalScroll(rememberScrollState())
                 } else {
-                    Modifier
+                    this
                 }
-            )
+            }
     ) {
         Column(
             modifier = Modifier
@@ -73,19 +74,19 @@ fun WeScreen(
                 painter = painterResource(Res.drawable.ic_back_circle_filled),
                 contentDescription = "go back",
                 modifier = Modifier.clickable(onClick = onBack),
-                tint = MaterialTheme.colorScheme.onPrimary
+                tint = WeTheme.colorScheme.textPrimary
             )
             Spacer(Modifier.height(12.dp))
             Text(
                 text = title,
-                color = MaterialTheme.colorScheme.onPrimary,
+                color = WeTheme.colorScheme.textPrimary,
                 fontSize = 20.sp,
                 lineHeight = 32.sp
             )
             Spacer(Modifier.height(4.dp))
             Text(
                 text = description,
-                color = MaterialTheme.colorScheme.onSecondary,
+                color = WeTheme.colorScheme.textSecondary,
                 fontSize = 14.sp
             )
         }

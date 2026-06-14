@@ -4,7 +4,6 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -19,6 +18,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.IntSize
 import kotlinx.coroutines.isActive
 import top.chengdongqing.weui.components.WeScreen
+import top.chengdongqing.weui.theme.GreenPrimary
 
 @Composable
 fun SymmetryParticleScreen(onBack: () -> Unit) {
@@ -39,8 +39,6 @@ fun SymmetryParticleScreen(onBack: () -> Unit) {
             }
         }
     }
-
-    val primaryColor = MaterialTheme.colorScheme.primary
 
     WeScreen(
         title = "SymmetryParticle",
@@ -69,7 +67,7 @@ fun SymmetryParticleScreen(onBack: () -> Unit) {
 
             balls.forEach { offset ->
                 drawCircle(
-                    color = primaryColor,
+                    color = GreenPrimary,
                     radius = 10f,
                     center = offset
                 )

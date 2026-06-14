@@ -14,22 +14,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import top.chengdongqing.weui.theme.DangerColorLight
-import top.chengdongqing.weui.theme.FontColorDark
-import top.chengdongqing.weui.theme.FontColorLight
-import top.chengdongqing.weui.theme.PrimaryColor
+import top.chengdongqing.weui.theme.GreenPrimary
+import top.chengdongqing.weui.theme.RedDanger
+import top.chengdongqing.weui.theme.TextPrimaryDark
+import top.chengdongqing.weui.theme.TextPrimaryLight
 
 enum class ButtonType {
-    PRIMARY,
-    DANGER,
-    PLAIN
+    Primary,
+    Danger,
+    Plain
 }
 
 enum class ButtonSize(
@@ -37,9 +36,9 @@ enum class ButtonSize(
     val fontSize: TextUnit,
     val borderRadius: Dp = 8.dp
 ) {
-    LARGE(PaddingValues(vertical = 12.dp, horizontal = 24.dp), 17.sp),
-    MEDIUM(PaddingValues(vertical = 10.dp, horizontal = 24.dp), 14.sp),
-    SMALL(PaddingValues(vertical = 6.dp, horizontal = 12.dp), 14.sp, 6.dp)
+    Large(PaddingValues(vertical = 12.dp, horizontal = 24.dp), 17.sp),
+    Medium(PaddingValues(vertical = 10.dp, horizontal = 24.dp), 14.sp),
+    Small(PaddingValues(vertical = 6.dp, horizontal = 12.dp), 14.sp, 6.dp)
 }
 
 /**
@@ -49,7 +48,8 @@ enum class ButtonSize(
  * @param type 类型
  * @param size 大小
  * @param width 宽度
- * @param disabled 是否禁用
+ * @param prefix 前缀
+ * @param enabled 是否启用
  * @param loading 是否加载中
  * @param onClick 点击事件
  */
@@ -57,36 +57,36 @@ enum class ButtonSize(
 fun WeButton(
     text: String,
     modifier: Modifier = Modifier,
-    type: ButtonType = ButtonType.PRIMARY,
-    size: ButtonSize = ButtonSize.LARGE,
+    type: ButtonType = ButtonType.Primary,
+    size: ButtonSize = ButtonSize.Large,
     width: Dp = 184.dp,
-    disabled: Boolean = false,
+    prefix: (@Composable () -> Unit)? = null,
+    enabled: Boolean = true,
     loading: Boolean = false,
     onClick: (() -> Unit)? = null
 ) {
-    val colors = buttonColorSchemeOf(type)
-    val localDisabled = disabled || loading
+    val colors = colorSchemeOf(type, enabled)
+    val finalEnabled = enabled && !loading
 
     Box(
         Modifier
-            .width(if (size != ButtonSize.SMALL) width else Dp.Unspecified)
+            .width(if (size != ButtonSize.Small) width else Dp.Unspecified)
             .clip(RoundedCornerShape(size.borderRadius))
-            .clickable(
-                enabled = !localDisabled
-            ) {
-                if (!localDisabled) {
-                    onClick?.invoke()
-                }
+            .clickable(enabled = finalEnabled) {
+                onClick?.invoke()
             }
             .background(colors.containerColor)
             .padding(size.padding)
-            .alpha(if (disabled) 0.7f else 1f)
             .then(modifier),
         contentAlignment = Alignment.Center
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             if (loading) {
                 WeLoading(color = colors.contentColor)
+                Spacer(Modifier.width(8.dp))
+            }
+            prefix?.let {
+                it()
                 Spacer(Modifier.width(8.dp))
             }
 
@@ -105,22 +105,37 @@ private data class ButtonColors(
 )
 
 @Composable
-private fun buttonColorSchemeOf(type: ButtonType): ButtonColors {
+private fun colorSchemeOf(type: ButtonType, enabled: Boolean): ButtonColors {
+    val isDarkTheme = isSystemInDarkTheme()
+
     return when (type) {
-        ButtonType.PRIMARY -> {
-            ButtonColors(PrimaryColor, Color.White)
+        ButtonType.Primary -> ButtonColors(
+            if (enabled) GreenPrimary else {
+                if (isDarkTheme) {
+                    Color(0xFF373737)
+                } else {
+                    Color(0xFFDEDEDE)
+                }
+            },
+            if (enabled) Color.White else {
+                if (isDarkTheme) {
+                    Color(0xFFBBBBBB).copy(alpha = 0.4f)
+                } else {
+                    Color(0xFFBBBBBB)
+                }
+            }
+        )
+
+        ButtonType.Danger -> if (isDarkTheme) {
+            ButtonColors(RedDanger, TextPrimaryDark)
+        } else {
+            ButtonColors(Color.Black.copy(0.05f), RedDanger)
         }
 
-        ButtonType.DANGER -> if (isSystemInDarkTheme()) {
-            ButtonColors(DangerColorLight, FontColorDark)
+        ButtonType.Plain -> if (isDarkTheme) {
+            ButtonColors(Color.White.copy(0.1f), TextPrimaryDark)
         } else {
-            ButtonColors(Color.Black.copy(0.05f), DangerColorLight)
-        }
-
-        ButtonType.PLAIN -> if (isSystemInDarkTheme()) {
-            ButtonColors(Color.White.copy(0.1f), FontColorDark)
-        } else {
-            ButtonColors(Color.Black.copy(0.05f), FontColorLight)
+            ButtonColors(Color.Black.copy(0.05f), TextPrimaryLight)
         }
     }
 }

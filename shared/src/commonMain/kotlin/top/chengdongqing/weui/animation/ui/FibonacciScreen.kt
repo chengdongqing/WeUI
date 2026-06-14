@@ -9,12 +9,12 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import top.chengdongqing.weui.components.WeScreen
+import top.chengdongqing.weui.theme.GreenPrimary
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.min
@@ -32,9 +32,7 @@ fun FibonacciScreen(onBack: () -> Unit) {
             repeatMode = RepeatMode.Restart
         ), label = "angle"
     )
-
     val pointCount = 500
-    val primaryColor = MaterialTheme.colorScheme.primary
 
     WeScreen(
         title = "Fibonacci",
@@ -71,7 +69,7 @@ fun FibonacciScreen(onBack: () -> Unit) {
 
                 // 绘制点
                 drawCircle(
-                    color = primaryColor,
+                    color = GreenPrimary,
                     radius = 4f * perspective.toFloat(),
                     center = Offset(drawX, drawY)
                 )

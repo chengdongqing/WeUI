@@ -1,104 +1,94 @@
 package top.chengdongqing.weui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.Font
+import top.chengdongqing.weui.util.AppPlatform
+import top.chengdongqing.weui.util.getPlatform
 import weui_kmp.shared.generated.resources.Res
 import weui_kmp.shared.generated.resources.noto_sans_sc
 
-private val DarkColorScheme = darkColorScheme(
-    primary = PrimaryColor,
-    onPrimary = FontColorDark,
-    onSecondary = FontSecondaryColorDark,
-    background = BackgroundColorDark,
-    onBackground = OnBackgroundColorDark,
-    surface = Color.Black,
-    onSurface = BackgroundColorDark,
-    error = DangerColorDark,
-    errorContainer = OnBackgroundColorDark,
-    outline = BorderColorDark
+@Immutable
+data class WeColorScheme(
+    val primary: Color = GreenPrimary,
+    val danger: Color = RedDanger,
+    val link: Color = PurpleLink,
+    // 背景层级（从低到高）
+    val background: Color,       // 页面底色
+    val surface: Color,          // 卡片/列表容器
+    val surfaceVariant: Color,   // 输入框/次级容器
+    val elevated: Color,         // 浮层/弹窗
+    // 文本层级
+    val textPrimary: Color,
+    val textSecondary: Color,
+    val textTertiary: Color,     // 时间戳、占位符等
+    // 其他
+    val divider: Color,          // 分隔线
 )
 
-private val LightColorScheme = lightColorScheme(
-    primary = PrimaryColor,
-    onPrimary = FontColorLight,
-    onSecondary = FontSecondaryColorLight,
-    background = BackgroundColorLight,
-    onBackground = OnBackgroundColorLight,
+val LightColorScheme = WeColorScheme(
+    background = Grey_ED,
     surface = Color.White,
-    onSurface = BackgroundColorLight,
-    error = DangerColorLight,
-    errorContainer = Color(0xffFFFBE6),
-    outline = BorderColorLight
+    surfaceVariant = Grey_F7,
+    elevated = Color.White,
+    textPrimary = TextPrimaryLight,
+    textSecondary = TextSecondaryLight,
+    textTertiary = TextTertiaryLight,
+    divider = DividerLight,
 )
+
+val DarkColorScheme = WeColorScheme(
+    background = Dark_BG,
+    surface = Dark_Surface,
+    surfaceVariant = Dark_Surface2,
+    elevated = Dark_Elevated,
+    textPrimary = TextPrimaryDark,
+    textSecondary = TextSecondaryDark,
+    textTertiary = TextTertiaryDark,
+    divider = DividerDark,
+)
+
+val LocalColorScheme = staticCompositionLocalOf { LightColorScheme }
 
 @Composable
 fun WeUITheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    isDark: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
+    // 颜色方案
     val colorScheme = when {
-        darkTheme -> DarkColorScheme
+        isDark -> DarkColorScheme
         else -> LightColorScheme
     }
+    // 字体配置（仅web端需要）
+    val fontFamily = if (getPlatform() == AppPlatform.Web) {
+        FontFamily(Font(Res.font.noto_sans_sc))
+    } else {
+        null
+    }
 
-    val fontFamily = FontFamily(Font(Res.font.noto_sans_sc))
-
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography
-    ) {
+    MaterialTheme {
         CompositionLocalProvider(
             LocalTextStyle provides TextStyle(
                 fontFamily = fontFamily
-            )
+            ),
+            LocalColorScheme provides colorScheme
         ) {
-            Box(
-                // 仅在经典导航键的情况下加底部导航栏边距
-                Modifier.run {
-                    if (isClassicNavigationMode())
-                        navigationBarsPadding()
-                    else this
-                }
-            ) {
-                content()
-            }
+            content()
         }
     }
 }
 
-/**
- * 是否为经典导航键模式
- */
-@Composable
-fun isClassicNavigationMode(): Boolean {
-    val navInsets = WindowInsets.navigationBars
-    val density = LocalDensity.current
-
-    val isClassicMode by remember {
-        derivedStateOf {
-            val height = with(density) { navInsets.getBottom(density).toDp() }
-            height > 30.dp
-        }
-    }
-
-    return isClassicMode
+object WeTheme {
+    val colorScheme: WeColorScheme
+        @Composable
+        get() = LocalColorScheme.current
 }
