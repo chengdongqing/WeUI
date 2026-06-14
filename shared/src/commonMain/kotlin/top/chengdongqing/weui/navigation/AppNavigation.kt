@@ -16,6 +16,9 @@ import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import androidx.navigationevent.NavigationEventInfo
+import androidx.navigationevent.compose.NavigationBackHandler
+import androidx.navigationevent.compose.rememberNavigationEventState
 import top.chengdongqing.weui.animation.navigation.animationNavEntries
 import top.chengdongqing.weui.basic.navigation.basicNavEntries
 import top.chengdongqing.weui.charts.navigation.chartsNavEntries
@@ -95,3 +98,15 @@ private fun createExitTransition() = slideInHorizontally(
     targetOffsetX = { it },
     animationSpec = TRANSITION_ANIMATION_SPEC
 )
+
+@Composable
+fun BackHandler(
+    enabled: Boolean = true,
+    onBack: () -> Unit
+) {
+    NavigationBackHandler(
+        state = rememberNavigationEventState(NavigationEventInfo.None),
+        isBackEnabled = enabled,
+        onBackCompleted = onBack
+    )
+}

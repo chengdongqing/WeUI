@@ -5,9 +5,7 @@ import top.chengdongqing.weui.util.getRoomDatabaseBuilder
 
 class AddressRepositoryImpl : AddressRepository {
     private val database by lazy {
-        getRoomDatabaseBuilder()
-            .fallbackToDestructiveMigration(true)
-            .build()
+        AddressDatabase.getRoomDatabase(getRoomDatabaseBuilder())
     }
 
     override val addressList: Flow<List<Address>>

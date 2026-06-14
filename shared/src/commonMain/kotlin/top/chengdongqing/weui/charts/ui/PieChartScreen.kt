@@ -25,6 +25,16 @@ import top.chengdongqing.weui.util.rememberToggleState
 
 @Composable
 fun PieChartScreen(onBack: () -> Unit) {
+    val dataSource = rememberSaveable { mutableStateOf(buildData()) }
+    val (ringWidth, toggleRingWidth) = rememberToggleState(
+        defaultValue = 0.dp,
+        reverseValue = 40.dp
+    )
+    val (showLegend, toggleLegend) = rememberToggleState(
+        defaultValue = false,
+        reverseValue = true
+    )
+
     WeScreen(
         title = "PieChart",
         description = "饼图",
@@ -32,16 +42,6 @@ fun PieChartScreen(onBack: () -> Unit) {
         verticalArrangement = Arrangement.spacedBy(20.dp),
         onBack = onBack
     ) {
-        val dataSource = rememberSaveable { mutableStateOf(buildData()) }
-        val (ringWidth, toggleRingWidth) = rememberToggleState(
-            defaultValue = 0.dp,
-            reverseValue = 40.dp
-        )
-        val (showLegend, toggleLegend) = rememberToggleState(
-            defaultValue = false,
-            reverseValue = true
-        )
-
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center

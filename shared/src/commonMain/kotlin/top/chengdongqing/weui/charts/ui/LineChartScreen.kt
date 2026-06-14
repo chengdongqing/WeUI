@@ -24,6 +24,17 @@ import top.chengdongqing.weui.util.randomFloat
 
 @Composable
 fun LineChartScreen(onBack: () -> Unit) {
+    var dataSource by rememberSaveable {
+        mutableStateOf(
+            listOf(
+                LineChartData(
+                    buildData(6),
+                    GreenPrimary.copy(0.8f)
+                )
+            )
+        )
+    }
+
     WeScreen(
         title = "LineChart",
         description = "折线图",
@@ -31,17 +42,6 @@ fun LineChartScreen(onBack: () -> Unit) {
         verticalArrangement = Arrangement.spacedBy(20.dp),
         onBack = onBack
     ) {
-        var dataSource by rememberSaveable {
-            mutableStateOf(
-                listOf(
-                    LineChartData(
-                        buildData(6),
-                        GreenPrimary.copy(0.8f)
-                    )
-                )
-            )
-        }
-
         WeLineChart(
             dataSources = dataSource
         ) {
@@ -49,40 +49,10 @@ fun LineChartScreen(onBack: () -> Unit) {
         }
         Spacer(modifier = Modifier.height(40.dp))
         WeButton(text = "更新数据") {
-            dataSource = buildList {
-                add(
-                    LineChartData(
-                        buildData(),
-                        GreenPrimary.copy(0.8f)
-                    )
-                )
-                if (dataSource.size == 2) {
-                    add(
-                        LineChartData(
-                            buildData(),
-                            YellowWarning.copy(0.8f)
-                        )
-                    )
-                }
-            }
+            dataSource = updateData(dataSource)
         }
         WeButton(text = "切换数量", type = ButtonType.Plain) {
-            dataSource = buildList {
-                add(
-                    LineChartData(
-                        buildData(),
-                        GreenPrimary.copy(0.8f)
-                    )
-                )
-                if (dataSource.size == 1) {
-                    add(
-                        LineChartData(
-                            buildData(),
-                            YellowWarning.copy(0.8f)
-                        )
-                    )
-                }
-            }
+            dataSource = updateCount(dataSource)
         }
     }
 }
@@ -91,5 +61,39 @@ private fun buildData(size: Int = 6): List<ChartData> {
     return MutableList(size) { index ->
         val value = randomFloat(0f, 10000f)
         ChartData(value, "${index + 1}月")
+    }
+}
+
+private fun updateData(dataSource: List<LineChartData>) = buildList {
+    add(
+        LineChartData(
+            buildData(),
+            GreenPrimary.copy(0.8f)
+        )
+    )
+    if (dataSource.size == 2) {
+        add(
+            LineChartData(
+                buildData(),
+                YellowWarning.copy(0.8f)
+            )
+        )
+    }
+}
+
+private fun updateCount(dataSource: List<LineChartData>) = buildList {
+    add(
+        LineChartData(
+            buildData(),
+            GreenPrimary.copy(0.8f)
+        )
+    )
+    if (dataSource.size == 1) {
+        add(
+            LineChartData(
+                buildData(),
+                YellowWarning.copy(0.8f)
+            )
+        )
     }
 }

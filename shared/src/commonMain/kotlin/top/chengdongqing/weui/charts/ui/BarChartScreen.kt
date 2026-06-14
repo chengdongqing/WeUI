@@ -30,6 +30,18 @@ import top.chengdongqing.weui.util.rememberToggleState
 
 @Composable
 fun BarChartScreen(onBack: () -> Unit) {
+    var dataSource by rememberSaveable { mutableStateOf(buildData()) }
+    val (color, toggleColor) = rememberToggleState(
+        defaultValue = GreenPrimary.copy(0.8f),
+        reverseValue = YellowWarning.copy(0.8f)
+    )
+    val (maxBarWidth, toggleMaxBarWidth) = rememberToggleState(
+        defaultValue = 20,
+        reverseValue = 30
+    )
+    var scrollable by remember { mutableStateOf(false) }
+    val containerDpSize = LocalWindowInfo.current.containerDpSize
+
     WeScreen(
         title = "BarChart",
         description = "柱状图",
@@ -37,18 +49,6 @@ fun BarChartScreen(onBack: () -> Unit) {
         verticalArrangement = Arrangement.spacedBy(20.dp),
         onBack = onBack
     ) {
-        var dataSource by rememberSaveable { mutableStateOf(buildData()) }
-        val (color, toggleColor) = rememberToggleState(
-            defaultValue = GreenPrimary.copy(0.8f),
-            reverseValue = YellowWarning.copy(0.8f)
-        )
-        val (maxBarWidth, toggleMaxBarWidth) = rememberToggleState(
-            defaultValue = 20,
-            reverseValue = 30
-        )
-        var scrollable by remember { mutableStateOf(false) }
-        val containerDpSize = LocalWindowInfo.current.containerDpSize
-
         Box(
             modifier = if (scrollable) {
                 Modifier.horizontalScroll(rememberScrollState())

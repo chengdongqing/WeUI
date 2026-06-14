@@ -27,9 +27,9 @@ fun DropCardScreen(onBack: () -> Unit) {
     ) {
         val items = remember {
             mutableStateListOf(
-                "https://s.xiaopeng.com/xp-fe/mainsite/2023/p7i/m/p17.jpg",
+                "https://s1.xiaomiev.com/activity-outer-assets/0328/images/yu7_20250522/pc/19.jpg",
                 "https://s.xiaopeng.com/xp-fe/mainsite/2023/g6/v1_5/p5-4-1.jpg",
-                "https://s1.xiaomiev.com/activity-outer-assets/web/su7/1-3_m.jpg",
+                "https://s1.xiaomiev.com/activity-outer-assets/0328/images/su7_20260319/pc/38-1.png",
                 "https://s.xiaopeng.com/xp-fe/mainsite/2023/g92024/v2/Gu72d34fs245/m/p3-1.jpg",
                 "https://p.ampmake.com/lilibrary/688863524210496/fe2ee1c6-5c94-420a-bee0-7bb040f84f03.jpg"
             )

@@ -14,6 +14,10 @@ import top.chengdongqing.weui.samples.ui.IndexedListScreen
 import top.chengdongqing.weui.samples.ui.NotificationBarScreen
 import top.chengdongqing.weui.samples.ui.OrgTreeScreen
 import top.chengdongqing.weui.samples.ui.PanoramicImageScreen
+import top.chengdongqing.weui.samples.ui.ReorderableScreen
+import top.chengdongqing.weui.samples.ui.SearchBarScreen
+import top.chengdongqing.weui.samples.ui.paint.PaintScreen
+import top.chengdongqing.weui.theme.WeUITheme
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 fun EntryProviderScope<NavKey>.samplesNavEntries(onBack: () -> Unit) {
@@ -61,5 +65,22 @@ fun EntryProviderScope<NavKey>.samplesNavEntries(onBack: () -> Unit) {
         metadata = ListDetailSceneStrategy.detailPane()
     ) {
         IndexedListScreen(onBack)
+    }
+    entry<SamplesNavKey.SearchBar>(
+        metadata = ListDetailSceneStrategy.detailPane()
+    ) {
+        SearchBarScreen(onBack)
+    }
+    entry<SamplesNavKey.Reorderable>(
+        metadata = ListDetailSceneStrategy.detailPane()
+    ) {
+        ReorderableScreen(onBack)
+    }
+    entry<SamplesNavKey.Paint>(
+        metadata = ListDetailSceneStrategy.detailPane()
+    ) {
+        WeUITheme(isDark = false) {
+            PaintScreen(onBack)
+        }
     }
 }

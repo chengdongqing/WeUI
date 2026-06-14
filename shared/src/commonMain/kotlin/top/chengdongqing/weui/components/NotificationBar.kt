@@ -4,6 +4,7 @@ import androidx.compose.foundation.MarqueeDefaults
 import androidx.compose.foundation.MarqueeSpacing
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -74,7 +75,15 @@ data class NotificationBarColors(
 
 val WeTheme.notificationBarColorScheme: NotificationBarColors
     @Composable
-    get() = NotificationBarColors(
-        containerColor = Color(red = 249, green = 222, blue = 220),
-        contentColor = colorScheme.danger
-    )
+    get() {
+        val isDark = isSystemInDarkTheme()
+
+        return NotificationBarColors(
+            containerColor = if (isDark) {
+                colorScheme.surface
+            } else {
+                Color(red = 249, green = 222, blue = 220)
+            },
+            contentColor = colorScheme.danger
+        )
+    }

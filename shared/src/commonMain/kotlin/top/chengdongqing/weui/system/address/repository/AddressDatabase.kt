@@ -5,17 +5,23 @@ import androidx.room3.Database
 import androidx.room3.RoomDatabase
 import androidx.room3.RoomDatabaseConstructor
 
-@Database(
-    entities = [Address::class],
-    version = 1,
-    exportSchema = false
-)
-@ConstructedBy(AppDatabaseConstructor::class)
+@Database(entities = [Address::class], version = 1, exportSchema = false)
+@ConstructedBy(AddressDatabaseConstructor::class)
 abstract class AddressDatabase : RoomDatabase() {
     abstract fun addressDao(): AddressDao
+
+    companion object {
+        fun getRoomDatabase(
+            builder: Builder<AddressDatabase>
+        ): AddressDatabase {
+            return builder
+                .fallbackToDestructiveMigration(true)
+                .build()
+        }
+    }
 }
 
-@Suppress("NO_ACTUAL_FOR_EXPECT")
-expect object AppDatabaseConstructor : RoomDatabaseConstructor<AddressDatabase> {
+@Suppress("KotlinNoActualForExpect")
+expect object AddressDatabaseConstructor : RoomDatabaseConstructor<AddressDatabase> {
     override fun initialize(): AddressDatabase
 }

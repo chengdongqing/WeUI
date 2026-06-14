@@ -14,62 +14,53 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.produceState
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import kotlinx.coroutines.launch
 import top.chengdongqing.weui.components.WeDivider
 import top.chengdongqing.weui.components.loading.WeLoading
 import top.chengdongqing.weui.theme.WeTheme
-import top.chengdongqing.weui.util.getInitial
 
 @Composable
-fun WeIndexedList(labels: List<String>) {
+fun WeIndexedList(
+    labels: List<String>,
+    viewModel: IndexedListViewModel = viewModel(factory = viewModelFactory {
+        initializer {
+            IndexedListViewModel()
+        }
+    })
+) {
     val listState = rememberLazyListState()
     val scope = rememberCoroutineScope()
-    var loading by remember { mutableStateOf(false) }
-    val groups by produceState(initialValue = emptyMap(), key1 = labels) {
-        loading = true
-        value = labels.groupBy { it.getInitial() }
-            .entries.sortedWith { e1, e2 ->
-                val a = e1.key
-                val b = e2.key
-                when {
-                    a == '#' -> 1
-                    b == '#' -> -1
-                    else -> a.compareTo(b)
-                }
-            }
-            .associate { it.key to it.value }
-        loading = false
-    }
-    val indexMap by remember(groups) {
-        derivedStateOf {
-            calculateIndexMap(groups)
-        }
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.loadData(labels)
     }
 
-    if (loading) {
+    if (uiState.isLoading) {
         WeLoading()
-    }
-    Box(modifier = Modifier.fillMaxSize()) {
-        LazyColumn(
-            state = listState,
-            contentPadding = PaddingValues(bottom = 60.dp)
-        ) {
-            indexGroups(groups)
-        }
-        AlphabetIndexer(groups) { initial ->
-            indexMap[initial]?.let { targetIndex ->
-                scope.launch {
-                    listState.scrollToItem(targetIndex)
+    } else {
+        Box(modifier = Modifier.fillMaxSize()) {
+            LazyColumn(
+                state = listState,
+                contentPadding = PaddingValues(bottom = 60.dp)
+            ) {
+                indexGroups(uiState.groups)
+            }
+            AlphabetIndexer(uiState.groups) { initial ->
+                uiState.indexMap[initial]?.let { targetIndex ->
+                    scope.launch {
+                        listState.scrollToItem(targetIndex)
+                    }
                 }
             }
         }
@@ -105,16 +96,6 @@ private fun LazyListScope.indexGroups(groups: Map<Char, List<String>>) {
                     WeDivider(modifier = Modifier.padding(start = 16.dp, end = 30.dp))
                 }
             }
-        }
-    }
-}
-
-private fun calculateIndexMap(groups: Map<Char, List<String>>): Map<Char, Int> {
-    var currentIndex = 0
-    return buildMap {
-        groups.forEach { (initial, apks) ->
-            put(initial, currentIndex)
-            currentIndex += apks.size + 1
         }
     }
 }

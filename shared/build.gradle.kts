@@ -53,6 +53,7 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.coil.video)
             implementation(libs.pinyin)
+            implementation(libs.coil.network.okhttp)
         }
         iosMain.dependencies {
             implementation(libs.androidx.sqlite.bundled)
@@ -78,7 +79,7 @@ kotlin {
             implementation(libs.navigation.ui)
             implementation(libs.room.runtime)
             implementation(libs.coil.compose)
-            implementation(libs.coil.network)
+            implementation(libs.coil.network.ktor)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

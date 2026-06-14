@@ -94,6 +94,15 @@ sealed interface SamplesNavKey {
 
     @Serializable
     data object IndexedList : NavKey
+
+    @Serializable
+    data object SearchBar : NavKey
+
+    @Serializable
+    data object Reorderable : NavKey
+
+    @Serializable
+    data object Paint : NavKey
 }
 
 @Serializable

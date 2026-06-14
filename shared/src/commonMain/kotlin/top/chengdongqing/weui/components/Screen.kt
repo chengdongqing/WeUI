@@ -25,6 +25,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.painterResource
 import top.chengdongqing.weui.theme.WeTheme
+import top.chengdongqing.weui.util.AppPlatform
+import top.chengdongqing.weui.util.getPlatform
 import weui_kmp.shared.generated.resources.Res
 import weui_kmp.shared.generated.resources.ic_back_circle_filled
 
@@ -70,12 +72,14 @@ fun WeScreen(
                 .padding(horizontal = 40.dp)
                 .padding(bottom = 40.dp, top = 10.dp)
         ) {
-            Icon(
-                painter = painterResource(Res.drawable.ic_back_circle_filled),
-                contentDescription = "go back",
-                modifier = Modifier.clickable(onClick = onBack),
-                tint = WeTheme.colorScheme.textPrimary
-            )
+            if (getPlatform() != AppPlatform.Android) {
+                Icon(
+                    painter = painterResource(Res.drawable.ic_back_circle_filled),
+                    contentDescription = "go back",
+                    modifier = Modifier.clickable(onClick = onBack),
+                    tint = WeTheme.colorScheme.textPrimary
+                )
+            }
             Spacer(Modifier.height(12.dp))
             Text(
                 text = title,

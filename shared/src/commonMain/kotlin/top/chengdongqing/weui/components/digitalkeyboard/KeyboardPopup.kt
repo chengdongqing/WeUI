@@ -16,10 +16,8 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupPositionProvider
-import androidx.navigationevent.NavigationEventInfo
-import androidx.navigationevent.compose.NavigationBackHandler
-import androidx.navigationevent.compose.rememberNavigationEventState
 import kotlinx.coroutines.delay
+import top.chengdongqing.weui.navigation.BackHandler
 import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
@@ -49,11 +47,7 @@ internal fun KeyboardPopup(
         localVisible = visible
     }
 
-    NavigationBackHandler(
-        state = rememberNavigationEventState(NavigationEventInfo.None),
-        isBackEnabled = visible,
-        onBackCompleted = onHide
-    )
+    BackHandler(visible, onHide)
 
     if (visible || localVisible) {
         Popup(popupPositionProvider) {

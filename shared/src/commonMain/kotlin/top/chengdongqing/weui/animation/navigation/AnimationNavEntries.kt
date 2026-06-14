@@ -12,6 +12,7 @@ import top.chengdongqing.weui.animation.ui.RoseCurveScreen
 import top.chengdongqing.weui.animation.ui.SolarSystemScreen
 import top.chengdongqing.weui.animation.ui.SymmetryParticleScreen
 import top.chengdongqing.weui.navigation.AnimationNavKey
+import top.chengdongqing.weui.theme.WeUITheme
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 fun EntryProviderScope<NavKey>.animationNavEntries(onBack: () -> Unit) {
@@ -23,7 +24,9 @@ fun EntryProviderScope<NavKey>.animationNavEntries(onBack: () -> Unit) {
     entry<AnimationNavKey.SolarSystem>(
         metadata = ListDetailSceneStrategy.detailPane()
     ) {
-        SolarSystemScreen(onBack)
+        WeUITheme(isDark = true) {
+            SolarSystemScreen(onBack)
+        }
     }
     entry<AnimationNavKey.Fibonacci>(
         metadata = ListDetailSceneStrategy.detailPane()

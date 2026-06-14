@@ -22,7 +22,6 @@ import kotlinx.coroutines.isActive
 import org.jetbrains.compose.resources.imageResource
 import top.chengdongqing.weui.components.WeScreen
 import top.chengdongqing.weui.theme.StatusBarAppearanceEffect
-import top.chengdongqing.weui.theme.WeUITheme
 import top.chengdongqing.weui.util.toIntOffset
 import top.chengdongqing.weui.util.toRadians
 import weui_kmp.shared.generated.resources.Res
@@ -37,42 +36,40 @@ import kotlin.time.Clock
 fun SolarSystemScreen(onBack: () -> Unit) {
     StatusBarAppearanceEffect(isDark = false)
 
-    WeUITheme(isDark = true) {
-        WeScreen(
-            title = "SolarSystem",
-            description = "太阳系动画",
-            containerColor = Color.Black,
-            onBack = onBack
+    WeScreen(
+        title = "SolarSystem",
+        description = "太阳系动画",
+        containerColor = Color.Black,
+        onBack = onBack
+    ) {
+        // 图片资源
+        val sunImage = imageResource(Res.drawable.solar_system_sun)
+        val moonImage = imageResource(Res.drawable.solar_system_moon)
+        val earthImage = imageResource(Res.drawable.solar_system_earth)
+        // 动画时间状态
+        val time by rememberAnimatedTime()
+
+        Canvas(
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(1f)
         ) {
-            // 图片资源
-            val sunImage = imageResource(Res.drawable.solar_system_sun)
-            val moonImage = imageResource(Res.drawable.solar_system_moon)
-            val earthImage = imageResource(Res.drawable.solar_system_earth)
-            // 动画时间状态
-            val time by rememberAnimatedTime()
+            val center = Offset(size.width / 2, size.height / 2)
 
-            Canvas(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(1f)
-            ) {
-                val center = Offset(size.width / 2, size.height / 2)
+            // 绘制太阳
+            drawImage(
+                image = sunImage,
+                dstSize = Size(size.width, size.height).toIntSize()
+            )
 
-                // 绘制太阳
-                drawImage(
-                    image = sunImage,
-                    dstSize = Size(size.width, size.height).toIntSize()
-                )
+            // 绘制地球及其轨道
+            val earthPosition = calculateOrbitPosition(center, size.width / 3, time, 60000)
+            drawOrbit(center, size.width / 3)
+            drawCelestialBody(image = earthImage, position = earthPosition, scale = 3f)
 
-                // 绘制地球及其轨道
-                val earthPosition = calculateOrbitPosition(center, size.width / 3, time, 60000)
-                drawOrbit(center, size.width / 3)
-                drawCelestialBody(image = earthImage, position = earthPosition, scale = 3f)
-
-                // 绘制月球
-                val moonPosition = calculateOrbitPosition(earthPosition, 90f, time, 6000)
-                drawCelestialBody(image = moonImage, position = moonPosition, scale = 3f)
-            }
+            // 绘制月球
+            val moonPosition = calculateOrbitPosition(earthPosition, 90f, time, 6000)
+            drawCelestialBody(image = moonImage, position = moonPosition, scale = 3f)
         }
     }
 }
