@@ -26,13 +26,13 @@ val MenuTreeData = listOf(
             MenuItem("Loading", BasicNavKey.Loading),
             MenuItem("LoadMore", BasicNavKey.LoadMore),
             MenuItem("Progress", BasicNavKey.Progress),
-            MenuItem("Steps", LayersNavKey),
-            MenuItem("Swiper", LayersNavKey),
+            MenuItem("Steps", BasicNavKey.Steps),
+            MenuItem("Swiper", BasicNavKey.Swiper),
             MenuItem("RefreshView", BasicNavKey.RefreshView),
-            MenuItem("TabView", LayersNavKey),
-            MenuItem("SwipeAction", LayersNavKey),
-            MenuItem("Skeleton", LayersNavKey),
-            MenuItem("Tree", LayersNavKey)
+            MenuItem("TabView", BasicNavKey.TabView),
+            MenuItem("SwipeAction", BasicNavKey.SwipeAction),
+            MenuItem("Skeleton", BasicNavKey.Skeleton),
+            MenuItem("Tree", BasicNavKey.Tree)
         )
     ),
     MenuItem(

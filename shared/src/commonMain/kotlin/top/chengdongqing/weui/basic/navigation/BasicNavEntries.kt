@@ -9,6 +9,12 @@ import top.chengdongqing.weui.basic.ui.LoadMoreScreen
 import top.chengdongqing.weui.basic.ui.LoadingScreen
 import top.chengdongqing.weui.basic.ui.ProgressScreen
 import top.chengdongqing.weui.basic.ui.RefreshViewScreen
+import top.chengdongqing.weui.basic.ui.SkeletonScreen
+import top.chengdongqing.weui.basic.ui.StepsScreen
+import top.chengdongqing.weui.basic.ui.SwipeActionScreen
+import top.chengdongqing.weui.basic.ui.SwiperScreen
+import top.chengdongqing.weui.basic.ui.TabViewScreen
+import top.chengdongqing.weui.basic.ui.TreeScreen
 import top.chengdongqing.weui.navigation.BasicNavKey
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
@@ -37,5 +43,35 @@ fun EntryProviderScope<NavKey>.basicNavEntries(onBack: () -> Unit) {
         metadata = ListDetailSceneStrategy.detailPane()
     ) {
         RefreshViewScreen(onBack)
+    }
+    entry<BasicNavKey.Skeleton>(
+        metadata = ListDetailSceneStrategy.detailPane()
+    ) {
+        SkeletonScreen(onBack)
+    }
+    entry<BasicNavKey.Steps>(
+        metadata = ListDetailSceneStrategy.detailPane()
+    ) {
+        StepsScreen(onBack)
+    }
+    entry<BasicNavKey.SwipeAction>(
+        metadata = ListDetailSceneStrategy.detailPane()
+    ) {
+        SwipeActionScreen(onBack)
+    }
+    entry<BasicNavKey.Swiper>(
+        metadata = ListDetailSceneStrategy.detailPane()
+    ) {
+        SwiperScreen(onBack)
+    }
+    entry<BasicNavKey.TabView>(
+        metadata = ListDetailSceneStrategy.detailPane()
+    ) {
+        TabViewScreen(onBack)
+    }
+    entry<BasicNavKey.Tree>(
+        metadata = ListDetailSceneStrategy.detailPane()
+    ) {
+        TreeScreen(onBack)
     }
 }

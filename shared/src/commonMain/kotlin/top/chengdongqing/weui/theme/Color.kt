@@ -6,7 +6,7 @@ import androidx.compose.ui.graphics.Color
 val GreenPrimary = Color(0xFF07C160)
 val RedDanger = Color(0xFFFA5151)
 val PurpleLink = Color(0xFF576B95)
-val YellowWarning = Color(254, 156, 1)
+val YellowWarning = Color(0xFFFE9C01)
 
 // --- 浅色模式灰阶 ---
 val Grey_F7 = Color(0xFFF7F7F7)

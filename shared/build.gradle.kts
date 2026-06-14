@@ -73,6 +73,7 @@ kotlin {
             implementation(libs.compose.material.icons.extended)
             implementation(libs.navigation.ui)
             implementation(libs.room.runtime)
+            implementation(libs.bundles.coil)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

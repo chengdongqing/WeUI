@@ -25,6 +25,24 @@ sealed interface BasicNavKey {
 
     @Serializable
     data object RefreshView : NavKey
+
+    @Serializable
+    data object Skeleton : NavKey
+
+    @Serializable
+    data object Steps : NavKey
+
+    @Serializable
+    data object SwipeAction : NavKey
+
+    @Serializable
+    data object Swiper : NavKey
+
+    @Serializable
+    data object TabView : NavKey
+
+    @Serializable
+    data object Tree : NavKey
 }
 
 @Serializable
