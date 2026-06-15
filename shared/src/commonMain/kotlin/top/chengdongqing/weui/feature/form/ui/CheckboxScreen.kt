@@ -27,10 +27,10 @@ fun CheckboxScreen(onBack: () -> Unit) {
     val selectedValues = remember { mutableStateListOf<String>() }
 
     fun toggleSelection(value: String) {
-        if (selectedValues.contains(value)) {
-            selectedValues.remove(value)
+        if (value in selectedValues) {
+            selectedValues -= value
         } else {
-            selectedValues.add(value)
+            selectedValues += value
         }
     }
 
