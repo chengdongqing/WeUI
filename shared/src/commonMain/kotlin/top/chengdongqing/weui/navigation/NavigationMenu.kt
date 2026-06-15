@@ -65,12 +65,12 @@ val MenuTreeData = listOf(
         label = "操作反馈",
         iconRes = Res.drawable.ic_nav_feedback,
         children = listOf(
-            MenuItem("ActionSheet", LayersNavKey),
-            MenuItem("Dialog", LayersNavKey),
-            MenuItem("Popup", LayersNavKey),
-            MenuItem("Toast", LayersNavKey),
-            MenuItem("InformationBar", LayersNavKey),
-            MenuItem("ContextMenu", LayersNavKey)
+            MenuItem("ActionSheet", FeedbackNavKey.ActionSheet),
+            MenuItem("Dialog", FeedbackNavKey.Dialog),
+            MenuItem("Popup", FeedbackNavKey.Popup),
+            MenuItem("Toast", FeedbackNavKey.Toast),
+            MenuItem("InformationBar", FeedbackNavKey.InformationBar),
+            MenuItem("ContextMenu", FeedbackNavKey.ContextMenu)
         )
     ),
     MenuItem(

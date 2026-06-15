@@ -73,6 +73,27 @@ sealed interface FormNavKey {
 }
 
 @Serializable
+sealed interface FeedbackNavKey {
+    @Serializable
+    data object ActionSheet : NavKey
+
+    @Serializable
+    data object ContextMenu : NavKey
+
+    @Serializable
+    data object Dialog : NavKey
+
+    @Serializable
+    data object InformationBar : NavKey
+
+    @Serializable
+    data object Popup : NavKey
+
+    @Serializable
+    data object Toast : NavKey
+}
+
+@Serializable
 sealed interface SystemNavKey {
     @Serializable
     data object AddressList : NavKey

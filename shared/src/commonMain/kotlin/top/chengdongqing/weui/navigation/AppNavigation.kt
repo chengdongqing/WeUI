@@ -22,6 +22,7 @@ import androidx.navigationevent.compose.rememberNavigationEventState
 import top.chengdongqing.weui.feature.animation.navigation.animationNavEntries
 import top.chengdongqing.weui.feature.basic.navigation.basicNavEntries
 import top.chengdongqing.weui.feature.charts.navigation.chartsNavEntries
+import top.chengdongqing.weui.feature.feedback.navigation.feedbackNavEntries
 import top.chengdongqing.weui.feature.form.navigation.formNavEntries
 import top.chengdongqing.weui.feature.home.HomeScreen
 import top.chengdongqing.weui.feature.layers.LayersScreen
@@ -69,6 +70,7 @@ fun AppNavigation() {
 
             basicNavEntries(goBack)
             formNavEntries(goBack)
+            feedbackNavEntries(goBack)
             systemNavEntries(backStack, goBack)
             chartsNavEntries(goBack)
             samplesNavEntries(goBack)
