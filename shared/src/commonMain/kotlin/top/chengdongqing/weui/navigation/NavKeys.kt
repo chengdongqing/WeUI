@@ -100,6 +100,9 @@ sealed interface SystemNavKey {
 
     @Serializable
     data class AddressDetail(val addressId: Int?) : NavKey
+
+    @Serializable
+    data object Clipboard : NavKey
 }
 
 @Serializable

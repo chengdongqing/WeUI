@@ -6,6 +6,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import top.chengdongqing.weui.feature.system.address.AddressFormScreen
+import top.chengdongqing.weui.feature.system.ui.ClipboardScreen
 import top.chengdongqing.weui.feature.system.ui.DatabaseScreen
 import top.chengdongqing.weui.navigation.SystemNavKey
 
@@ -31,5 +32,10 @@ fun EntryProviderScope<NavKey>.systemNavEntries(
             id = it.addressId,
             onBack = onBack
         )
+    }
+    entry<SystemNavKey.Clipboard>(
+        metadata = ListDetailSceneStrategy.detailPane()
+    ) {
+        ClipboardScreen(onBack)
     }
 }

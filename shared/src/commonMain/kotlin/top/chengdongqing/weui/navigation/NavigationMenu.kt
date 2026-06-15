@@ -78,7 +78,7 @@ val MenuTreeData = listOf(
         iconRes = Res.drawable.ic_nav_layout,
         children = listOf(
             MenuItem("Contacts", LayersNavKey),
-            MenuItem("Clipboard", LayersNavKey),
+            MenuItem("Clipboard", SystemNavKey.Clipboard),
             MenuItem("CalendarEvents", LayersNavKey),
             MenuItem("DeviceInfo", LayersNavKey),
             MenuItem("Downloader", LayersNavKey),

@@ -6,10 +6,18 @@ import android.content.Context
 import top.chengdongqing.weui.androidAppInstance
 
 class AndroidClipboard(private val context: Context) : Clipboard {
+    private val clipboardManager by lazy {
+        context.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager
+    }
+
     override suspend fun setClipboardData(data: String, label: String) {
-        val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager
         val clip = ClipData.newPlainText(label, data)
-        clipboard?.setPrimaryClip(clip)
+        clipboardManager?.setPrimaryClip(clip)
+    }
+
+    override suspend fun getClipboardData(): String? {
+        return clipboardManager?.primaryClip?.takeIf { it.itemCount > 0 }
+            ?.getItemAt(0)?.text?.toString()
     }
 }
 
