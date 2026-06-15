@@ -154,6 +154,9 @@ sealed interface SamplesNavKey {
 
     @Serializable
     data object Paint : NavKey
+
+    @Serializable
+    data object Calendar : NavKey
 }
 
 @Serializable

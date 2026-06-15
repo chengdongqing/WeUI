@@ -147,7 +147,7 @@ val MenuTreeData = listOf(
         label = "扩展示例",
         iconRes = Res.drawable.ic_nav_search,
         children = listOf(
-            MenuItem("Calendar", LayersNavKey),
+            MenuItem("Calendar", SamplesNavKey.Calendar),
             MenuItem("DropCard", SamplesNavKey.DropCard),
             MenuItem("SearchBar", SamplesNavKey.SearchBar),
             MenuItem("FileBrowser", LayersNavKey),

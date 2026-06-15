@@ -5,6 +5,7 @@ import androidx.compose.material3.adaptive.navigation3.ListDetailSceneStrategy
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import top.chengdongqing.weui.core.ui.theme.WeUITheme
+import top.chengdongqing.weui.feature.samples.ui.CalendarScreen
 import top.chengdongqing.weui.feature.samples.ui.CubicBezierScreen
 import top.chengdongqing.weui.feature.samples.ui.DigitalKeyboardScreen
 import top.chengdongqing.weui.feature.samples.ui.DigitalRollerScreen
@@ -82,5 +83,10 @@ fun EntryProviderScope<NavKey>.samplesNavEntries(onBack: () -> Unit) {
         WeUITheme(isDark = false) {
             PaintScreen(onBack)
         }
+    }
+    entry<SamplesNavKey.Calendar>(
+        metadata = ListDetailSceneStrategy.detailPane()
+    ) {
+        CalendarScreen(onBack)
     }
 }
