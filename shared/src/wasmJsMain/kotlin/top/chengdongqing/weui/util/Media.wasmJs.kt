@@ -13,7 +13,7 @@ import org.w3c.files.BlobPropertyBag
 
 @OptIn(ExperimentalWasmJsInterop::class)
 actual suspend fun saveBitmap(bitmap: ImageBitmap, filename: String): Boolean {
-    return try {
+    return runCatching {
         val image = Image.makeFromBitmap(bitmap.asSkiaBitmap())
         val bytes = image.encodeToData(quality = 90)?.bytes ?: return false
 
@@ -34,8 +34,7 @@ actual suspend fun saveBitmap(bitmap: ImageBitmap, filename: String): Boolean {
         URL.revokeObjectURL(url)
 
         true
-    } catch (e: Exception) {
-        e.printStackTrace()
-        false
-    }
+    }.onFailure {
+        it.printStackTrace()
+    }.getOrDefault(false)
 }

@@ -10,7 +10,7 @@ import android.provider.MediaStore
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asAndroidBitmap
 import top.chengdongqing.weui.androidAppInstance
-import top.chengdongqing.weui.data.model.MediaType
+import top.chengdongqing.weui.core.data.model.MediaType
 import top.chengdongqing.weui.shared.R
 import top.chengdongqing.weui.util.MediaStoreUtils.createContentValues
 import top.chengdongqing.weui.util.MediaStoreUtils.finishPending
@@ -20,7 +20,7 @@ actual suspend fun saveBitmap(
     filename: String
 ): Boolean {
     return runCatching {
-        androidAppInstance.apply {
+        androidAppInstance.applicationContext.apply {
             val contentValues = createContentValues(
                 filename = filename,
                 mimeType = "image/webp",
@@ -31,12 +31,14 @@ actual suspend fun saveBitmap(
 
             contentResolver.insert(contentUri, contentValues)?.let { uri ->
                 contentResolver.openOutputStream(uri)?.use { outputStream ->
-                    bitmap.asAndroidBitmap().compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+                    bitmap.asAndroidBitmap().compress(Bitmap.CompressFormat.PNG, 90, outputStream)
                     finishPending(uri)
                 }
             }
         }
         true
+    }.onFailure {
+        it.printStackTrace()
     }.getOrDefault(false)
 }
 

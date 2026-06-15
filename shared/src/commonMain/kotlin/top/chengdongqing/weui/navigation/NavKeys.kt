@@ -46,6 +46,33 @@ sealed interface BasicNavKey {
 }
 
 @Serializable
+sealed interface FormNavKey {
+    @Serializable
+    data object Button : NavKey
+
+    @Serializable
+    data object Checkbox : NavKey
+
+    @Serializable
+    data object Input : NavKey
+
+    @Serializable
+    data object Picker : NavKey
+
+    @Serializable
+    data object Radio : NavKey
+
+    @Serializable
+    data object Rate : NavKey
+
+    @Serializable
+    data object Slider : NavKey
+
+    @Serializable
+    data object Switch : NavKey
+}
+
+@Serializable
 sealed interface SystemNavKey {
     @Serializable
     data object AddressList : NavKey

@@ -3,7 +3,7 @@ package top.chengdongqing.weui.util
 import androidx.room3.Room
 import androidx.room3.RoomDatabase
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
-import top.chengdongqing.weui.system.address.repository.AddressDatabase
+import top.chengdongqing.weui.feature.system.address.repository.AddressDatabase
 import java.io.File
 
 actual fun getRoomDatabaseBuilder(): RoomDatabase.Builder<AddressDatabase> {

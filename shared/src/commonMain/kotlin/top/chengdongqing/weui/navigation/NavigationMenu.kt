@@ -39,14 +39,14 @@ val MenuTreeData = listOf(
         label = "表单组件",
         iconRes = Res.drawable.ic_nav_form,
         children = listOf(
-            MenuItem("Button", LayersNavKey),
-            MenuItem("Checkbox", LayersNavKey),
-            MenuItem("Radio", LayersNavKey),
-            MenuItem("Switch", LayersNavKey),
-            MenuItem("Slider", LayersNavKey),
-            MenuItem("Picker", LayersNavKey),
-            MenuItem("Input", LayersNavKey),
-            MenuItem("Rate", LayersNavKey)
+            MenuItem("Button", FormNavKey.Button),
+            MenuItem("Checkbox", FormNavKey.Checkbox),
+            MenuItem("Radio", FormNavKey.Radio),
+            MenuItem("Switch", FormNavKey.Switch),
+            MenuItem("Slider", FormNavKey.Slider),
+            MenuItem("Picker", FormNavKey.Picker),
+            MenuItem("Input", FormNavKey.Input),
+            MenuItem("Rate", FormNavKey.Rate)
         )
     ),
     MenuItem(

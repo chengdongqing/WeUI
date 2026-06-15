@@ -19,13 +19,14 @@ import androidx.navigation3.ui.NavDisplay
 import androidx.navigationevent.NavigationEventInfo
 import androidx.navigationevent.compose.NavigationBackHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
-import top.chengdongqing.weui.animation.navigation.animationNavEntries
-import top.chengdongqing.weui.basic.navigation.basicNavEntries
-import top.chengdongqing.weui.charts.navigation.chartsNavEntries
-import top.chengdongqing.weui.home.HomeScreen
-import top.chengdongqing.weui.layers.LayersScreen
-import top.chengdongqing.weui.samples.navigation.samplesNavEntries
-import top.chengdongqing.weui.system.navigation.systemNavEntries
+import top.chengdongqing.weui.feature.animation.navigation.animationNavEntries
+import top.chengdongqing.weui.feature.basic.navigation.basicNavEntries
+import top.chengdongqing.weui.feature.charts.navigation.chartsNavEntries
+import top.chengdongqing.weui.feature.form.navigation.formNavEntries
+import top.chengdongqing.weui.feature.home.HomeScreen
+import top.chengdongqing.weui.feature.layers.LayersScreen
+import top.chengdongqing.weui.feature.samples.navigation.samplesNavEntries
+import top.chengdongqing.weui.feature.system.navigation.systemNavEntries
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
@@ -63,14 +64,15 @@ fun AppNavigation() {
             entry<LayersNavKey>(
                 metadata = ListDetailSceneStrategy.detailPane()
             ) {
-                LayersScreen(onBack = goBack)
+                LayersScreen(goBack)
             }
 
-            basicNavEntries(onBack = goBack)
-            systemNavEntries(backStack = backStack, onBack = goBack)
-            chartsNavEntries(onBack = goBack)
-            samplesNavEntries(onBack = goBack)
-            animationNavEntries(onBack = goBack)
+            basicNavEntries(goBack)
+            formNavEntries(goBack)
+            systemNavEntries(backStack, goBack)
+            chartsNavEntries(goBack)
+            samplesNavEntries(goBack)
+            animationNavEntries(goBack)
         }
     )
 }

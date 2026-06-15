@@ -1,0 +1,30 @@
+package top.chengdongqing.weui.feature.form.ui
+
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import top.chengdongqing.weui.core.ui.components.WeScreen
+import top.chengdongqing.weui.core.ui.components.WeSwitch
+
+@Composable
+fun SwitchScreen(onBack: () -> Unit) {
+    WeScreen(
+        title = "Switch",
+        description = "开关",
+        onBack = onBack
+    ) {
+        val checked = remember { mutableStateOf(false) }
+
+        WeSwitch(checked = checked.value) {
+            checked.value = it
+        }
+        Spacer(Modifier.height(16.dp))
+        WeSwitch(checked = checked.value, disabled = true) {
+            checked.value = it
+        }
+    }
+}

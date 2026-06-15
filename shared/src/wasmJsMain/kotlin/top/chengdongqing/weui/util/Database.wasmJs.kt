@@ -4,7 +4,7 @@ import androidx.room3.Room
 import androidx.room3.RoomDatabase
 import androidx.sqlite.driver.web.WebWorkerSQLiteDriver
 import org.w3c.dom.Worker
-import top.chengdongqing.weui.system.address.repository.AddressDatabase
+import top.chengdongqing.weui.feature.system.address.repository.AddressDatabase
 
 actual fun getRoomDatabaseBuilder(): RoomDatabase.Builder<AddressDatabase> {
     return Room.databaseBuilder<AddressDatabase>("my_room.db")

@@ -7,7 +7,7 @@ import kotlinx.cinterop.ExperimentalForeignApi
 import platform.Foundation.NSDocumentDirectory
 import platform.Foundation.NSFileManager
 import platform.Foundation.NSUserDomainMask
-import top.chengdongqing.weui.system.address.repository.AddressDatabase
+import top.chengdongqing.weui.feature.system.address.repository.AddressDatabase
 
 @OptIn(ExperimentalForeignApi::class)
 private fun documentDirectory(): String {
