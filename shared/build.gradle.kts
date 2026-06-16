@@ -54,6 +54,7 @@ kotlin {
             implementation(libs.coil.video)
             implementation(libs.pinyin)
             implementation(libs.coil.network.okhttp)
+            implementation(libs.lunar)
         }
         iosMain.dependencies {
             implementation(libs.androidx.sqlite.bundled)
@@ -61,6 +62,7 @@ kotlin {
         jvmMain.dependencies {
             implementation(libs.androidx.sqlite.bundled)
             implementation(libs.pinyin)
+            implementation(libs.lunar)
         }
         commonMain.dependencies {
             implementation(libs.compose.runtime)

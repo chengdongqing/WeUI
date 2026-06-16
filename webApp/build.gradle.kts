@@ -17,6 +17,7 @@ kotlin {
         browser {
             commonWebpackConfig {
                 devtool = null
+                cssSupport { enabled = true }
             }
         }
         binaries.executable()
@@ -31,6 +32,7 @@ kotlin {
             implementation(npm("@js-joda/core", "6.0.1"))
             implementation(npm("@js-joda/timezone", "2.25.1"))
             implementation(npm("pinyin-pro", "3.28.1"))
+            implementation(npm("lunar-javascript", "1.7.7"))
             implementation(npm("sqlite-wasm-worker", project.file("sqlite-wasm-worker")))
         }
     }

@@ -48,7 +48,9 @@ import kotlinx.datetime.plus
 import kotlinx.datetime.yearMonth
 import top.chengdongqing.weui.core.ui.theme.WeTheme
 import top.chengdongqing.weui.util.ChineseDateFormatter
+import top.chengdongqing.weui.util.getLunar
 import top.chengdongqing.weui.util.localDate
+import top.chengdongqing.weui.util.toDisplayString
 import kotlin.time.Clock
 
 @Composable
@@ -152,7 +154,7 @@ private fun DaysGrid(pagerState: PagerState) {
         // 当月总天数
         val daysOfMonth = date.yearMonth.numberOfDays
         // 当月第一天是星期几
-        val firstDayOfWeek = date.dayOfWeek.ordinal
+        val firstDayOfWeek = date.yearMonth.firstDay.dayOfWeek.ordinal
 
         Box(contentAlignment = Alignment.Center) {
             // 月份背景
@@ -243,15 +245,8 @@ private fun DayItem(
             fontWeight = if (!outInMonth) FontWeight.Bold else FontWeight.Normal
         )
         // 农历日期
-//        val lunarDate = Lunar(Solar(date.year, date.month.number, date.day))
-//        val lunarDay = if (lunarDate.festivals.isNotEmpty()) {
-//            lunarDate.festivals.first()
-//        } else if (lunarDate.day == 1) {
-//            lunarDate.monthInChinese + "月"
-//        } else {
-//            lunarDate.dayInChinese
-//        }
-        val lunarDay = "七月"
+        val lunarDate = getLunar(date.year, date.month.number, date.day)
+        val lunarDay = lunarDate.toDisplayString()
         Text(
             text = lunarDay,
             color = if (isToday) {
