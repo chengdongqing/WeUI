@@ -9,12 +9,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import org.jetbrains.compose.resources.Font
-import top.chengdongqing.weui.util.AppPlatform
-import top.chengdongqing.weui.util.getPlatform
-import weui_kmp.shared.generated.resources.Res
-import weui_kmp.shared.generated.resources.noto_sans_sc
+import top.chengdongqing.weui.util.getFontFamily
 
 @Immutable
 data class WeColorScheme(
@@ -69,11 +64,7 @@ fun WeUITheme(
         else -> LightColorScheme
     }
     // 字体配置（仅web端需要）
-    val fontFamily = if (getPlatform() == AppPlatform.Web) {
-        FontFamily(Font(Res.font.noto_sans_sc))
-    } else {
-        null
-    }
+    val fontFamily = getFontFamily()
 
     MaterialTheme {
         CompositionLocalProvider(

@@ -21,8 +21,13 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "top.chengdongqing.weui"
+            packageName = "WeUI"
             packageVersion = "1.0.0"
+
+            macOS {
+                bundleID = "top.chengdongqing.weui"
+                iconFile.set(project.file("src/main/resources/logo.icns"))
+            }
         }
     }
 }

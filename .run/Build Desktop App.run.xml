@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-    <configuration name="Build Web App" default="false" factoryName="Gradle"
+    <configuration name="Build Desktop App" default="false" factoryName="Gradle"
         type="GradleRunConfiguration">
         <ExternalSystemSettings>
             <option name="executionName" />
@@ -11,7 +11,7 @@
             </option>
             <option name="taskNames">
                 <list>
-                    <option value="wasmJsBrowserDistribution" />
+                    <option value="packageDistributionForCurrentOS" />
                 </list>
             </option>
             <option name="vmOptions" />

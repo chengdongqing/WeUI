@@ -18,3 +18,4 @@ captures
 **/xcshareddata/WorkspaceSettings.xcsettings
 node_modules/
 /kotlin-js-store/wasm/yarn.lock
+/androidApp/release/
