@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.feature.samples.data
+package top.chengdongqing.weui.feature.samples.data.provider
 
 internal object CityDataProvider {
     val cities = listOf(

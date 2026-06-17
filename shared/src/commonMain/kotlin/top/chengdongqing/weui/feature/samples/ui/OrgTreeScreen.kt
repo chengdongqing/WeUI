@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import top.chengdongqing.weui.core.ui.components.WeOrgTree
 import top.chengdongqing.weui.core.ui.components.WeScreen
-import top.chengdongqing.weui.feature.samples.data.GovernmentDataProvider
+import top.chengdongqing.weui.feature.samples.data.provider.GovernmentDataProvider
 
 @Composable
 fun OrgTreeScreen(onBack: () -> Unit) {

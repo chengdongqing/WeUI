@@ -31,6 +31,9 @@ import kotlinx.coroutines.launch
 import top.chengdongqing.weui.core.ui.components.ToastIcon
 import top.chengdongqing.weui.core.ui.components.WeScreen
 import top.chengdongqing.weui.core.ui.components.rememberToastState
+import top.chengdongqing.weui.feature.samples.data.model.StrokePath
+import top.chengdongqing.weui.feature.samples.ui.paint.components.DrawingBoard
+import top.chengdongqing.weui.feature.samples.ui.paint.components.DrawingTools
 import top.chengdongqing.weui.util.saveBitmap
 import kotlin.time.Clock
 import kotlin.time.Duration

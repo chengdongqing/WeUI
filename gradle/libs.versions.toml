@@ -26,6 +26,7 @@ coil = "3.5.0"
 coilZoomable = "0.19.0"
 pinyin = "0.4.0"
 lunar = "1.7.7"
+accompanist = "0.37.3"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -63,6 +64,7 @@ coil-video = { module = "io.coil-kt.coil3:coil-video", version.ref = "coil" } # 
 coil-zoomable = { module = "me.saket.telephoto:zoomable-image-coil3", version.ref = "coilZoomable" } # 图片缩放/加载大图
 pinyin = { module = "com.github.houbb:pinyin", version.ref = "pinyin" } # 汉字转拼音
 lunar = { module = "cn.6tail:lunar", version.ref = "lunar" } # 获取农历日期与节日
+accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" } # 简化权限请求
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

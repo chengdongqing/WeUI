@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.feature.samples.ui.paint
+package top.chengdongqing.weui.feature.samples.ui.paint.components
 
 /// Inspired from https://github.com/msasikanth/compose_colorpicker to understand hue creations .
 

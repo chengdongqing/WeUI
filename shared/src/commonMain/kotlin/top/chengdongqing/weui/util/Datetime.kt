@@ -1,6 +1,7 @@
 package top.chengdongqing.weui.util
 
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.format.FormatStringsInDatetimeFormats
@@ -28,4 +29,9 @@ val ChineseDateFormatter = LocalDate.Format {
 @OptIn(FormatStringsInDatetimeFormats::class)
 val DefaultTimeFormatter = LocalTime.Format {
     byUnicodePattern("HH:mm:ss")
+}
+
+@OptIn(FormatStringsInDatetimeFormats::class)
+val DefaultDateTimeFormatter = LocalDateTime.Format {
+    byUnicodePattern("yyyy-MM-dd HH:mm:ss")
 }

@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.feature.samples.data
+package top.chengdongqing.weui.feature.samples.data.provider
 
 import top.chengdongqing.weui.core.ui.components.OrgNode
 

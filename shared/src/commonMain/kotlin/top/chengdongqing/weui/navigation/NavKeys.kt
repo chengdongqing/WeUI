@@ -157,6 +157,9 @@ sealed interface SamplesNavKey {
 
     @Serializable
     data object Calendar : NavKey
+
+    @Serializable
+    data object FileBrowser : NavKey
 }
 
 @Serializable

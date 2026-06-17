@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.feature.samples.ui.paint
+package top.chengdongqing.weui.feature.samples.ui.paint.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize

@@ -1,6 +1,12 @@
 package top.chengdongqing.weui.util
 
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.format
+import kotlinx.datetime.format.DateTimeFormat
+import kotlinx.datetime.toLocalDateTime
 import kotlin.math.pow
+import kotlin.time.Instant
 
 /**
  * 格式化数字
@@ -25,3 +31,32 @@ fun Float.format(
         }
     }
 }
+
+/**
+ * 格式化文件大小
+ */
+fun formatFileSize(size: Long): String {
+    return when {
+        size < 1024 -> "$size B"
+        size < 1024 * 1024 -> "${(size / 1024f).format()} KB"
+        size < 1024 * 1024 * 1024 -> "${(size / (1024 * 1024f)).format()} MB"
+        else -> "${(size / (1024 * 1024 * 1024f)).format()} GB"
+    }
+}
+
+/**
+ * 格式化时间
+ *
+ * @param milliseconds 毫秒数
+ * @param pattern 格式
+ */
+fun formatTime(
+    milliseconds: Long,
+    pattern: DateTimeFormat<LocalDateTime> = DefaultDateTimeFormatter
+): String =
+    Instant.fromEpochMilliseconds(milliseconds)
+        .toLocalDateTime(TimeZone.currentSystemDefault())
+        .format(pattern)
+
+fun Boolean.format(trueLabel: String = "是", falseLabel: String = "否") =
+    if (this) trueLabel else falseLabel

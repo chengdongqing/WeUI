@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.feature.samples.ui.paint
+package top.chengdongqing.weui.feature.samples.data.model
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path

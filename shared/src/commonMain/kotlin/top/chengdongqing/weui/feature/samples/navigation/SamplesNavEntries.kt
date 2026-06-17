@@ -17,6 +17,7 @@ import top.chengdongqing.weui.feature.samples.ui.OrgTreeScreen
 import top.chengdongqing.weui.feature.samples.ui.PanoramicImageScreen
 import top.chengdongqing.weui.feature.samples.ui.ReorderableScreen
 import top.chengdongqing.weui.feature.samples.ui.SearchBarScreen
+import top.chengdongqing.weui.feature.samples.ui.filebrowser.FileBrowserScreen
 import top.chengdongqing.weui.feature.samples.ui.paint.PaintScreen
 import top.chengdongqing.weui.navigation.SamplesNavKey
 
@@ -88,5 +89,10 @@ fun EntryProviderScope<NavKey>.samplesNavEntries(onBack: () -> Unit) {
         metadata = ListDetailSceneStrategy.detailPane()
     ) {
         CalendarScreen(onBack)
+    }
+    entry<SamplesNavKey.FileBrowser>(
+        metadata = ListDetailSceneStrategy.detailPane()
+    ) {
+        FileBrowserScreen(onBack)
     }
 }

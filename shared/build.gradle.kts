@@ -55,6 +55,7 @@ kotlin {
             implementation(libs.pinyin)
             implementation(libs.coil.network.okhttp)
             implementation(libs.lunar)
+            implementation(libs.accompanist.permissions)
         }
         iosMain.dependencies {
             implementation(libs.androidx.sqlite.bundled)

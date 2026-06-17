@@ -87,7 +87,7 @@ private val TRANSITION_ANIMATION_SPEC = tween<IntOffset>(
     durationMillis = TRANSITION_DURATION_MILLISECOND
 )
 
-private fun createEnterTransition() = slideInHorizontally(
+fun createEnterTransition() = slideInHorizontally(
     initialOffsetX = { it },
     animationSpec = TRANSITION_ANIMATION_SPEC
 ) togetherWith slideOutHorizontally(
@@ -95,7 +95,7 @@ private fun createEnterTransition() = slideInHorizontally(
     animationSpec = TRANSITION_ANIMATION_SPEC
 )
 
-private fun createExitTransition() = slideInHorizontally(
+fun createExitTransition() = slideInHorizontally(
     initialOffsetX = { -it },
     animationSpec = TRANSITION_ANIMATION_SPEC
 ) togetherWith slideOutHorizontally(

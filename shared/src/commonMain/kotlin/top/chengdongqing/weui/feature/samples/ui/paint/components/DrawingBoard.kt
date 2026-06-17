@@ -1,4 +1,4 @@
-package top.chengdongqing.weui.feature.samples.ui.paint
+package top.chengdongqing.weui.feature.samples.ui.paint.components
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.IntSize
+import top.chengdongqing.weui.feature.samples.data.model.StrokePath
 
 @Composable
 fun DrawingBoard(

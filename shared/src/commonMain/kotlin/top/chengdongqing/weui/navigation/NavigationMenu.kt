@@ -150,7 +150,7 @@ val MenuTreeData = listOf(
             MenuItem("Calendar", SamplesNavKey.Calendar),
             MenuItem("DropCard", SamplesNavKey.DropCard),
             MenuItem("SearchBar", SamplesNavKey.SearchBar),
-            MenuItem("FileBrowser", LayersNavKey),
+            MenuItem("FileBrowser", SamplesNavKey.FileBrowser),
             MenuItem("Paint", SamplesNavKey.Paint),
             MenuItem("IndexedList", SamplesNavKey.IndexedList),
             MenuItem("Reorderable", SamplesNavKey.Reorderable),
