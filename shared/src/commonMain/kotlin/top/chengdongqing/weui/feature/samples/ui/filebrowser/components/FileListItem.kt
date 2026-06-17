@@ -193,12 +193,21 @@ private fun FileDetailsPopup(
         padding = PaddingValues(20.dp),
         onClose = onClose
     ) {
+        val isSizeLoading = remember { mutableStateOf(false) }
         val totalSize by produceState(initialValue = 0L) {
+            isSizeLoading.value = true
             value = calculateFileSize(file.path)
+            isSizeLoading.value = false
         }
 
         WeCardListItem(label = "位置", value = file.path)
-        WeCardListItem(label = "大小", value = formatFileSize(totalSize))
+        WeCardListItem(
+            label = "大小", value = if (isSizeLoading.value) {
+                "计算中..."
+            } else {
+                formatFileSize(totalSize)
+            }
+        )
         WeCardListItem(label = "时间", value = file.lastModified)
         WeCardListItem(label = "可读", value = file.isReadable.format())
         WeCardListItem(label = "可写", value = file.isWriteable.format())

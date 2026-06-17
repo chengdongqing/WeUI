@@ -24,10 +24,19 @@ import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.core.ui.components.ButtonType
 import top.chengdongqing.weui.core.ui.components.WeButton
 import java.io.File
+import java.io.IOException
+import java.nio.file.FileVisitResult
+import java.nio.file.Files
+import java.nio.file.Files.walkFileTree
+import java.nio.file.Path
+import java.nio.file.Paths
+import java.nio.file.SimpleFileVisitor
+import java.nio.file.attribute.BasicFileAttributes
+import java.util.concurrent.atomic.AtomicLong
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-actual fun RequestStoragePermission(content: @Composable (() -> Unit)) {
+actual fun RequestStoragePermission(content: @Composable ((String) -> Unit)) {
     var hasPermission by remember { mutableStateOf(false) }
     val permissionState = rememberMultiplePermissionsState(
         listOf(
@@ -72,36 +81,28 @@ actual fun RequestStoragePermission(content: @Composable (() -> Unit)) {
             }
         }
     } else {
-        content()
+        content(Environment.getExternalStorageDirectory().path)
     }
 }
 
-actual fun getStorageRootPath(): String = Environment.getExternalStorageDirectory().path
-
 actual suspend fun calculateFileSize(filePath: String): Long = withContext(Dispatchers.IO) {
-    fun loadFileSize(file: File): Long =
-        when {
-            file.isFile -> {
-                // 如果是文件，直接返回其大小
-                file.length()
+    val size = AtomicLong(0)
+    val path = Paths.get(filePath)
+
+    if (Files.exists(path)) {
+        walkFileTree(path, object : SimpleFileVisitor<Path>() {
+            override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
+                size.addAndGet(attrs.size())
+                return FileVisitResult.CONTINUE
             }
 
-            file.isDirectory -> {
-                // 如果是目录，递归计算所有子文件和子目录的大小
-                val children = file.listFiles()
-                var totalSize: Long = 0
-                if (children != null) {
-                    for (child in children) {
-                        totalSize += loadFileSize(child)
-                    }
-                }
-                totalSize
+            override fun visitFileFailed(file: Path, exc: IOException): FileVisitResult {
+                // 忽略无法访问的文件/目录
+                return FileVisitResult.CONTINUE
             }
-
-            else -> 0
-        }
-
-    loadFileSize(File(filePath))
+        })
+    }
+    size.get()
 }
 
 fun Context.getFileProviderUri(file: File): Uri {

@@ -16,7 +16,6 @@ import top.chengdongqing.weui.feature.samples.ui.filebrowser.components.Navigati
 import top.chengdongqing.weui.feature.samples.ui.filebrowser.navigation.FileBrowserNav
 import top.chengdongqing.weui.feature.samples.ui.filebrowser.navigation.FileBrowserNavKey
 import top.chengdongqing.weui.util.RequestStoragePermission
-import top.chengdongqing.weui.util.getStorageRootPath
 
 @Composable
 fun FileBrowserScreen(onBack: () -> Unit) {
@@ -28,11 +27,10 @@ fun FileBrowserScreen(onBack: () -> Unit) {
         scrollEnabled = false,
         onBack = onBack
     ) {
-        RequestStoragePermission {
+        RequestStoragePermission { rootPath ->
             val backStack = remember {
                 mutableStateListOf<NavKey>(FileBrowserNavKey(null))
             }
-            val rootPath = remember { getStorageRootPath() }
             val folders = remember { mutableStateListOf(rootPath) }
 
             Column {

@@ -11,7 +11,7 @@ interface FileRepository {
         showChooser: Boolean = true
     )
 
-    suspend fun deleteFile(filePath: String)
+    suspend fun deleteFile(filePath: String): Boolean
 }
 
 expect fun getFileRepository(): FileRepository
