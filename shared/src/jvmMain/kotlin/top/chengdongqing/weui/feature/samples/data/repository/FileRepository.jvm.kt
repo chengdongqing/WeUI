@@ -80,7 +80,7 @@ class JvmFileRepository : FileRepository {
         return top.chengdongqing.weui.util.formatFileSize(size)
     }
 
-    override fun openFile(
+    override suspend fun openFile(
         filePath: String,
         mimeType: String,
         showChooser: Boolean

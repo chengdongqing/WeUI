@@ -28,7 +28,7 @@ class FileListViewModel : ViewModel() {
         }
     }
 
-    fun openFile(
+    suspend fun openFile(
         filePath: String,
         mimeType: String,
         showChooser: Boolean = true

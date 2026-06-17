@@ -94,7 +94,7 @@ class AndroidFileRepository(val context: Context) : FileRepository {
         return formatFileSize(size)
     }
 
-    override fun openFile(
+    override suspend fun openFile(
         filePath: String,
         mimeType: String,
         showChooser: Boolean

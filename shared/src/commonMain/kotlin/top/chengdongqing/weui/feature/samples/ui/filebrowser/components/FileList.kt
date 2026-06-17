@@ -94,7 +94,9 @@ private fun FileList(
                             onNavigateToFolder(fileItem.path)
                         },
                         onFileClick = {
-                            viewModel.openFile(fileItem.path, fileItem.mimeType)
+                            scope.launch {
+                                viewModel.openFile(fileItem.path, fileItem.mimeType)
+                            }
                         },
                         onDelete = {
                             scope.launch {

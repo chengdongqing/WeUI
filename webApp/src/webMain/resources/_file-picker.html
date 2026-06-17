@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Web 文件管理器</title>
+    <style>
+        body { font-family: system-ui; padding: 20px; }
+        /* 面包屑样式 */
+        #breadcrumb { margin-bottom: 15px; padding: 10px; background: #e9ecef; border-radius: 5px; }
+        .crumb-item { cursor: pointer; color: #007bff; text-decoration: underline; margin-right: 5px; }
+        .crumb-item:hover { color: #0056b3; }
+
+        /* 列表样式 */
+        .row { display: flex; align-items: center; padding: 10px; border-bottom: 1px solid #eee; cursor: pointer; }
+        .row:hover { background: #f0f7ff; }
+        .col { width: 150px; }
+        .name { flex-grow: 1; font-weight: bold; }
+
+        #preview-area { margin-top: 20px; padding: 20px; border: 1px solid #ccc; background: #fff; display: none; }
+        img { max-width: 100%; height: auto; }
+        pre { background: #f4f4f4; padding: 10px; overflow-x: auto; white-space: pre-wrap; }
+    </style>
+</head>
+<body>
+
+<button id="btn-open">打开文件夹</button>
+<div id="breadcrumb">当前路径：根目录</div>
+<div id="file-list"></div>
+<div id="preview-area">
+    <h3 id="preview-title"></h3>
+    <div id="content"></div>
+</div>
+
+<script>
+    // 路径栈：每个元素为 { name: string, handle: FileSystemDirectoryHandle }
+    let pathStack = [];
+
+    const fileList = document.getElementById('file-list');
+    const breadcrumb = document.getElementById('breadcrumb');
+    const previewArea = document.getElementById('preview-area');
+    const contentDiv = document.getElementById('content');
+
+    document.getElementById('btn-open').addEventListener('click', async () => {
+        const rootHandle = await window.showDirectoryPicker();
+        pathStack = [{ name: rootHandle.name || '根目录', handle: rootHandle }];
+        render();
+    });
+
+    // 核心渲染函数
+    async function render() {
+        renderBreadcrumb();
+        await renderList();
+    }
+
+    // 1. 渲染面包屑
+    function renderBreadcrumb() {
+        breadcrumb.innerHTML = '当前路径：';
+        pathStack.forEach((item, index) => {
+            const span = document.createElement('span');
+            span.className = 'crumb-item';
+            span.textContent = item.name + (index === pathStack.length - 1 ? '' : ' > ');
+            span.onclick = () => {
+                pathStack = pathStack.slice(0, index + 1); // 截断到点击层级
+                render();
+            };
+            breadcrumb.appendChild(span);
+        });
+    }
+
+    // 2. 渲染目录列表
+    async function renderList() {
+        fileList.innerHTML = '<div class="row"><strong>类型</strong><strong class="name">名称</strong><strong>大小</strong></div>';
+        const currentDir = pathStack[pathStack.length - 1].handle;
+
+        for await (const entry of currentDir.values()) {
+            const row = document.createElement('div');
+            row.className = 'row';
+            const file = entry.kind === 'file' ? await entry.getFile() : null;
+
+            row.innerHTML = `
+                <span class="col">${entry.kind === 'directory' ? '📁' : '📄'}</span>
+                <span class="name">${entry.name}</span>
+                <span class="col">${file ? (file.size/1024).toFixed(1) + ' KB' : '-'}</span>
+            `;
+
+            row.onclick = () => {
+                if (entry.kind === 'directory') {
+                    pathStack.push({ name: entry.name, handle: entry });
+                    render();
+                } else {
+                    showFileDetails(entry, file);
+                }
+            };
+            fileList.appendChild(row);
+        }
+    }
+
+    // 3. 文件处理与预览
+    async function showFileDetails(handle, file) {
+        previewArea.style.display = 'block';
+        document.getElementById('preview-title').textContent = `正在查看: ${file.name}`;
+        contentDiv.innerHTML = `<p><b>类型:</b> ${file.type || '未知'} | <b>修改时间:</b> ${new Date(file.lastModified).toLocaleString()}</p>`;
+
+        if (file.type.startsWith('image/')) {
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(file);
+            contentDiv.appendChild(img);
+        } else if (file.type.startsWith('text/') || file.type === 'application/json') {
+            const text = await file.text();
+            const pre = document.createElement('pre');
+            pre.textContent = text;
+            contentDiv.appendChild(pre);
+        } else {
+            const btn = document.createElement('button');
+            btn.textContent = "在新标签页打开";
+            btn.onclick = () => window.open(URL.createObjectURL(file), '_blank');
+            contentDiv.appendChild(btn);
+        }
+    }
+</script>
+</body>
+</html>
