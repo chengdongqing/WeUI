@@ -12,8 +12,8 @@ data class FileItem(
     val lastModified: String?,
     val childrenCount: Int,
     val iconRes: DrawableResource,
-    val isReadable: Boolean,
-    val isWriteable: Boolean,
-    val isHidden: Boolean,
+    val isReadable: Boolean?,
+    val isWriteable: Boolean?,
+    val isHidden: Boolean?,
     var thumbnailUrl: String? = node.id
 )

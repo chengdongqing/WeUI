@@ -1,22 +1,7 @@
 package top.chengdongqing.weui.feature.samples.data.model
 
 import kotlinx.browser.window
-import org.khronos.webgl.ArrayBuffer
 import kotlin.js.Promise
-
-val FileSystemHandle.isDirectory: Boolean
-    get() = this.kind == "directory"
-
-@OptIn(ExperimentalWasmJsInterop::class)
-external interface DirectoryPickerOptions : JsAny {
-    var mode: String?     // 可选值："read" 或 "readwrite"
-    var id: String?       // 可选，用于让浏览器记住上次打开的目录
-    var startIn: JsAny?   // 可选，起始目录（可传入特定字符串或其它句柄）
-}
-
-@OptIn(ExperimentalWasmJsInterop::class)
-@JsFun("() => ({})")
-external fun createDirectoryPickerOptions(): DirectoryPickerOptions
 
 @OptIn(ExperimentalWasmJsInterop::class)
 external interface Window : JsAny {
@@ -53,8 +38,6 @@ external interface JsFile : JsAny {
     val type: JsString
     val size: JsBigInt
     val lastModified: JsBigInt
-    fun text(): Promise<JsString>
-    fun arrayBuffer(): Promise<ArrayBuffer>
 }
 
 @OptIn(ExperimentalWasmJsInterop::class)
@@ -68,6 +51,18 @@ external interface JsIteratorResult<T : JsAny> : JsAny {
     val value: T?
 }
 
+val FileSystemHandle.isDirectory: Boolean
+    get() = this.kind == "directory"
+
+@OptIn(ExperimentalWasmJsInterop::class)
+external interface DirectoryPickerOptions : JsAny {
+    var mode: String?
+}
+
+@OptIn(ExperimentalWasmJsInterop::class)
+@JsFun("() => ({})")
+external fun createDirectoryPickerOptions(): DirectoryPickerOptions
+
 @OptIn(ExperimentalWasmJsInterop::class)
 external interface RemoveEntryOptions : JsAny {
     var recursive: Boolean? // 是否递归删除子目录及文件
@@ -76,7 +71,3 @@ external interface RemoveEntryOptions : JsAny {
 @OptIn(ExperimentalWasmJsInterop::class)
 @JsFun("() => ({})")
 external fun createRemoveEntryOptions(): RemoveEntryOptions
-
-@OptIn(ExperimentalWasmJsInterop::class)
-@JsFun("(buffer) => [buffer]")
-external fun wrapInJsArray(buffer: ArrayBuffer): JsArray<JsAny?>

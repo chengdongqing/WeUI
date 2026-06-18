@@ -32,7 +32,7 @@ actual fun RequestStoragePermission(content: @Composable (FileNode) -> Unit) {
         content(
             JvmFileNode(
                 id = it,
-                name = "/",
+                name = it.split('/', '\\').last(),
                 isDirectory = true,
                 file = File(it)
             )

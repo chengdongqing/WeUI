@@ -87,7 +87,7 @@ actual fun RequestStoragePermission(content: @Composable ((FileNode) -> Unit)) {
         content(
             AndroidFileNode(
                 id = rootPath,
-                name = "/",
+                name = "内部存储",
                 isDirectory = true,
                 file = File(rootPath)
             )

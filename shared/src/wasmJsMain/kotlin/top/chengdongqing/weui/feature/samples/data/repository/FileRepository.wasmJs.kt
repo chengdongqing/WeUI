@@ -96,9 +96,9 @@ class WasmFileRepository : FileRepository {
             mimeType = file?.type?.toString().orEmpty(),
             isDirectory = isDirectory,
             isVisualMedia = isVisualMedia,
-            isReadable = true,
-            isWriteable = true,
-            isHidden = false,
+            isReadable = null,
+            isWriteable = null,
+            isHidden = null,
             lastModified = file?.let {
                 formatTime(it.lastModified.toLong())
             },

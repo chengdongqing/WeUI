@@ -213,8 +213,14 @@ private fun FileDetailsPopup(
         file.lastModified?.let {
             WeCardListItem(label = "时间", value = file.lastModified)
         }
-        WeCardListItem(label = "可读", value = file.isReadable.format())
-        WeCardListItem(label = "可写", value = file.isWriteable.format())
-        WeCardListItem(label = "隐藏", value = file.isHidden.format())
+        file.isReadable?.let {
+            WeCardListItem(label = "可读", value = file.isReadable.format())
+        }
+        file.isWriteable?.let {
+            WeCardListItem(label = "可写", value = file.isWriteable.format())
+        }
+        file.isHidden?.let {
+            WeCardListItem(label = "隐藏", value = file.isHidden.format())
+        }
     }
 }

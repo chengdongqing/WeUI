@@ -34,7 +34,10 @@ internal fun NavigationBar(
     }
 
     Row {
-        FolderLabel("内部存储", levels == 1) {
+        FolderLabel(
+            label = nodes.firstOrNull()?.name ?: "",
+            isActive = levels == 1
+        ) {
             if (nodes.size > 1) {
                 repeat(nodes.size - 1) {
                     onBack()

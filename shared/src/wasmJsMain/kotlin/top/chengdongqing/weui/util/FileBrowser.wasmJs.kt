@@ -43,14 +43,14 @@ actual fun RequestStoragePermission(content: @Composable ((FileNode) -> Unit)) {
         type = ButtonType.Plain
     ) {
         scope.launch {
-            try {
+            runCatching {
                 directoryHandle = myWindow.showDirectoryPicker(
                     createDirectoryPickerOptions().apply {
                         mode = "readwrite"
-                    })
-                    .await<FileSystemDirectoryHandle>()
-            } catch (e: Exception) {
-                e.printStackTrace()
+                    }
+                ).await<FileSystemDirectoryHandle>()
+            }.onFailure {
+                it.printStackTrace()
             }
         }
     }
