@@ -1,17 +1,14 @@
 package top.chengdongqing.weui.feature.samples.data.repository
 
 import top.chengdongqing.weui.feature.samples.data.model.FileItem
+import top.chengdongqing.weui.feature.samples.data.model.FileNode
 
 interface FileRepository {
-    suspend fun getFileList(filepath: String): List<FileItem>
+    suspend fun getChildren(fileNode: FileNode): List<FileItem>
 
-    suspend fun openFile(
-        filePath: String,
-        mimeType: String,
-        showChooser: Boolean = true
-    )
+    suspend fun open(fileItem: FileItem)
 
-    suspend fun deleteFile(filePath: String): Boolean
+    suspend fun delete(fileNode: FileNode): Boolean
 }
 
 expect fun getFileRepository(): FileRepository

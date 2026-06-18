@@ -4,6 +4,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jetbrains.compose.resources.DrawableResource
 import top.chengdongqing.weui.feature.samples.data.model.FileItem
+import top.chengdongqing.weui.feature.samples.data.model.FileNode
+import top.chengdongqing.weui.feature.samples.data.model.JvmFileNode
+import top.chengdongqing.weui.util.formatFileSize
 import top.chengdongqing.weui.util.formatTime
 import weui_kmp.shared.generated.resources.Res
 import weui_kmp.shared.generated.resources.ic_document
@@ -16,9 +19,11 @@ import java.io.File
 import java.nio.file.Files
 
 class JvmFileRepository : FileRepository {
-    override suspend fun getFileList(filepath: String): List<FileItem> =
-        withContext(Dispatchers.IO) {
-            File(filepath).listFiles()
+    override suspend fun getChildren(fileNode: FileNode): List<FileItem> {
+        val node = fileNode as JvmFileNode
+
+        return withContext(Dispatchers.IO) {
+            node.file.listFiles()
                 ?.sortedWith(
                     compareBy<File> { !it.isDirectory }
                         .thenBy { it.name }
@@ -26,7 +31,12 @@ class JvmFileRepository : FileRepository {
                 ?.map { file ->
                     FileItem(
                         name = file.name,
-                        path = file.path,
+                        node = JvmFileNode(
+                            file = file,
+                            id = file.path,
+                            name = file.name,
+                            isDirectory = file.isDirectory
+                        ),
                         iconRes = file.getFileIcon(),
                         size = formatFileSize(file),
                         mimeType = file.getMimeType(),
@@ -40,6 +50,7 @@ class JvmFileRepository : FileRepository {
                     )
                 } ?: emptyList()
         }
+    }
 
     private fun File.isVisualMedia(): Boolean {
         val mimeType = getMimeType()
@@ -77,15 +88,13 @@ class JvmFileRepository : FileRepository {
      */
     fun formatFileSize(file: File): String {
         val size = if (file.exists()) file.length() else 0
-        return top.chengdongqing.weui.util.formatFileSize(size)
+        return formatFileSize(size)
     }
 
-    override suspend fun openFile(
-        filePath: String,
-        mimeType: String,
-        showChooser: Boolean
-    ) {
-        val file = File(filePath)
+    override suspend fun open(fileItem: FileItem) {
+        val node = fileItem.node as JvmFileNode
+        val file = node.file
+
         if (file.exists() && Desktop.isDesktopSupported()) {
             runCatching {
                 Desktop.getDesktop().open(file)
@@ -95,8 +104,8 @@ class JvmFileRepository : FileRepository {
         }
     }
 
-    override suspend fun deleteFile(filePath: String) = withContext(Dispatchers.IO) {
-        val file = File(filePath)
+    override suspend fun delete(fileNode: FileNode): Boolean = withContext(Dispatchers.IO) {
+        val file = (fileNode as JvmFileNode).file
         if (file.isDirectory) {
             file.deleteRecursively()
         } else {

@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -22,34 +21,31 @@ import top.chengdongqing.weui.core.ui.components.loading.LoadMoreType
 import top.chengdongqing.weui.core.ui.components.loading.WeLoadMore
 import top.chengdongqing.weui.core.ui.components.refreshview.WeRefreshView
 import top.chengdongqing.weui.core.ui.theme.WeTheme
+import top.chengdongqing.weui.feature.samples.data.model.FileNode
 import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun FileListWrapper(
-    filePath: String,
+    fileNode: FileNode,
     viewModel: FileListViewModel = viewModel(factory = viewModelFactory {
         initializer {
-            FileListViewModel()
+            FileListViewModel(fileNode)
         }
     }),
-    onNavigateToFolder: (String) -> Unit
+    onNavigateToFolder: (FileNode) -> Unit
 ) {
     val scope = rememberCoroutineScope()
 
-    LaunchedEffect(filePath) {
-        viewModel.getFileList(filePath)
-    }
-
     WeRefreshView(onRefresh = {
         delay(1000.milliseconds)
-        viewModel.getFileList(filePath)
+        viewModel.getFileList(fileNode)
     }) {
         FileList(
             viewModel = viewModel,
             onNavigateToFolder = onNavigateToFolder,
             onRefresh = {
                 scope.launch {
-                    viewModel.getFileList(filePath)
+                    viewModel.getFileList(fileNode)
                 }
             }
         )
@@ -59,7 +55,7 @@ fun FileListWrapper(
 @Composable
 private fun FileList(
     viewModel: FileListViewModel,
-    onNavigateToFolder: (String) -> Unit,
+    onNavigateToFolder: (FileNode) -> Unit,
     onRefresh: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
@@ -87,20 +83,20 @@ private fun FileList(
             }
 
             else -> {
-                items(fileList, key = { it.path }) { fileItem ->
+                items(fileList, key = { it.node.id }) { fileItem ->
                     FileListItem(
                         file = fileItem,
                         onFolderClick = {
-                            onNavigateToFolder(fileItem.path)
+                            onNavigateToFolder(fileItem.node)
                         },
                         onFileClick = {
                             scope.launch {
-                                viewModel.openFile(fileItem.path, fileItem.mimeType)
+                                viewModel.openFile(fileItem)
                             }
                         },
                         onDelete = {
                             scope.launch {
-                                viewModel.deleteFile(fileItem.path)
+                                viewModel.deleteFile(fileItem.node)
                                 onRefresh()
                             }
                         }

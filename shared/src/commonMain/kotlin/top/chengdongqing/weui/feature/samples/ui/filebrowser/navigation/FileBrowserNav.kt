@@ -7,6 +7,7 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import kotlinx.serialization.Serializable
+import top.chengdongqing.weui.feature.samples.data.model.FileNode
 import top.chengdongqing.weui.feature.samples.ui.filebrowser.components.FileListWrapper
 import top.chengdongqing.weui.navigation.createEnterTransition
 import top.chengdongqing.weui.navigation.createExitTransition
@@ -14,8 +15,8 @@ import top.chengdongqing.weui.navigation.createExitTransition
 @Composable
 fun FileBrowserNav(
     backStack: List<NavKey>,
-    rootPath: String,
-    onNavigateToFolder: (String) -> Unit,
+    rootFileNode: FileNode,
+    onNavigateToFolder: (FileNode) -> Unit,
     onBack: () -> Unit
 ) {
     NavDisplay(
@@ -31,7 +32,7 @@ fun FileBrowserNav(
         entryProvider = entryProvider {
             entry<FileBrowserNavKey> {
                 FileListWrapper(
-                    filePath = it.path ?: rootPath,
+                    fileNode = it.fileNode ?: rootFileNode,
                     onNavigateToFolder = onNavigateToFolder
                 )
             }
@@ -41,5 +42,5 @@ fun FileBrowserNav(
 
 @Serializable
 data class FileBrowserNavKey(
-    val path: String?
+    val fileNode: FileNode?
 ) : NavKey

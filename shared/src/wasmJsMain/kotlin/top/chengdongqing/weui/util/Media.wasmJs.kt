@@ -19,9 +19,9 @@ actual suspend fun saveBitmap(bitmap: ImageBitmap, filename: String): Boolean {
 
         val jsArray = Uint8Array(bytes.size)
         bytes.forEachIndexed { index, byte -> jsArray[index] = byte }
-        val jsAnyArray = arrayOf(jsArray as JsAny?).toJsArray()
+        val jsAnyArray = arrayOf(jsArray).toJsArray()
 
-        val blob = Blob(jsAnyArray, BlobPropertyBag(type = "image/webp"))
+        val blob = Blob(jsAnyArray.unsafeCast(), BlobPropertyBag(type = "image/webp"))
         val url = URL.createObjectURL(blob)
 
         val a = document.createElement("a") as HTMLAnchorElement

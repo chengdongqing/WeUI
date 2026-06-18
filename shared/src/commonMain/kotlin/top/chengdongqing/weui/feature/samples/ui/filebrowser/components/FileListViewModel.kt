@@ -1,40 +1,49 @@
 package top.chengdongqing.weui.feature.samples.ui.filebrowser.components
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import top.chengdongqing.weui.feature.samples.data.model.FileItem
+import top.chengdongqing.weui.feature.samples.data.model.FileNode
 import top.chengdongqing.weui.feature.samples.data.repository.getFileRepository
 
-class FileListViewModel : ViewModel() {
+class FileListViewModel(fileNode: FileNode) : ViewModel() {
     private val repository = getFileRepository()
 
     private val _uiState = MutableStateFlow(FileBrowserUiState())
     val uiState = _uiState.asStateFlow()
 
-    suspend fun getFileList(filePath: String) {
+    init {
+        viewModelScope.launch {
+            getFileList(fileNode)
+        }
+    }
+
+    suspend fun getFileList(fileNode: FileNode) {
         _uiState.update {
             it.copy(isLoading = true)
         }
 
-        val fileList = repository.getFileList(filePath)
+        runCatching {
+            val fileList = repository.getChildren(fileNode)
 
-        _uiState.update {
-            it.copy(
-                isLoading = false,
-                fileList = fileList
-            )
+            _uiState.update {
+                it.copy(
+                    isLoading = false,
+                    fileList = fileList
+                )
+            }
+        }.onFailure {
+            it.printStackTrace()
         }
     }
 
-    suspend fun openFile(
-        filePath: String,
-        mimeType: String,
-        showChooser: Boolean = true
-    ) = repository.openFile(filePath, mimeType, showChooser)
+    suspend fun openFile(fileItem: FileItem) = repository.open(fileItem)
 
-    suspend fun deleteFile(filePath: String) = repository.deleteFile(filePath)
+    suspend fun deleteFile(fileNode: FileNode) = repository.delete(fileNode)
 }
 
 data class FileBrowserUiState(

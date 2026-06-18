@@ -27,29 +27,29 @@ fun FileBrowserScreen(onBack: () -> Unit) {
         scrollEnabled = false,
         onBack = onBack
     ) {
-        RequestStoragePermission { rootPath ->
+        RequestStoragePermission { fileNode ->
             val backStack = remember {
                 mutableStateListOf<NavKey>(FileBrowserNavKey(null))
             }
-            val folders = remember { mutableStateListOf(rootPath) }
+            val nodes = remember { mutableStateListOf(fileNode) }
 
             Column {
                 NavigationBar(
-                    folders = folders,
+                    nodes = nodes,
                     onBack = backStack::removeLast
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 FileBrowserNav(
                     backStack = backStack,
-                    rootPath = rootPath,
+                    rootFileNode = fileNode,
                     onNavigateToFolder = {
                         backStack.add(FileBrowserNavKey(it))
-                        folders.add(it)
+                        nodes.add(it)
                     },
                     onBack = {
                         if (backStack.isNotEmpty()) {
                             backStack.removeLast()
-                            folders.removeLast()
+                            nodes.removeLast()
                         } else {
                             onBack()
                         }

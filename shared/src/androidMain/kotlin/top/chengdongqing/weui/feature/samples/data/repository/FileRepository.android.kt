@@ -7,7 +7,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jetbrains.compose.resources.DrawableResource
 import top.chengdongqing.weui.androidAppInstance
+import top.chengdongqing.weui.feature.samples.data.model.AndroidFileNode
 import top.chengdongqing.weui.feature.samples.data.model.FileItem
+import top.chengdongqing.weui.feature.samples.data.model.FileNode
 import top.chengdongqing.weui.util.formatFileSize
 import top.chengdongqing.weui.util.formatTime
 import top.chengdongqing.weui.util.getFileProviderUri
@@ -21,9 +23,11 @@ import weui_kmp.shared.generated.resources.ic_video
 import java.io.File
 
 class AndroidFileRepository(val context: Context) : FileRepository {
-    override suspend fun getFileList(filepath: String): List<FileItem> =
-        withContext(Dispatchers.IO) {
-            File(filepath).listFiles()
+    override suspend fun getChildren(fileNode: FileNode): List<FileItem> {
+        val node = fileNode as AndroidFileNode
+
+        return withContext(Dispatchers.IO) {
+            node.file.listFiles()
                 ?.sortedWith(
                     compareBy<File> { !it.isDirectory }
                         .thenBy { it.name }
@@ -31,7 +35,12 @@ class AndroidFileRepository(val context: Context) : FileRepository {
                 ?.map { file ->
                     FileItem(
                         name = file.name,
-                        path = file.path,
+                        node = AndroidFileNode(
+                            file = file,
+                            id = file.path,
+                            name = file.name,
+                            isDirectory = file.isDirectory
+                        ),
                         iconRes = file.getFileIcon(),
                         size = formatFileSize(file),
                         mimeType = file.getFileMimeType(),
@@ -45,6 +54,7 @@ class AndroidFileRepository(val context: Context) : FileRepository {
                     )
                 } ?: emptyList()
         }
+    }
 
     private fun File.isVisualMedia(): Boolean {
         val mimeType = getFileMimeType()
@@ -94,31 +104,25 @@ class AndroidFileRepository(val context: Context) : FileRepository {
         return formatFileSize(size)
     }
 
-    override suspend fun openFile(
-        filePath: String,
-        mimeType: String,
-        showChooser: Boolean
-    ) {
-        val uri = context.getFileProviderUri(File(filePath))
+    override suspend fun open(fileItem: FileItem) {
+        val node = fileItem.node as AndroidFileNode
+
+        val uri = context.getFileProviderUri(node.file)
         val intent = Intent(Intent.ACTION_VIEW).apply {
-            setDataAndType(uri, mimeType)
+            setDataAndType(uri, fileItem.mimeType)
             // 授予临时访问权限
             flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_NEW_TASK
         }
 
-        val finalIntent = if (showChooser) {
-            Intent.createChooser(intent, "打开文件").apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            }
-        } else {
-            intent
+        val finalIntent = Intent.createChooser(intent, "打开文件").apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
         }
 
         context.startActivity(finalIntent)
     }
 
-    override suspend fun deleteFile(filePath: String) = withContext(Dispatchers.IO) {
-        val file = File(filePath)
+    override suspend fun delete(fileNode: FileNode): Boolean = withContext(Dispatchers.IO) {
+        val file = (fileNode as AndroidFileNode).file
         if (file.isDirectory) {
             file.deleteRecursively()
         } else {

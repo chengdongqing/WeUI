@@ -23,6 +23,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.core.ui.components.ButtonType
 import top.chengdongqing.weui.core.ui.components.WeButton
+import top.chengdongqing.weui.feature.samples.data.model.AndroidFileNode
+import top.chengdongqing.weui.feature.samples.data.model.FileNode
 import java.io.File
 import java.io.IOException
 import java.nio.file.FileVisitResult
@@ -36,7 +38,7 @@ import java.util.concurrent.atomic.AtomicLong
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-actual fun RequestStoragePermission(content: @Composable ((String) -> Unit)) {
+actual fun RequestStoragePermission(content: @Composable ((FileNode) -> Unit)) {
     var hasPermission by remember { mutableStateOf(false) }
     val permissionState = rememberMultiplePermissionsState(
         listOf(
@@ -81,13 +83,22 @@ actual fun RequestStoragePermission(content: @Composable ((String) -> Unit)) {
             }
         }
     } else {
-        content(Environment.getExternalStorageDirectory().path)
+        val rootPath = Environment.getExternalStorageDirectory().path
+        content(
+            AndroidFileNode(
+                id = rootPath,
+                name = "/",
+                isDirectory = true,
+                file = File(rootPath)
+            )
+        )
     }
 }
 
-actual suspend fun calculateFileSize(filePath: String): Long = withContext(Dispatchers.IO) {
+actual suspend fun calculateFileSize(fileNode: FileNode): Long = withContext(Dispatchers.IO) {
     val size = AtomicLong(0)
-    val path = Paths.get(filePath)
+    val node = fileNode as AndroidFileNode
+    val path = Paths.get(node.id)
 
     if (Files.exists(path)) {
         walkFileTree(path, object : SimpleFileVisitor<Path>() {

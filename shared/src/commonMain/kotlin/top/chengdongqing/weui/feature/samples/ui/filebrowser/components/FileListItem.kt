@@ -110,8 +110,10 @@ internal fun FileListItem(
             Row {
                 Text(
                     text = buildString {
-                        append(file.lastModified)
-                        append(" | ")
+                        file.lastModified?.let {
+                            append(file.lastModified)
+                            append(" | ")
+                        }
                         if (file.isDirectory) {
                             append("${file.childrenCount}项")
                         } else {
@@ -161,7 +163,7 @@ private fun FileThumbnail(file: FileItem) {
 @Composable
 private fun VisualMediaThumbnail(file: FileItem) {
     AsyncImage(
-        model = file.path,
+        model = file.thumbnailUrl,
         contentDescription = null,
         modifier = Modifier
             .size(38.dp)
@@ -196,11 +198,11 @@ private fun FileDetailsPopup(
         val isSizeLoading = remember { mutableStateOf(false) }
         val totalSize by produceState(initialValue = 0L) {
             isSizeLoading.value = true
-            value = calculateFileSize(file.path)
+            value = calculateFileSize(file.node)
             isSizeLoading.value = false
         }
 
-        WeCardListItem(label = "位置", value = file.path)
+        WeCardListItem(label = "位置", value = file.node.id)
         WeCardListItem(
             label = "大小", value = if (isSizeLoading.value) {
                 "计算中..."
@@ -208,7 +210,9 @@ private fun FileDetailsPopup(
                 formatFileSize(totalSize)
             }
         )
-        WeCardListItem(label = "时间", value = file.lastModified)
+        file.lastModified?.let {
+            WeCardListItem(label = "时间", value = file.lastModified)
+        }
         WeCardListItem(label = "可读", value = file.isReadable.format())
         WeCardListItem(label = "可写", value = file.isWriteable.format())
         WeCardListItem(label = "隐藏", value = file.isHidden.format())

@@ -10,6 +10,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import top.chengdongqing.weui.core.ui.components.ButtonType
 import top.chengdongqing.weui.core.ui.components.WeButton
+import top.chengdongqing.weui.feature.samples.data.model.FileNode
+import top.chengdongqing.weui.feature.samples.data.model.JvmFileNode
+import java.io.File
 import java.io.IOException
 import java.nio.file.FileVisitResult
 import java.nio.file.Files
@@ -22,11 +25,18 @@ import java.util.concurrent.atomic.AtomicLong
 import javax.swing.JFileChooser
 
 @Composable
-actual fun RequestStoragePermission(content: @Composable (String) -> Unit) {
+actual fun RequestStoragePermission(content: @Composable (FileNode) -> Unit) {
     var directory by remember { mutableStateOf<String?>(null) }
 
     directory?.let {
-        content(it)
+        content(
+            JvmFileNode(
+                id = it,
+                name = "/",
+                isDirectory = true,
+                file = File(it)
+            )
+        )
     } ?: WeButton(
         text = "选择文件夹",
         width = 200.dp,
@@ -44,9 +54,10 @@ actual fun RequestStoragePermission(content: @Composable (String) -> Unit) {
     }
 }
 
-actual suspend fun calculateFileSize(filePath: String): Long = withContext(Dispatchers.IO) {
+actual suspend fun calculateFileSize(fileNode: FileNode): Long = withContext(Dispatchers.IO) {
     val size = AtomicLong(0)
-    val path = Paths.get(filePath)
+    val node = fileNode as JvmFileNode
+    val path = Paths.get(node.id)
 
     if (Files.exists(path)) {
         walkFileTree(path, object : SimpleFileVisitor<Path>() {

@@ -16,43 +16,44 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.painterResource
 import top.chengdongqing.weui.core.ui.theme.WeTheme
+import top.chengdongqing.weui.feature.samples.data.model.FileNode
 import top.chengdongqing.weui.util.weClickable
 import weui_kmp.shared.generated.resources.Res
 import weui_kmp.shared.generated.resources.ic_arrow_right
 
 @Composable
 internal fun NavigationBar(
-    folders: MutableList<String>,
+    nodes: MutableList<FileNode>,
     onBack: () -> Unit
 ) {
-    val levels = folders.size
+    val levels = nodes.size
     val listState = rememberLazyListState()
+
     LaunchedEffect(levels) {
-        listState.animateScrollToItem(folders.lastIndex)
+        listState.animateScrollToItem(nodes.lastIndex)
     }
 
     Row {
         FolderLabel("内部存储", levels == 1) {
-            if (folders.size > 1) {
-                repeat(folders.size - 1) {
+            if (nodes.size > 1) {
+                repeat(nodes.size - 1) {
                     onBack()
                 }
-                folders.subList(1, levels).clear()
+                nodes.subList(1, levels).clear()
             }
         }
         if (levels > 1) {
             FolderArrowIcon()
             LazyRow(state = listState) {
-                folders.slice(1..folders.lastIndex).forEachIndexed { index, item ->
-                    val label = item.slice(item.lastIndexOf("/") + 1..item.lastIndex)
+                nodes.slice(1..nodes.lastIndex).forEachIndexed { index, node ->
                     val isActive = index + 2 == levels
 
                     item {
-                        FolderLabel(label, isActive) {
+                        FolderLabel(node.name, isActive) {
                             if (!isActive) {
-                                val toRemoveFolders = folders.slice(index + 2..folders.lastIndex)
-                                folders.removeAll(toRemoveFolders)
-                                repeat(toRemoveFolders.size) {
+                                val toRemoveNode = nodes.slice(index + 2..nodes.lastIndex)
+                                nodes.removeAll(toRemoveNode)
+                                repeat(toRemoveNode.size) {
                                     onBack()
                                 }
                             }
@@ -68,7 +69,11 @@ internal fun NavigationBar(
 }
 
 @Composable
-private fun FolderLabel(label: String, isActive: Boolean, onClick: () -> Unit) {
+private fun FolderLabel(
+    label: String,
+    isActive: Boolean,
+    onClick: () -> Unit
+) {
     Text(
         text = label,
         color = if (isActive) {
