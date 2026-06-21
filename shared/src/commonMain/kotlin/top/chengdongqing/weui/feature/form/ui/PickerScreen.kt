@@ -51,7 +51,7 @@ fun PickerScreen(onBack: () -> Unit) {
 @Composable
 private fun DatePickDemo() {
     val state = rememberDatePickerState()
-    var value by remember { mutableStateOf(Clock.localDate) }
+    var value by remember { mutableStateOf(Clock.System.localDate) }
 
     WeInput(
         value = value.format(ChineseDateFormatter),
@@ -82,7 +82,7 @@ private fun DatePickDemo() {
 private fun TimePickDemo() {
     val picker = rememberTimePickerState()
     var value by remember {
-        mutableStateOf(Clock.localTime)
+        mutableStateOf(Clock.System.localTime)
     }
 
     WeInput(

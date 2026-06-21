@@ -19,7 +19,7 @@ import kotlin.time.Clock
 @Composable
 fun CalendarScreen(onBack: () -> Unit) {
     val calendarState = rememberCalendarState()
-    val today = remember { Clock.localDate }
+    val today = remember { Clock.System.localDate }
 
     WeScreen(
         title = "Calendar",

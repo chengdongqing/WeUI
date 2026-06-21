@@ -143,7 +143,7 @@ private fun rememberValues(
     end: LocalTime
 ): MutableState<Array<Int>> {
     return remember(range, value) {
-        val finalValue = value ?: Clock.localTime
+        val finalValue = value ?: Clock.System.localTime
         val initialValue = if (finalValue < start) {
             start
         } else if (finalValue > end) {

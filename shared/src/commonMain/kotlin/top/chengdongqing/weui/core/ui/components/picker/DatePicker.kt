@@ -177,7 +177,7 @@ private fun rememberCurrentValues(
     end: LocalDate
 ): MutableState<Array<Int>> {
     return remember(ranges, value, start, end) {
-        val finalValue = value ?: Clock.localDate
+        val finalValue = value ?: Clock.System.localDate
         val initialValue = if (finalValue < start) {
             start
         } else if (finalValue > end) {
@@ -259,5 +259,5 @@ private data class DatePickerProps(
     val onChange: (LocalDate) -> Unit
 )
 
-private val LocalDateStart: LocalDate = Clock.localDate.minus(DatePeriod(years = 50))
-private val LocalDateEnd: LocalDate = Clock.localDate.plus(DatePeriod(years = 10))
+private val LocalDateStart: LocalDate = Clock.System.localDate.minus(DatePeriod(years = 50))
+private val LocalDateEnd: LocalDate = Clock.System.localDate.plus(DatePeriod(years = 10))

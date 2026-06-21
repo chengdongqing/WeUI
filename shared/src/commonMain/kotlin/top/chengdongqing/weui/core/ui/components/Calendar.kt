@@ -328,5 +328,5 @@ private class CalendarStateImpl(
 
 private const val TotalPage = 1000
 private const val InitialPage = 500
-private val Today = Clock.localDate
+private val Today = Clock.System.localDate
 private val WeekDays = arrayOf("日", "一", "二", "三", "四", "五", "六")

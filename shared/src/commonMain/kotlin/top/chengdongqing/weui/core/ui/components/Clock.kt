@@ -28,6 +28,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import top.chengdongqing.weui.core.ui.theme.WeColorScheme
 import top.chengdongqing.weui.core.ui.theme.WeTheme
+import top.chengdongqing.weui.util.nowMillis
 import top.chengdongqing.weui.util.polarToCartesian
 import top.chengdongqing.weui.util.toRadians
 import kotlin.math.cos
@@ -43,19 +44,19 @@ fun WeClock(
     scale: Float = 1f,
     isSmoothSweep: Boolean = false // 是否启用流线扫秒
 ) {
-    val currentTimeState = remember { mutableLongStateOf(Clock.System.now().toEpochMilliseconds()) }
+    val currentTimeState = remember { mutableLongStateOf(Clock.System.nowMillis) }
 
     LaunchedEffect(isSmoothSweep) {
         while (isActive) {
             if (isSmoothSweep) {
                 // 随屏幕刷新率更新
                 withFrameMillis {
-                    currentTimeState.longValue = Clock.System.now().toEpochMilliseconds()
+                    currentTimeState.longValue = Clock.System.nowMillis
                 }
             } else {
                 // 每秒更新一次
                 delay(1000.milliseconds)
-                currentTimeState.longValue = Clock.System.now().toEpochMilliseconds()
+                currentTimeState.longValue = Clock.System.nowMillis
             }
         }
     }

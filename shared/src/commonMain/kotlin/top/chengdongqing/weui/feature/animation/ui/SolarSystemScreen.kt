@@ -22,6 +22,7 @@ import kotlinx.coroutines.isActive
 import org.jetbrains.compose.resources.imageResource
 import top.chengdongqing.weui.core.ui.components.WeScreen
 import top.chengdongqing.weui.core.ui.theme.StatusBarAppearanceEffect
+import top.chengdongqing.weui.util.nowMillis
 import top.chengdongqing.weui.util.toIntOffset
 import top.chengdongqing.weui.util.toRadians
 import weui_kmp.shared.generated.resources.Res
@@ -81,7 +82,7 @@ private fun rememberAnimatedTime(): MutableLongState {
     LaunchedEffect(Unit) {
         while (isActive) {
             withFrameMillis {
-                time.longValue = Clock.System.now().toEpochMilliseconds()
+                time.longValue = Clock.System.nowMillis
             }
         }
     }

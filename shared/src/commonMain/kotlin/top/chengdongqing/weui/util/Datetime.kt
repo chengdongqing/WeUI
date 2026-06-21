@@ -9,11 +9,13 @@ import kotlinx.datetime.format.byUnicodePattern
 import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Clock
 
-val Clock.Companion.localDateTime
-    get() = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-val Clock.Companion.localDate
+val Clock.nowMillis
+    get() = now().toEpochMilliseconds()
+val Clock.localDateTime
+    get() = now().toLocalDateTime(TimeZone.currentSystemDefault())
+val Clock.localDate
     get() = localDateTime.date
-val Clock.Companion.localTime
+val Clock.localTime
     get() = localDateTime.time
 
 val LocalTime.Companion.Min: LocalTime

@@ -34,6 +34,7 @@ import top.chengdongqing.weui.core.ui.components.rememberToastState
 import top.chengdongqing.weui.feature.samples.data.model.StrokePath
 import top.chengdongqing.weui.feature.samples.ui.paint.components.DrawingBoard
 import top.chengdongqing.weui.feature.samples.ui.paint.components.DrawingTools
+import top.chengdongqing.weui.util.nowMillis
 import top.chengdongqing.weui.util.saveBitmap
 import kotlin.time.Clock
 import kotlin.time.Duration
@@ -83,8 +84,7 @@ fun PaintScreen(onBack: () -> Unit) {
 
                         coroutineScope.launch {
                             val imageBitmap = drawPathsToImage(paths, size)
-                            val filename =
-                                "drawing_${Clock.System.now().toEpochMilliseconds()}.webp"
+                            val filename = "drawing_${Clock.System.nowMillis}.webp"
                             val result = saveBitmap(imageBitmap, filename)
 
                             toast.hide()
