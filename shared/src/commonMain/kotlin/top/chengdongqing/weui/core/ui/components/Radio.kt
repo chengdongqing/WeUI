@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.painterResource
 import top.chengdongqing.weui.core.ui.theme.WeTheme
-import top.chengdongqing.weui.util.weClickable
+import top.chengdongqing.weui.util.onTap
 import weui_kmp.shared.generated.resources.Res
 import weui_kmp.shared.generated.resources.ic_check
 
@@ -36,7 +36,7 @@ fun <T> WeRadioGroup(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp)
-                    .weClickable { onChange(option.second) }
+                    .onTap { onChange(option.second) }
                     .padding(horizontal = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {

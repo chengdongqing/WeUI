@@ -1,8 +1,9 @@
 package top.chengdongqing.weui.core.ui.theme
 
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
@@ -66,15 +67,14 @@ fun WeUITheme(
     // 字体配置（仅web端需要）
     val fontFamily = getFontFamily()
 
-    MaterialTheme {
-        CompositionLocalProvider(
-            LocalTextStyle provides TextStyle(
-                fontFamily = fontFamily
-            ),
-            LocalColorScheme provides colorScheme
-        ) {
-            content()
-        }
+    CompositionLocalProvider(
+        LocalTextStyle provides TextStyle(
+            fontFamily = fontFamily
+        ),
+        LocalIndication provides ripple(),
+        LocalColorScheme provides colorScheme
+    ) {
+        content()
     }
 }
 

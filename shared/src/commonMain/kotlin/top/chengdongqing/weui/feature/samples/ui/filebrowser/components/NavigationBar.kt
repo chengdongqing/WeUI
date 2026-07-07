@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.painterResource
 import top.chengdongqing.weui.core.ui.theme.WeTheme
 import top.chengdongqing.weui.feature.samples.data.model.FileNode
-import top.chengdongqing.weui.util.weClickable
+import top.chengdongqing.weui.util.onTap
 import weui_kmp.shared.generated.resources.Res
 import weui_kmp.shared.generated.resources.ic_arrow_right
 
@@ -94,7 +94,7 @@ private fun FolderLabel(
                 },
                 shape = RoundedCornerShape(16.dp)
             )
-            .weClickable { onClick() }
+            .onTap { onClick() }
             .padding(vertical = 4.dp, horizontal = 12.dp)
     )
 }

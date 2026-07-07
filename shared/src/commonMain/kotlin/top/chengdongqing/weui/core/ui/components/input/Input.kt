@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.core.ui.components.WeDivider
 import top.chengdongqing.weui.core.ui.theme.WeTheme
-import top.chengdongqing.weui.util.weClickable
+import top.chengdongqing.weui.util.onTap
 
 @Composable
 fun WeInput(
@@ -79,7 +79,7 @@ fun WeInput(
                     modifier = Modifier
                         .fillMaxSize()
                         .then(onClick?.let {
-                            Modifier.weClickable { it() }
+                            Modifier.onTap { it() }
                         } ?: Modifier),
                     contentAlignment = when (textAlign) {
                         TextAlign.Center -> Alignment.Center

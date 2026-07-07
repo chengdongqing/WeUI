@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.core.ui.theme.WeTheme
-import top.chengdongqing.weui.util.weClickable
+import top.chengdongqing.weui.util.onTap
 
 @Composable
 fun WeTreeNode(
@@ -55,7 +55,7 @@ fun WeTreeNode(
         Row(
             modifier = Modifier
                 .padding(vertical = 2.dp)
-                .weClickable {
+                .onTap {
                     if (expandable) {
                         expended = !expended
                     }

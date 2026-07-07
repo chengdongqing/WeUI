@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import top.chengdongqing.weui.core.ui.theme.WeTheme
-import top.chengdongqing.weui.util.weClickable
+import top.chengdongqing.weui.util.onTap
 
 @Composable
 fun WeTabView(
@@ -74,7 +74,7 @@ private fun TabBar(pagerState: PagerState, options: List<String>, containerColor
                 },
                 fontSize = 15.sp,
                 modifier = Modifier
-                    .weClickable {
+                    .onTap {
                         coroutineScope.launch {
                             pagerState.animateScrollToPage(index)
                         }

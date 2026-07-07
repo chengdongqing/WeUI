@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.core.ui.theme.PurpleLink
 import top.chengdongqing.weui.core.ui.theme.WeTheme
 import top.chengdongqing.weui.navigation.BackHandler
-import top.chengdongqing.weui.util.weClickable
+import top.chengdongqing.weui.util.onTap
 
 @Composable
 fun WeSearchBar(
@@ -123,7 +123,7 @@ fun WeSearchBar(
                 Row(
                     modifier = Modifier
                         .fillMaxSize()
-                        .weClickable {
+                        .onTap {
                             if (!disabled) {
                                 setFocus(true)
                             }
@@ -154,7 +154,7 @@ fun WeSearchBar(
                 color = PurpleLink,
                 fontSize = 16.sp,
                 modifier = Modifier
-                    .weClickable {
+                    .onTap {
                         setFocus(false)
                         onChange("")
                     }

@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.chengdongqing.weui.core.ui.theme.WeTheme
-import top.chengdongqing.weui.util.weClickable
+import top.chengdongqing.weui.util.onTap
 
 data class OrgNode(
     val label: String,
@@ -87,7 +87,7 @@ fun WeOrgTree(
                         )
                         .clip(RoundedCornerShape(2.dp))
                         .setStyle(expended)
-                        .weClickable {
+                        .onTap {
                             if (item.children.isNotEmpty()) {
                                 expended = !expended
                             }
@@ -141,7 +141,7 @@ private fun ExpandableIcon(onClick: () -> Unit) {
             tint = WeTheme.colorScheme.textSecondary,
             modifier = Modifier
                 .size(20.dp)
-                .weClickable {
+                .onTap {
                     onClick()
                 }
         )

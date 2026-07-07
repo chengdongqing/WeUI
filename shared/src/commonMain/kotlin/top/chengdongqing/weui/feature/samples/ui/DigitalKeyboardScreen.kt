@@ -16,8 +16,8 @@ import top.chengdongqing.weui.core.ui.components.digitalkeyboard.DigitalKeyboard
 import top.chengdongqing.weui.core.ui.components.digitalkeyboard.WeDigitalKeyboard
 import top.chengdongqing.weui.core.ui.components.input.WeInput
 import top.chengdongqing.weui.core.ui.theme.RedDanger
+import top.chengdongqing.weui.util.onTap
 import top.chengdongqing.weui.util.rememberToggleState
-import top.chengdongqing.weui.util.weClickable
 
 @Composable
 fun DigitalKeyboardScreen(onBack: () -> Unit) {
@@ -42,7 +42,7 @@ fun DigitalKeyboardScreen(onBack: () -> Unit) {
             label = "金额",
             placeholder = "请输入",
             disabled = true,
-            modifier = Modifier.weClickable {
+            modifier = Modifier.onTap {
                 visible = true
             }
         )

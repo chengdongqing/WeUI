@@ -40,7 +40,7 @@ import top.chengdongqing.weui.core.ui.components.WeDivider
 import top.chengdongqing.weui.core.ui.theme.InvertColorMatrix
 import top.chengdongqing.weui.core.ui.theme.WeTheme
 import top.chengdongqing.weui.navigation.MenuItem
-import top.chengdongqing.weui.util.weClickable
+import top.chengdongqing.weui.util.onTap
 import weui_kmp.shared.generated.resources.Res
 import weui_kmp.shared.generated.resources.ic_arrow_right
 import weui_kmp.shared.generated.resources.ic_footer_link
@@ -183,7 +183,7 @@ private fun MenuGroupHeader(
     Row(
         Modifier
             .alpha(if (expanded) 0.5f else 1f)
-            .weClickable { onClick() }
+            .onTap { onClick() }
             .padding(20.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {

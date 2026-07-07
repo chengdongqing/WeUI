@@ -52,8 +52,8 @@ import top.chengdongqing.weui.core.ui.components.WeDivider
 import top.chengdongqing.weui.core.ui.components.WeScreen
 import top.chengdongqing.weui.core.ui.theme.WeTheme
 import top.chengdongqing.weui.util.calculateBezierPath
+import top.chengdongqing.weui.util.onTap
 import top.chengdongqing.weui.util.toIntOffset
-import top.chengdongqing.weui.util.weClickable
 import weui_kmp.shared.generated.resources.Res
 import weui_kmp.shared.generated.resources.milk_tea
 
@@ -174,7 +174,7 @@ private fun ProductItem(onAddToCart: (Offset) -> Unit) {
                 .onGloballyPositioned {
                     position = it.positionInRoot()
                 }
-                .weClickable {
+                .onTap {
                     onAddToCart(position)
                 }
         )

@@ -20,7 +20,7 @@ import top.chengdongqing.weui.core.ui.components.WeCheckBox
 import top.chengdongqing.weui.core.ui.components.WeDivider
 import top.chengdongqing.weui.core.ui.components.WeScreen
 import top.chengdongqing.weui.core.ui.theme.WeTheme
-import top.chengdongqing.weui.util.weClickable
+import top.chengdongqing.weui.util.onTap
 
 @Composable
 fun CheckboxScreen(onBack: () -> Unit) {
@@ -49,7 +49,7 @@ fun CheckboxScreen(onBack: () -> Unit) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp)
-                        .weClickable { toggleSelection(option.second) }
+                        .onTap { toggleSelection(option.second) }
                         .padding(horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {

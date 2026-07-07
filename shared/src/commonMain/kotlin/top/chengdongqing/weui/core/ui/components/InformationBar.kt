@@ -31,7 +31,7 @@ import org.jetbrains.compose.resources.painterResource
 import top.chengdongqing.weui.core.ui.theme.GreenPrimary
 import top.chengdongqing.weui.core.ui.theme.PurpleLink
 import top.chengdongqing.weui.core.ui.theme.RedDanger
-import top.chengdongqing.weui.util.weClickable
+import top.chengdongqing.weui.util.onTap
 import weui_kmp.shared.generated.resources.Res
 import weui_kmp.shared.generated.resources.ic_check
 import weui_kmp.shared.generated.resources.ic_error_circle_filled
@@ -106,7 +106,7 @@ fun WeInformationBar(
                     text = it,
                     fontSize = 14.sp,
                     color = colors.linkColor,
-                    modifier = Modifier.weClickable {
+                    modifier = Modifier.onTap {
                         onLink?.invoke()
                     }
                 )
@@ -117,7 +117,7 @@ fun WeInformationBar(
                     Icons.Outlined.Close,
                     contentDescription = null,
                     tint = colors.closeIconColor,
-                    modifier = Modifier.weClickable {
+                    modifier = Modifier.onTap {
                         it()
                     }
                 )

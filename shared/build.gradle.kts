@@ -61,6 +61,7 @@ kotlin {
             implementation(libs.androidx.sqlite.bundled)
         }
         jvmMain.dependencies {
+            implementation(libs.coil.network.okhttp)
             implementation(libs.androidx.sqlite.bundled)
             implementation(libs.pinyin)
             implementation(libs.lunar)

@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import kotlinx.coroutines.delay
 import top.chengdongqing.weui.core.ui.components.WeScreen
-import top.chengdongqing.weui.util.weClickable
+import top.chengdongqing.weui.util.onTap
 import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
@@ -59,7 +59,7 @@ fun LayersScreen(onBack: () -> Unit) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .weClickable {
+                .onTap {
                     expanded = !expanded
                 }
                 .padding(top = 150.dp),
