@@ -1,0 +1,23 @@
+PODS:
+  - LunarSwift (1.1.8)
+  - shared (1.0):
+    - LunarSwift (= 1.1.8)
+
+DEPENDENCIES:
+  - shared (from `../shared`)
+
+SPEC REPOS:
+  trunk:
+    - LunarSwift
+
+EXTERNAL SOURCES:
+  shared:
+    :path: "../shared"
+
+SPEC CHECKSUMS:
+  LunarSwift: 8ad9d06cb1b774755be2f6e9b41c07dcaf82d37d
+  shared: de139303245a0aee58a8e4b6054acd07135d488e
+
+PODFILE CHECKSUM: 190b831fad3467006a15795834a8a9601f7ff25e
+
+COCOAPODS: 1.15.2

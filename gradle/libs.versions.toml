@@ -1,5 +1,5 @@
 [versions]
-agp = "9.2.1"
+agp = "9.3.1"
 android-compileSdk = "37"
 android-minSdk = "26"
 android-targetSdk = "37"
@@ -7,19 +7,20 @@ androidx-activity = "1.13.0"
 androidx-appcompat = "1.7.1"
 androidx-core = "1.19.0"
 androidx-espresso = "3.7.0"
-androidx-lifecycle = "2.11.0-rc01"
+androidx-lifecycle = "2.11.0"
 androidx-testExt = "1.3.0"
 composeMultiplatform = "1.11.1"
 junit = "4.13.2"
-kotlin = "2.4.0"
-kotlin-wrappers = "2026.7.0"
+kotlin = "2.4.10"
+kotlin-wrappers = "2026.7.7"
 kotlinx-coroutines = "1.11.0"
 kotlinxDatetime = "0.8.0"
+ktor = "3.5.2"
 material3 = "1.11.0-alpha07"
 adaptive-navigation3 = "1.3.0-beta02"
 material-icons-extended = "1.7.3"
 navigation = "1.1.1"
-room = "3.0.0"
+room = "3.0.1"
 sqlite = "2.7.0"
 ksp = "2.3.4"
 coil = "3.5.0"
@@ -60,6 +61,7 @@ androidx-sqlite-web = { module = "androidx.sqlite:sqlite-web", version.ref = "sq
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" } # colil核心库
 coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" } # 加载网络图片
 coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" } # 加载网络图片
+ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" } # iOS 网络引擎
 coil-video = { module = "io.coil-kt.coil3:coil-video", version.ref = "coil" } # 加载视频帧
 coil-zoomable = { module = "me.saket.telephoto:zoomable-image-coil3", version.ref = "coilZoomable" } # 图片缩放/加载大图
 pinyin = { module = "com.github.houbb:pinyin", version.ref = "pinyin" } # 汉字转拼音
@@ -73,5 +75,6 @@ composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "composeMul
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlinCocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 room = { id = "androidx.room3", version.ref = "room" }

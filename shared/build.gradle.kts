@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.kotlinCocoapods)
     alias(libs.plugins.androidMultiplatformLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
@@ -11,13 +12,24 @@ plugins {
 }
 
 kotlin {
-    listOf(
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach { iosTarget ->
-        iosTarget.binaries.framework {
+    iosArm64()
+    iosSimulatorArm64()
+
+    cocoapods {
+        version = "1.0"
+        summary = "Shared module for WeUI-KMP"
+        homepage = "https://github.com/chengdongqing/WeUI"
+        ios.deploymentTarget = "18.2"
+        podfile = project.file("../iosApp/Podfile")
+
+        framework {
             baseName = "Shared"
             isStatic = true
+            binaryOption("bundleId", "top.chengdongqing.shared")
+        }
+
+        pod("LunarSwift") {
+            version = "1.1.8"
         }
     }
 
@@ -59,6 +71,7 @@ kotlin {
         }
         iosMain.dependencies {
             implementation(libs.androidx.sqlite.bundled)
+            implementation(libs.ktor.client.darwin)
         }
         jvmMain.dependencies {
             implementation(libs.coil.network.okhttp)
@@ -104,4 +117,28 @@ dependencies {
 
 room3 {
     schemaDirectory("$projectDir/schemas")
+}
+
+// Kotlin 2.4 currently raises synthetic Pod targets only to iOS 12, while Xcode 27
+// no longer ships simulator support below iOS 15. Patch the generated Podfile so
+// third-party pods inherit this module's deployment target after every generation.
+val syntheticIosPodfile = layout.buildDirectory.file("cocoapods/synthetic/ios/Podfile")
+val patchSyntheticIosPodfile = tasks.register<Exec>("patchSyntheticIosPodfile") {
+    dependsOn("podGenIos")
+    inputs.file(syntheticIosPodfile)
+    outputs.upToDateWhen { false }
+    commandLine(
+        "/usr/bin/sed",
+        "-i",
+        "",
+        "-e",
+        """s/deployment_target_major < 12 || (deployment_target_major == 12 && deployment_target_minor < 0)/deployment_target_major < 15 || (deployment_target_major == 15 \&\& deployment_target_minor < 0)/g""",
+        "-e",
+        "s/#{12}.#{0}/#{15}.#{0}/g",
+        syntheticIosPodfile.get().asFile.absolutePath
+    )
+}
+
+tasks.named("podInstallSyntheticIos").configure {
+    dependsOn(patchSyntheticIosPodfile)
 }

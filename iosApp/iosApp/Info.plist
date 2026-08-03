@@ -4,5 +4,7 @@
 <dict>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>用于将您创建的图片保存到系统相册</string>
 </dict>
 </plist>
