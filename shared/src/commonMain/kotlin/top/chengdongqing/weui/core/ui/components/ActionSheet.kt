@@ -66,7 +66,7 @@ fun WeActionSheet(
                 ) {
                     Text(
                         text = it,
-                        color = WeTheme.colorScheme.surface,
+                        color = WeTheme.colorScheme.textTertiary,
                         fontSize = 12.sp
                     )
                 }

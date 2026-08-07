@@ -7,7 +7,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Videocam
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -20,6 +19,7 @@ import top.chengdongqing.weui.core.ui.components.WeScreen
 import top.chengdongqing.weui.core.ui.components.rememberActionSheetState
 import top.chengdongqing.weui.core.ui.components.rememberToastState
 import top.chengdongqing.weui.core.ui.theme.GreenPrimary
+import top.chengdongqing.weui.core.ui.theme.WeTheme
 
 @Composable
 fun ActionSheetScreen(onBack: () -> Unit) {
@@ -46,7 +46,7 @@ private fun RequestPay() {
             ActionSheetItem("微信", color = GreenPrimary),
             ActionSheetItem("支付宝", color = Color(0xFF00BBEE)),
             ActionSheetItem("QQ钱包", color = Color.Red),
-            ActionSheetItem("小米钱包", "禁用", disabled = true)
+            ActionSheetItem("小米钱包", description = "禁用", disabled = true)
         )
     }
 
@@ -68,7 +68,7 @@ private fun MakeCall() {
                 Icon(
                     imageVector = Icons.Filled.Videocam,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onPrimary,
+                    tint = WeTheme.colorScheme.textPrimary,
                     modifier = Modifier.size(22.dp)
                 )
             }),
@@ -76,7 +76,7 @@ private fun MakeCall() {
                 Icon(
                     imageVector = Icons.Filled.Call,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onPrimary,
+                    tint = WeTheme.colorScheme.textPrimary,
                     modifier = Modifier.size(18.dp)
                 )
             })

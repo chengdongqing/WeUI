@@ -2,6 +2,7 @@ package top.chengdongqing.weui.core.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -48,54 +49,52 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
-import kotlinx.coroutines.delay
 import top.chengdongqing.weui.core.ui.theme.WeTheme
 import kotlin.math.roundToInt
-import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun WeContextMenu(
     state: ContextMenuState,
     onClick: (listIndex: Int, menuIndex: Int) -> Unit
 ) {
-    if (!state.visible) return
     val props = state.props ?: return
 
-    val layout = state.calculateLayout(LocalDensity.current, LocalWindowInfo.current.containerSize)
-    var isVisible by remember { mutableStateOf(false) }
-
-    // 动画控制逻辑
-    LaunchedEffect(Unit) { isVisible = true }
-    LaunchedEffect(isVisible) {
-        if (!isVisible) {
-            delay(160.milliseconds)
-            state.hide()
-        }
+    val density = LocalDensity.current
+    val containerSize = LocalWindowInfo.current.containerSize
+    val layout = remember(state.visible) {
+        state.calculateLayout(density, containerSize)
     }
 
-    Popup(
-        offset = layout.offset,
-        onDismissRequest = { isVisible = false },
-        properties = PopupProperties(focusable = true)
-    ) {
-        val animationSpec = tween<Float>(durationMillis = 150, easing = LinearOutSlowInEasing)
+    val visibilityState = remember { MutableTransitionState(false) }
+    LaunchedEffect(state.visible) {
+        visibilityState.targetState = state.visible
+    }
 
-        AnimatedVisibility(
-            visible = isVisible,
-            enter = scaleIn(
-                initialScale = 0.4f,
-                transformOrigin = layout.pivot,
-                animationSpec = animationSpec
-            ) + fadeIn(animationSpec),
-            exit = scaleOut(
-                targetScale = 0.4f,
-                transformOrigin = layout.pivot,
-                animationSpec = animationSpec
-            ) + fadeOut(animationSpec)
+    if (visibilityState.currentState || visibilityState.targetState) {
+        Popup(
+            offset = layout.offset,
+            onDismissRequest = { state.hide() },
+            properties = PopupProperties(focusable = true)
         ) {
-            MenuContent(props.options, state.itemWidthDp, state.itemHeightDp) { menuIndex ->
-                isVisible = false
-                onClick(props.listIndex, menuIndex)
+            val animationSpec = tween<Float>(durationMillis = 150, easing = LinearOutSlowInEasing)
+
+            AnimatedVisibility(
+                visibleState = visibilityState,
+                enter = scaleIn(
+                    initialScale = 0.4f,
+                    transformOrigin = layout.pivot,
+                    animationSpec = animationSpec
+                ) + fadeIn(animationSpec),
+                exit = scaleOut(
+                    targetScale = 0.4f,
+                    transformOrigin = layout.pivot,
+                    animationSpec = animationSpec
+                ) + fadeOut(animationSpec)
+            ) {
+                MenuContent(props.options, state.itemWidthDp, state.itemHeightDp) { menuIndex ->
+                    state.hide()
+                    onClick(props.listIndex, menuIndex)
+                }
             }
         }
     }

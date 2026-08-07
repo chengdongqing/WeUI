@@ -1,6 +1,7 @@
 package top.chengdongqing.weui.core.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -80,8 +81,9 @@ fun WeToast(
     onClose: () -> Unit
 ) {
     val hasIcon = icon != ToastIcon.None
-    var localVisible by remember {
-        mutableStateOf(visible)
+    val visibilityState = remember { MutableTransitionState(false) }
+    LaunchedEffect(visible) {
+        visibilityState.targetState = visible
     }
 
     LaunchedEffect(visible, duration, title) {
@@ -90,29 +92,11 @@ fun WeToast(
             onClose()
         }
     }
-    LaunchedEffect(visible) {
-        if (!visible) {
-            delay(150.milliseconds)
-        }
-        localVisible = visible
-    }
 
-    val positionProvider = remember {
-        object : PopupPositionProvider {
-            override fun calculatePosition(
-                anchorBounds: IntRect,
-                windowSize: IntSize,
-                layoutDirection: LayoutDirection,
-                popupContentSize: IntSize
-            ): IntOffset {
-                return windowSize.center - popupContentSize.center
-            }
-        }
-    }
     val statusBarHeight = rememberStatusBarHeight()
 
-    if (visible || localVisible) {
-        Popup(popupPositionProvider = positionProvider) {
+    if (visibilityState.currentState || visibilityState.targetState) {
+        Popup(popupPositionProvider = ToastPositionProvider) {
             Box(
                 modifier = if (mask) {
                     Modifier
@@ -124,7 +108,7 @@ fun WeToast(
                 contentAlignment = Alignment.Center
             ) {
                 AnimatedVisibility(
-                    visible = visible && localVisible,
+                    visibleState = visibilityState,
                     enter = fadeIn() + scaleIn(tween(100), initialScale = 0.8f),
                     exit = fadeOut() + scaleOut(tween(100), targetScale = 0.8f)
                 ) {
@@ -177,6 +161,17 @@ fun WeToast(
                 }
             }
         }
+    }
+}
+
+private object ToastPositionProvider : PopupPositionProvider {
+    override fun calculatePosition(
+        anchorBounds: IntRect,
+        windowSize: IntSize,
+        layoutDirection: LayoutDirection,
+        popupContentSize: IntSize
+    ): IntOffset {
+        return windowSize.center - popupContentSize.center
     }
 }
 
